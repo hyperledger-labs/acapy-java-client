@@ -9,13 +9,13 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Aries Cloud Agent - Python: Java client implementation</description>
-    <url>https://github.com/boschresearch/aries-acapy-clients</url>
+    <url>https://github.com/hyperledger-labs/acapy-java-client</url>
 
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub boschresearch Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/boschresearch/aries-acapy-clients</url>
+            <url>https://maven.pkg.github.com/hyperledger-labs/acapy-java-client</url>
          </repository>
      </distributionManagement>
 
@@ -28,14 +28,14 @@
     </licenses>
 
     <issueManagement>
-        <url>https://github.com/boschresearch/aries-acapy-clients/issues</url>
+        <url>https://github.com/hyperledger-labs/acapy-java-client/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
 
     <scm>
         <connection>scm:git:${project.scm.url}</connection>
         <developerConnection>scm:git:${project.scm.url}</developerConnection>
-        <url>git@github.com:boschresearch/aries-acapy-clients.git</url>
+        <url>git@github.com:hyperledger-labs/acapy-java-client.git</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -44,7 +44,7 @@
             <id>github</id>
             <name>github contributors</name>
             <organization>github</organization>
-            <organizationUrl>https://github.com/boschresearch/aries-acapy-clients/graphs/contributors</organizationUrl>
+            <organizationUrl>https://github.com/hyperledger-labs/acapy-java-client/graphs/contributors</organizationUrl>
         </developer>
     </developers>
 
