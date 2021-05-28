@@ -1,0 +1,13 @@
+{
+  "schema": {
+    "ver": "1.0",
+    "id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0",
+    "name": "bank_account",
+    "version": "1.0",
+    "attrNames": [
+      "iban",
+      "bic"
+    ],
+    "seqNo": 571
+  }
+}

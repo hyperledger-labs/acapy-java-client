@@ -1,0 +1,42 @@
+{
+    "result": {
+        "state": "active",
+        "tails_public_uri": "https://limemilo.aries.bosch-digital.de/revocation/registry/VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:fa566996-9b61-4fb0-a22a-837e87a3d767/tails-file",
+        "revoc_reg_entry": {
+            "ver": "1.0",
+            "value": {
+                "accum": "21 1246E648FF558350E84B8AEB3784B0DCCF0F77378905DA919CCD3803504A80D46 21 13BF7B7735F5CF2E31E94B6417B62DA3C77972CA002110FFC79DA92ECFAE8E7C4 6 6428777CB62D5E255A257EEBFBC59979D27D68FA0A37CCD33854518C9AB84346 4 3033FDEA1D4E27CB0F83EE3389810DA196E16B0E7ED15126737B4291874D74C0 6 679B8FFF7C16C74E2E5193341AA74929B98FEB7AB1F394C8884DBD4510DFBF38 4 34F354B63BBEB6A05E1F85CC4246FD06168E0AE08FC79ED6D4415358FC88F6E9"
+            }
+        },
+        "created_at": "2020-08-06 10:26:27.613885Z",
+        "revoc_reg_def": {
+            "ver": "1.0",
+            "id": "VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:fa566996-9b61-4fb0-a22a-837e87a3d767",
+            "revocDefType": "CL_ACCUM",
+            "tag": "fa566996-9b61-4fb0-a22a-837e87a3d767",
+            "credDefId": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
+            "value": {
+                "issuanceType": "ISSUANCE_BY_DEFAULT",
+                "maxCredNum": 100,
+                "publicKeys": {
+                    "accumKey": {
+                        "z": "1 087D322BD373533E7607253A50A132B5750FBD203517A68FA0D596D1EC034DE3 1 186C40576FD320F5CFAE832C5F9DBCC504A1BEE0C2A852DDC9B17496809AD2AD 1 00186D1F4E2F34029009CEBAF0525354F0DE64FF5085E938A6B91EF1995C40FE 1 0486D7E72BC0D173EA28BACD1BDB0A6472F1B04E141A670725523DC46B62DE64 1 1860D41EAF71D0A6422C3B34FF1DAA7C210C31ECA555FD22D35B0AE460A3C616 1 02C5E76968E6640C753FD31BC1524687922DCD673923F5AB610C67AB61B5E252 1 244D6D473092F0EE43C9B3C7CFEDE430A8F5D4589253DC49C2EA620165149D1E 1 0E7A72733F20AC5E9192179258E2FE87F961D80585D8A80CDACE2BF5089FF0E4 1 0C1440CAD32EE1DAC7FC2627CDB5E63C30E3F75CC7EB4D6FC0E334F709B8348B 1 077552125AA94BB85D3FCAA32DE0A11AEA52606534F82DF705324FF23F2726B0 1 19433ACF411B4E060CBBB21DE5D81B522EF00127493B2ACA69814DCAFCBDE9B4 1 2368403AAEC595F7DDDBBA8D17FCD73A6D96E0F6466F5A2E81683DE164D5DF1B"
+                    }
+                },
+                "tailsHash": "3hdTyT6SXdekryjcvRbRcbYjrcd71zK7WcyV6JC6gwn9",
+                "tailsLocation": "https://limemilo.aries.bosch-digital.de/revocation/registry/VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:fa566996-9b61-4fb0-a22a-837e87a3d767/tails-file"
+            }
+        },
+        "issuer_did": "VoSfM3eGaPxduty34ySygw",
+        "cred_def_id": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
+        "tag": "fa566996-9b61-4fb0-a22a-837e87a3d767",
+        "tails_hash": "3hdTyT6SXdekryjcvRbRcbYjrcd71zK7WcyV6JC6gwn9",
+        "max_cred_num": 100,
+        "revoc_def_type": "CL_ACCUM",
+        "tails_local_path": "/home/indy/.indy_client/tails/VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:fa566996-9b61-4fb0-a22a-837e87a3d767/3hdTyT6SXdekryjcvRbRcbYjrcd71zK7WcyV6JC6gwn9",
+        "record_id": "fa566996-9b61-4fb0-a22a-837e87a3d767",
+        "updated_at": "2020-08-06 10:30:20.920369Z",
+        "revoc_reg_id": "VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:fa566996-9b61-4fb0-a22a-837e87a3d767",
+        "pending_pub": []
+    }
+}

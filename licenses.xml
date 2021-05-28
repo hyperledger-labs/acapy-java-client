@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<licenses>
+    <valid>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <names>
+                <name>The Apache Software License, Version 2.0</name>
+                <name>Apache License, Version 2.0</name>
+                <name>Apache License 2.0</name>
+                <name>Apache 2.0</name>
+            </names>
+            <urls>
+                <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            </urls>
+        </license>
+        <license>
+            <name>The MIT License</name>
+            <names>
+                <name>The MIT License</name>
+                <name>MIT License</name>
+            </names>
+        </license>
+    </valid>
+    <forbidden>
+        <license>
+            <name>GNU General Public License version 2</name>
+            <names>
+                <name>GNU General Public License version 2</name>
+            </names>
+        </license>
+    </forbidden>
+</licenses>
