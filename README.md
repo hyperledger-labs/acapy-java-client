@@ -120,6 +120,8 @@ The goal is to move to maven central, also there will be GitHub packages availab
 | POST   | /multitenancy/wallet/{wallet_id}/token                  | :white_check_mark: |
 | GET    | /multitenancy/wallets                                   | :white_check_mark: |
 |        | **out-of-band**                                         |                    |
+| POST   | /out-of-band/create-invitation                          | :white_check_mark: |
+| POST   | /out-of-band/receive-invitation                         | :white_check_mark: |
 |        | **present-proof**                                       |                    |
 | POST   | /present-proof/create-request                           | :white_check_mark: |
 | GET    | /present-proof/records                                  | :white_check_mark: |

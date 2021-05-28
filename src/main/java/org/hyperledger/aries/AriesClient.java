@@ -16,15 +16,13 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.acy_py.generated.model.DID;
-import org.hyperledger.acy_py.generated.model.DIDCreate;
-import org.hyperledger.acy_py.generated.model.DIDEndpoint;
-import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
-import org.hyperledger.acy_py.generated.model.ClearPendingRevocationsRequest;
-import org.hyperledger.acy_py.generated.model.PublishRevocations;
-import org.hyperledger.acy_py.generated.model.SendMessage;
+import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.action_menu.PerformRequest;
 import org.hyperledger.aries.api.action_menu.SendMenu;
+import org.hyperledger.aries.api.connection.ConnectionStaticRequest;
+import org.hyperledger.aries.api.connection.ConnectionStaticResult;
+import org.hyperledger.aries.api.connection.CreateInvitationRequest;
+import org.hyperledger.aries.api.connection.ReceiveInvitationRequest;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionRequest;
@@ -33,19 +31,36 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinition.Cred
 import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilter;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
+import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.*;
+import org.hyperledger.aries.api.jsonld.SignRequest;
+import org.hyperledger.aries.api.jsonld.VerifyRequest;
+import org.hyperledger.aries.api.jsonld.VerifyResponse;
 import org.hyperledger.aries.api.jsonld.*;
-import org.hyperledger.aries.api.ledger.*;
+import org.hyperledger.aries.api.ledger.DidVerkeyResponse;
+import org.hyperledger.aries.api.ledger.EndpointResponse;
+import org.hyperledger.aries.api.ledger.TAAAccept;
+import org.hyperledger.aries.api.ledger.TAAInfo;
 import org.hyperledger.aries.api.message.PingRequest;
 import org.hyperledger.aries.api.message.PingResponse;
-import org.hyperledger.aries.api.multitenancy.*;
+import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
+import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
+import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
-import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
-import org.hyperledger.aries.api.out_of_band.InvitationRecord;
+import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
+import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
+import org.hyperledger.aries.api.present_proof.PresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.resolver.DIDDocument;
+import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
+import org.hyperledger.aries.api.revocation.RevRegUpdateTailsFileUri;
+import org.hyperledger.aries.api.revocation.RevRegsCreated;
+import org.hyperledger.aries.api.revocation.RevokeRequest;
 import org.hyperledger.aries.api.revocation.*;
 import org.hyperledger.aries.api.schema.SchemaSendRequest;
 import org.hyperledger.aries.api.schema.SchemaSendResponse;
@@ -995,12 +1010,29 @@ public class AriesClient extends BaseClient {
      */
     public Optional<InvitationRecord> outOfBandCreateInvitation(
             @NonNull InvitationCreateRequest request, CreateInvitationFilter filter) throws IOException {
-        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/vreate-invitation")).newBuilder();
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/create-invitation")).newBuilder();
         if (filter != null) {
             filter.buildParams(b);
         }
         Request req = buildPost(b.build().toString(), request);
         return call(req, InvitationRecord.class);
+    }
+
+    /**
+     * Receive a new connection invitation
+     * @param request {@link InvitationMessage}
+     * @param filter {@link ReceiveInvitationFilter}
+     * @return {@link ConnRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<ConnRecord> outOfBandReceiveInvitation(
+            @NonNull InvitationMessage request, ReceiveInvitationFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/receive-invitation")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildPost(b.build().toString(), request);
+        return call(req, ConnRecord.class);
     }
 
     // ----------------------------------------------------

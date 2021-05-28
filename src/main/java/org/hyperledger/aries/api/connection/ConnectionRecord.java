@@ -7,6 +7,8 @@
  */
 package org.hyperledger.aries.api.connection;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
@@ -24,12 +26,12 @@ public class ConnectionRecord {
     private String inboundConnectionId;
     @Deprecated private String initiator;
     private String invitationKey;
-    private String invitationMode;
+    private InvitationMode invitationMode;
     private String invitationMsgId;
     private String myDid;
     private String requestId;
     private String rfc23Sate;
-    private String routingState;
+    private RoutingState routingState;
     private ConnectionState state;
     private String theirDid;
     private String theirLabel;
@@ -47,5 +49,37 @@ public class ConnectionRecord {
 
     public boolean isActive() {
         return ConnectionState.ACTIVE.equals(state);
+    }
+
+    public enum InvitationMode {
+        @JsonProperty("once")
+        @SerializedName("once")
+        ONCE,
+
+        @JsonProperty("multi")
+        @SerializedName("multi")
+        MULTI,
+
+        @JsonProperty("static")
+        @SerializedName("static")
+        STATIC,
+    }
+
+    public enum RoutingState {
+        @JsonProperty("none")
+        @SerializedName("none")
+        NONE,
+
+        @JsonProperty("request")
+        @SerializedName("request")
+        REQUEST,
+
+        @JsonProperty("active")
+        @SerializedName("active")
+        ACTIVE,
+
+        @JsonProperty("error")
+        @SerializedName("error")
+        ERROR
     }
 }
