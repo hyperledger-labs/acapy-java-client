@@ -178,7 +178,7 @@ ac.connectionsReceiveInvitation(
 
 ```Java
 MyCredential myCredential = MyCredential.builder().email("test@myexample.com").build();
-ac.issueCredentialSend(new V1CredentialProposalRequest(connectionId, credentialdefinitionId, myCredentialDefinition));
+ac.issueCredentialSend(new V1CredentialProposalRequest(connectionId, credentialdefinitionId, myCredential));
 ```
 
 ### Present Proof Request
@@ -190,7 +190,7 @@ PresentProofRequest proofRequest = PresentProofRequestHelper.buildForEachAttribu
     ProofRestrictions.builder()
         .credentialDefinitionId(credentialDefinitionId)
         .build());
-ac.presentProofSendRequest(PresentProofRequest.build(proofRequest));
+ac.presentProofSendRequest(proofRequest);
 ```
 
 ## Webhook/Websocket Handler Support
