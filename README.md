@@ -1,5 +1,8 @@
 # ACA-PY Java Client Library
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![CI/CD](https://github.com/hyperledger-labs/acapy-java-client/workflows/CI/CD/badge.svg)](https://github.com/hyperledger-labs/acapy-java-client/actions?query=workflow%3ACI%2FCD+branch%3Amaster)
+
 Convenience library based on okhttp and gson to interact with aries cloud agent python (aca-py) instances.  
 It is currently work in progress and not all endpoints of the agent are present in the client.
 
@@ -7,7 +10,8 @@ It is currently work in progress and not all endpoints of the agent are present 
 
 | Client Version | ACA-PY Version |
 |----------------|----------------|
-| \>= 0.15.0     | 0.6.0        |
+| \>= 0.15.0     | 0.6.0          |
+| \>= 0.23.0     | 0.7.0          |
 
 ## Implemented Endpoints
 
