@@ -3,15 +3,50 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![CI/CD](https://github.com/hyperledger-labs/acapy-java-client/workflows/CI/CD/badge.svg)](https://github.com/hyperledger-labs/acapy-java-client/actions?query=workflow%3ACI%2FCD+branch%3Amaster)
 
-Convenience library based on okhttp and gson to interact with aries cloud agent python (aca-py) instances.  
+Convenience library based on okhttp and gson to interact with [aries cloud agent python](https://github.com/hyperledger/aries-cloudagent-python) (aca-py) instances.  
 It is currently work in progress and not all endpoints of the agent are present in the client.
+
+## Use it in your project
+
+The goal is to move to maven central, also there will be GitHub packages available with the next release. Until then, you can use: 
+
+```xml
+<repositories>
+    <repository>
+        <id>acapy-java-client</id>
+        <url>https://nexus.bosch-digital.com/repository/bds-all</url>
+    </repository>
+</repositories>
+```
+```xml
+<dependency>
+    <groupId>org.hyperledger</groupId>
+    <artifactId>aries-client-python</artifactId>
+    <version>0.22.0</version>
+</dependency>
+```
+
+## FAQ
+
+1. Why don't you use swagger codegen?
+
+   For a long time aca-py's swagger.json was not really in sync with the code base. This has been hugely improved lately,
+   so I started to generate model classes based on the stable releases found on dockerhub. There are still issues
+   with complex structures, so one can not simply use the models 1:1, instead each one has to be checked manually before using it.
+   This is tedious work and might take a while to complete. Also, the api is complex so that I found it useful to introduce
+   helper methods directly in the model classes to make them more accessible.
+
+2. Why is endpoint X, or field Y missing?
+
+   aca-py's api is changing rapidly with each release, and until most of the classes are using the generated models this can happen.
+   So, if you are missing something create a PR with a fix or open an issue.
 
 ## Version Compatibility
 
-| Client Version | ACA-PY Version |
-|----------------|----------------|
-| \>= 0.15.0     | 0.6.0          |
-| \>= 0.23.0     | 0.7.0          |
+| Client Version | ACA-PY Version  |
+|----------------|-----------------|
+| \>= 0.15.0     | 0.6.0           |
+| \>= 0.23.0     | 0.7.0 (upcoming)|
 
 ## Implemented Endpoints
 
@@ -124,7 +159,9 @@ It is currently work in progress and not all endpoints of the agent are present 
 | GET    | /wallet/get-did-endpoint                                | :white_check_mark: |
 | POST   | /wallet/set-did-endpoint                                | :white_check_mark: |
 
-## Create the aca-py rest client
+## Client Examples
+
+### Create the aca-py rest client
 
 The default assumes you are running against a single wallet. In case of multi tenancy with base and sub wallets
 the bearerToken needs to be set as well.
@@ -132,15 +169,15 @@ the bearerToken needs to be set as well.
 ```java
 AriesClient ac = AriesClient
         .builder()
-        .url("https://example.com")
-        .apiKey("secret") // optional admin api key
-        .bearerToken("123.456.789") // optional jwt token - only when running in multi tennant mode
+        .url("https://myacapy.com:8031")
+        .apiKey("secret") // optional - admin api key if set
+        .bearerToken("123.456.789") // optional - jwt token - only when running in multi tennant mode
         .build();
 ```
 
-## A Word on Credential Definitions
+### A Word on Credential POJO's
 
-The library assumes credentials, and their related credential definitions are flat Pojo's like:
+The library assumes credentials are flat Pojo's like:
 
 ```Java
 @Data @NoArgsConstructor @Builder
@@ -155,7 +192,7 @@ public final class MyCredential {
 }
 ```
 
-How fields are serialised/deserialized can be changed by using the @AttributeName annotation.
+How fields are serialised/deserialized can be changed by using the `@AttributeName` or `@AttributeGroupName` annotations.
 
 ### Create a connection
 
@@ -212,24 +249,27 @@ public class WebhookController {
 }
 ```
 
-Websocket controller example
+Websocket client example
 
 ```java
-@ClientWebSocket("/ws/{topic}")
-public class WebsocketController {
+import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.webhook.WebsocketMessage;
 
-    @Inject private EventHandler handler;
-
-    private String topic;
-
-    @OnOpen
-    public void onOpen(String topic) {
-        this.topic = topic;
-    }
-
+public class AcyPyWebsocketClient extends WebSocketClient {
+    
+    private Gson gson = GsonConfig.defaultConfig();
+    private EventHandler handler = new MyHandler();
+    
     @OnMessage
     public void onMessage(String message) {
-        handler.handleEvent(topic, message);
+        WebsocketMessage msg = gson.fromJson(message, WebsocketMessage.class);
+        handler.handleEvent(msg.getTopic(), msg.getPayload());
+    }
+
+    public static void main(String[] args) throws URISyntaxException {
+        AcyPyWebsocketClient c = new AcyPyWebsocketClient(new URI(
+                "ws://localhost:8031/ws"));
+        c.connect();
     }
 }
 ```
@@ -256,9 +296,9 @@ like a barcode, but the java client supports this by providing models and builde
 
 A flow has the usually following steps:
 
-1. The user is presented with a QRCode that contains an invite URL like: https://myhost.com/url/1234
-2. The server side HTTP handler of this URL responds with a HTTP.FOUND response that has the proof request encoded in the m parameter
-3. The mobile wallet tries to match a credential, and then responds with a proof if possible
+1. The user is presented with a QRCode that contains an invitation URL like: https://myhost.com/url/1234
+2. The server side HTTP handler of this URL responds with an HTTP.FOUND response that has the proof request encoded in the m parameter
+3. The mobile wallet tries to match a stored credential, and then responds with a proof presentation if possible
 3. The server side WebhookHandler waits for the proof and then triggers further actions
 
 ```java
@@ -288,5 +328,4 @@ PresentProofRequest presentProofRequest = PresentProofRequestHelper.buildForEach
             .build());
 
 Optional<String> base64 = builder.buildRequest(presentProofRequest);
-
 ```
