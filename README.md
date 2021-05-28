@@ -143,8 +143,8 @@ AriesClient ac = AriesClient
 The library assumes credentials, and their related credential definitions are flat Pojo's like:
 
 ```Java
-@Data @NoArgsConstructor
-public final class MyCredentialDefinition {
+@Data @NoArgsConstructor @Builder
+public final class MyCredential {
     private String street;
     
     @AttributeName("e-mail")
@@ -162,9 +162,13 @@ How fields are serialised/deserialized can be changed by using the @AttributeNam
 ```java
 ac.connectionsReceiveInvitation(
         ReceiveInvitationRequest.builder()
-        .did(did)
-        .label(label)
-        .build(), "alias")    
+            .did(did)
+            .label(label)
+            .build(), 
+        ConnectionReceiveInvitationFilter
+            .builder()
+            .alias("alias")
+            .build())    
 .ifPresent(connection -> {
     log.debug("{}", connection.getConnectionId());
 });
@@ -173,8 +177,8 @@ ac.connectionsReceiveInvitation(
 ### Issue a Credential
 
 ```Java
-MyCredentialDefinition myCredentialDefinition = new MyCredentialDefinition("test@myexample.com")
-ac.issueCredentialSend(new IssueCredentialSend(connectionId, credentialdefinitionId, myCredentialDefinition));
+MyCredential myCredential = MyCredential.builder().email("test@myexample.com").build();
+ac.issueCredentialSend(new V1CredentialProposalRequest(connectionId, credentialdefinitionId, myCredentialDefinition));
 ```
 
 ### Present Proof Request
@@ -182,16 +186,16 @@ ac.issueCredentialSend(new IssueCredentialSend(connectionId, credentialdefinitio
 ```Java
 PresentProofRequest proofRequest = PresentProofRequestHelper.buildForEachAttribute(
     connectionId,
-    MySchemaPojo.class,
+    MyCredential.class,
     ProofRestrictions.builder()
         .credentialDefinitionId(credentialDefinitionId)
         .build());
 ac.presentProofSendRequest(PresentProofRequest.build(proofRequest));
 ```
 
-## Webhook Handler
+## Webhook/Websocket Handler Support
 
-Assume you have a rest controller like this to handle aca-py webhook calls
+Webhook controller example
 
 ```java
 @Controller
@@ -199,11 +203,33 @@ public class WebhookController {
 
     @Inject private EventHandler handler;
 
-    @Post("/topic/{eventType}")
+    @Post("/webhook/{topic}")
     public void ariesEvent(
-            @PathVariable String eventType,
-            @Body String eventBody) {
-        handler.handleEvent(eventType, eventBody);
+            @PathVariable String topic,
+            @Body String message) {
+        handler.handleEvent(topic, message);
+    }
+}
+```
+
+Websocket controller example
+
+```java
+@ClientWebSocket("/ws/{topic}")
+public class WebsocketController {
+
+    @Inject private EventHandler handler;
+
+    private String topic;
+
+    @OnOpen
+    public void onOpen(String topic) {
+        this.topic = topic;
+    }
+
+    @OnMessage
+    public void onMessage(String message) {
+        handler.handleEvent(topic, message);
     }
 }
 ```
@@ -215,8 +241,9 @@ Your event handler implementation can then extend the abstract EventHandler clas
 public class MyHandler extends EventHandler {
     @Override
     public void handleProof(PresentProofPresentation proof) {
-        if (proof.isVerified() && "verifier".equals(proof.getRole())) {     // received a validated proof
-            MyCredentialDefinition myCredentialDefinition = proof.from(MyCredentialDefinition.class);
+        if (PresentationExchangeRole.VERIFIER.equals(proof.getRole())
+                && PresentationExchangeState.VERIFIED.equals(proof.getState())) {    // received a validated proof
+            MyCredential myCredential = proof.from(MyCredential.class);
             //
         }
     }
