@@ -1132,11 +1132,11 @@ public class AriesClient extends BaseClient {
     /**
      * Send a problem report for presentation exchange
      * @param presentationExchangeId presentation exchange identifier
-     * @param request {@link PresentationProblemReportRequest}
+     * @param request {@link V10PresentationProblemReportRequest}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public void presentProofRecordsProblemReport(@NonNull String presentationExchangeId,
-        @NonNull PresentationProblemReportRequest request) throws IOException {
+        @NonNull V10PresentationProblemReportRequest request) throws IOException {
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/problem-report",
                 request);
         call(req);

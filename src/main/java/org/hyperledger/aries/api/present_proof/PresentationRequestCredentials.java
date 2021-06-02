@@ -43,8 +43,8 @@ public class PresentationRequestCredentials {
 
         private String revRegId;
 
-        @SerializedName(value = "cred_rev_id", alternate = "credential_revision_id")
-        private String credentialRevisionId;
+        @SerializedName(value = "cred_rev_id")
+        private String credRevId;
 
     }
 
@@ -53,6 +53,7 @@ public class PresentationRequestCredentials {
      */
     @Data @NoArgsConstructor
     public static final class Interval {
+        private Integer from;
         private Integer to;
     }
 }

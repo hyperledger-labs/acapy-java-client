@@ -27,8 +27,8 @@ public class ProblemReport {
     @SerializedName("~thread")
     private Thread thread;
 
-    @SerializedName("explain-ltxt")
-    private String explainLtxt;
+    @SerializedName("description")
+    private String description;
 
     @Data @NoArgsConstructor @AllArgsConstructor
     public static final class Thread {
