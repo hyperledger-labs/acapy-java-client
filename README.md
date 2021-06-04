@@ -22,7 +22,7 @@ The goal is to move to maven central, also there will be GitHub packages availab
 <dependency>
     <groupId>org.hyperledger</groupId>
     <artifactId>aries-client-python</artifactId>
-    <version>0.22.0</version>
+    <version>0.23.0</version>
 </dependency>
 ```
 
@@ -46,7 +46,7 @@ The goal is to move to maven central, also there will be GitHub packages availab
 | Client Version | ACA-PY Version  |
 |----------------|-----------------|
 | \>= 0.15.0     | 0.6.0           |
-| \>= 0.23.0     | 0.7.0 (upcoming)|
+| \>= 0.24.0     | 0.7.0 (upcoming)|
 
 ## Implemented Endpoints
 
@@ -183,14 +183,15 @@ The library assumes credentials are flat Pojo's like:
 
 ```Java
 @Data @NoArgsConstructor @Builder
+@AttributeGroupName("referent") // the referent that should be matched in the proof request
 public final class MyCredential {
-    private String street;
-    
-    @AttributeName("e-mail")
-    private String email;       // schema attribute name is e-mail
-    
-    @AttributeName(excluded = true)
-    private String comment;     // internal field
+   private String street;
+
+   @AttributeName("e-mail")
+   private String email;       // schema attribute name is e-mail
+
+   @AttributeName(excluded = true)
+   private String comment;     // internal field
 }
 ```
 
@@ -216,8 +217,12 @@ ac.connectionsReceiveInvitation(
 ### Issue a Credential
 
 ```Java
-MyCredential myCredential = MyCredential.builder().email("test@myexample.com").build();
-ac.issueCredentialSend(new V1CredentialProposalRequest(connectionId, credentialdefinitionId, myCredential));
+MyCredential myCredential = MyCredential
+        .builder()
+        .email("test@myexample.com")
+        .build();
+ac.issueCredentialSend(
+        new V1CredentialProposalRequest(connectionId, credentialdefinitionId, myCredential));
 ```
 
 ### Present Proof Request
@@ -276,7 +281,7 @@ public class AcyPyWebsocketClient extends WebSocketClient {
 }
 ```
 
-Your event handler implementation can then extend the abstract EventHandler class which takes care of type conversion so that you can immediately implement your business logic.
+Your event handler can then extend the abstract EventHandler class which takes care of type conversion so that you can immediately implement your business logic.
 
 ```java
 @Singleton
@@ -286,7 +291,9 @@ public class MyHandler extends EventHandler {
         if (PresentationExchangeRole.VERIFIER.equals(proof.getRole())
                 && PresentationExchangeState.VERIFIED.equals(proof.getState())) {    // received a validated proof
             MyCredential myCredential = proof.from(MyCredential.class);
-            //
+            // If the presentation is based on multiple credentials this can be done multiple times
+            // given that the POJO is annotated with @AttributeGroup e.g.
+           MyOtherCredential otherCredential = proof.from(MyOtherCredential.class);
         }
     }
 }

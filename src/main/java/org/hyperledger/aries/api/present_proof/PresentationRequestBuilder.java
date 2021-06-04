@@ -12,6 +12,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * Used in scenarios where 'auto-respond-presentation-request' is set to false.
+ * The helper takes the result of the following two api calls:
+ * 1. /present-proof/records/{pres_ex_id}
+ * 2. /present-proof/records/{pres_ex_id}/credentials
+ * To generate the model for
+ * /present-proof/records/{pres_ex_id}/send-presentation
+ *
+ * https://github.com/hyperledger/aries-rfcs/blob/master/concepts/0441-present-proof-best-practices/README.md
+ */
 public class PresentationRequestBuilder {
 
     /**
