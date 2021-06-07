@@ -33,6 +33,7 @@ import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
+import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 import org.hyperledger.aries.api.jsonld.SignRequest;
@@ -68,6 +69,7 @@ import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
+import org.hyperledger.aries.config.TimeUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -82,6 +84,7 @@ import java.util.stream.Collectors;
  * ACA-PY client
  */
 @Slf4j
+@SuppressWarnings("unused")
 public class AriesClient extends BaseClient {
 
     private final String url;
@@ -440,6 +443,23 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Sends a credential definition to the ledger via an endorser
+     * @since aca-py 0.7.0
+     * @param defReq {@link CredentialDefinitionRequest}
+     * @param endorserInfoFilter {@link EndorserInfoFilter}
+     * @return {@link CredentialDefinitionResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredentialDefinitionResponse> credentialDefinitionsCreate(
+            @NonNull CredentialDefinitionRequest defReq, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/credential-definitions")).newBuilder();
+        endorserInfoFilter.buildParams(b);
+        Request req = buildPost(b.toString(), defReq);
+        return call(req, CredentialDefinitionResponse.class);
+    }
+
+    /**
      * Search for matching credential definitions that originated from this agent
      * @param filter {@link CredentialDefinitionFilter}
      * @return {@link CredentialDefinitionsCreated}
@@ -575,6 +595,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Create request against public DID's implicit invitation
+     * @since aca-py 0.7.0
      * @param filter {@link DidExchangeCreateRequestFilter}
      * @return {@link DIDXRequest}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -590,6 +611,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Receive request against public DID's implicit invitation
+     * @since aca-py 0.7.0
      * @param request {@link DIDXRequest}
      * @param filter {@link DidExchangeReceiveRequestFilter}
      * @return {link ConnectionRecord}
@@ -608,6 +630,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Accept a stored connection invitation
+     * @since aca-py 0.7.0
      * @param connectionId the connection id
      * @param filter {@link DidExchangeAcceptInvitationFilter}
      * @return {@link ConnectionRecord}
@@ -626,6 +649,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Accept a stored connection request
+     * @since aca-py 0.7.0
      * @param connectionId the connection id
      * @param filter {@link DidExchangeAcceptRequestFilter}
      * @return {@link ConnectionRecord}
@@ -640,6 +664,148 @@ public class AriesClient extends BaseClient {
         }
         Request req = buildPost(b.toString(), EMPTY_JSON);
         return call(req, ConnectionRecord.class);
+    }
+
+    // ----------------------------------------------------
+    // Endorse Transaction - Endorse a transaction
+    // ----------------------------------------------------
+
+    /**
+     * For Author to resend a particular transaction request
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionResend(@NonNull String trxId) throws IOException {
+        Request req = buildPost(url + "/transaction/" + trxId + "/resend", EMPTY_JSON);
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * Query transactions
+     * @since aca-py 0.7.0
+     * @return list of {@link TransactionRecord}}
+     * @throws IOException IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<TransactionRecord>> endorseGetTransactions() throws IOException {
+        Request req = buildGet(url + "/transactions");
+        final Optional<String> resp = raw(req);
+        return getWrapped(resp, "results", TRX_RECORD_TYPE);
+    }
+
+    /**
+     * For author to send a transaction request
+     * @since aca-py 0.7.0
+     * @param expiresTime when the request should expire
+     * @param filter {@link EndorseCreateRequestFilter}
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionCreateRequest(
+            @NonNull Instant expiresTime, @NonNull EndorseCreateRequestFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/transactions/create-request")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.toString(), EndorseCreateRequest
+                .builder()
+                .expiresTime(TimeUtil.currentTimeFormatted(expiresTime))
+                .build());
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * Set Endorser Info
+     * @since aca-py 0.7.0
+     * @param connectionId the connection id
+     * @param filter {@link SetEndorserInfoFilter}
+     * @return {@link EndorserInfo}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<EndorserInfo> endorseTransactionSetEndorserInfo(
+            @NonNull String connectionId, @NonNull SetEndorserInfoFilter filter) throws IOException{
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/transactions/" + connectionId + "/set-endorser-info")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        return call(req, EndorserInfo.class);
+    }
+
+    /**
+     * Set transaction jobs
+     * @since aca-py 0.7.0
+     * @param connectionId the connection id
+     * @param filter {@link SetEndorserRoleFilter}
+     * @return {@link TransactionJobs}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionJobs> endorseTransactionSetEndorserRole(
+            @NonNull String connectionId, @NonNull SetEndorserRoleFilter filter) throws IOException{
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/transactions/" + connectionId + "/set-endorser-role")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        return call(req, TransactionJobs.class);
+    }
+
+    /**
+     * Fetch single transaction record
+     * @since aca-py 0.7.0
+     * @param trxId the transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionGetById(@NonNull String trxId) throws IOException {
+        Request req = buildGet(url + "/transactions/" + trxId);
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * For Author to cancel a particular transaction request
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionCancel(@NonNull String trxId) throws IOException{
+        Request req = buildPost(url + "/transactions/" + trxId + "/cancel", EMPTY_JSON);
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * For Endorser to endorse a particular transaction record
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionEndorse(@NonNull String trxId) throws IOException{
+        Request req = buildPost(url + "/transactions/" + trxId + "/endorse", EMPTY_JSON);
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * For Endorser to refuse a particular transaction record
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionRefuse(@NonNull String trxId) throws IOException{
+        Request req = buildPost(url + "/transactions/" + trxId + "/refuse", EMPTY_JSON);
+        return call(req, TransactionRecord.class);
+    }
+
+    /**
+     * For Author / Endorser to write an endorsed transaction to the ledger
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @return {@link TransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TransactionRecord> endorseTransactionWrite(@NonNull String trxId) throws IOException{
+        Request req = buildPost(url + "/transactions/" + trxId + "/write", EMPTY_JSON);
+        return call(req, TransactionRecord.class);
     }
 
     // ----------------------------------------------------
@@ -1003,6 +1169,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Create a new connection invitation
+     * @since aca-py 0.7.0
      * @param request {@link InvitationCreateRequest}
      * @param filter optional {@link CreateInvitationFilter}
      * @return {@link InvitationRecord}
@@ -1020,6 +1187,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Receive a new connection invitation
+     * @since aca-py 0.7.0
      * @param request {@link InvitationMessage}
      * @param filter {@link ReceiveInvitationFilter}
      * @return {@link ConnRecord}
@@ -1230,7 +1398,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Retrieve doc for requested did
-     * @since 0.7.0
+     * @since aca-py 0.7.0
      * @param did the did
      * @return {@link DIDDocument}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -1373,6 +1541,23 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Sends a schema to the ledger via an endorser
+     * @since aca-py 0.7.0
+     * @param schema {@link SchemaSendRequest}
+     * @param endorserInfoFilter {@link EndorserInfoFilter}
+     * @return {@link SchemaSendResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<SchemaSendResponse> schemas(
+            @NonNull SchemaSendRequest schema, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/schemas")).newBuilder();
+        endorserInfoFilter.buildParams(b);
+        Request req = buildPost(b.toString(), schema);
+        return call(req, SchemaSendResponse.class);
+    }
+
+    /**
      * Gets a schema from the ledger
      * @param schemaId the schemas id or sequence number
      * @return {@link Schema}
@@ -1389,7 +1574,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Fetch the server configuration
-     * @since 0.7.0
+     * @since aca-py 0.7.0
      * @return {@link AdminConfig}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */

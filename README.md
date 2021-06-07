@@ -88,6 +88,17 @@ The goal is to move to maven central, also there will be GitHub packages availab
 | POST   | /didexchange/receive-request                            | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-invitation                | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-request                   | :white_check_mark: |
+|        | **endorse-transaction**                                 |                    |
+| POST   | /transaction/{tran_id}/resend                           | :white_check_mark: |
+| POST   | /transactions                                           | :white_check_mark: |
+| POST   | /transactions/create-request                            | :white_check_mark: |
+| POST   | /transactions/{conn_id}/set-endorser-info               | :white_check_mark: |
+| POST   | /transactions/{conn_id}/set-endorser-role               | :white_check_mark: |
+| POST   | /transactions/{tran_id}                                 | :white_check_mark: |
+| POST   | /transactions/{tran_id}/cancel                          | :white_check_mark: |
+| POST   | /transactions/{tran_id}/endorse                         | :white_check_mark: |
+| POST   | /transactions/{tran_id}/refuse                          | :white_check_mark: |
+| POST   | /transactions/{tran_id}/write                           | :white_check_mark: |
 |        | **introduction**                                        |                    |
 |        | **issue-credential v1.0**                               |                    |
 | POST   | /issue-credential/create                                | :white_check_mark: |
