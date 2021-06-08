@@ -289,8 +289,9 @@
                 <configuration>
                     <scmCommentPrefix>[ci skip]</scmCommentPrefix>
                     <tagNameFormat>@{project.version}</tagNameFormat>
-                    <releaseProfiles>sign,osshr</releaseProfiles>
+                    <releaseProfiles>sign,ossrh</releaseProfiles>
                     <pushChanges>false</pushChanges>
+                    <signTag>true</signTag>
                     <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
                 </configuration>
                 <dependencies>
