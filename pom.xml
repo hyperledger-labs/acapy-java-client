@@ -4,7 +4,7 @@
 
     <groupId>network.idu.acapy</groupId>
     <artifactId>aries-client-python</artifactId>
-    <version>0.7.1-pre.2-SNAPSHOT</version>
+    <version>0.7.0-pre.2</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -525,6 +525,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <passphrase>${gpg.passphrase}</passphrase>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
