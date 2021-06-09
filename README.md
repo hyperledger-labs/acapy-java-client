@@ -8,7 +8,15 @@ It is currently work in progress and not all endpoints of the agent are present 
 
 ## Use it in your project
 
-The goal is to move to maven central, also there will be GitHub packages available with the next release. Until then, you can use: 
+```xml
+<dependency>
+   <groupId>network.idu.acapy</groupId>
+   <artifactId>aries-client-python</artifactId>
+   <version>0.7.0-pre.2</version>
+</dependency>
+```
+
+For a aca-py 0.6.0 compatible client version you can use the following repository:
 
 ```xml
 <repositories>
@@ -45,8 +53,7 @@ The goal is to move to maven central, also there will be GitHub packages availab
 
 | Client Version | ACA-PY Version  |
 |----------------|-----------------|
-| \>= 0.15.0     | 0.6.0           |
-| \>= 0.24.0     | 0.7.0 (upcoming)|
+| 0.7.0-pre.2    | 0.7.0-pre.2     |
 
 ## Implemented Endpoints
 
