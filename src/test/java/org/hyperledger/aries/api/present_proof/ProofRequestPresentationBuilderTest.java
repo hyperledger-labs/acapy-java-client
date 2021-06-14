@@ -10,7 +10,6 @@ package org.hyperledger.aries.api.present_proof;
 import com.google.gson.Gson;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.present_proof.PresentProofRequest.ProofRequest;
-import org.hyperledger.aries.api.present_proof.PresentProofRequest.ProofRequest.ProofAttributes.ProofRestrictions;
 import org.hyperledger.aries.api.present_proof.ProofRequestPresentation.PresentationAttachment;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +32,7 @@ class ProofRequestPresentationBuilderTest extends IntegrationTestBase {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper.buildForEachAttribute(
                 UUID.randomUUID().toString(),
                 List.of("name", "email"),
-                ProofRestrictions
+                ProofRequest.ProofRestrictions
                         .builder()
                         .schemaId("WgWxqztrNooG92RXvxSTWv:2:schema_name:1.0")
                         .build());

@@ -43,8 +43,7 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
     @Test
     void testBuildForEachAttributeWithRestrictions() throws Exception {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForEachAttribute("dummy", DummyPojo.class, PresentProofRequest.
-                        ProofRequest.ProofAttributes.ProofRestrictions
+                .buildForEachAttribute("dummy", DummyPojo.class, PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build());
@@ -69,8 +68,7 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
     @Test
     void testBuildForAllAttributesWithRestrictions() throws Exception {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", DummyPojo.class, List.of(PresentProofRequest.
-                        ProofRequest.ProofAttributes.ProofRestrictions
+                .buildForAllAttributes("dummy", DummyPojo.class, List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build()));
@@ -86,22 +84,21 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
 
     @Test
     void testBuildForAllWithTwoAttributeGroups() throws Exception {
-        PresentProofRequest.ProofRequest.ProofAttributes.ProofNonRevoked nonRevoked = PresentProofRequest.ProofRequest.
-                ProofAttributes.ProofNonRevoked
+        PresentProofRequest.ProofRequest.ProofNonRevoked nonRevoked = PresentProofRequest.ProofRequest.ProofNonRevoked
                 .builder()
                 .from(Instant.now().minus(Duration.ofMinutes(30)).getEpochSecond())
                 .to(Instant.now().getEpochSecond())
                 .build();
-        PresentProofRequest.ProofRequest.ProofAttributes corporateId = PresentProofRequestHelper.buildAttributeForAll(
+        PresentProofRequest.ProofRequest.ProofRequestedAttributes corporateId = PresentProofRequestHelper.buildAttributeForAll(
                 PojoProcessor.fieldNames(DummyPojo.class),
-                List.of(PresentProofRequest.ProofRequest.ProofAttributes.ProofRestrictions
+                List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:indy:123")
                         .build()),
                 nonRevoked);
-        PresentProofRequest.ProofRequest.ProofAttributes masterId = PresentProofRequestHelper.buildAttributeForAll(
+        PresentProofRequest.ProofRequest.ProofRequestedAttributes masterId = PresentProofRequestHelper.buildAttributeForAll(
                 PojoProcessor.fieldNames(OtherDummyPojo.class),
-                List.of(PresentProofRequest.ProofRequest.ProofAttributes.ProofRestrictions
+                List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .schemaIssuerDid("did:indy:432")
                         .build()),

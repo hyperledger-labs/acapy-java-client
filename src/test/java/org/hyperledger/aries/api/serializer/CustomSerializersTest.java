@@ -31,8 +31,7 @@ public class CustomSerializersTest {
     @Test
     void testProofSerializeDeserializeWithJackson() throws Exception {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.
-                        ProofRequest.ProofAttributes.ProofRestrictions
+                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build()));
@@ -44,8 +43,7 @@ public class CustomSerializersTest {
     @Test
     void testProofSerializeDeserializeWithGson() {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.
-                        ProofRequest.ProofAttributes.ProofRestrictions
+                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build()));
