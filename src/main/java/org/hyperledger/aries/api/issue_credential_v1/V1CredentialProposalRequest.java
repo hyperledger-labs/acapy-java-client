@@ -36,7 +36,7 @@ public class V1CredentialProposalRequest {
     private String connectionId;
 
     @Nullable
-    @SerializedName(value = CredDefId.CREDENTIAL_DEFINITION_ID, alternate = CredDefId.CRED_DEF_ID)
+    @SerializedName(value = CredDefId.CRED_DEF_ID, alternate = CredDefId.CREDENTIAL_DEFINITION_ID)
     private String credentialDefinitionId;
 
     /**
