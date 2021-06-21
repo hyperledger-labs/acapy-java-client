@@ -21,7 +21,7 @@ public abstract class IntegrationTestBase {
 
     private final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
-    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-0_0.7-pre.2";
+    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-0_0.7-pre.3";
     public static final Integer ARIES_ADMIN_PORT = 8031;
 
     protected AriesClient ac;

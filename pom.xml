@@ -182,7 +182,7 @@
                 <version>5.1.1</version>
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
-                    <inputSpec>${project.basedir}/swagger/0_7_0_pre_swagger.json</inputSpec>
+                    <inputSpec>${project.basedir}/swagger/0_7_0_pre3_swagger.json</inputSpec>
                     <generatorName>java</generatorName>
                     <output>${project.basedir}</output>
                     <generateApis>false</generateApis>
@@ -239,6 +239,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <release>${jdk.version}</release>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
