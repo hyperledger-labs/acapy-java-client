@@ -27,7 +27,7 @@ public class DIDDocument {
 
     @JsonProperty("@context")
     @SerializedName("@context")
-    private String context = "https://www.w3.org/ns/did/v1";
+    private List<String> context = List.of("https://www.w3.org/ns/did/v1");
 
     private String id;
 
