@@ -1405,7 +1405,7 @@ public class AriesClient extends BaseClient {
      */
     public Optional<DIDDocument> resolverResolveDid(@NonNull String did) throws IOException {
         Request req = buildGet(url + "/resolver/resolve/" + did);
-        return call(req, DIDDocument.class);
+        return getWrapped(raw(req), "did_document", DIDDocument.class);
     }
 
     // ----------------------------------------------------
