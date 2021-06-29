@@ -11,6 +11,8 @@ import lombok.*;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Locale;
+
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class CreateInvitationParams {
     private String alias;
@@ -23,14 +25,18 @@ public class CreateInvitationParams {
             b.addQueryParameter("alias", alias);
         }
         if (autoAccept != null) {
-            b.addQueryParameter("auto_accept", autoAccept.toString());
+            b.addQueryParameter("auto_accept", toLowerCase(autoAccept));
         }
         if (multiUse != null) {
-            b.addQueryParameter("multi_use", multiUse.toString());
+            b.addQueryParameter("multi_use", toLowerCase(multiUse));
         }
         if (isPublic != null) {
-            b.addQueryParameter("public", isPublic.toString());
+            b.addQueryParameter("public", toLowerCase(isPublic));
         }
         return b;
+    }
+
+    private String toLowerCase(@NonNull Boolean val) {
+        return val.toString().toLowerCase(Locale.US);
     }
 }
