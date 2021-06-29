@@ -1479,7 +1479,7 @@ public class AriesClient extends BaseClient {
             b.addQueryParameter("cred_def_id", credentialDefinitionId);
         }
         if (state != null) {
-            b.addQueryParameter("state", state.toString());
+            b.addQueryParameter("state", state.getValue());
         }
         Request req = buildGet(b.build().toString());
         return call(req, RevRegsCreated.class);

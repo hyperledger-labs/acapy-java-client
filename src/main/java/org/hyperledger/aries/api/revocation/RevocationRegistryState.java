@@ -10,30 +10,41 @@ package org.hyperledger.aries.api.revocation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@AllArgsConstructor @Getter
 public enum RevocationRegistryState {
     @JsonProperty("init")
     @SerializedName("init")
-    INIT,
+    INIT("init"),
 
     @JsonProperty("generated")
     @SerializedName("generated")
-    GENERATED,
+    GENERATED("generated"),
 
     @JsonProperty("published")
     @SerializedName("published")
-    PUBLISHED,
+    PUBLISHED("published"),
 
     @JsonProperty("staged")
     @SerializedName("staged")
-    STAGED,
+    STAGED("staged"),
 
     @JsonProperty("active")
     @SerializedName("active")
-    ACTIVE,
+    ACTIVE("active"),
 
     @JsonProperty("full")
     @SerializedName("full")
-    FULL
+    FULL("full")
+    ;
+
+    private final String value;
+
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
 }
