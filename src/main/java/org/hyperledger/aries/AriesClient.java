@@ -26,7 +26,6 @@ import org.hyperledger.aries.api.connection.ReceiveInvitationRequest;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionRequest;
-import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionResponse;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionsCreated;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilter;
 import org.hyperledger.aries.api.credentials.Credential;
@@ -64,7 +63,6 @@ import org.hyperledger.aries.api.revocation.RevRegsCreated;
 import org.hyperledger.aries.api.revocation.RevokeRequest;
 import org.hyperledger.aries.api.revocation.*;
 import org.hyperledger.aries.api.schema.SchemaSendRequest;
-import org.hyperledger.aries.api.schema.SchemaSendResponse;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
@@ -433,13 +431,13 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a credential definition to the ledger
      * @param defReq {@link CredentialDefinitionRequest}
-     * @return {@link CredentialDefinitionResponse}
+     * @return {@link TxnOrCredentialDefinitionSendResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<CredentialDefinitionResponse> credentialDefinitionsCreate(
+    public Optional<TxnOrCredentialDefinitionSendResult> credentialDefinitionsCreate(
             @NonNull CredentialDefinitionRequest defReq) throws IOException {
         Request req = buildPost(url + "/credential-definitions", defReq);
-        return call(req, CredentialDefinitionResponse.class);
+        return call(req, TxnOrCredentialDefinitionSendResult.class);
     }
 
     /**
@@ -447,16 +445,16 @@ public class AriesClient extends BaseClient {
      * @since aca-py 0.7.0
      * @param defReq {@link CredentialDefinitionRequest}
      * @param endorserInfoFilter {@link EndorserInfoFilter}
-     * @return {@link CredentialDefinitionResponse}
+     * @return {@link TxnOrCredentialDefinitionSendResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<CredentialDefinitionResponse> credentialDefinitionsCreate(
+    public Optional<TxnOrCredentialDefinitionSendResult> credentialDefinitionsCreate(
             @NonNull CredentialDefinitionRequest defReq, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
                 .parse(url + "/credential-definitions")).newBuilder();
         endorserInfoFilter.buildParams(b);
         Request req = buildPost(b.toString(), defReq);
-        return call(req, CredentialDefinitionResponse.class);
+        return call(req, TxnOrCredentialDefinitionSendResult.class);
     }
 
     /**
@@ -1457,13 +1455,13 @@ public class AriesClient extends BaseClient {
     /**
      * Publish pending revocations to ledger
      * @param request {@link PublishRevocations}
-     * @return {@link PublishRevocations}
+     * @return {@link TxnOrPublishRevocationsResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<PublishRevocations> revocationPublishRevocations(@NonNull PublishRevocations request)
+    public Optional<TxnOrPublishRevocationsResult> revocationPublishRevocations(@NonNull PublishRevocations request)
             throws IOException {
         Request req = buildPost(url + "/revocation/publish-revocations", request);
-        return call(req, PublishRevocations.class);
+        return call(req, TxnOrPublishRevocationsResult.class);
     }
 
     /**
@@ -1532,12 +1530,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a schema to the ledger
      * @param schema {@link SchemaSendRequest}
-     * @return {@link SchemaSendResponse}
+     * @return {@link TxnOrSchemaSendResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<SchemaSendResponse> schemas(@NonNull SchemaSendRequest schema) throws IOException {
+    public Optional<TxnOrSchemaSendResult> schemas(@NonNull SchemaSendRequest schema) throws IOException {
         Request req = buildPost(url + "/schemas", schema);
-        return call(req, SchemaSendResponse.class);
+        return call(req, TxnOrSchemaSendResult.class);
     }
 
     /**
@@ -1545,16 +1543,16 @@ public class AriesClient extends BaseClient {
      * @since aca-py 0.7.0
      * @param schema {@link SchemaSendRequest}
      * @param endorserInfoFilter {@link EndorserInfoFilter}
-     * @return {@link SchemaSendResponse}
+     * @return {@link TxnOrSchemaSendResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<SchemaSendResponse> schemas(
+    public Optional<TxnOrSchemaSendResult> schemas(
             @NonNull SchemaSendRequest schema, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
                 .parse(url + "/schemas")).newBuilder();
         endorserInfoFilter.buildParams(b);
         Request req = buildPost(b.toString(), schema);
-        return call(req, SchemaSendResponse.class);
+        return call(req, TxnOrSchemaSendResult.class);
     }
 
     /**

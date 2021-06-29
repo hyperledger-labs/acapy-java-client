@@ -9,6 +9,7 @@ package org.hyperledger.aries.api.schema;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
+import org.hyperledger.acy_py.generated.model.TxnOrSchemaSendResult;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,7 @@ class MockedSchemaTest extends MockedTestBase {
 
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<SchemaSendResponse> res = ac.schemas(SchemaSendRequest
+        final Optional<TxnOrSchemaSendResult> res = ac.schemas(SchemaSendRequest
                 .builder()
                 .schemaName("prefs")
                 .schemaVersion("1.0")
@@ -34,8 +35,9 @@ class MockedSchemaTest extends MockedTestBase {
                 .build());
 
         Assertions.assertTrue(res.isPresent());
-        Assertions.assertTrue(res.get().getSchemaId().startsWith("M6Mbe3qx7vB4wpZF4sBRjt"));
-        Assertions.assertTrue(res.get().getSchema().getId().startsWith("M6Mbe3qx7vB4wpZF4sBRjt"));
+        Assertions.assertNotNull(res.get().getSent());
+        Assertions.assertTrue(res.get().getSent().getSchemaId().startsWith("M6Mbe3qx7vB4wpZF4sBRjt"));
+        Assertions.assertTrue(res.get().getSent().getSchema().getId().startsWith("M6Mbe3qx7vB4wpZF4sBRjt"));
         log.debug(pretty.toJson(res.get()));
     }
 

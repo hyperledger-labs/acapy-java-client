@@ -12,7 +12,7 @@ It is currently work in progress and not all endpoints of the agent are present 
 <dependency>
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
-   <version>0.7.0-pre.2</version>
+   <version>0.7.0-pre.3.1</version>
 </dependency>
 ```
 
@@ -54,6 +54,7 @@ For a aca-py 0.6.0 compatible client version you can use the following repositor
 | Client Version | ACA-PY Version  |
 |----------------|-----------------|
 | 0.7.0-pre.2    | 0.7.0-pre.2     |
+| 0.7.0-pre.3.1  | 0.7.0-pre.3     |
 
 ## Implemented Endpoints
 

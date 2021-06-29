@@ -4,7 +4,7 @@
 
     <groupId>network.idu.acapy</groupId>
     <artifactId>aries-client-python</artifactId>
-    <version>0.7.0-pre.4-SNAPSHOT</version>
+    <version>0.7.0-pre.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -62,7 +62,7 @@
         <kotlin.version>1.4.32</kotlin.version>
         <lombok.version>1.18.20</lombok.version>
         <okhttp.version>4.9.1</okhttp.version>
-        <pmd.version>6.35.0</pmd.version>
+        <pmd.version>6.36.0</pmd.version>
         <testcontainers.version>1.15.3</testcontainers.version>
     </properties>
 
