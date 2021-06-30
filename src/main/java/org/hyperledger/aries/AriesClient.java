@@ -7,23 +7,54 @@
  */
 package org.hyperledger.aries;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.acy_py.generated.model.*;
+import org.hyperledger.acy_py.generated.model.ClearPendingRevocationsRequest;
+import org.hyperledger.acy_py.generated.model.ConnRecord;
+import org.hyperledger.acy_py.generated.model.DID;
+import org.hyperledger.acy_py.generated.model.DIDCreate;
+import org.hyperledger.acy_py.generated.model.DIDEndpoint;
+import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
+import org.hyperledger.acy_py.generated.model.EndorserInfo;
+import org.hyperledger.acy_py.generated.model.InvitationCreateRequest;
+import org.hyperledger.acy_py.generated.model.InvitationMessage;
+import org.hyperledger.acy_py.generated.model.InvitationRecord;
+import org.hyperledger.acy_py.generated.model.PublishRevocations;
+import org.hyperledger.acy_py.generated.model.SendMessage;
+import org.hyperledger.acy_py.generated.model.TransactionJobs;
+import org.hyperledger.acy_py.generated.model.TransactionRecord;
+import org.hyperledger.acy_py.generated.model.TxnOrCredentialDefinitionSendResult;
+import org.hyperledger.acy_py.generated.model.TxnOrPublishRevocationsResult;
+import org.hyperledger.acy_py.generated.model.TxnOrSchemaSendResult;
+import org.hyperledger.acy_py.generated.model.V10PresentationProblemReportRequest;
 import org.hyperledger.aries.api.action_menu.PerformRequest;
 import org.hyperledger.aries.api.action_menu.SendMenu;
+import org.hyperledger.aries.api.connection.ConnectionAcceptInvitationFilter;
+import org.hyperledger.aries.api.connection.ConnectionAcceptRequestFilter;
+import org.hyperledger.aries.api.connection.ConnectionFilter;
+import org.hyperledger.aries.api.connection.ConnectionReceiveInvitationFilter;
+import org.hyperledger.aries.api.connection.ConnectionRecord;
+import org.hyperledger.aries.api.connection.ConnectionSetMetaDataRequest;
 import org.hyperledger.aries.api.connection.ConnectionStaticRequest;
 import org.hyperledger.aries.api.connection.ConnectionStaticResult;
+import org.hyperledger.aries.api.connection.CreateInvitationParams;
 import org.hyperledger.aries.api.connection.CreateInvitationRequest;
+import org.hyperledger.aries.api.connection.CreateInvitationResponse;
+import org.hyperledger.aries.api.connection.EndpointResult;
 import org.hyperledger.aries.api.connection.ReceiveInvitationRequest;
-import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionRequest;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionsCreated;
@@ -31,14 +62,30 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilte
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
-import org.hyperledger.aries.api.did_exchange.*;
-import org.hyperledger.aries.api.endorser.*;
+import org.hyperledger.aries.api.did_exchange.DidExchangeAcceptInvitationFilter;
+import org.hyperledger.aries.api.did_exchange.DidExchangeAcceptRequestFilter;
+import org.hyperledger.aries.api.did_exchange.DidExchangeCreateRequestFilter;
+import org.hyperledger.aries.api.did_exchange.DidExchangeReceiveRequestFilter;
+import org.hyperledger.aries.api.endorser.EndorseCreateRequest;
+import org.hyperledger.aries.api.endorser.EndorseCreateRequestFilter;
+import org.hyperledger.aries.api.endorser.EndorserInfoFilter;
+import org.hyperledger.aries.api.endorser.SetEndorserInfoFilter;
+import org.hyperledger.aries.api.endorser.SetEndorserRoleFilter;
 import org.hyperledger.aries.api.exception.AriesException;
-import org.hyperledger.aries.api.issue_credential_v1.*;
+import org.hyperledger.aries.api.issue_credential_v1.IssueCredentialRecordsFilter;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialCreate;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialIssueRequest;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialOfferRequest;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProblemReportRequest;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialStoreRequest;
+import org.hyperledger.aries.api.jsonld.Proof;
 import org.hyperledger.aries.api.jsonld.SignRequest;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
-import org.hyperledger.aries.api.jsonld.*;
 import org.hyperledger.aries.api.ledger.DidVerkeyResponse;
 import org.hyperledger.aries.api.ledger.EndpointResponse;
 import org.hyperledger.aries.api.ledger.TAAAccept;
@@ -54,29 +101,37 @@ import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
+import org.hyperledger.aries.api.present_proof.PresentProofProposal;
+import org.hyperledger.aries.api.present_proof.PresentProofRecordsFilter;
+import org.hyperledger.aries.api.present_proof.PresentProofRequest;
+import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
-import org.hyperledger.aries.api.present_proof.*;
+import org.hyperledger.aries.api.present_proof.PresentationRequestCredentials;
+import org.hyperledger.aries.api.present_proof.PresentationRequestCredentialsFilter;
 import org.hyperledger.aries.api.resolver.DIDDocument;
 import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
+import org.hyperledger.aries.api.revocation.RevRegCreateResponse;
 import org.hyperledger.aries.api.revocation.RevRegUpdateTailsFileUri;
 import org.hyperledger.aries.api.revocation.RevRegsCreated;
+import org.hyperledger.aries.api.revocation.RevocationRegistryState;
 import org.hyperledger.aries.api.revocation.RevokeRequest;
-import org.hyperledger.aries.api.revocation.*;
 import org.hyperledger.aries.api.schema.SchemaSendRequest;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
+import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.config.TimeUtil;
 
-import javax.annotation.Nullable;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 /**
  * ACA-PY client
@@ -1564,6 +1619,23 @@ public class AriesClient extends BaseClient {
     public Optional<Schema> schemasGetById(@NonNull String schemaId) throws IOException {
         Request req = buildGet(url + "/schemas/" + schemaId);
         return getWrapped(raw(req), "schema", Schema.class);
+    }
+    
+    /**
+     * Loads all schemas from the ledger, which where created by the DID of this cloudagent.
+     * 
+     * @param filter allows to look only for some schemas
+     * @return List of Schema names
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<String>> schemasCreated(@Nullable SchemasCreatedFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/schemas/created")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
+        return getWrapped(raw(req), "schema_ids", List.class);
     }
 
     // ----------------------------------------------------
