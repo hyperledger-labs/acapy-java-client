@@ -64,6 +64,7 @@ import org.hyperledger.aries.api.revocation.RevokeRequest;
 import org.hyperledger.aries.api.revocation.*;
 import org.hyperledger.aries.api.schema.SchemaSendRequest;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
+import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
@@ -1564,6 +1565,23 @@ public class AriesClient extends BaseClient {
     public Optional<Schema> schemasGetById(@NonNull String schemaId) throws IOException {
         Request req = buildGet(url + "/schemas/" + schemaId);
         return getWrapped(raw(req), "schema", Schema.class);
+    }
+    
+    /**
+     * Loads all schemas from the ledger, which where created by the DID of this cloudagent.
+     * 
+     * @param filter allows to look only for some schemas
+     * @return List of Schema names
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<String>> schemasCreated(@Nullable SchemasCreatedFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/schemas/created")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
+        return getWrapped(raw(req), "schema_ids", List.class);
     }
 
     // ----------------------------------------------------

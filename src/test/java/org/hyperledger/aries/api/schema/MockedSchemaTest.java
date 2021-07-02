@@ -15,6 +15,9 @@ import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +56,26 @@ class MockedSchemaTest extends MockedTestBase {
         Assertions.assertTrue(res.get().getId().startsWith("M6Mbe3qx7vB4wpZF4sBRjt"));
         Assertions.assertEquals("bank_account", res.get().getName());
         Assertions.assertEquals(571, res.get().getSeqNo());
+        log.debug(pretty.toJson(res.get()));
+    }
+    
+    @Test
+    void testGetAllSchemas() throws Exception {
+    	JsonArray jsonArray = new JsonArray();
+    	jsonArray.add("exampleSchemaId");
+    	JsonObject jsonObject = new JsonObject();
+    	jsonObject.add("schema_ids", jsonArray);
+    	
+        String json = jsonObject.toString();
+        System.out.println(json);
+
+        server.enqueue(new MockResponse().setBody(json));
+
+        Optional<List<String>> res = ac.schemasCreated(SchemasCreatedFilter.builder().build());
+
+        Assertions.assertTrue(res.isPresent());
+        Assertions.assertEquals(1, res.get().size());
+        
         log.debug(pretty.toJson(res.get()));
     }
 
