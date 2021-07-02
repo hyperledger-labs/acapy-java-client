@@ -52,10 +52,10 @@ public class PresentProofRequest {
 
         private ProofNonRevoked nonRevoked;
 
-        @Builder.Default
+        @Singular
         private Map<String, ProofRequestedAttributes> requestedAttributes = new LinkedHashMap<>();
 
-        @Builder.Default
+        @Singular
         private Map<String, ProofRequestedPredicates> requestedPredicates = new LinkedHashMap<>();
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -64,6 +64,7 @@ public class PresentProofRequest {
             /** @since 0.5.4 */
             private List<String> names;
             private ProofNonRevoked nonRevoked;
+            @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
             private List<JsonObject> restrictions = new ArrayList<>();
@@ -75,6 +76,7 @@ public class PresentProofRequest {
             private ProofNonRevoked nonRevoked;
             private IndyProofReqPredSpec.PTypeEnum pType;
             private String pValue;
+            @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
             private List<JsonObject> restrictions = new ArrayList<>();
