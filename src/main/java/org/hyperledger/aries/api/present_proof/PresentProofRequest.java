@@ -18,17 +18,17 @@ import org.hyperledger.aries.api.serializer.JsonObjectArraySerializer;
 import org.hyperledger.aries.config.CredDefId;
 import org.hyperledger.aries.config.GsonConfig;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Aka PresentationSendRequestRequest
  * This model is used to send a presentation request, or in other words to request a proof.
- *
  */
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PresentProofRequest {
 
     private String connectionId;
@@ -67,7 +67,7 @@ public class PresentProofRequest {
             @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
-            private List<JsonObject> restrictions = new ArrayList<>();
+            private List<JsonObject> restrictions;
         }
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -79,7 +79,7 @@ public class PresentProofRequest {
             @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
-            private List<JsonObject> restrictions = new ArrayList<>();
+            private List<JsonObject> restrictions;
         }
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
