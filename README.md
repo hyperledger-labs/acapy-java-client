@@ -166,6 +166,7 @@ For a aca-py 0.6.0 compatible client version you can use the following repositor
 | POST   | /revocation/revoke                                      | :white_check_mark: |
 |        | **schema**                                              |                    |
 | POST   | /schemas                                                | :white_check_mark: |
+| GET    | /schemas/created                                        | :white_check_mark: |
 | GET    | /schemas/{schema_id}                                    | :white_check_mark: |
 |        | **server**                                              |                    |
 | GET    | /status/config                                          | :white_check_mark: |

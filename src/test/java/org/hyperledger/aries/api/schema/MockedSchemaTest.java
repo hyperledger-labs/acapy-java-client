@@ -58,16 +58,16 @@ class MockedSchemaTest extends MockedTestBase {
         Assertions.assertEquals(571, res.get().getSeqNo());
         log.debug(pretty.toJson(res.get()));
     }
-    
+
     @Test
     void testGetAllSchemas() throws Exception {
-    	JsonArray jsonArray = new JsonArray();
-    	jsonArray.add("exampleSchemaId");
-    	JsonObject jsonObject = new JsonObject();
-    	jsonObject.add("schema_ids", jsonArray);
-    	
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add("exampleSchemaId");
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("schema_ids", jsonArray);
+
         String json = jsonObject.toString();
-        System.out.println(json);
+        log.debug(pretty.toJson(json));
 
         server.enqueue(new MockResponse().setBody(json));
 
@@ -75,7 +75,7 @@ class MockedSchemaTest extends MockedTestBase {
 
         Assertions.assertTrue(res.isPresent());
         Assertions.assertEquals(1, res.get().size());
-        
+
         log.debug(pretty.toJson(res.get()));
     }
 
