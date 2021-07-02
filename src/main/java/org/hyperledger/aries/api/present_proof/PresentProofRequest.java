@@ -18,17 +18,17 @@ import org.hyperledger.aries.api.serializer.JsonObjectArraySerializer;
 import org.hyperledger.aries.config.CredDefId;
 import org.hyperledger.aries.config.GsonConfig;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Aka PresentationSendRequestRequest
  * This model is used to send a presentation request, or in other words to request a proof.
- *
  */
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PresentProofRequest {
 
     private String connectionId;
@@ -52,11 +52,11 @@ public class PresentProofRequest {
 
         private ProofNonRevoked nonRevoked;
 
-        @Builder.Default
-        private Map<String, ProofRequestedAttributes> requestedAttributes = new LinkedHashMap<>();
+        @Singular
+        private Map<String, ProofRequestedAttributes> requestedAttributes;
 
-        @Builder.Default
-        private Map<String, ProofRequestedPredicates> requestedPredicates = new LinkedHashMap<>();
+        @Singular
+        private Map<String, ProofRequestedPredicates> requestedPredicates;
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
         public static class ProofRequestedAttributes {
@@ -64,9 +64,10 @@ public class PresentProofRequest {
             /** @since 0.5.4 */
             private List<String> names;
             private ProofNonRevoked nonRevoked;
+            @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
-            private List<JsonObject> restrictions = new ArrayList<>();
+            private List<JsonObject> restrictions;
         }
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -75,9 +76,10 @@ public class PresentProofRequest {
             private ProofNonRevoked nonRevoked;
             private IndyProofReqPredSpec.PTypeEnum pType;
             private String pValue;
+            @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
-            private List<JsonObject> restrictions = new ArrayList<>();
+            private List<JsonObject> restrictions;
         }
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
