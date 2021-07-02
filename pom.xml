@@ -182,6 +182,7 @@
                 <version>5.1.1</version>
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
+                    <skip>true</skip>
                     <inputSpec>${project.basedir}/swagger/0_7_0_pre3_swagger.json</inputSpec>
                     <generatorName>java</generatorName>
                     <output>${project.basedir}</output>
