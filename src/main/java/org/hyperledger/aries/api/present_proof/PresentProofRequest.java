@@ -53,10 +53,10 @@ public class PresentProofRequest {
         private ProofNonRevoked nonRevoked;
 
         @Singular
-        private Map<String, ProofRequestedAttributes> requestedAttributes = new LinkedHashMap<>();
+        private Map<String, ProofRequestedAttributes> requestedAttributes;
 
         @Singular
-        private Map<String, ProofRequestedPredicates> requestedPredicates = new LinkedHashMap<>();
+        private Map<String, ProofRequestedPredicates> requestedPredicates;
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
         public static class ProofRequestedAttributes {
