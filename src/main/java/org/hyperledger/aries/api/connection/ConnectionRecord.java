@@ -9,6 +9,8 @@ package org.hyperledger.aries.api.connection;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import lombok.Data;
@@ -21,10 +23,10 @@ public class ConnectionRecord {
     private ConnectionAcceptance accept;
     private String alias;
     private String connectionId;
+    private ConnectionProtocol connectionProtocol;
     private String createdAt;
     private String errorMsg;
     private String inboundConnectionId;
-    @Deprecated private String initiator;
     private String invitationKey;
     private InvitationMode invitationMode;
     private String invitationMsgId;
@@ -81,5 +83,20 @@ public class ConnectionRecord {
         @JsonProperty("error")
         @SerializedName("error")
         ERROR
+    }
+
+    @Getter @AllArgsConstructor
+    public enum ConnectionProtocol {
+
+        @JsonProperty("connections/1.0")
+        @SerializedName("connections/1.0")
+        CONNECTION_V1("connections/1.0"),
+
+        @JsonProperty("didexchange/1.0")
+        @SerializedName("didexchange/1.0")
+        DID_EXCHANGE_V1("didexchange/1.0")
+        ;
+
+        private String value;
     }
 }

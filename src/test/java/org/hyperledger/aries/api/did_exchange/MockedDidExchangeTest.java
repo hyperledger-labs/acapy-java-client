@@ -8,7 +8,9 @@
 package org.hyperledger.aries.api.did_exchange;
 
 import okhttp3.mockwebserver.MockResponse;
+import org.hyperledger.acy_py.generated.model.ConnRecord;
 import org.hyperledger.aries.MockedTestBase;
+import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,11 +23,11 @@ class MockedDidExchangeTest extends MockedTestBase {
         String json = loader.load("files/didexchange/didexchange-create-request.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<DIDXRequest> c = ac.didExchangeCreateRequest(DidExchangeCreateRequestFilter
+        final Optional<ConnectionRecord> c = ac.didExchangeCreateRequest(DidExchangeCreateRequestFilter
                 .builder()
-                .theirPublicDid("did:iil:123")
+                .theirPublicDid("F6dB7dMVHUQSC64qemnBi7")
                 .build());
         Assertions.assertTrue(c.isPresent());
-        Assertions.assertEquals("word up", c.get().getLabel());
+        Assertions.assertEquals(ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1, c.get().getConnectionProtocol());
     }
 }

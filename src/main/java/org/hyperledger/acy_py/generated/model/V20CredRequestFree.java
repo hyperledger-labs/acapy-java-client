@@ -37,6 +37,9 @@ public class V20CredRequestFree {
     public static final String SERIALIZED_NAME_FILTER = "filter";
     @SerializedName(SERIALIZED_NAME_FILTER)
     private V20CredFilterLDProof filter;
+    public static final String SERIALIZED_NAME_HOLDER_DID = "holder_did";
+    @SerializedName(SERIALIZED_NAME_HOLDER_DID)
+    private String holderDid;
     public static final String SERIALIZED_NAME_TRACE = "trace";
     @SerializedName(SERIALIZED_NAME_TRACE)
     private Boolean trace;

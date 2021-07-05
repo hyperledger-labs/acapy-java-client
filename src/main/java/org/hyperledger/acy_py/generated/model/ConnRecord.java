@@ -85,6 +85,86 @@ public class ConnRecord {
     public static final String SERIALIZED_NAME_CONNECTION_ID = "connection_id";
     @SerializedName(SERIALIZED_NAME_CONNECTION_ID)
     private String connectionId;
+
+    /**
+     * Connection protocol used
+     */
+    @JsonAdapter(ConnectionProtocolEnum.Adapter.class)
+    public enum ConnectionProtocolEnum {
+        C("c"),
+
+        O("o"),
+
+        N("n"),
+
+        E("e"),
+
+        T("t"),
+
+        I("i"),
+
+        S("s"),
+
+        SLASH("/"),
+
+        _1("1"),
+
+        PERIOD("."),
+
+        _0("0"),
+
+        D("d"),
+
+        X("x"),
+
+        H("h"),
+
+        A("a"),
+
+        G("g");
+
+        private String value;
+
+        ConnectionProtocolEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static ConnectionProtocolEnum fromValue(String value) {
+            for (ConnectionProtocolEnum b : ConnectionProtocolEnum.values()) {
+                if (b.value.equals(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
+
+        public static class Adapter extends TypeAdapter<ConnectionProtocolEnum> {
+            @Override
+            public void write(final JsonWriter jsonWriter, final ConnectionProtocolEnum enumeration)
+                    throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public ConnectionProtocolEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return ConnectionProtocolEnum.fromValue(value);
+            }
+        }
+    }
+
+    public static final String SERIALIZED_NAME_CONNECTION_PROTOCOL = "connection_protocol";
+    @SerializedName(SERIALIZED_NAME_CONNECTION_PROTOCOL)
+    private ConnectionProtocolEnum connectionProtocol;
     public static final String SERIALIZED_NAME_CREATED_AT = "created_at";
     @SerializedName(SERIALIZED_NAME_CREATED_AT)
     private String createdAt;

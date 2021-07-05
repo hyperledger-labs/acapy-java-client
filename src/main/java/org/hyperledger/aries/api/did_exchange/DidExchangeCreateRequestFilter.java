@@ -26,12 +26,16 @@ public class DidExchangeCreateRequestFilter implements AcaPyRequestFilter {
     /** Label for connection request */
     private String myLabel;
 
+    /** Use public did for this connection */
+    private Boolean usePublicDid;
+
     @Builder
     public DidExchangeCreateRequestFilter(@NonNull String theirPublicDid, String mediationId,
-        String myEndpoint, String myLabel) {
+        String myEndpoint, String myLabel, Boolean usePublicDid) {
         this.theirPublicDid = theirPublicDid;
         this.mediationId = mediationId;
         this.myEndpoint = myEndpoint;
         this.myLabel = myLabel;
+        this.usePublicDid = usePublicDid;
     }
 }

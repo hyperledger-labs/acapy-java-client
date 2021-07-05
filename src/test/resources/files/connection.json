@@ -1,13 +1,16 @@
 {
-    "updated_at": "2020-06-16 09:42:54.540635Z",
-    "their_label": "Bob",
-    "created_at": "2020-06-16 09:42:54.499263Z",
-    "state": "request",
-    "request_id": "b1245a73-aa98-4511-910b-1d5da9429b9f",
+    "invitation_key": "8gdhRLtvJHzKoJGyuEqgdN1QZGYfai4wMHFGgtfDXg3D",
     "invitation_mode": "once",
+    "their_label": "bob",
+    "their_role": "inviter",
+    "connection_protocol": "connections/1.0",
+    "rfc23_state": "request-sent",
     "accept": "auto",
-    "connection_id": "ce43c882-029d-415e-af44-fa01168a5ad1",
     "routing_state": "none",
-    "initiator": "external",
-    "my_did": "2jLadxcUa35JGjWvnUzH9m"
+    "updated_at": "2021-07-05 12:27:31.979933Z",
+    "their_did": "CsqqtKN3Se89LoV5MPGC8Z",
+    "state": "request",
+    "my_did": "XWKk9DP2ZBKMmiwLSAAdE9",
+    "connection_id": "bc349b33-00cd-4419-a432-82cdf7142bd7",
+    "created_at": "2021-07-05 12:27:31.979933Z"
 }

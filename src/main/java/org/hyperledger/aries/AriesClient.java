@@ -596,16 +596,16 @@ public class AriesClient extends BaseClient {
      * Create request against public DID's implicit invitation
      * @since aca-py 0.7.0
      * @param filter {@link DidExchangeCreateRequestFilter}
-     * @return {@link DIDXRequest}
+     * @return {@link ConnectionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<DIDXRequest> didExchangeCreateRequest(@NonNull DidExchangeCreateRequestFilter filter)
+    public Optional<ConnectionRecord> didExchangeCreateRequest(@NonNull DidExchangeCreateRequestFilter filter)
             throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(
                 HttpUrl.parse(url + "/didexchange/create-request")).newBuilder();
         filter.buildParams(b);
         Request req = buildPost(b.toString(), EMPTY_JSON);
-        return call(req, DIDXRequest.class);
+        return call(req, ConnectionRecord.class);
     }
 
     /**

@@ -73,7 +73,17 @@ class MockedConnectionTest extends MockedTestBase {
 
         final Optional<ConnectionRecord> con = ac.connectionsReceiveInvitation(new ReceiveInvitationRequest(), null);
         Assertions.assertTrue(con.isPresent());
-        Assertions.assertTrue(con.get().getConnectionId().startsWith("ce43c882"));
+        Assertions.assertTrue(con.get().getConnectionId().startsWith("bc349b33"));
+        Assertions.assertEquals(ConnectionRecord.ConnectionProtocol.CONNECTION_V1, con.get().getConnectionProtocol());
+    }
+
+    @Test
+    void testConnectionProtocol() {
+        ConnectionRecord con = new ConnectionRecord();
+        con.setConnectionProtocol(ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1);
+        String json = gson.toJson(con);
+        ConnectionRecord deserialized = gson.fromJson(json, ConnectionRecord.class);
+        Assertions.assertEquals(con, deserialized);
     }
 
 }
