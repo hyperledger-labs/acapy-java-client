@@ -47,7 +47,7 @@ public class DIDEndpointWithType {
 
         LINKEDDOMAINS("LinkedDomains");
 
-        private String value;
+        private final String value;
 
         EndpointTypeEnum(String value) {
             this.value = value;

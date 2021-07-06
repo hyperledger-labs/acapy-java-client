@@ -52,6 +52,7 @@ import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
 import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
 import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
+import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
@@ -1189,17 +1190,17 @@ public class AriesClient extends BaseClient {
      * @since aca-py 0.7.0
      * @param request {@link InvitationMessage}
      * @param filter {@link ReceiveInvitationFilter}
-     * @return {@link ConnRecord}
+     * @return {@link ConnectionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<ConnRecord> outOfBandReceiveInvitation(
+    public Optional<ConnectionRecord> outOfBandReceiveInvitation(
             @NonNull InvitationMessage request, ReceiveInvitationFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/receive-invitation")).newBuilder();
         if (filter != null) {
             filter.buildParams(b);
         }
         Request req = buildPost(b.build().toString(), request);
-        return call(req, ConnRecord.class);
+        return call(req, ConnectionRecord.class);
     }
 
     // ----------------------------------------------------

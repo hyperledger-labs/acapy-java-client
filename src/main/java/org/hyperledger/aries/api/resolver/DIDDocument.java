@@ -25,6 +25,8 @@ import java.util.Optional;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class DIDDocument {
 
+    public static final String ENDPOINT_TYPE_DID_COMM = "did-communication";
+
     @JsonProperty("@context")
     @SerializedName("@context")
     private List<String> context = List.of("https://www.w3.org/ns/did/v1");
@@ -93,17 +95,17 @@ public class DIDDocument {
     }
 
     public Optional<String> findPublicProfileUrl() {
-        return findUrlByType(DIDEndpointWithType.EndpointTypeEnum.PROFILE);
+        return findUrlByType(DIDEndpointWithType.EndpointTypeEnum.PROFILE.getValue());
     }
 
     public Optional<String> findAriesEndpointUrl() {
-        return findUrlByType(DIDEndpointWithType.EndpointTypeEnum.ENDPOINT);
+        return findUrlByType(ENDPOINT_TYPE_DID_COMM);
     }
 
-    private Optional<String> findUrlByType(@NonNull DIDEndpointWithType.EndpointTypeEnum type) {
+    private Optional<String> findUrlByType(@NonNull String type) {
         return getService()
                 .stream()
-                .filter(s -> StringUtils.equalsIgnoreCase(type.getValue(), s.getType()))
+                .filter(s -> StringUtils.equalsIgnoreCase(type, s.getType()))
                 .findFirst()
                 .map(Service::getServiceEndpoint);
     }
@@ -119,6 +121,6 @@ public class DIDDocument {
                 .anyMatch(s ->
                         StringUtils.equalsIgnoreCase(
                                 DIDEndpointWithType.EndpointTypeEnum.ENDPOINT.getValue(), s.getType())
-                        || StringUtils.equalsIgnoreCase("did-communication", s.getType()));
+                        || StringUtils.equalsIgnoreCase(ENDPOINT_TYPE_DID_COMM, s.getType()));
     }
 }

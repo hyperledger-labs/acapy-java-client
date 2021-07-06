@@ -45,10 +45,5 @@ public enum ConnectionState {
 
     @JsonProperty("start")
     @SerializedName("start")
-    START,
-
-    @Deprecated // since 0.6.0
-    @JsonProperty("inactive")
-    @SerializedName("inactive")
-    INACTIVE
+    START
 }

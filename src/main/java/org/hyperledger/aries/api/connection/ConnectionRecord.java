@@ -10,10 +10,8 @@ package org.hyperledger.aries.api.connection;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -42,11 +40,11 @@ public class ConnectionRecord {
     private String updatedAt;
 
     /**
-     * The request id is only set if the connection was initated by this agent.
+     * Tries to determine the direction of a connection
      * @return true in case the connection was not initiated by this agent
      */
     public boolean isIncomingConnection() {
-        return StringUtils.isEmpty(requestId);
+        return ConnectionTheirRole.INVITEE.equals(theirRole);
     }
 
     public boolean isActive() {
@@ -97,6 +95,6 @@ public class ConnectionRecord {
         DID_EXCHANGE_V1("didexchange/1.0")
         ;
 
-        private String value;
+        private final String value;
     }
 }
