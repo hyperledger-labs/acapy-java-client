@@ -14,13 +14,6 @@ import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
 public class DidExchangeAcceptRequestFilter implements AcaPyRequestFilter {
-    private String connId;
     private String mediationId;
     private String myEndpoint;
-
-    public DidExchangeAcceptRequestFilter(@NonNull String connId, String mediationId, String myEndpoint) {
-        this.connId = connId;
-        this.mediationId = mediationId;
-        this.myEndpoint = myEndpoint;
-    }
 }
