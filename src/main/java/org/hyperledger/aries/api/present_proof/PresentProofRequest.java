@@ -18,7 +18,6 @@ import org.hyperledger.aries.api.serializer.JsonObjectArrayDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectArraySerializer;
 import org.hyperledger.aries.config.CredDefId;
 import org.hyperledger.aries.config.GsonConfig;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -134,7 +133,7 @@ public class PresentProofRequest {
                 return flattenGenericRestrictions(result);
             }
 
-            @NotNull
+            @NonNull
             private JsonObject flattenGenericRestrictions(JsonObject result) {
                 result.remove(GENERIC_RESTRICTIONS);
                 genericRestrictions.forEach((k,v)-> result.add(k,new JsonPrimitive(v)));
