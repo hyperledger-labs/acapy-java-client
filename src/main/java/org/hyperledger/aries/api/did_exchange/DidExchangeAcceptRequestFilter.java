@@ -9,7 +9,6 @@ package org.hyperledger.aries.api.did_exchange;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
