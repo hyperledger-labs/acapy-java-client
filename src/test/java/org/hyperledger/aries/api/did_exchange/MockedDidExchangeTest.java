@@ -8,7 +8,6 @@
 package org.hyperledger.aries.api.did_exchange;
 
 import okhttp3.mockwebserver.MockResponse;
-import org.hyperledger.acy_py.generated.model.ConnRecord;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.junit.jupiter.api.Assertions;
