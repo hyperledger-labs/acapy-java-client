@@ -8,7 +8,6 @@
 package org.hyperledger.aries.api.credentials;
 
 import okhttp3.mockwebserver.MockResponse;
-import org.hyperledger.acy_py.generated.model.TxnOrCredentialDefinitionSendResult;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionRequest;
@@ -28,15 +27,15 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testCreateCredentialDefinition() throws Exception {
-        server.enqueue(new MockResponse().setBody("{\"sent\": {\n" +
-                "    \"credential_definition_id\": \"F6dB7dMVHUQSC64qemnBi7:3:CL:571:phil-bank6\"\n" +
-                "  }\n" +
+        server.enqueue(new MockResponse().setBody("\n" +
+                "{\n" +
+                "  \"credential_definition_id\": \"F6dB7dMVHUQSC64qemnBi7:3:CL:571:my-local-test-bank-foo\"\n" +
                 "}"));
 
-        final Optional<TxnOrCredentialDefinitionSendResult> c = ac.credentialDefinitionsCreate(
+        final Optional<CredentialDefinition.CredentialDefinitionResponse> c = ac.credentialDefinitionsCreate(
                 new CredentialDefinitionRequest());
         Assertions.assertTrue(c.isPresent());
-        Assertions.assertTrue(c.get().getSent().getCredentialDefinitionId().startsWith("F6dB7dMVHUQSC64qemnBi7"));
+        Assertions.assertTrue(c.get().getCredentialDefinitionId().startsWith("F6dB7dMVHUQSC64qemnBi7"));
     }
 
     @Test

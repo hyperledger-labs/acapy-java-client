@@ -52,7 +52,7 @@ public final class CredentialDefinition {
 
     @Data @NoArgsConstructor @AllArgsConstructor
     public static final class CredentialDefinitionResponse {
-        @SerializedName(value = CredDefId.CRED_DEF_ID, alternate = CredDefId.CREDENTIAL_DEFINITION_ID)
+        @SerializedName(value = CredDefId.CREDENTIAL_DEFINITION_ID, alternate = CredDefId.CRED_DEF_ID)
         private String credentialDefinitionId;
     }
 

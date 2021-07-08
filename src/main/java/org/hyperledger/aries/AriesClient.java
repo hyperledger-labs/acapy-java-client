@@ -64,6 +64,7 @@ import org.hyperledger.aries.api.revocation.RevRegsCreated;
 import org.hyperledger.aries.api.revocation.RevokeRequest;
 import org.hyperledger.aries.api.revocation.*;
 import org.hyperledger.aries.api.schema.SchemaSendRequest;
+import org.hyperledger.aries.api.schema.SchemaSendResponse;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
@@ -433,13 +434,13 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a credential definition to the ledger
      * @param defReq {@link CredentialDefinitionRequest}
-     * @return {@link TxnOrCredentialDefinitionSendResult}
+     * @return {@link CredentialDefinition.CredentialDefinitionResponse}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TxnOrCredentialDefinitionSendResult> credentialDefinitionsCreate(
+    public Optional<CredentialDefinition.CredentialDefinitionResponse> credentialDefinitionsCreate(
             @NonNull CredentialDefinitionRequest defReq) throws IOException {
         Request req = buildPost(url + "/credential-definitions", defReq);
-        return call(req, TxnOrCredentialDefinitionSendResult.class);
+        return call(req, CredentialDefinition.CredentialDefinitionResponse.class);
     }
 
     /**
@@ -1457,12 +1458,27 @@ public class AriesClient extends BaseClient {
     /**
      * Publish pending revocations to ledger
      * @param request {@link PublishRevocations}
+     * @return {@link PublishRevocations}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<PublishRevocations> revocationPublishRevocations(@NonNull PublishRevocations request)
+            throws IOException {
+        Request req = buildPost(url + "/revocation/publish-revocations", request);
+        return call(req, PublishRevocations.class);
+    }
+
+    /**
+     * Publish pending revocations to ledger via an endorser
+     * @param request {@link PublishRevocations}
      * @return {@link TxnOrPublishRevocationsResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TxnOrPublishRevocationsResult> revocationPublishRevocations(@NonNull PublishRevocations request)
+    public Optional<TxnOrPublishRevocationsResult> revocationPublishRevocations(@NonNull PublishRevocations request, @NonNull EndorserInfoFilter filter)
             throws IOException {
-        Request req = buildPost(url + "/revocation/publish-revocations", request);
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/publish-revocations")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.toString(), request);
         return call(req, TxnOrPublishRevocationsResult.class);
     }
 
@@ -1532,12 +1548,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a schema to the ledger
      * @param schema {@link SchemaSendRequest}
-     * @return {@link TxnOrSchemaSendResult}
+     * @return {@link SchemaSendResponse}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TxnOrSchemaSendResult> schemas(@NonNull SchemaSendRequest schema) throws IOException {
+    public Optional<SchemaSendResponse> schemas(@NonNull SchemaSendRequest schema) throws IOException {
         Request req = buildPost(url + "/schemas", schema);
-        return call(req, TxnOrSchemaSendResult.class);
+        return call(req, SchemaSendResponse.class);
     }
 
     /**
