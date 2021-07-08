@@ -109,7 +109,6 @@ public class PresentProofRequest {
         @AllArgsConstructor
         @Builder
         public static class ProofRestrictions {
-            private static final String GENERIC_RESTRICTIONS="GenericRestrictions";
             private String schemaId;
 
             private String schemaName;
@@ -123,9 +122,8 @@ public class PresentProofRequest {
 
             private String issuerDid;
 
-            @SerializedName(value = GENERIC_RESTRICTIONS)
             @Singular
-            private Map<String, String> genericRestrictions;
+            private transient Map<String, String> genericRestrictions;
 
             public JsonObject toJsonObject() {
                 JsonObject result = GsonConfig.defaultConfig().toJsonTree(this)
@@ -135,7 +133,6 @@ public class PresentProofRequest {
 
             @NonNull
             private JsonObject flattenGenericRestrictions(JsonObject result) {
-                result.remove(GENERIC_RESTRICTIONS);
                 genericRestrictions.forEach((k,v)-> result.add(k,new JsonPrimitive(v)));
                 return result;
             }
