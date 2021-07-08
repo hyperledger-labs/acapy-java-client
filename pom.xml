@@ -57,7 +57,7 @@
         <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.12.3</jackson.version>
+        <jackson.version>2.12.4</jackson.version>
         <junit.jupiter.api.version>5.7.2</junit.jupiter.api.version>
         <kotlin.version>1.4.32</kotlin.version>
         <lombok.version>1.18.20</lombok.version>

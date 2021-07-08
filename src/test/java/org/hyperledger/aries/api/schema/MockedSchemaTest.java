@@ -7,16 +7,14 @@
  */
 package org.hyperledger.aries.api.schema;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
-import org.hyperledger.acy_py.generated.model.TxnOrSchemaSendResult;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.util.List;
 import java.util.Optional;
