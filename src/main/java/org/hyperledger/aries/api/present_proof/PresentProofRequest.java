@@ -10,6 +10,7 @@ package org.hyperledger.aries.api.present_proof;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import org.hyperledger.acy_py.generated.model.IndyProofReqPredSpec;
@@ -33,13 +34,17 @@ public class PresentProofRequest {
 
     private String connectionId;
 
-    @NonNull private ProofRequest proofRequest;
+    @NonNull
+    private ProofRequest proofRequest;
 
     private Boolean trace;
 
     private String comment;
 
-    @Data @NoArgsConstructor @AllArgsConstructor @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class ProofRequest {
 
         @Builder.Default
@@ -58,10 +63,15 @@ public class PresentProofRequest {
         @Singular
         private Map<String, ProofRequestedPredicates> requestedPredicates;
 
-        @Data @NoArgsConstructor @AllArgsConstructor @Builder
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public static class ProofRequestedAttributes {
             private String name;
-            /** @since 0.5.4 */
+            /**
+             * @since 0.5.4
+             */
             private List<String> names;
             private ProofNonRevoked nonRevoked;
             @Singular
@@ -70,7 +80,10 @@ public class PresentProofRequest {
             private List<JsonObject> restrictions;
         }
 
-        @Data @NoArgsConstructor @AllArgsConstructor @Builder
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public static class ProofRequestedPredicates {
             private String name;
             private ProofNonRevoked nonRevoked;
@@ -82,13 +95,19 @@ public class PresentProofRequest {
             private List<JsonObject> restrictions;
         }
 
-        @Data @NoArgsConstructor @AllArgsConstructor @Builder
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public static class ProofNonRevoked {
             private Long from;
             private Long to;
         }
 
-        @Data @NoArgsConstructor @AllArgsConstructor @Builder
+        @Data
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
         public static class ProofRestrictions {
             private String schemaId;
 
@@ -103,8 +122,19 @@ public class PresentProofRequest {
 
             private String issuerDid;
 
+            @Singular
+            private transient Map<String, String> genericRestrictions;
+
             public JsonObject toJsonObject() {
-                return GsonConfig.defaultConfig().toJsonTree(this).getAsJsonObject();
+                JsonObject result = GsonConfig.defaultConfig().toJsonTree(this)
+                        .getAsJsonObject();
+                return flattenGenericRestrictions(result);
+            }
+
+            @NonNull
+            private JsonObject flattenGenericRestrictions(JsonObject result) {
+                genericRestrictions.forEach((k,v)-> result.add(k,new JsonPrimitive(v)));
+                return result;
             }
 
             public static JsonObject addNameValue(
@@ -113,6 +143,14 @@ public class PresentProofRequest {
                     @NonNull JsonObject restriction) {
                 restriction.addProperty("attr::" + name + "::value", value);
                 return restriction;
+            }
+
+            // This extends the lombok generated builder with contained methods.
+            public static class ProofRestrictionsBuilder{
+                public ProofRestrictionsBuilder addAttributeValueRestriction(@NonNull String name, @NonNull String value) {
+                    this.genericRestriction("attr::" + name + "::value", value);
+                    return this;
+                }
             }
         }
     }
