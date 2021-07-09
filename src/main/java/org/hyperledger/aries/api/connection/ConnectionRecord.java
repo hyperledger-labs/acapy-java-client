@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.apache.commons.lang3.StringUtils;
 
 @Data @NoArgsConstructor @Accessors(chain = true)
 public class ConnectionRecord {
@@ -44,7 +45,7 @@ public class ConnectionRecord {
      * @return true in case the connection was not initiated by this agent
      */
     public boolean isIncomingConnection() {
-        return ConnectionTheirRole.INVITEE.equals(theirRole);
+        return StringUtils.isNotEmpty(invitationKey);
     }
 
     public boolean isActive() {
