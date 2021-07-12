@@ -56,7 +56,7 @@ For a aca-py 0.6.0 compatible client version you can use the following repositor
 |----------------|-----------------|
 | 0.7.0-pre.2    | 0.7.0-pre.2     |
 | 0.7.0-pre.3.2  | 0.7.0-pre.3     |
-| 0.7.0-pre.3.4  | 0.7.0.rc0       |
+| 0.7.0-pre.3.5  | 0.7.0.rc1       |
 
 ## Implemented Endpoints
 
