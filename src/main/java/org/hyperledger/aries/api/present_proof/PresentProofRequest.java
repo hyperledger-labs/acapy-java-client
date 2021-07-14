@@ -88,7 +88,7 @@ public class PresentProofRequest {
             private String name;
             private ProofNonRevoked nonRevoked;
             private IndyProofReqPredSpec.PTypeEnum pType;
-            private String pValue;
+            private Integer pValue;
             @Singular
             @JsonSerialize(using = JsonObjectArraySerializer.class)
             @JsonDeserialize(using = JsonObjectArrayDeserializer.class)
