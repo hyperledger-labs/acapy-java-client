@@ -9,10 +9,9 @@ package org.hyperledger.aries.api.endorser;
 
 import lombok.Builder;
 import lombok.Data;
-import org.hyperledger.acy_py.generated.model.TransactionJobs;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
 public class SetEndorserRoleFilter implements AcaPyRequestFilter {
-    private TransactionJobs transactionMyJob;
+    private String transactionMyJob;
 }
