@@ -179,7 +179,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.1.1</version>
+                <version>5.2.0</version>
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
                     <skip>true</skip>
@@ -218,7 +218,7 @@
             <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.15.0</version>
+                <version>2.16.0</version>
                 <configuration>
                     <includes>
                         <include>org/hyperledger/acy_py/generated/</include>
@@ -329,7 +329,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.2.3</version>
+                <version>4.3.0</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>

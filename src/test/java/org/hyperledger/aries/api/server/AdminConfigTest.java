@@ -17,17 +17,23 @@ import java.util.Optional;
 public class AdminConfigTest extends IntegrationTestBase {
 
     @Test
-    void testGetAdminConfig() throws Exception {
+    void testGetAdminConfigWrapped() throws Exception {
         Optional<AdminConfig> adminConfig = ac.statusConfig();
         Assertions.assertTrue(adminConfig.isPresent());
 
         // System.out.println(GsonConfig.prettyPrinter().toJson(adminConfig.get()));
 
-        AdminConfig config = adminConfig.get();
+        Optional<String> p = adminConfig.flatMap(c -> c.getAs("admin.port", String.class));
+        Assertions.assertTrue(p.isPresent());
+        Assertions.assertEquals("8031", p.get());
 
+        AdminConfig config = adminConfig.get();
         Optional<Boolean> mode = config.getAs("admin.admin_insecure_mode", Boolean.class);
         Assertions.assertTrue(mode.isPresent());
         Assertions.assertTrue(mode.get());
+
+        Optional<Boolean> empty = config.getAs("something", Boolean.class);
+        Assertions.assertFalse(empty.isPresent());
 
         Optional<String> port = config.getAs("admin.port", String.class);
         Assertions.assertTrue(port.isPresent());
@@ -40,5 +46,34 @@ public class AdminConfigTest extends IntegrationTestBase {
         Optional<List<String>> plugins = config.getAs("external_plugins", AdminConfig.COLLECTION_TYPE);
         Assertions.assertTrue(plugins.isPresent());
         Assertions.assertEquals("aries_cloudagent.messaging.jsonld", plugins.get().get(0));
+    }
+
+    @Test
+    void testGetAdminConfigUnwrapped() throws Exception {
+        Optional<AdminConfig> adminConfig = ac.statusConfig();
+        Assertions.assertTrue(adminConfig.isPresent());
+
+        AdminConfig config = adminConfig.get();
+        Boolean mode = config.getUnwrapped("admin.admin_insecure_mode", Boolean.class);
+        Assertions.assertNotNull(mode);
+        Assertions.assertTrue(mode);
+
+        Boolean empty = config.getUnwrapped("something", Boolean.class);
+        Assertions.assertNull(empty);
+
+        Boolean conversionFailure = config.getUnwrapped("transport.max_message_size", Boolean.class);
+        Assertions.assertNull(conversionFailure);
+
+        String port = config.getUnwrapped("admin.port", String.class);
+        Assertions.assertNotNull(port);
+        Assertions.assertEquals("8031", port);
+
+        Number messageSize = config.getUnwrapped("transport.max_message_size", Number.class);
+        Assertions.assertNotNull(messageSize);
+        Assertions.assertEquals(2097152, messageSize.longValue());
+
+        List<String> plugins = config.getUnwrapped("external_plugins", AdminConfig.COLLECTION_TYPE);
+        Assertions.assertNotNull(plugins);
+        Assertions.assertEquals("aries_cloudagent.messaging.jsonld", plugins.get(0));
     }
 }

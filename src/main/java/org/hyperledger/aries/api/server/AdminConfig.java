@@ -30,15 +30,41 @@ public class AdminConfig {
 
     private Map<String, JsonElement> config;
 
-    public <T> Optional<T> getAs(@NonNull String key, Type type) {
+    /**
+     * Get a config value
+     * @param key the config key e.g. debug.auto_accept_invites
+     * @param type the desired return type
+     * @param <T> – the type of the desired result object
+     * @return the value or an empty optional if the key was not found or conversion failed
+     */
+    public <T> Optional<T> getAs(@NonNull String key, @NonNull Type type) {
         JsonElement value = config.get(key);
         if (value != null) {
             try {
-                return Optional.of(gson.fromJson(value, type));
+                return Optional.ofNullable(gson.fromJson(value, type));
             } catch (Exception e) {
                 log.error("Could not convert {} to {}", key, type, e);
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * Get a config value
+     * @param key the config key e.g. debug.auto_accept_invites
+     * @param type the desired return type
+     * @param <T> – the type of the desired result object
+     * @return the value or null if the key was not found or conversion failed
+     */
+    public <T> T getUnwrapped(@NonNull String key, @NonNull Type type) {
+        JsonElement value = config.get(key);
+        if (value != null) {
+            try {
+                return gson.fromJson(value, type);
+            } catch (Exception e) {
+                log.error("Could not convert {} to {}", key, type, e);
+            }
+        }
+        return null;
     }
 }
