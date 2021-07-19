@@ -45,5 +45,15 @@ public enum ConnectionState {
 
     @JsonProperty("start")
     @SerializedName("start")
-    START
+    START,
+
+    // not aries states
+
+    @JsonProperty("ping_response")
+    @SerializedName("ping_response")
+    PING_RESPONSE,
+
+    @JsonProperty("ping_no_response")
+    @SerializedName("ping_no_response")
+    PING_NO_RESPONSE
 }

@@ -48,6 +48,34 @@ public class ConnectionRecord {
         return StringUtils.isNotEmpty(invitationKey);
     }
 
+    /** Tests if this event is an OOB invitation
+     * @return true if OOB invitation
+     */
+    public boolean isOOBInvitation() {
+        return StringUtils.isNotEmpty(invitationMsgId)
+                && !ConnectionState.INVITATION.equals(state);
+    }
+
+    /**
+     * Tests if this event is not an connection invitation
+     * @return true if it is not an invitation event
+     */
+    public boolean isNotConnectionInvitation() {
+        return StringUtils.isEmpty(invitationMsgId)
+                && !(ConnectionState.INVITATION.equals(state)
+                && ConnectionTheirRole.INVITEE.equals(theirRole));
+    }
+
+    /**
+     * Tests if this event is a connection request
+     * e.g. if --auto-accept-requests is set to false
+     * @return true in case another agent wants to connect
+     */
+    public boolean isRequestToConnect() {
+        return ConnectionAcceptance.MANUAL.equals(accept)
+                && ConnectionState.REQUEST.equals(state);
+    }
+
     public boolean isActive() {
         return ConnectionState.ACTIVE.equals(state);
     }
