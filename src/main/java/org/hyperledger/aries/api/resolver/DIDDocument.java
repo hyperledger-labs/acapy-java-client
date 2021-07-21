@@ -12,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +25,8 @@ import java.util.Optional;
 public class DIDDocument {
 
     public static final String ENDPOINT_TYPE_DID_COMM = "did-communication";
+
+    public static final String ENDPOINT_TYPE_PROFILE = "profile";
 
     @JsonProperty("@context")
     @SerializedName("@context")
@@ -95,7 +96,7 @@ public class DIDDocument {
     }
 
     public Optional<String> findPublicProfileUrl() {
-        return findUrlByType(DIDEndpointWithType.EndpointTypeEnum.PROFILE.getValue());
+        return findUrlByType(ENDPOINT_TYPE_PROFILE);
     }
 
     public Optional<String> findAriesEndpointUrl() {
@@ -105,22 +106,16 @@ public class DIDDocument {
     private Optional<String> findUrlByType(@NonNull String type) {
         return getService()
                 .stream()
-                .filter(s -> StringUtils.equalsIgnoreCase(type, s.getType()))
+                .filter(s -> StringUtils.equals(type, s.getType()))
                 .findFirst()
                 .map(Service::getServiceEndpoint);
     }
 
     public boolean hasProfileEndpoint() {
-        return getService().stream()
-                .anyMatch(s -> StringUtils.equalsIgnoreCase(
-                        DIDEndpointWithType.EndpointTypeEnum.PROFILE.getValue(), s.getType()));
+        return getService().stream().anyMatch(s -> StringUtils.equals(ENDPOINT_TYPE_PROFILE, s.getType()));
     }
 
     public boolean hasAriesEndpoint() {
-        return getService().stream()
-                .anyMatch(s ->
-                        StringUtils.equalsIgnoreCase(
-                                DIDEndpointWithType.EndpointTypeEnum.ENDPOINT.getValue(), s.getType())
-                        || StringUtils.equalsIgnoreCase(ENDPOINT_TYPE_DID_COMM, s.getType()));
+        return getService().stream().anyMatch(s -> StringUtils.equals(ENDPOINT_TYPE_DID_COMM, s.getType()));
     }
 }
