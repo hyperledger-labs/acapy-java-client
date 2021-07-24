@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 public enum TransactionRole {
-    @JsonProperty("prover")
-    @SerializedName("prover")
-    PROVER,
+    @JsonProperty("Author")
+    @SerializedName("Author")
+    AUTHOR,
 
-    @JsonProperty("verifier")
-    @SerializedName("verifier")
-    VERIFIER,
+    @JsonProperty("Endorser")
+    @SerializedName("Endorser")
+    ENDORSER,
 }

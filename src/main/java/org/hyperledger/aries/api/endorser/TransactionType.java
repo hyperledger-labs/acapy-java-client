@@ -11,11 +11,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
 public enum TransactionType {
-    @JsonProperty("prover")
-    @SerializedName("prover")
-    PROVER,
+    @JsonProperty("1")
+    @SerializedName("1")
+    NYM,
 
-    @JsonProperty("verifier")
-    @SerializedName("verifier")
-    VERIFIER,
+    @JsonProperty("100")
+    @SerializedName("100")
+    ATTRIB,
+
+    @JsonProperty("101")
+    @SerializedName("101")
+    SCHEMA,
+
+    @JsonProperty("102")
+    @SerializedName("102")
+    CREDENTIIAL_DEFINITION,
+
+    @JsonProperty("113")
+    @SerializedName("113")
+    REVOC_REG_DEF,
+
+    @JsonProperty("114")
+    @SerializedName("114")
+    REVOC_REV_ID
+
 }

@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
  */
 @Data @NoArgsConstructor @AllArgsConstructor
 public class EndorseTransactionEvent {
-    private String type;
+    private TransactionType type;
     private String connectionId;
     private String createdAt;
     private Boolean endorserWriteTxn;
@@ -40,7 +40,7 @@ public class EndorseTransactionEvent {
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonArray signatureResponse;
-    private String state;
+    private TransactionState state;
     private String threadId;
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
