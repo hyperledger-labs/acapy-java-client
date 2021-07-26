@@ -16,5 +16,5 @@ public class EndorserInfoFilter implements AcaPyRequestFilter {
 
     private String connId;
 
-    private boolean createTransactionForEndorser;
+    private Boolean createTransactionForEndorser;
 }
