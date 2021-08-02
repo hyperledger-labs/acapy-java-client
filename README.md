@@ -62,7 +62,7 @@ For a aca-py 0.6.0 compatible client version you can use the following repositor
 ## Implemented Endpoints
 
 | Method | Endpoint                                                  | Implemented        |
-|--------|---------------------------------------------------  ------|--------------------|
+|--------|-----------------------------------------------------------|--------------------|
 |        | **action-menu**                                           |                    |
 | POST   | /action-menu/{conn_id}/close                              | :white_check_mark: |
 | POST   | /action-menu/{conn_id}/fetch                              | :white_check_mark: |
