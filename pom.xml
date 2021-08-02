@@ -62,8 +62,8 @@
         <kotlin.version>1.4.32</kotlin.version>
         <lombok.version>1.18.20</lombok.version>
         <okhttp.version>4.9.1</okhttp.version>
-        <pmd.version>6.36.0</pmd.version>
-        <testcontainers.version>1.15.3</testcontainers.version>
+        <pmd.version>6.37.0</pmd.version>
+        <testcontainers.version>1.16.0</testcontainers.version>
     </properties>
 
     <dependencyManagement>

@@ -7,38 +7,42 @@
  */
 package org.hyperledger.aries.api.endorser;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
-import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
-
-import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
-
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hyperledger.aries.api.serializer.JsonArrayDeserializer;
+import org.hyperledger.aries.api.serializer.JsonArraySerializer;
+import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
+import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 
 /**
- * Webhook event: issuer_cred_rev
+ * Webhook event: endorse_transaction
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data @NoArgsConstructor @AllArgsConstructor
 public class EndorseTransactionEvent {
+    @SerializedName("_type")
     private TransactionType type;
     private String connectionId;
     private String createdAt;
     private Boolean endorserWriteTxn;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    @JsonSerialize(using = JsonArraySerializer.class)
+    @JsonDeserialize(using = JsonArrayDeserializer.class)
     private JsonArray formats;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    @JsonSerialize(using = JsonArraySerializer.class)
+    @JsonDeserialize(using = JsonArrayDeserializer.class)
     private JsonArray messagesAttach;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    @JsonSerialize(using = JsonArraySerializer.class)
+    @JsonDeserialize(using = JsonArrayDeserializer.class)
     private JsonArray signatureRequest;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    @JsonSerialize(using = JsonArraySerializer.class)
+    @JsonDeserialize(using = JsonArrayDeserializer.class)
     private JsonArray signatureResponse;
     private TransactionState state;
     private String threadId;

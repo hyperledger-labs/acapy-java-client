@@ -13,8 +13,6 @@ import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
 public class EndorserInfoFilter implements AcaPyRequestFilter {
-
     private String connId;
-
     private Boolean createTransactionForEndorser;
 }
