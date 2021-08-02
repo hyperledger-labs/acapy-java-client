@@ -16,6 +16,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
+import org.hyperledger.aries.api.endorser.EndorseTransactionEvent;
 
 @Slf4j
 public abstract class EventHandler {
@@ -39,6 +40,8 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, PingEvent.class).ifPresent(this::handlePing);
             } else if ("issuer_cred_rev".equals(eventType)) {
                 parser.parseValueSave(json, RevocationEvent.class).ifPresent(this::handleRevocation);
+            } else if ("endorse_transaction".equals(eventType)) {
+                parser.parseValueSave(json, EndorseTransactionEvent.class).ifPresent(this::handleEndorseTransaction);
             } else if ("problem_report".equals(eventType)) {
                 parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
             }
@@ -69,6 +72,10 @@ public abstract class EventHandler {
 
     public void handleRevocation(RevocationEvent revocation) {
         log.debug("Revocation: {}", revocation);
+    }
+
+    public void handleEndorseTransaction(EndorseTransactionEvent transaction) {
+        log.debug("Endorse Transaction: {}", transaction);
     }
 
     public void handleProblemReport(ProblemReport report) {

@@ -7,14 +7,15 @@
  */
 package org.hyperledger.aries.api.endorser;
 
-import lombok.Builder;
-import lombok.Data;
-import org.hyperledger.aries.api.AcaPyRequestFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
-@Data @Builder
-public class EndorserInfoFilter implements AcaPyRequestFilter {
+public enum TransactionRole {
+    @JsonProperty("Author")
+    @SerializedName("Author")
+    AUTHOR,
 
-    private String connId;
-
-    private Boolean createTransactionForEndorser;
+    @JsonProperty("Endorser")
+    @SerializedName("Endorser")
+    ENDORSER,
 }
