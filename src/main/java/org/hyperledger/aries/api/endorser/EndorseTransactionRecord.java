@@ -26,7 +26,7 @@ import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data @NoArgsConstructor @AllArgsConstructor
-public class EndorseTransactionEvent {
+public class EndorseTransactionRecord {
     @SerializedName("_type")
     private TransactionType type;
     private String connectionId;

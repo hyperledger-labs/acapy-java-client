@@ -14,5 +14,5 @@ import org.hyperledger.aries.api.AcaPyRequestFilter;
 @Data @Builder
 public class EndorseCreateRequestFilter implements AcaPyRequestFilter {
     private String tranId;
-    private boolean endorserWriteTxn;
+    private Boolean endorserWriteTxn;
 }

@@ -20,12 +20,12 @@ public class SerializationTest {
 
     @Test
     void testFromGsonToJackson() throws Exception {
-        EndorseTransactionEvent trxGson = gson.fromJson(event, EndorseTransactionEvent.class);
+        EndorseTransactionRecord trxGson = gson.fromJson(event, EndorseTransactionRecord.class);
         System.out.println(trxGson);
 
         String jacksonString = mapper.writeValueAsString(trxGson);
         // System.out.println(jacksonString);
-        EndorseTransactionEvent trxJackson = mapper.readValue(jacksonString, EndorseTransactionEvent.class);
+        EndorseTransactionRecord trxJackson = mapper.readValue(jacksonString, EndorseTransactionRecord.class);
 
         Assertions.assertEquals(trxGson, trxJackson);
     }

@@ -675,21 +675,21 @@ public class AriesClient extends BaseClient {
      * For Author to resend a particular transaction request
      * @since aca-py 0.7.0
      * @param trxId transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionResend(@NonNull String trxId) throws IOException {
+    public Optional<EndorseTransactionRecord> endorseTransactionResend(@NonNull String trxId) throws IOException {
         Request req = buildPost(url + "/transaction/" + trxId + "/resend", EMPTY_JSON);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
      * Query transactions
      * @since aca-py 0.7.0
-     * @return list of {@link TransactionRecord}}
-     * @throws IOException IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @return list of {@link EndorseTransactionRecord}}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<List<TransactionRecord>> endorseGetTransactions() throws IOException {
+    public Optional<List<EndorseTransactionRecord>> endorseGetTransactions() throws IOException {
         Request req = buildGet(url + "/transactions");
         final Optional<String> resp = raw(req);
         return getWrapped(resp, "results", TRX_RECORD_TYPE);
@@ -700,10 +700,10 @@ public class AriesClient extends BaseClient {
      * @since aca-py 0.7.0
      * @param expiresTime when the request should expire
      * @param filter {@link EndorseCreateRequestFilter}
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionCreateRequest(
+    public Optional<EndorseTransactionRecord> endorseTransactionCreateRequest(
             @NonNull Instant expiresTime, @NonNull EndorseCreateRequestFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(
                 HttpUrl.parse(url + "/transactions/create-request")).newBuilder();
@@ -712,7 +712,7 @@ public class AriesClient extends BaseClient {
                 .builder()
                 .expiresTime(TimeUtil.currentTimeFormatted(expiresTime))
                 .build());
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
@@ -753,60 +753,60 @@ public class AriesClient extends BaseClient {
      * Fetch single transaction record
      * @since aca-py 0.7.0
      * @param trxId the transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionGetById(@NonNull String trxId) throws IOException {
+    public Optional<EndorseTransactionRecord> endorseTransactionGetById(@NonNull String trxId) throws IOException {
         Request req = buildGet(url + "/transactions/" + trxId);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
      * For Author to cancel a particular transaction request
      * @since aca-py 0.7.0
      * @param trxId transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionCancel(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionCancel(@NonNull String trxId) throws IOException{
         Request req = buildPost(url + "/transactions/" + trxId + "/cancel", EMPTY_JSON);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
      * For Endorser to endorse a particular transaction record
      * @since aca-py 0.7.0
      * @param trxId transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionEndorse(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionEndorse(@NonNull String trxId) throws IOException{
         Request req = buildPost(url + "/transactions/" + trxId + "/endorse", EMPTY_JSON);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
      * For Endorser to refuse a particular transaction record
      * @since aca-py 0.7.0
      * @param trxId transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionRefuse(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionRefuse(@NonNull String trxId) throws IOException{
         Request req = buildPost(url + "/transactions/" + trxId + "/refuse", EMPTY_JSON);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     /**
      * For Author / Endorser to write an endorsed transaction to the ledger
      * @since aca-py 0.7.0
      * @param trxId transaction id
-     * @return {@link TransactionRecord}
+     * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<TransactionRecord> endorseTransactionWrite(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionWrite(@NonNull String trxId) throws IOException{
         Request req = buildPost(url + "/transactions/" + trxId + "/write", EMPTY_JSON);
-        return call(req, TransactionRecord.class);
+        return call(req, EndorseTransactionRecord.class);
     }
 
     // ----------------------------------------------------
