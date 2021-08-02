@@ -61,128 +61,142 @@ For a aca-py 0.6.0 compatible client version you can use the following repositor
 
 ## Implemented Endpoints
 
-| Method | Endpoint                                                | Implemented        |
-|--------|---------------------------------------------------------|--------------------|
-|        | **action-menu**                                         |                    |
-| POST   | /action-menu/{conn_id}/close                            | :white_check_mark: |
-| POST   | /action-menu/{conn_id}/fetch                            | :white_check_mark: |
-| POST   | /action-menu/{conn_id}/perform                          | :white_check_mark: |
-| POST   | /action-menu/{conn_id}/request                          | :white_check_mark: |
-| POST   | /action-menu/{conn_id}/send-menu                        | :white_check_mark: |
-|        | **basicmessage**                                        |                    |
-| POST   | /connections/{conn_id}/send-message                     | :white_check_mark: |
-|        | **connection**                                          |                    |
-| GET    | /connections                                            | :white_check_mark: |
-| POST   | /connections/create-invitation                          | :white_check_mark: |
-| POST   | /connections/create-static                              | :white_check_mark: |
-| POST   | /connections/receive-invitation                         | :white_check_mark: |
-| GET    | /connections/{conn_id}}                                 | :white_check_mark: |
-| DELETE | /connections/{conn_id}                                  | :white_check_mark: |
-| POST   | /connections/{conn_id}/accept-invitation                | :white_check_mark: |
-| POST   | /connections/{conn_id}/accept-request                   | :white_check_mark: |
-| GET    | /connections/{conn_id}/endpoints                        | :white_check_mark: |
-| POST   | /connections/{conn_id}/establish-inbound/{ref_id}       | :white_check_mark: |
-| GET    | /connections/{conn_id}/metadata                         | :white_check_mark: |
-| POST   | /connections/{conn_id}/metadata                         | :white_check_mark: |
-|        | **credential-definition**                               |                    |
-| POST   | /credential-definitions                                 | :white_check_mark: |
-| GET    | /credential-definitions/created                         | :white_check_mark: |
-| GET    | /credential-definitions/{cred_def_id}                   | :white_check_mark: |
-|        | **credentials**                                         |                    |
-| GET    | /credentials/mime-types/{credential_id}                 | :white_check_mark: |
-| GET    | /credentials/revoked/{credential_id}                    | :white_check_mark: |
-| GET    | /credential/{credential_id}                             | :white_check_mark: |
-| DELETE | /credential/{credential_id}                             | :white_check_mark: |
-| GET    | /credentials                                            | :white_check_mark: |
-|        | **did-exchange**                                        |                    |
-| POST   | /didexchange/create-request                             | :white_check_mark: |
-| POST   | /didexchange/receive-request                            | :white_check_mark: |
-| POST   | /didexchange/{conn_id}/accept-invitation                | :white_check_mark: |
-| POST   | /didexchange/{conn_id}/accept-request                   | :white_check_mark: |
-|        | **endorse-transaction**                                 |                    |
-| POST   | /transaction/{tran_id}/resend                           | :white_check_mark: |
-| POST   | /transactions                                           | :white_check_mark: |
-| POST   | /transactions/create-request                            | :white_check_mark: |
-| POST   | /transactions/{conn_id}/set-endorser-info               | :white_check_mark: |
-| POST   | /transactions/{conn_id}/set-endorser-role               | :white_check_mark: |
-| POST   | /transactions/{tran_id}                                 | :white_check_mark: |
-| POST   | /transactions/{tran_id}/cancel                          | :white_check_mark: |
-| POST   | /transactions/{tran_id}/endorse                         | :white_check_mark: |
-| POST   | /transactions/{tran_id}/refuse                          | :white_check_mark: |
-| POST   | /transactions/{tran_id}/write                           | :white_check_mark: |
-|        | **introduction**                                        |                    |
-|        | **issue-credential v1.0**                               |                    |
-| POST   | /issue-credential/create                                | :white_check_mark: |
-| GET    | /issue-credential/records                               | :white_check_mark: |
-| GET    | /issue-credential/records/{cred_ex_id}                  | :white_check_mark: |
-| DELETE | /issue-credential/records/{cred_ex_id}                  | :white_check_mark: |
-| POST   | /issue-credential/records/{cred_ex_id}/issue            | :white_check_mark: |
-| POST   | /issue-credential/records/{cred_ex_id}/problem-report   | :white_check_mark: |
-| POST   | /issue-credential/records/{cred_ex_id}/send-offer       | :white_check_mark: |
-| POST   | /issue-credential/records/{cred_ex_id}/send-request     | :white_check_mark: |
-| POST   | /issue-credential/records/{cred_ex_id}/store            | :white_check_mark: |
-| POST   | /issue-credential/send                                  | :white_check_mark: |
-| POST   | /issue-credential/send-offer                            | :white_check_mark: |
-| POST   | /issue-credential/send-proposal                         | :white_check_mark: |
-|        | **issue-credential v2.0**                               |                    |
-|        | **jsonld**                                              |                    |
-| POST   | /jsonld/sign                                            | :white_check_mark: |
-| POST   | /jsonld/verify                                          | :white_check_mark: |
-|        | **ledger**                                              |                    |
-| GET    | /ledger/did-endpoint                                    | :white_check_mark: |
-| GET    | /ledger/did-verkey                                      | :white_check_mark: |
-| GET    | /ledger/taa                                             | :white_check_mark: |
-| POST   | /ledger/taa/accept                                      | :white_check_mark: |
-|        | **mediation**                                           |                    |
-|        | **multitenancy**                                        |                    |
-| POST   | /multitenancy/wallet                                    | :white_check_mark: |
-| GET    | /multitenancy/wallet/{wallet_id}                        | :white_check_mark: |
-| PUT    | /multitenancy/wallet/{wallet_id}                        | :white_check_mark: |
-| POST   | /multitenancy/wallet/{wallet_id}/remove                 | :white_check_mark: |
-| POST   | /multitenancy/wallet/{wallet_id}/token                  | :white_check_mark: |
-| GET    | /multitenancy/wallets                                   | :white_check_mark: |
-|        | **out-of-band**                                         |                    |
-| POST   | /out-of-band/create-invitation                          | :white_check_mark: |
-| POST   | /out-of-band/receive-invitation                         | :white_check_mark: |
-|        | **present-proof**                                       |                    |
-| POST   | /present-proof/create-request                           | :white_check_mark: |
-| GET    | /present-proof/records                                  | :white_check_mark: |
-| GET    | /present-proof/records/{pres_ex_id}                     | :white_check_mark: |
-| DELETE | /present-proof/records/{pres_ex_id}                     | :white_check_mark: |
-| GET    | /present-proof/records/{pres_ex_id}/credentials         | :white_check_mark: |
-| POST   | /present-proof/records/{pres_ex_id}/problem-report      | :white_check_mark: |
-| POST   | /present-proof/records/{pres_ex_id}/send-presentation   | :white_check_mark: |
-| POST   | /present-proof/records/{pres_ex_id}/send-request        | :white_check_mark: |
-| POST   | /present-proof/records/{pres_ex_id}/verify-presentation | :white_check_mark: |
-| POST   | /present-proof/send-proposal                            | :white_check_mark: |
-| POST   | /present-proof/send-request                             | :white_check_mark: |
-|        | **resolver**                                            |                    |
-| GET    | /resolver/resolve/{did}                                 | :white_check_mark: |
-|        | **revocation**                                          |                    |
-| GET    | /revocation/active-registry/{cred_def_id}               | :white_check_mark: |
-| POST   | /revocation/clear-pending-revocations                   | :white_check_mark: |
-| POST   | /revocation/create-registry                             | :white_check_mark: |
-| POST   | /revocation/publish-revocations                         | :white_check_mark: |
-| GET    | /revocation/registries/created                          | :white_check_mark: |
-| GET    | /revocation/registry/{rev_reg_id}                       | :white_check_mark: |
-| PATCH  | /revocation/registry/{rev_reg_id}                       | :white_check_mark: |
-| POST   | /revocation/revoke                                      | :white_check_mark: |
-|        | **schema**                                              |                    |
-| POST   | /schemas                                                | :white_check_mark: |
-| GET    | /schemas/created                                        | :white_check_mark: |
-| GET    | /schemas/{schema_id}                                    | :white_check_mark: |
-|        | **server**                                              |                    |
-| GET    | /status/config                                          | :white_check_mark: |
-| GET    | /status/live                                            | :white_check_mark: |
-| GET    | /status/ready                                           | :white_check_mark: |
-|        | **trustping**                                           |                    |
-| POST   | /connections/{conn_id}/send-ping                        | :white_check_mark: |
-|        | **wallet**                                              |                    |
-| GET    | /wallet/did                                             | :white_check_mark: |
-| POST   | /wallet/did/create                                      | :white_check_mark: |
-| GET    | /wallet/did/public                                      | :white_check_mark: |
-| GET    | /wallet/get-did-endpoint                                | :white_check_mark: |
-| POST   | /wallet/set-did-endpoint                                | :white_check_mark: |
+| Method | Endpoint                                                  | Implemented        |
+|--------|---------------------------------------------------  ------|--------------------|
+|        | **action-menu**                                           |                    |
+| POST   | /action-menu/{conn_id}/close                              | :white_check_mark: |
+| POST   | /action-menu/{conn_id}/fetch                              | :white_check_mark: |
+| POST   | /action-menu/{conn_id}/perform                            | :white_check_mark: |
+| POST   | /action-menu/{conn_id}/request                            | :white_check_mark: |
+| POST   | /action-menu/{conn_id}/send-menu                          | :white_check_mark: |
+|        | **basicmessage**                                          |                    |
+| POST   | /connections/{conn_id}/send-message                       | :white_check_mark: |
+|        | **connection**                                            |                    |
+| GET    | /connections                                              | :white_check_mark: |
+| POST   | /connections/create-invitation                            | :white_check_mark: |
+| POST   | /connections/create-static                                | :white_check_mark: |
+| POST   | /connections/receive-invitation                           | :white_check_mark: |
+| GET    | /connections/{conn_id}}                                   | :white_check_mark: |
+| DELETE | /connections/{conn_id}                                    | :white_check_mark: |
+| POST   | /connections/{conn_id}/accept-invitation                  | :white_check_mark: |
+| POST   | /connections/{conn_id}/accept-request                     | :white_check_mark: |
+| GET    | /connections/{conn_id}/endpoints                          | :white_check_mark: |
+| POST   | /connections/{conn_id}/establish-inbound/{ref_id}         | :white_check_mark: |
+| GET    | /connections/{conn_id}/metadata                           | :white_check_mark: |
+| POST   | /connections/{conn_id}/metadata                           | :white_check_mark: |
+|        | **credential-definition**                                 |                    |
+| POST   | /credential-definitions                                   | :white_check_mark: |
+| GET    | /credential-definitions/created                           | :white_check_mark: |
+| GET    | /credential-definitions/{cred_def_id}                     | :white_check_mark: |
+|        | **credentials**                                           |                    |
+| GET    | /credentials/mime-types/{credential_id}                   | :white_check_mark: |
+| GET    | /credentials/revoked/{credential_id}                      | :white_check_mark: |
+| GET    | /credential/{credential_id}                               | :white_check_mark: |
+| DELETE | /credential/{credential_id}                               | :white_check_mark: |
+| GET    | /credentials                                              | :white_check_mark: |
+|        | **did-exchange**                                          |                    |
+| POST   | /didexchange/create-request                               | :white_check_mark: |
+| POST   | /didexchange/receive-request                              | :white_check_mark: |
+| POST   | /didexchange/{conn_id}/accept-invitation                  | :white_check_mark: |
+| POST   | /didexchange/{conn_id}/accept-request                     | :white_check_mark: |
+|        | **endorse-transaction**                                   |                    |
+| POST   | /transaction/{tran_id}/resend                             | :white_check_mark: |
+| POST   | /transactions                                             | :white_check_mark: |
+| POST   | /transactions/create-request                              | :white_check_mark: |
+| POST   | /transactions/{conn_id}/set-endorser-info                 | :white_check_mark: |
+| POST   | /transactions/{conn_id}/set-endorser-role                 | :white_check_mark: |
+| POST   | /transactions/{tran_id}                                   | :white_check_mark: |
+| POST   | /transactions/{tran_id}/cancel                            | :white_check_mark: |
+| POST   | /transactions/{tran_id}/endorse                           | :white_check_mark: |
+| POST   | /transactions/{tran_id}/refuse                            | :white_check_mark: |
+| POST   | /transactions/{tran_id}/write                             | :white_check_mark: |
+|        | **introduction**                                          |                    |
+|        | **issue-credential v1.0**                                 |                    |
+| POST   | /issue-credential/create                                  | :white_check_mark: |
+| GET    | /issue-credential/records                                 | :white_check_mark: |
+| GET    | /issue-credential/records/{cred_ex_id}                    | :white_check_mark: |
+| DELETE | /issue-credential/records/{cred_ex_id}                    | :white_check_mark: |
+| POST   | /issue-credential/records/{cred_ex_id}/issue              | :white_check_mark: |
+| POST   | /issue-credential/records/{cred_ex_id}/problem-report     | :white_check_mark: |
+| POST   | /issue-credential/records/{cred_ex_id}/send-offer         | :white_check_mark: |
+| POST   | /issue-credential/records/{cred_ex_id}/send-request       | :white_check_mark: |
+| POST   | /issue-credential/records/{cred_ex_id}/store              | :white_check_mark: |
+| POST   | /issue-credential/send                                    | :white_check_mark: |
+| POST   | /issue-credential/send-offer                              | :white_check_mark: |
+| POST   | /issue-credential/send-proposal                           | :white_check_mark: |
+|        | **issue-credential v2.0**                                 |                    |
+| POST   | /issue-credential-2.0/create                              | :white_check_mark: |
+| GET    | /issue-credential-2.0/records                             | :white_check_mark: |
+| GET    | /issue-credential-2.0/records/{cred_ex_id}                | :white_check_mark: |
+| DELETE | /issue-credential-2.0/records/{cred_ex_id}                | :white_check_mark: |
+| POST   | /issue-credential-2.0/records/{cred_ex_id}/issue          | :white_check_mark: |
+| POST   | /issue-credential-2.0/records/{cred_ex_id}/problem-report | :white_check_mark: |
+| POST   | /issue-credential-2.0/records/{cred_ex_id}/send-offer     | :white_check_mark: |
+| POST   | /issue-credential-2.0/records/{cred_ex_id}/send-request   | :white_check_mark: |
+| POST   | /issue-credential-2.0/records/{cred_ex_id}/store          | :white_check_mark: |
+| POST   | /issue-credential-2.0/send                                | :white_check_mark: |
+| POST   | /issue-credential-2.0/send-offer                          | :white_check_mark: |
+| POST   | /issue-credential-2.0/send-proposal                       | :white_check_mark: |
+| POST   | /issue-credential-2.0/send-request                        | :white_check_mark: |
+|        | **jsonld**                                                |                    |
+| POST   | /jsonld/sign                                              | :white_check_mark: |
+| POST   | /jsonld/verify                                            | :white_check_mark: |
+|        | **ledger**                                                |                    |
+| GET    | /ledger/did-endpoint                                      | :white_check_mark: |
+| GET    | /ledger/did-verkey                                        | :white_check_mark: |
+| GET    | /ledger/taa                                               | :white_check_mark: |
+| POST   | /ledger/taa/accept                                        | :white_check_mark: |
+|        | **mediation**                                             |                    |
+|        | **multitenancy**                                          |                    |
+| POST   | /multitenancy/wallet                                      | :white_check_mark: |
+| GET    | /multitenancy/wallet/{wallet_id}                          | :white_check_mark: |
+| PUT    | /multitenancy/wallet/{wallet_id}                          | :white_check_mark: |
+| POST   | /multitenancy/wallet/{wallet_id}/remove                   | :white_check_mark: |
+| POST   | /multitenancy/wallet/{wallet_id}/token                    | :white_check_mark: |
+| GET    | /multitenancy/wallets                                     | :white_check_mark: |
+|        | **out-of-band**                                           |                    |
+| POST   | /out-of-band/create-invitation                            | :white_check_mark: |
+| POST   | /out-of-band/receive-invitation                           | :white_check_mark: |
+|        | **present-proof v1.0**                                    |                    |
+| POST   | /present-proof/create-request                             | :white_check_mark: |
+| GET    | /present-proof/records                                    | :white_check_mark: |
+| GET    | /present-proof/records/{pres_ex_id}                       | :white_check_mark: |
+| DELETE | /present-proof/records/{pres_ex_id}                       | :white_check_mark: |
+| GET    | /present-proof/records/{pres_ex_id}/credentials           | :white_check_mark: |
+| POST   | /present-proof/records/{pres_ex_id}/problem-report        | :white_check_mark: |
+| POST   | /present-proof/records/{pres_ex_id}/send-presentation     | :white_check_mark: |
+| POST   | /present-proof/records/{pres_ex_id}/send-request          | :white_check_mark: |
+| POST   | /present-proof/records/{pres_ex_id}/verify-presentation   | :white_check_mark: |
+| POST   | /present-proof/send-proposal                              | :white_check_mark: |
+| POST   | /present-proof/send-request                               | :white_check_mark: |
+|        | **present-proof v2.0**                                    |                    |
+|        | **resolver**                                              |                    |
+| GET    | /resolver/resolve/{did}                                   | :white_check_mark: |
+|        | **revocation**                                            |                    |
+| GET    | /revocation/active-registry/{cred_def_id}                 | :white_check_mark: |
+| POST   | /revocation/clear-pending-revocations                     | :white_check_mark: |
+| POST   | /revocation/create-registry                               | :white_check_mark: |
+| POST   | /revocation/publish-revocations                           | :white_check_mark: |
+| GET    | /revocation/registries/created                            | :white_check_mark: |
+| GET    | /revocation/registry/{rev_reg_id}                         | :white_check_mark: |
+| PATCH  | /revocation/registry/{rev_reg_id}                         | :white_check_mark: |
+| POST   | /revocation/revoke                                        | :white_check_mark: |
+|        | **schema**                                                |                    |
+| POST   | /schemas                                                  | :white_check_mark: |
+| GET    | /schemas/created                                          | :white_check_mark: |
+| GET    | /schemas/{schema_id}                                      | :white_check_mark: |
+|        | **server**                                                |                    |
+| GET    | /status/config                                            | :white_check_mark: |
+| GET    | /status/live                                              | :white_check_mark: |
+| GET    | /status/ready                                             | :white_check_mark: |
+|        | **trustping**                                             |                    |
+| POST   | /connections/{conn_id}/send-ping                          | :white_check_mark: |
+|        | **wallet**                                                |                    |
+| GET    | /wallet/did                                               | :white_check_mark: |
+| POST   | /wallet/did/create                                        | :white_check_mark: |
+| GET    | /wallet/did/public                                        | :white_check_mark: |
+| GET    | /wallet/get-did-endpoint                                  | :white_check_mark: |
+| POST   | /wallet/set-did-endpoint                                  | :white_check_mark: |
 
 ## Client Examples
 

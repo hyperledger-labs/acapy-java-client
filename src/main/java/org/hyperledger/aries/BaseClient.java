@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.acy_py.generated.model.DID;
+import org.hyperledger.acy_py.generated.model.V20CredExRecordDetail;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -43,6 +44,7 @@ abstract class BaseClient {
     static final Type CONNECTION_TYPE = new TypeToken<Collection<ConnectionRecord>>(){}.getType();
     static final Type CREDENTIAL_TYPE = new TypeToken<Collection<Credential>>(){}.getType();
     static final Type ISSUE_CREDENTIAL_TYPE = new TypeToken<Collection<V1CredentialExchange>>(){}.getType();
+    static final Type ISSUE_CREDENTIAL_V2_TYPE = new TypeToken<Collection<V20CredExRecordDetail>>(){}.getType();
     static final Type PRESENTATION_REQUEST_CREDENTIALS = new TypeToken<Collection<PresentationRequestCredentials>>(){}.getType();
     static final Type PROOF_TYPE = new TypeToken<Collection<PresentationExchangeRecord>>(){}.getType();
     static final Type TRX_RECORD_TYPE = new TypeToken<Collection<EndorseTransactionRecord>>(){}.getType();

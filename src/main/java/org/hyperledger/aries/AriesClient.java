@@ -900,13 +900,15 @@ public class AriesClient extends BaseClient {
     /**
      * Send holder a credential offer in reference to a proposal with a preview
      * @param credentialExchangeId credential exchange identifier
+     * @param offerRequest {@link V10CredentialBoundOfferRequest}
      * @return {@link V1CredentialExchange}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<V1CredentialExchange> issueCredentialRecordsSendOffer(
-            @NonNull String credentialExchangeId) throws IOException {
+            @NonNull String credentialExchangeId, @NonNull V10CredentialBoundOfferRequest offerRequest)
+            throws IOException {
         Request req = buildPost(url + "/issue-credential/records/" + credentialExchangeId + "/send-offer",
-                EMPTY_JSON);
+                offerRequest);
         return call(req, V1CredentialExchange.class);
     }
 
@@ -977,7 +979,173 @@ public class AriesClient extends BaseClient {
     // Issue Credential - Credential Issue v2.0
     // ----------------------------------------------------
 
-    // TODO
+    /**
+     * Create credential from attribute values
+     * @param request {@link V20IssueCredSchemaCore}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2Create(@NonNull V20IssueCredSchemaCore request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/create", request);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Fetch all credential exchange records
+     * @param filter {@link IssueCredentialRecordsFilter}
+     * @return list of {@link V20CredExRecordDetail}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<V20CredExRecordDetail>> issueCredentialV2Records(IssueCredentialRecordsFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/issue-credential-2.0/records")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        final Optional<String> resp = raw(req);
+        return getWrapped(resp, "results", ISSUE_CREDENTIAL_V2_TYPE);
+    }
+
+    /**
+     * Fetch a single credential exchange record
+     * @param credentialExchangeId credential exchange identifier
+     * @return {@link V20CredExRecordDetail}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecordDetail> issueCredentialV2RecordsGetById(@NonNull String credentialExchangeId)
+            throws IOException {
+        Request req = buildGet(url + "/issue-credential-2.0/records/" + credentialExchangeId);
+        return call(req, V20CredExRecordDetail.class);
+    }
+
+    /**
+     * Remove an existing credential exchange record
+     * @param credentialExchangeId the credential exchange id
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void issueCredentialV2RecordsRemove(@NonNull String credentialExchangeId) throws IOException {
+        Request req = buildDelete(url + "/issue-credential-2.0/records/" + credentialExchangeId);
+        call(req);
+    }
+
+    /**
+     * Send holder a credential
+     * @param credentialExchangeId credential exchange identifier
+     * @param request optional {@link V20CredIssueRequest}
+     * @return {@link V20CredExRecordDetail}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecordDetail> issueCredentialV2RecordsIssue(
+            @NonNull String credentialExchangeId, @Nullable V20CredIssueRequest request) throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/issue",
+                request != null ? request : EMPTY_JSON);
+        return call(req, V20CredExRecordDetail.class);
+    }
+
+    /**
+     * Send a problem report for a credential exchange
+     * @param credentialExchangeId credential exchange identifier
+     * @param request {@link V20CredIssueProblemReportRequest}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void issueCredentialV2RecordsProblemReport(@NonNull String credentialExchangeId,
+            @NonNull V20CredIssueProblemReportRequest request) throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/problem-report",
+                request);
+        call(req);
+    }
+
+    /**
+     * Send holder a credential offer in reference to a proposal with a preview
+     * @param credentialExchangeId credential exchange identifier
+     * @param offerRequest {@link V20CredBoundOfferRequest}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2RecordsSendOffer(
+            @NonNull String credentialExchangeId, @NonNull V20CredBoundOfferRequest offerRequest) throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/send-offer",
+                offerRequest);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Send issuer a credential request
+     * @param credentialExchangeId credential exchange identifier
+     * @param request {@link V20CredRequestRequest}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2RecordsSendRequest(
+            @NonNull String credentialExchangeId, @Nullable V20CredRequestRequest request) throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/send-request",
+                request != null ? request : EMPTY_JSON);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Store a received credential
+     * @param credentialExchangeId the credential exchange id
+     * @param request {@link V20CredStoreRequest}
+     * @return {@link V20CredExRecordDetail}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecordDetail> issueCredentialV2RecordsStore(@NonNull String credentialExchangeId,
+            @Nullable V20CredStoreRequest request) throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/store",
+                request != null ? request : EMPTY_JSON);
+        return call(req, V20CredExRecordDetail.class);
+    }
+
+    /**
+     * Send holder a credential, automating the entire flow
+     * @param request {@link V20CredSendRequest} the credential to be issued
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V20CredSendRequest request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/send", request);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Send holder a credential offer, independent of any proposal
+     * @param request {@link V20CredOfferRequest}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2SendOffer(@NonNull V20CredOfferRequest request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/send-offer", request);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Send issuer a credential proposal
+     * @param request {@link V20IssueCredSchemaCore} the requested credential
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V20IssueCredSchemaCore request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/send-proposal", request);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Send issuer a credential request not bound to an existing thread. Indy credential's cannot start at a request
+     * @param request {@link V20CredRequestFree} the requested credential
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2SendRequest(@NonNull V20CredRequestFree request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/send-request", request);
+        return call(req, V20CredExRecord.class);
+    }
 
     // ----------------------------------------------------
     // JSON-LD

@@ -43,7 +43,13 @@ public enum CredentialExchangeState {
     @SerializedName("credential_received")
     CREDENTIAL_RECEIVED,
 
+    // V1 sate only
     @JsonProperty("credential_acked")
     @SerializedName("credential_acked")
-    CREDENTIAL_ACKED
+    CREDENTIAL_ACKED,
+
+    // V2 state only
+    @JsonProperty("done")
+    @SerializedName("done")
+    DONE
 }
