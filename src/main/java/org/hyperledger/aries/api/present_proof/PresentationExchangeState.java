@@ -35,11 +35,23 @@ public enum PresentationExchangeState {
     @SerializedName("presentation_received")
     PRESENTATION_RECEIVED,
 
+    // V1 state only
     @JsonProperty("verified")
     @SerializedName("verified")
     VERIFIED,
 
+    // V1 state only
     @JsonProperty("presentation_acked")
     @SerializedName("presentation_acked")
-    PRESENTATION_ACKED
+    PRESENTATION_ACKED,
+
+    // V2 state only
+    @JsonProperty("done")
+    @SerializedName("done")
+    DONE,
+
+    // V2 state only
+    @JsonProperty("abandoned")
+    @SerializedName("abandoned")
+    ABANDONED
 }

@@ -16,6 +16,7 @@ import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.acy_py.generated.model.DID;
 import org.hyperledger.acy_py.generated.model.V20CredExRecordDetail;
+import org.hyperledger.acy_py.generated.model.V20PresExRecord;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -47,6 +48,7 @@ abstract class BaseClient {
     static final Type ISSUE_CREDENTIAL_V2_TYPE = new TypeToken<Collection<V20CredExRecordDetail>>(){}.getType();
     static final Type PRESENTATION_REQUEST_CREDENTIALS = new TypeToken<Collection<PresentationRequestCredentials>>(){}.getType();
     static final Type PROOF_TYPE = new TypeToken<Collection<PresentationExchangeRecord>>(){}.getType();
+    static final Type PROOF_TYPE_V2 = new TypeToken<Collection<V20PresExRecord>>(){}.getType();
     static final Type TRX_RECORD_TYPE = new TypeToken<Collection<EndorseTransactionRecord>>(){}.getType();
     static final Type WALLET_DID_TYPE = new TypeToken<Collection<DID>>(){}.getType();
     static final Type WALLET_RECORD_TYPE = new TypeToken<Collection<WalletRecord>>(){}.getType();

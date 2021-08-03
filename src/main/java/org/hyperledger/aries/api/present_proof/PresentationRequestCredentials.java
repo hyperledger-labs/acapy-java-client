@@ -27,6 +27,7 @@ public class PresentationRequestCredentials {
 
     private Interval interval;
 
+    @SerializedName(value = "presentation_referents", alternate = "pres_referents")
     private List<String> presentationReferents;
 
     @Data @NoArgsConstructor

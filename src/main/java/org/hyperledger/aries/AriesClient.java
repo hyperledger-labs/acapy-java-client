@@ -1373,7 +1373,7 @@ public class AriesClient extends BaseClient {
     }
 
     // ----------------------------------------------------
-    // Present Proof - Proof Presentation
+    // Present Proof - Proof Presentation v1.0
     // ----------------------------------------------------
 
     /**
@@ -1439,7 +1439,7 @@ public class AriesClient extends BaseClient {
     /**
      * Fetch credentials for a presentation request from wallet
      * @param presentationExchangeId the presentation exchange id
-     * @return {@link PresentationExchangeRecord}
+     * @return list of {@link PresentationRequestCredentials}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<List<PresentationRequestCredentials>> presentProofRecordsCredentials(
@@ -1451,7 +1451,7 @@ public class AriesClient extends BaseClient {
      * Fetch credentials for a presentation request from wallet
      * @param presentationExchangeId the presentation exchange id
      * @param filter {@link PresentationRequestCredentialsFilter}
-     * @return {@link PresentationExchangeRecord}
+     * @return list of {@link PresentationRequestCredentials}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<List<PresentationRequestCredentials>> presentProofRecordsCredentials(
@@ -1483,13 +1483,14 @@ public class AriesClient extends BaseClient {
      * Sends a proof presentation
      * @param presentationExchangeId the presentation exchange id
      * @param presentationRequest {@link PresentationRequest}
+     * @return {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public void presentProofRecordsSendPresentation(@NonNull String presentationExchangeId,
+    public Optional<PresentationExchangeRecord> presentProofRecordsSendPresentation(@NonNull String presentationExchangeId,
         @NonNull PresentationRequest presentationRequest) throws IOException {
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/send-presentation",
                 presentationRequest);
-        call(req);
+        return call(req, PresentationExchangeRecord.class);
     }
 
     /**
@@ -1561,6 +1562,153 @@ public class AriesClient extends BaseClient {
     // Present-Proof v2.0 - Proof presentation v2.0
     // ----------------------------------------------------
 
+    /**
+     * Creates a presentation request not bound to any proposal or existing connection
+     * @param request {@link V20PresCreateRequestRequest}
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2CreateRequest(
+            @NonNull V20PresCreateRequestRequest request) throws IOException {
+        Request req = buildPost(url + "/present-proof-2.0/create-request", request);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Fetch all present-proof exchange records
+     * @param filter {@link PresentProofRecordsFilter}
+     * @return list of {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<V20PresExRecord>> presentProofV2Records(@Nullable PresentProofRecordsFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/present-proof-2.0/records")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        final Optional<String> resp = raw(req);
+        return getWrapped(resp, "results", PROOF_TYPE_V2);
+    }
+
+    /**
+     * Fetch a single presentation exchange record by ID
+     * @param presentationExchangeId the presentation exchange id
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2RecordsGetById(@NonNull String presentationExchangeId)
+            throws IOException {
+        Request req = buildGet(url + "/present-proof-2.0/records/" + presentationExchangeId);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Remove an existing presentation exchange record by ID
+     * @param presentationExchangeId the presentation exchange id
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void presentProofV2RecordsRemove(@NonNull String presentationExchangeId) throws IOException {
+        Request req = buildDelete(url + "/present-proof-2.0/records/" + presentationExchangeId);
+        call(req);
+    }
+
+    /**
+     * Fetch credentials for a presentation request from wallet
+     * @param presentationExchangeId the presentation exchange id
+     * @param filter {@link PresentationRequestCredentialsFilter}
+     * @return list of {@link PresentationRequestCredentials}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<PresentationRequestCredentials>> presentProofV2RecordsCredentials(
+            @NonNull String presentationExchangeId, @Nullable PresentationRequestCredentialsFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/present-proof-2.0/records/" + presentationExchangeId + "/credentials")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, PRESENTATION_REQUEST_CREDENTIALS);
+    }
+
+    /**
+     * Send a problem report for presentation exchange
+     * @param presentationExchangeId presentation exchange identifier
+     * @param request {@link V20PresProblemReportRequest}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void presentProofV2RecordsProblemReport(@NonNull String presentationExchangeId,
+            @NonNull V20PresProblemReportRequest request) throws IOException {
+        Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/problem-report",
+                request);
+        call(req);
+    }
+
+    /**
+     * Sends a proof presentation
+     * @param presentationExchangeId the presentation exchange id
+     * @param presentationRequest {@link V20PresSpecByFormatRequest}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2RecordsSendPresentation(@NonNull String presentationExchangeId,
+            @NonNull V20PresSpecByFormatRequest presentationRequest) throws IOException {
+        Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/send-presentation",
+                presentationRequest);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Sends presentation request in reference to a proposal
+     * @param presentationExchangeId presentation exchange identifier
+     * @param request {@link AdminAPIMessageTracing}
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2RecordsSendRequest(
+            @NonNull String presentationExchangeId, @NonNull AdminAPIMessageTracing request) throws IOException{
+        Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/send-request",
+                request);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Verify a received presentation
+     * @param presentationExchangeId presentation exchange identifier
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2RecordsVerifyPresentation(
+            @NonNull String presentationExchangeId) throws IOException{
+        Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/verify-presentation",
+                EMPTY_JSON);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Sends a presentation proposal
+     * @param proofProposal {@link V20PresProposalRequest}
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2SendProposal(@NonNull V20PresProposalRequest proofProposal)
+            throws IOException{
+        Request req = buildPost(url + "/present-proof-2.0/send-proposal", proofProposal);
+        return call(req, V20PresExRecord.class);
+    }
+
+    /**
+     * Sends a free presentation request not bound to any proposal
+     * @param proofRequest {@link V20PresSendRequestRequest}
+     * @return {@link V20PresExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20PresExRecord> presentProofV2SendRequest(@NonNull V20PresSendRequestRequest proofRequest)
+            throws IOException {
+        Request req = buildPost(url + "/present-proof-2.0/send-request", proofRequest);
+        return call(req, V20PresExRecord.class);
+    }
+
     // ----------------------------------------------------
     // Resolver - Retrieve doc for requested did
     // ----------------------------------------------------
@@ -1609,7 +1757,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Creates a new revocation registry
-     * Creating a new registry is a three step flow:
+     * Creating a new registry is a three-step flow:
      * First: create the registry
      * Second: publish the URI of the tails file {@link #revocationRegistryUpdateUri}
      * Third: Set the registry to active {@link #revocationActiveRegistry}
@@ -1755,7 +1903,7 @@ public class AriesClient extends BaseClient {
     /**
      * Loads all schemas from the ledger, which where created by the DID of this cloudagent.
      * 
-     * @param filter allows to look only for some schemas
+     * @param filter allows looking only for some schemas
      * @return List of Schema names
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
