@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.webhook;
 
+import org.hyperledger.acy_py.generated.model.V20CredExRecord;
 import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
@@ -34,6 +35,8 @@ public abstract class EventHandler {
                 parser.parsePresentProof(json).ifPresent(this::handleProof);
             } else if ("issue_credential".equals(eventType)) {
                 parser.parseValueSave(json, V1CredentialExchange.class).ifPresent(this::handleCredential);
+            } else if ("issue_credential_v2_0".equals(eventType)) {
+                parser.parseValueSave(json, V20CredExRecord.class).ifPresent(this::handleCredentialV2);
             } else if ("basicmessages".equals(eventType)) {
                 parser.parseValueSave(json, BasicMessage.class).ifPresent(this::handleBasicMessage);
             } else if ("ping".equals(eventType)) {
@@ -60,6 +63,10 @@ public abstract class EventHandler {
 
     public void handleCredential(V1CredentialExchange credential) {
         log.debug("Issue Credential Event: {}", credential);
+    }
+
+    public void handleCredentialV2(V20CredExRecord v20Credential) {
+        log.debug("Issue Credential V2 Event: {}", v20Credential);
     }
 
     public void handleBasicMessage(BasicMessage message) {
