@@ -30,6 +30,7 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinition.Cred
 import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilter;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
+import org.hyperledger.aries.api.credentials.CredentialRevokedFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.endorser.*;
@@ -513,7 +514,23 @@ public class AriesClient extends BaseClient {
      */
     public Optional<Credential.CredentialRevokedResult> credentialRevoked(@NonNull String credentialId)
             throws IOException {
-        Request req = buildGet(url + "/credential/revoked/" + credentialId);
+        return credentialRevoked(credentialId, null);
+    }
+
+    /**
+     * Query credential revocation status by id
+     * @param credentialId credentialId
+     * @param filter optional {@link CredentialRevokedFilter}
+     * @return {@link Credential.CredentialRevokedResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<Credential.CredentialRevokedResult> credentialRevoked(@NonNull String credentialId, CredentialRevokedFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/credential/revoked/" + credentialId)).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
         return call(req, Credential.CredentialRevokedResult.class);
     }
 

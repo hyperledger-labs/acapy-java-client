@@ -65,4 +65,12 @@ public class V1CredentialExchange {
     private String threadId;
     private Boolean trace;
     private String updatedAt;
+
+    public boolean isIssuer() {
+        return CredentialExchangeRole.ISSUER.equals(role);
+    }
+
+    public boolean isHolder() {
+        return CredentialExchangeRole.HOLDER.equals(role);
+    }
 }
