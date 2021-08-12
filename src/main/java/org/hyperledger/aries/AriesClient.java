@@ -36,6 +36,7 @@ import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.*;
+import org.hyperledger.aries.api.issue_credential_v2.V2CredentialSendRequest;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
@@ -607,6 +608,8 @@ public class AriesClient extends BaseClient {
         return result;
     }
 
+    // TODO W3C queries
+
     // ----------------------------------------------------
     // DID Exchange - Connection management via DID exchange
     // ----------------------------------------------------
@@ -1118,11 +1121,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Send holder a credential, automating the entire flow
-     * @param request {@link V20CredSendRequest} the credential to be issued
+     * @param request {@link V2CredentialSendRequest} the credential to be issued
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V20CredSendRequest request)
+    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V2CredentialSendRequest request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/send", request);
         return call(req, V20CredExRecord.class);
