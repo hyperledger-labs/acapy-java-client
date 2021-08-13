@@ -51,7 +51,7 @@ public abstract class EventHandler {
             } else if ("problem_report".equals(eventType)) {
                 parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
         }
     }
