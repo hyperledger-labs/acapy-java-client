@@ -8,10 +8,7 @@
 package org.hyperledger.aries.api.credentials;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.config.CredDefId;
 import org.hyperledger.aries.pojo.PojoProcessor;
@@ -23,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Credential {
 
     private Map<String, String> attrs;

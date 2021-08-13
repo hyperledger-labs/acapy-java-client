@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.pojo.AttributeName;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -37,28 +38,31 @@ public class CredentialAttributes {
         this.name = name;
         this.value = value;
     }
+
     public static <T> List<CredentialAttributes> from(@NonNull T instance) {
         List<CredentialAttributes> result = new ArrayList<>();
         Field[] fields = instance.getClass().getDeclaredFields();
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
             for (Field field : fields) {
-                String fieldName = field.getName();
-                AttributeName a = field.getAnnotation(AttributeName.class);
-                if (a != null && StringUtils.isNotEmpty(a.value())) {
-                    fieldName = a.value();
-                }
-                if (a == null || !a.excluded()) {
-                    String fieldValue = "";
-                    try {
-                        field.setAccessible(true);
-                        Object fv = field.get(instance);
-                        if (fv != null) {
-                            fieldValue = fv.toString();
-                        }
-                    } catch (IllegalAccessException | IllegalArgumentException e) {
-                        log.error("Could not get value of field: {}", fieldName, e);
+                if (!Modifier.isStatic(field.getModifiers()) && Modifier.isPrivate(field.getModifiers())) {
+                    String fieldName = field.getName();
+                    AttributeName a = field.getAnnotation(AttributeName.class);
+                    if (a != null && StringUtils.isNotEmpty(a.value())) {
+                        fieldName = a.value();
                     }
-                    result.add(new CredentialAttributes(fieldName, fieldValue));
+                    if (a == null || !a.excluded()) {
+                        String fieldValue = "";
+                        try {
+                            field.setAccessible(true);
+                            Object fv = field.get(instance);
+                            if (fv != null) {
+                                fieldValue = fv.toString();
+                            }
+                        } catch (IllegalAccessException | IllegalArgumentException e) {
+                            log.error("Could not get value of field: {}", fieldName, e);
+                        }
+                        result.add(new CredentialAttributes(fieldName, fieldValue));
+                    }
                 }
             }
             return null; // nothing to return
@@ -70,6 +74,12 @@ public class CredentialAttributes {
         List<CredentialAttributes> result = new ArrayList<>();
         // TODO check if complex object
         values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v.toString())));
+        return result;
+    }
+
+    public static List<CredentialAttributes> fromMap(@NonNull Map<String, String> values) {
+        List<CredentialAttributes> result = new ArrayList<>();
+        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v)));
         return result;
     }
 }
