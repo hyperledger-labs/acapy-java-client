@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * Webhook/Websocket Event:
  * issue_credential_v2_0_indy event
  * contains credential revocation information for issued v2 credentials
  */
@@ -22,4 +23,6 @@ public class V2IssueIndyCredentialEvent {
     private String updatedAt;
     private String createdAt;
     private String credRevId;
+    private String credIdStored; // only set when holder
+    private Object credRequestMetadata; // only set when holder
 }
