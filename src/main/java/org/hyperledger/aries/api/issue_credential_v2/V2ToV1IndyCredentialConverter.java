@@ -19,10 +19,19 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Converts a V2 credential exchange record into a {@link Credential} representation.
+ */
 public class V2ToV1IndyCredentialConverter {
 
     private final Gson gson = GsonConfig.defaultConfig();
 
+    /**
+     * Converts v2 record into a {@link Credential}
+     * Only works when the exchange state is 'done'
+     * @param v2Record {@link V20CredExRecord}
+     * @return optional {@link Credential}
+     */
     public Optional<Credential> toV1(@NonNull V20CredExRecord v2Record) {
         Optional<Object> credential = getCredential(v2Record);
         if (credential.isPresent()) {
