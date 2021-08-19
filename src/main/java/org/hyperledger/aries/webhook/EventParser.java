@@ -105,7 +105,9 @@ public class EventParser {
 
         names.forEach(name -> {
             String value = getValueFor(name, revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
-            result.put(name, value);
+            if (StringUtils.isNotEmpty(value)) {
+                result.put(name, value);
+            }
         });
         return result;
     }

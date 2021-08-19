@@ -29,35 +29,22 @@ public class PresentProofRequestTest extends IntegrationTestBase {
     }
 
     @Test
-    public void testAttributeValueWithPostProcessing() {
-        JsonObject obj = PresentProofRequest.ProofRequest.ProofRestrictions.builder()
-                .issuerDid("issuerId")
-                .schemaId("schemaId")
-                .build()
-                .toJsonObject();
-        String sut = PresentProofRequest.ProofRequest.ProofRestrictions.addNameValue("attrName", "value", obj).toString();
-        Assertions.assertEquals("{\"schema_id\":\"schemaId\"," +
-                "\"issuer_did\":\"issuerId\"," +
-                "\"attr::attrName::value\":\"value\"}", sut);
-    }
-
-    @Test
     public void testAttributeValueWithBuilderFunction() {
-        String sut = PresentProofRequest.ProofRequest.ProofRestrictions.builder()
+        PresentProofRequest.ProofRequest.ProofRestrictions sut = PresentProofRequest.ProofRequest.ProofRestrictions.builder()
                 .issuerDid("issuerId")
                 .schemaId("schemaId")
                 .addAttributeValueRestriction("attrName", "value")
-                .build()
-                .toJsonObject()
-                .toString();
-        Assertions.assertEquals("{\"schema_id\":\"schemaId\"," +
+                .build();
+        String expected = "{\"schema_id\":\"schemaId\"," +
                 "\"issuer_did\":\"issuerId\"," +
-                "\"attr::attrName::value\":\"value\"}", sut);
+                "\"attr::attrName::value\":\"value\"}";
+        Assertions.assertEquals(expected, sut.toJsonObject().toString());
+        Assertions.assertEquals(sut, PresentProofRequest.ProofRequest.ProofRestrictions.fromJsonObject(sut.toJsonObject()));
     }
 
     /**
      * In aries the {@link PresentProofRequest} has to be mappable to {@link org.hyperledger.acy_py.generated.model.IndyProofRequest}
-     * @throws IOException
+     * @throws IOException if aca-py is unavailable
      */
     @Test
     public void testPredicatesCanBeMappedToAcaPysType() throws IOException {

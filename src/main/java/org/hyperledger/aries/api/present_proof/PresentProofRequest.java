@@ -100,8 +100,13 @@ public class PresentProofRequest {
         @AllArgsConstructor
         @Builder
         public static class ProofNonRevoked {
+            // epoch seconds e.g. Instant.now().getEpochSecond()
             private Long from;
             private Long to;
+
+            public boolean isSet() {
+                return from != null || to != null;
+            }
         }
 
         @Data
@@ -131,18 +136,17 @@ public class PresentProofRequest {
                 return flattenGenericRestrictions(result);
             }
 
-            @NonNull
-            private JsonObject flattenGenericRestrictions(JsonObject result) {
-                genericRestrictions.forEach((k,v)-> result.add(k,new JsonPrimitive(v)));
+            public static ProofRestrictions fromJsonObject(@NonNull JsonObject json) {
+                ProofRestrictions result = GsonConfig.defaultConfig().fromJson(json, ProofRestrictions.class);
+                json.keySet().stream().filter(key -> key.startsWith("attr::")).findFirst().ifPresent(key ->
+                        result.setGenericRestrictions(Map.of(key, json.get(key).getAsString())));
                 return result;
             }
 
-            public static JsonObject addNameValue(
-                    @NonNull String name,
-                    @NonNull String value,
-                    @NonNull JsonObject restriction) {
-                restriction.addProperty("attr::" + name + "::value", value);
-                return restriction;
+            @NonNull
+            private JsonObject flattenGenericRestrictions(@NonNull JsonObject result) {
+                genericRestrictions.forEach((k,v)-> result.add(k,new JsonPrimitive(v)));
+                return result;
             }
 
             // This extends the lombok generated builder with contained methods.
