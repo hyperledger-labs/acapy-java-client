@@ -13,7 +13,7 @@ It is currently work in progress and not all endpoints of the agent are present 
 <dependency>
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
-   <version>0.7.1</version>
+   <version>0.7.2</version>
 </dependency>
 ```
 
