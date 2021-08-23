@@ -115,7 +115,7 @@ public class PresentationExchangeRecord {
      *
      * @return revealed attributes mapped to their group
      */
-    public Map<String, Map<String, Object>> getRevealedAttributeGroups() {
+    public Map<String, Map<String, Object>> findRevealedAttributeGroups() {
         return EventParser.getValuesByAttributeGroup(presentation.toString());
     }
 
@@ -130,7 +130,7 @@ public class PresentationExchangeRecord {
      * </pre>
      * @return revealed attribute to value mapping
      */
-    public Map<String, Object> getRevealedAttributes() {
+    public Map<String, Object> findRevealedAttributes() {
         return EventParser.getValuesByRevealedAttributes(presentation.toString());
     }
 

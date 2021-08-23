@@ -78,7 +78,7 @@ public class EventParserTest {
         String json = loader.load("events/proof-valid-verifier-attr-group.json");
         Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
         Assertions.assertTrue(p.isPresent());
-        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().getRevealedAttributeGroups();
+        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().findRevealedAttributeGroups();
         // System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
         Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").get("bic"));
     }
@@ -88,7 +88,7 @@ public class EventParserTest {
         String json = loader.load("events/proof-valid-verifier.json");
         Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
         Assertions.assertTrue(p.isPresent());
-        Map<String, Object> attrs = p.get().getRevealedAttributes();
+        Map<String, Object> attrs = p.get().findRevealedAttributes();
         Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
     }
 
