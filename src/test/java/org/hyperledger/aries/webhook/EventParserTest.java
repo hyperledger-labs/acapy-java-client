@@ -74,6 +74,15 @@ public class EventParserTest {
     }
 
     @Test
+    void testParseProofPresentationGetAttributeGroups() {
+        String json = loader.load("events/proof-valid-verifier-attr-group.json");
+        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
+        Assertions.assertTrue(p.isPresent());
+        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().getRevealedAttributesByGroup();
+        Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").get("bic"));
+    }
+
+    @Test
     void testParseProofPresentationProver() {
         String json = loader.load("events/proof-valid-prover.json");
         Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);

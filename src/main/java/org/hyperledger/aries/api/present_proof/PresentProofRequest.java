@@ -150,7 +150,7 @@ public class PresentProofRequest {
             }
 
             // This extends the lombok generated builder with contained methods.
-            public static class ProofRestrictionsBuilder{
+            public static class ProofRestrictionsBuilder {
                 public ProofRestrictionsBuilder addAttributeValueRestriction(@NonNull String name, @NonNull String value) {
                     this.genericRestriction("attr::" + name + "::value", value);
                     return this;

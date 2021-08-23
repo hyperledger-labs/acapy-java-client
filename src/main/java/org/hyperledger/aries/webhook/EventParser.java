@@ -71,7 +71,7 @@ public class EventParser {
         T result = PojoProcessor.getInstance(type);
 
         final Set<Entry<String, JsonElement>> revealedAttrs = getRevealedAttributes(json);
-        final Set<Entry<String, JsonElement>> revealedAttrGroups = getRevealedAttrGroups(
+        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(
                 json, PojoProcessor.getAttributeGroupName(type));
 
         List<Field> fields = PojoProcessor.fields(type);
@@ -101,7 +101,7 @@ public class EventParser {
         Map<String, Object> result = new HashMap<>();
 
         final Set<Entry<String, JsonElement>> revealedAttrs = getRevealedAttributes(json);
-        final Set<Entry<String, JsonElement>> revealedAttrGroups = getRevealedAttrGroups(json, null);
+        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(json, null);
 
         names.forEach(name -> {
             String value = getValueFor(name, revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
@@ -131,27 +131,32 @@ public class EventParser {
         return JsonParser
                 .parseString(json)
                 .getAsJsonObject().get("requested_proof")
-                .getAsJsonObject().get("revealed_attrs").getAsJsonObject()
+                .getAsJsonObject().get("revealed_attrs")
+                .getAsJsonObject()
                 .entrySet()
                 ;
     }
 
-    private static Set<Entry<String, JsonElement>> getRevealedAttrGroups(@NonNull String json, String groupName) {
-        Set<Entry<String, JsonElement>> result = new LinkedHashSet<>();
-        final JsonElement attr = JsonParser
+    private static JsonElement getRevealedAttrGroups(@NonNull String json) {
+        return JsonParser
                 .parseString(json)
                 .getAsJsonObject().get("requested_proof")
                 .getAsJsonObject().get("revealed_attr_groups")
-                ;
+        ;
+    }
+
+    private static Set<Entry<String, JsonElement>> aggregateRevealedAttrGroups(@NonNull String json, String groupName) {
+        Set<Entry<String, JsonElement>> result = new LinkedHashSet<>();
+        final JsonElement attr = getRevealedAttrGroups(json);
         if (attr == null) { // not an attr group
             return result;
         }
-        JsonObject attrGroup = attr.getAsJsonObject();
-        final Set<String> children = attrGroup.keySet();
+        JsonObject attrGroups = attr.getAsJsonObject();
+        final Set<String> attrGroupNames = attrGroups.keySet();
         if (StringUtils.isNotEmpty(groupName)) {
-            extract(result, attrGroup, groupName);
+            extract(result, attrGroups, groupName);
         } else { // brute force
-            children.forEach(c -> extract(result, attrGroup, c));
+            attrGroupNames.forEach(c -> extract(result, attrGroups, c));
         }
         return result;
     }
@@ -164,6 +169,24 @@ public class EventParser {
                 result.add(a);
             }
         });
+    }
+
+    public static Map<String, Map<String, Object>> getValuesByAttributeGroup(@NonNull String json) {
+        Map<String, Map<String, Object>> result = new HashMap<>();
+        final JsonElement groupsJson = getRevealedAttrGroups(json);
+        if (groupsJson == null) { // not an groupsJson group
+            return result;
+        }
+        JsonObject attrGroups = groupsJson.getAsJsonObject();
+        final Set<String> attrGroupNames = attrGroups.keySet();
+        attrGroupNames.forEach(name -> {
+            Map<String, Object> groupValues = new HashMap<>();
+            final Set<Entry<String, JsonElement>> attrs = attrGroups
+                    .get(name).getAsJsonObject().get("values").getAsJsonObject().entrySet();
+            attrs.forEach(e -> groupValues.put(e.getKey(), e.getValue().getAsJsonObject().get("raw").getAsString()));
+            result.put(name, groupValues);
+        });
+        return result;
     }
 
 }

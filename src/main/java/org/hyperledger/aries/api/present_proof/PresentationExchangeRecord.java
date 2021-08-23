@@ -20,6 +20,7 @@ import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
 import org.hyperledger.aries.webhook.EventParser;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -99,6 +100,10 @@ public class PresentationExchangeRecord {
      */
     public Map<String, Object> from(@NonNull Set<String> names) {
         return EventParser.from(presentation.toString(), names);
+    }
+
+    public Map<String, Map<String, Object>> getRevealedAttributesByGroup() {
+        return EventParser.getValuesByAttributeGroup(presentation.toString());
     }
 
     @Data @NoArgsConstructor
