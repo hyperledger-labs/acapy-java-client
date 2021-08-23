@@ -11,8 +11,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.connection.ConnectionState;
-import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRole;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -74,12 +74,22 @@ public class EventParserTest {
     }
 
     @Test
-    void testParseProofPresentationGetAttributeGroups() {
+    void testProofPresentationGetRevealedAttributeGroups() {
         String json = loader.load("events/proof-valid-verifier-attr-group.json");
         Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
         Assertions.assertTrue(p.isPresent());
-        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().getRevealedAttributesByGroup();
+        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().getRevealedAttributeGroups();
+        // System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
         Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").get("bic"));
+    }
+
+    @Test
+    void testProofPresentationGetRevealedAttributes() {
+        String json = loader.load("events/proof-valid-verifier.json");
+        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
+        Assertions.assertTrue(p.isPresent());
+        Map<String, Object> attrs = p.get().getRevealedAttributes();
+        Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
     }
 
     @Test

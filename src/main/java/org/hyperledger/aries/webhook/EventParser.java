@@ -23,6 +23,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class EventParser {
@@ -127,11 +128,15 @@ public class EventParser {
         return result;
     }
 
-    private static Set<Entry<String, JsonElement>> getRevealedAttributes(String json) {
-        return JsonParser
+    public static Set<Entry<String, JsonElement>> getRevealedAttributes(@NonNull String json) {
+        JsonElement revealedAttrs = JsonParser
                 .parseString(json)
                 .getAsJsonObject().get("requested_proof")
-                .getAsJsonObject().get("revealed_attrs")
+                .getAsJsonObject().get("revealed_attrs");
+        if (revealedAttrs == null) {
+            return Set.of();
+        }
+        return revealedAttrs
                 .getAsJsonObject()
                 .entrySet()
                 ;
@@ -187,6 +192,13 @@ public class EventParser {
             result.put(name, groupValues);
         });
         return result;
+    }
+
+    public static Map<String, Object> getValuesByRevealedAttributes(@NonNull String json) {
+        return getRevealedAttributes(json)
+                .stream()
+                .collect(Collectors
+                        .toMap(Map.Entry::getKey, v -> v.getValue().getAsJsonObject().get("raw").getAsString()));
     }
 
 }

@@ -20,7 +20,6 @@ import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
 import org.hyperledger.aries.webhook.EventParser;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -102,8 +101,37 @@ public class PresentationExchangeRecord {
         return EventParser.from(presentation.toString(), names);
     }
 
-    public Map<String, Map<String, Object>> getRevealedAttributesByGroup() {
+    /**
+     * Low level extractor that maps revealed attributes and values to their group
+     * <pre>{@code
+     * {
+     *   "bank-account": {
+     *     "iban": "4321",
+     *     "bic": "1234"
+     *   }
+     * }
+     * }
+     * </pre>
+     *
+     * @return revealed attributes mapped to their group
+     */
+    public Map<String, Map<String, Object>> getRevealedAttributeGroups() {
         return EventParser.getValuesByAttributeGroup(presentation.toString());
+    }
+
+    /**
+     * Low level extractor that returns a map of all revealed attributes and their values
+     * <pre>{@code
+     * {
+     *     "iban": "4321",
+     *     "bic": "1234"
+     * }
+     * }
+     * </pre>
+     * @return revealed attribute to value mapping
+     */
+    public Map<String, Object> getRevealedAttributes() {
+        return EventParser.getValuesByRevealedAttributes(presentation.toString());
     }
 
     @Data @NoArgsConstructor
