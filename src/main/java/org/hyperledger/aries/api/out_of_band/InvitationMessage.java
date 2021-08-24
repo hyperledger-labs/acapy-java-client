@@ -8,14 +8,32 @@
 package org.hyperledger.aries.api.out_of_band;
 
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 import org.hyperledger.acy_py.generated.model.AttachDecorator;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+/**
+ * Out Of Band Invitation Message
+ * <pre>{@code
+ * InvitationMessage<String> inviteString = gson.fromJson(inviteJson, InvitationMessage.STRING_TYPE);
+ * InvitationMessage<InvitationMessage.InvitationMessageService> complexType = gson.fromJson(inviteJson, InvitationMessage.RFC0067_TYPE);
+ * }
+ * </pre>
+ * @param <T> tape of the service object either {@link String} or {@link InvitationMessageService}
+ */
 @Data @Builder
-public class InvitationMessage {
+public class InvitationMessage<T> {
+
+    /** Used to deserialize RFC0067 service types */
+    public static final Type RFC0067_TYPE = new TypeToken<InvitationMessage<InvitationMessageService>>(){}.getType();
+
+    /** Used to deserialize DID string service types */
+    public static final Type STRING_TYPE = new TypeToken<InvitationMessage<String>>(){}.getType();
 
     @SerializedName("@id")
     private String atId;
@@ -31,8 +49,13 @@ public class InvitationMessage {
     @SerializedName("requests~attach")
     private List<AttachDecorator> requestsTildeAttach;
 
-    private List<InvitationMessageService> services;
+    /** Either a DIDComm service object (as per RFC0067) or a DID string. */
+    @Singular
+    private List<T> services;
 
+    /**
+     * DIDComm service object (as per RFC0067)
+     */
     @Data @Builder
     public static class InvitationMessageService {
 
@@ -48,6 +71,8 @@ public class InvitationMessage {
 
         @SerializedName("serviceEndpoint")
         private String serviceEndpoint;
+
+        private List<String> accept;
 
         private String type;
     }

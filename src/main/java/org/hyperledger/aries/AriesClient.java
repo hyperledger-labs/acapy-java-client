@@ -1379,11 +1379,13 @@ public class AriesClient extends BaseClient {
      * @since aca-py 0.7.0
      * @param request {@link InvitationMessage}
      * @param filter {@link ReceiveInvitationFilter}
+     * @param <T> type of the service object in the invitation message
+     *           either {@link String} or {@link InvitationMessage.InvitationMessageService}
      * @return {@link ConnectionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<ConnectionRecord> outOfBandReceiveInvitation(
-            @NonNull InvitationMessage request, ReceiveInvitationFilter filter) throws IOException {
+    public <T> Optional<ConnectionRecord> outOfBandReceiveInvitation(
+            @NonNull InvitationMessage<T> request, ReceiveInvitationFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/receive-invitation")).newBuilder();
         if (filter != null) {
             filter.buildParams(b);
