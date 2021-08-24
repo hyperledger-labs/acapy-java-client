@@ -10,6 +10,9 @@ package org.hyperledger.aries.api.present_proof;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * ARIES presentation exchange states for V1 and V2.
+ */
 public enum PresentationExchangeState {
     @JsonProperty("proposal_sent")
     @SerializedName("proposal_sent")
@@ -35,23 +38,27 @@ public enum PresentationExchangeState {
     @SerializedName("presentation_received")
     PRESENTATION_RECEIVED,
 
-    // V1 state only
+    /** V1 state only */
     @JsonProperty("verified")
     @SerializedName("verified")
     VERIFIED,
 
-    // V1 state only
+    /** V1 state only */
     @JsonProperty("presentation_acked")
     @SerializedName("presentation_acked")
     PRESENTATION_ACKED,
 
-    // V2 state only
+    /** V2 state only */
     @JsonProperty("done")
     @SerializedName("done")
     DONE,
 
-    // V2 state only
+    /** V2 state only */
     @JsonProperty("abandoned")
     @SerializedName("abandoned")
-    ABANDONED
+    ABANDONED,
+
+    /** Not an aries state, can be used in a manual proof exchange to mark the state
+     * as declined if the request was not accepted */
+    DECLINED
 }

@@ -11,10 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -134,7 +131,7 @@ public class PresentationExchangeRecord {
         return EventParser.getValuesByRevealedAttributes(presentation.toString());
     }
 
-    @Data @NoArgsConstructor
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor
     public static class Identifier {
         private String schemaId;
         @SerializedName(value = "cred_def_id", alternate = "credential_definition_id")
