@@ -68,6 +68,30 @@ public class PresentationExchangeRecord {
         return false;
     }
 
+    public boolean roleIsProver() {
+        return PresentationExchangeRole.PROVER.equals(role);
+    }
+
+    public boolean roleIsVerifier() {
+        return PresentationExchangeRole.VERIFIER.equals(role);
+    }
+
+    public boolean roleIsProverAndRequestReceived() {
+        return roleIsProver() && PresentationExchangeState.REQUEST_RECEIVED.equals(state);
+    }
+
+    public boolean roleIsProverAndPresentationSent() {
+        return roleIsProver() && PresentationExchangeState.PRESENTATIONS_SENT.equals(state);
+    }
+
+    public boolean roleIsProverAndPresentationAcked() {
+        return roleIsProver() && PresentationExchangeState.PRESENTATION_ACKED.equals(state);
+    }
+
+    public boolean roleIsVerifierAndRequestSent() {
+        return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(state);
+    }
+
     public JsonObject getPresentation() {
         if (presentation == null) {
             return new JsonObject();
