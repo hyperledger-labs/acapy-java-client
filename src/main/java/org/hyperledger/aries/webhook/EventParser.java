@@ -30,7 +30,7 @@ public class EventParser {
 
     private static final Type IDENTIFIER_TYPE = new TypeToken<Collection<Identifier>>(){}.getType();
 
-    private final Gson gson = GsonConfig.defaultConfig();
+    private static final Gson gson = GsonConfig.defaultConfig();
     private final Gson pretty = GsonConfig.prettyPrinter();
 
     public String prettyJson(@NonNull String json) {
@@ -150,6 +150,16 @@ public class EventParser {
         ;
     }
 
+    private static Identifier getIdentifierAtIndex(@NonNull String json, int index) {
+        JsonObject identifier = JsonParser
+                .parseString(json)
+                .getAsJsonObject().get("identifiers")
+                .getAsJsonArray()
+                .get(index)
+                .getAsJsonObject();
+        return gson.fromJson(identifier, Identifier.class);
+    }
+
     private static Set<Entry<String, JsonElement>> aggregateRevealedAttrGroups(@NonNull String json, String groupName) {
         Set<Entry<String, JsonElement>> result = new LinkedHashSet<>();
         final JsonElement attr = getRevealedAttrGroups(json);
@@ -176,8 +186,8 @@ public class EventParser {
         });
     }
 
-    public static Map<String, Map<String, Object>> getValuesByAttributeGroup(@NonNull String json) {
-        Map<String, Map<String, Object>> result = new HashMap<>();
+    public static Map<String, PresentationExchangeRecord.RevealedAttributeGroup> getValuesByAttributeGroup(@NonNull String json) {
+        Map<String, PresentationExchangeRecord.RevealedAttributeGroup> result = new HashMap<>();
         final JsonElement groupsJson = getRevealedAttrGroups(json);
         if (groupsJson == null) { // not an groupsJson group
             return result;
@@ -185,11 +195,17 @@ public class EventParser {
         JsonObject attrGroups = groupsJson.getAsJsonObject();
         final Set<String> attrGroupNames = attrGroups.keySet();
         attrGroupNames.forEach(name -> {
-            Map<String, Object> groupValues = new HashMap<>();
+            PresentationExchangeRecord.RevealedAttributeGroup
+                    .RevealedAttributeGroupBuilder groupBuilder = PresentationExchangeRecord.RevealedAttributeGroup.builder();
+
             final Set<Entry<String, JsonElement>> attrs = attrGroups
                     .get(name).getAsJsonObject().get("values").getAsJsonObject().entrySet();
-            attrs.forEach(e -> groupValues.put(e.getKey(), e.getValue().getAsJsonObject().get("raw").getAsString()));
-            result.put(name, groupValues);
+            attrs.forEach(e -> groupBuilder.revealedAttribute(e.getKey(), e.getValue().getAsJsonObject().get("raw").getAsString()));
+
+            int subProofIndex = attrGroups.get(name).getAsJsonObject().get("sub_proof_index").getAsInt();
+            groupBuilder.identifier(getIdentifierAtIndex(json, subProofIndex));
+
+            result.put(name, groupBuilder.build());
         });
         return result;
     }

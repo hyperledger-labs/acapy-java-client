@@ -127,8 +127,15 @@ public class PresentationExchangeRecord {
      * <pre>{@code
      * {
      *   "bank-account": {
-     *     "iban": "4321",
-     *     "bic": "1234"
+     *     "revealed_attributes": {
+     *       "bic": "1234",
+     *       "iban": "4321"
+     *     },
+     *     "identifier": {
+     *       "schema_id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0",
+     *       "cred_def_id": "F6dB7dMVHUQSC64qemnBi7:3:CL:571:mybank",
+     *       "timestamp": "1628609220"
+     *     }
      *   }
      * }
      * }
@@ -136,7 +143,7 @@ public class PresentationExchangeRecord {
      *
      * @return revealed attributes mapped to their group
      */
-    public Map<String, Map<String, Object>> findRevealedAttributeGroups() {
+    public Map<String, RevealedAttributeGroup> findRevealedAttributeGroups() {
         return EventParser.getValuesByAttributeGroup(presentation.toString());
     }
 
@@ -162,5 +169,12 @@ public class PresentationExchangeRecord {
         private String credentialDefinitionId;
         private String revRegId;
         private String timestamp;
+    }
+
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor
+    public static class RevealedAttributeGroup {
+        @Singular
+        private Map<String, String> revealedAttributes;
+        private Identifier identifier;
     }
 }

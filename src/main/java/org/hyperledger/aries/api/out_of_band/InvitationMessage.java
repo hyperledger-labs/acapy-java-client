@@ -42,6 +42,7 @@ public class InvitationMessage<T> {
     private String atType;
 
     @Builder.Default
+    @SerializedName("handshake_protocols")
     private List<String> handshakeProtocols = List.of("did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0");
 
     private String label;

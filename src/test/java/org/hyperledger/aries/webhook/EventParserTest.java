@@ -15,6 +15,7 @@ import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRole;
+import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.pojo.AttributeName;
 import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
@@ -78,9 +79,9 @@ public class EventParserTest {
         String json = loader.load("events/proof-valid-verifier-attr-group.json");
         Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
         Assertions.assertTrue(p.isPresent());
-        Map<String, Map<String, Object>> revealedAttributesByGroup = p.get().findRevealedAttributeGroups();
-        // System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
-        Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").get("bic"));
+        Map<String, PresentationExchangeRecord.RevealedAttributeGroup> revealedAttributesByGroup = p.get().findRevealedAttributeGroups();
+        System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
+        Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").getRevealedAttributes().get("bic"));
     }
 
     @Test
