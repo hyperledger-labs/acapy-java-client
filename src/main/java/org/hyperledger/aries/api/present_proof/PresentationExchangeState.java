@@ -60,5 +60,7 @@ public enum PresentationExchangeState {
 
     /** Not an aries state, can be used in a manual proof exchange to mark the state
      * as declined if the request was not accepted */
+    @JsonProperty("declined")
+    @SerializedName("declined")
     DECLINED
 }
