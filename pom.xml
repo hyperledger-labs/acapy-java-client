@@ -62,7 +62,7 @@
         <kotlin.version>1.4.32</kotlin.version>
         <lombok.version>1.18.20</lombok.version>
         <okhttp.version>4.9.1</okhttp.version>
-        <pmd.version>6.37.0</pmd.version>
+        <pmd.version>6.38.0</pmd.version>
         <testcontainers.version>1.16.0</testcontainers.version>
     </properties>
 
@@ -354,7 +354,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.2.3</version>
+                        <version>4.4.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -394,7 +394,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.2.2</version>
+                <version>6.3.0</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>

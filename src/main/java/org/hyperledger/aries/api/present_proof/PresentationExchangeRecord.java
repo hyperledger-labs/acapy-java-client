@@ -83,6 +83,9 @@ public class PresentationExchangeRecord {
     public boolean roleIsProverAndPresentationSent() {
         return roleIsProver() && PresentationExchangeState.PRESENTATIONS_SENT.equals(state);
     }
+    public boolean roleIsProverAndProposalSent() {
+        return roleIsProver() && PresentationExchangeState.PROPOSAL_SENT.equals(state);
+    }
 
     public boolean roleIsProverAndPresentationAcked() {
         return roleIsProver() && PresentationExchangeState.PRESENTATION_ACKED.equals(state);
