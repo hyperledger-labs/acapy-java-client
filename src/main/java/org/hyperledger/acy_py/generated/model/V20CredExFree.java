@@ -17,26 +17,29 @@ import com.google.gson.annotations.SerializedName;
 import java.util.UUID;
 
 /**
- * V10PresentationProposalRequest
+ * V20CredExFree
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class V10PresentationProposalRequest {
-    public static final String SERIALIZED_NAME_AUTO_PRESENT = "auto_present";
-    @SerializedName(SERIALIZED_NAME_AUTO_PRESENT)
-    private Boolean autoPresent;
+public class V20CredExFree {
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
     public static final String SERIALIZED_NAME_COMMENT = "comment";
     @SerializedName(SERIALIZED_NAME_COMMENT)
     private String comment;
     public static final String SERIALIZED_NAME_CONNECTION_ID = "connection_id";
     @SerializedName(SERIALIZED_NAME_CONNECTION_ID)
     private UUID connectionId;
-    public static final String SERIALIZED_NAME_PRESENTATION_PROPOSAL = "presentation_proposal";
-    @SerializedName(SERIALIZED_NAME_PRESENTATION_PROPOSAL)
-    private IndyPresPreview presentationProposal;
+    public static final String SERIALIZED_NAME_CREDENTIAL_PREVIEW = "credential_preview";
+    @SerializedName(SERIALIZED_NAME_CREDENTIAL_PREVIEW)
+    private V20CredPreview credentialPreview;
+    public static final String SERIALIZED_NAME_FILTER = "filter";
+    @SerializedName(SERIALIZED_NAME_FILTER)
+    private V20CredFilter filter;
     public static final String SERIALIZED_NAME_TRACE = "trace";
     @SerializedName(SERIALIZED_NAME_TRACE)
     private Boolean trace;
