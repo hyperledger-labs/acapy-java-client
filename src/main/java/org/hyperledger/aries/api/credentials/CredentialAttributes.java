@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.acy_py.generated.model.CredAttrSpec;
 import org.hyperledger.aries.pojo.AttributeName;
 
 import java.lang.reflect.Field;
@@ -81,5 +82,14 @@ public class CredentialAttributes {
         List<CredentialAttributes> result = new ArrayList<>();
         values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v)));
         return result;
+    }
+
+    public CredAttrSpec toCredAttrSpec() {
+        return CredAttrSpec
+                .builder()
+                .name(this.name)
+                .value(this.value)
+                .mimeType(this.mimeType)
+                .build();
     }
 }

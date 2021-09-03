@@ -9,16 +9,17 @@ package org.hyperledger.aries.api.issue_credential_v1;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hyperledger.acy_py.generated.model.CredAttrSpec;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
 
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.List;
 
 /**
  * Result of a credential exchange. E.g. issueCredentialSend() or issueCredentialSendProposal()
@@ -42,9 +43,7 @@ public class V1CredentialExchange {
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject credentialOfferDict;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject credentialProposalDict;
+    private CredentialProposalDict credentialProposalDict;
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject credentialRequest;
@@ -72,5 +71,48 @@ public class V1CredentialExchange {
 
     public boolean isHolder() {
         return CredentialExchangeRole.HOLDER.equals(role);
+    }
+
+    public boolean isProposalReceived() {
+        return CredentialExchangeState.PROPOSAL_RECEIVED.equals(state);
+    }
+
+    public boolean isAutoIssueEnabled() {
+        return autoIssue != null && autoIssue;
+    }
+
+    public boolean isAutoOfferEnabled() {
+        return autoOffer != null && autoOffer;
+    }
+
+    public boolean isAutoRemoveEnabled() {
+        return autoRemove != null && autoRemove;
+    }
+
+    public boolean isCredentialAcked() {
+        return CredentialExchangeState.CREDENTIAL_ACKED.equals(state);
+    }
+
+    @Data @NoArgsConstructor
+    public static final class CredentialProposalDict {
+        @SerializedName("@type")
+        private String type;
+
+        @SerializedName("@id")
+        private String id;
+
+        private String schemaId;
+
+        private String credDefId;
+
+        private CredentialProposal credentialProposal;
+
+        @Data @NoArgsConstructor
+        public static final class CredentialProposal {
+            @SerializedName("@type")
+            private String type;
+
+            private List<CredAttrSpec> attributes;
+        }
     }
 }
