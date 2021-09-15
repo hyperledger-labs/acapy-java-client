@@ -36,6 +36,7 @@ import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.*;
+import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialSendRequest;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
@@ -1078,6 +1079,19 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Send holder a credential offer in reference to a proposal with a preview. V1 to V2 Wrapper
+     * @param credentialExchangeId credential exchange identifier
+     * @param offerRequest {@link V10CredentialBoundOfferRequest}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2RecordsSendOffer(
+            @NonNull String credentialExchangeId, @NonNull V10CredentialBoundOfferRequest offerRequest) throws IOException {
+        return issueCredentialV2RecordsSendOffer(
+                credentialExchangeId, V1ToV2IssueCredentialConverter.toV20CredBoundOfferRequest(offerRequest));
+    }
+
+    /**
      * Send holder a credential offer in reference to a proposal with a preview
      * @param credentialExchangeId credential exchange identifier
      * @param offerRequest {@link V20CredBoundOfferRequest}
@@ -1117,6 +1131,17 @@ public class AriesClient extends BaseClient {
         Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/store",
                 request != null ? request : EMPTY_JSON);
         return call(req, V20CredExRecordDetail.class);
+    }
+
+    /**
+     * Send holder a credential, automating the entire flow (V1 to V2 wrapper).
+     * @param request {@link V1CredentialProposalRequest} the credential to be issued
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V1CredentialProposalRequest request)
+            throws IOException {
+        return issueCredentialV2Send(V1ToV2IssueCredentialConverter.toV2CredentialSendRequest(request));
     }
 
     /**

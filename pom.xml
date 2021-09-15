@@ -57,8 +57,8 @@
         <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.12.4</jackson.version>
-        <junit.jupiter.api.version>5.7.2</junit.jupiter.api.version>
+        <jackson.version>2.12.5</jackson.version>
+        <junit.jupiter.api.version>5.8.0</junit.jupiter.api.version>
         <kotlin.version>1.4.32</kotlin.version>
         <lombok.version>1.18.20</lombok.version>
         <okhttp.version>4.9.1</okhttp.version>
@@ -168,7 +168,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.6</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -256,7 +256,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <excludePackageNames>*.generated</excludePackageNames>
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
@@ -354,7 +354,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.4.0</version>
+                        <version>4.4.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -394,7 +394,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.3.0</version>
+                <version>6.3.1</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>
