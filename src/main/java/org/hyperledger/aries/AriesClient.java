@@ -1174,7 +1174,18 @@ public class AriesClient extends BaseClient {
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V20IssueCredSchemaCore request)
+    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V1CredentialProposalRequest request)
+            throws IOException {
+        return issueCredentialV2SendProposal(V1ToV2IssueCredentialConverter.toV20CredExFree(request));
+    }
+
+    /**
+     * Send issuer a credential proposal
+     * @param request {@link V20CredExFree} the requested credential
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V20CredExFree request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/send-proposal", request);
         return call(req, V20CredExRecord.class);

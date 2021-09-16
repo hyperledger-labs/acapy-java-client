@@ -9,9 +9,11 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 import lombok.NonNull;
 import org.hyperledger.acy_py.generated.model.*;
+import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialProposalRequest;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -90,5 +92,43 @@ public class V1ToV2IssueCredentialConverter {
                         .value(a.getValue())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public static List<V20CredAttrSpec> toV20CredAttrSpecFromAttributes(@NonNull List<CredentialAttributes> attributes) {
+        return attributes
+                .stream()
+                .map(a -> V20CredAttrSpec
+                        .builder()
+                        .mimeType(a.getMimeType())
+                        .name(a.getName())
+                        .value(a.getValue())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static V20CredExFree toV20CredExFree(@NonNull V1CredentialProposalRequest v1Proposal) {
+        return V20CredExFree
+                .builder()
+                .connectionId(UUID.fromString(v1Proposal.getConnectionId()))
+                .comment(v1Proposal.getComment())
+                .autoRemove(v1Proposal.getAutoRemove())
+                .trace(v1Proposal.getTrace())
+                .filter(V20CredFilter
+                        .builder()
+                        .indy(V20CredFilterIndy
+                                .builder()
+                                .schemaName(v1Proposal.getSchemaName())
+                                .credDefId(v1Proposal.getCredentialDefinitionId())
+                                .schemaVersion(v1Proposal.getSchemaVersion())
+                                .issuerDid(v1Proposal.getIssuerDid())
+                                .schemaId(v1Proposal.getSchemaId())
+                                .schemaIssuerDid(v1Proposal.getSchemaIssuerDid())
+                                .build())
+                        .build())
+                .credentialPreview(V20CredPreview
+                        .builder()
+                        .attributes(toV20CredAttrSpecFromAttributes(v1Proposal.getCredentialProposal().getAttributes()))
+                        .build())
+                .build();
     }
 }

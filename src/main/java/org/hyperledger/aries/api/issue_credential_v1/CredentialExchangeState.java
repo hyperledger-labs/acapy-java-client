@@ -93,7 +93,14 @@ public enum CredentialExchangeState {
      */
     @JsonProperty("done")
     @SerializedName("done")
-    DONE
+    DONE,
+
+    /**
+     * Not an aries state, but useful in business logic reacting on these states
+     */
+    @JsonProperty("revoked")
+    @SerializedName("revoked")
+    REVOKED
     ;
 
     /**
