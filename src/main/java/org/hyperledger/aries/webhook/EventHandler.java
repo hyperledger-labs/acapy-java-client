@@ -7,7 +7,7 @@
  */
 package org.hyperledger.aries.webhook;
 
-import org.hyperledger.acy_py.generated.model.V20CredExRecord;
+import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.connection.ConnectionRecord;

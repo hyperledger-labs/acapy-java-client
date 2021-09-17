@@ -129,7 +129,7 @@ public enum CredentialExchangeState {
             case DONE:
                 return DONE;
             default:
-                return null;
+                throw new IllegalStateException("V2 state could not be converted to its V1 counterpart");
         }
     }
 }

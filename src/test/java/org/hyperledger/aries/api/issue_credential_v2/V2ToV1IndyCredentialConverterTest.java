@@ -7,7 +7,6 @@
  */
 package org.hyperledger.aries.api.issue_credential_v2;
 
-import org.hyperledger.acy_py.generated.model.V20CredExRecord;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.junit.jupiter.api.Assertions;

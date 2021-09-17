@@ -11,10 +11,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.acy_py.generated.model.CredAttrSpec;
 import org.hyperledger.aries.api.credentials.Credential;
+import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
@@ -51,7 +53,7 @@ public class V1CredentialExchange {
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject credentialRequestMetadata;
     private String errorMsg;
-    private String initiator;
+    private CredentialExchangeInitiator initiator;
     private String parentThreadId;
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
@@ -107,12 +109,12 @@ public class V1CredentialExchange {
 
         private CredentialProposal credentialProposal;
 
-        @Data @NoArgsConstructor
+        @Data @NoArgsConstructor @AllArgsConstructor @Builder
         public static final class CredentialProposal {
             @SerializedName("@type")
             private String type;
 
-            private List<CredAttrSpec> attributes;
+            private List<CredentialAttributes> attributes;
         }
     }
 }

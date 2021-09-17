@@ -10,7 +10,6 @@ package org.hyperledger.aries.api.issue_credential_v2;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import lombok.NonNull;
-import org.hyperledger.acy_py.generated.model.V20CredExRecord;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.config.GsonConfig;
 

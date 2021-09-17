@@ -16,7 +16,7 @@ import java.util.List;
 public class CredentialPreview {
 
     @SerializedName("@type")
-    private String type = "issue-credential/1.0/credential-preview";
+    private String type;
 
     private List<CredentialAttributes> attributes;
 
