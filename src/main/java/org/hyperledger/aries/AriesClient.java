@@ -39,6 +39,7 @@ import org.hyperledger.aries.api.issue_credential_v1.*;
 import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialSendRequest;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
+import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
@@ -1015,11 +1016,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Fetch all credential exchange records
-     * @param filter {@link IssueCredentialRecordsFilter}
+     * @param filter {@link V2IssueCredentialRecordsFilter}
      * @return list of {@link V20CredExRecordDetail}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<List<V20CredExRecordDetail>> issueCredentialV2Records(IssueCredentialRecordsFilter filter)
+    public Optional<List<V20CredExRecordDetail>> issueCredentialV2Records(V2IssueCredentialRecordsFilter filter)
             throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/issue-credential-2.0/records")).newBuilder();
         if (filter != null) {

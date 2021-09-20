@@ -26,14 +26,14 @@ public enum CredentialExchangeState {
      * Step 1: Holder sends proposal to issuer
      */
     @JsonProperty("proposal_sent")
-    @SerializedName("proposal_sent")
+    @SerializedName(value = "proposal_sent", alternate = "proposal-sent")
     PROPOSAL_SENT,
 
     /**
      * Step 1: Issuer receives credential proposal from holder
      */
     @JsonProperty("proposal_received")
-    @SerializedName("proposal_received")
+    @SerializedName(value = "proposal_received", alternate = "proposal-received")
     PROPOSAL_RECEIVED,
 
     /**
@@ -41,42 +41,42 @@ public enum CredentialExchangeState {
      * start the process by sending an offer without receiving a proposal first
      */
     @JsonProperty("offer_sent")
-    @SerializedName("offer_sent")
+    @SerializedName(value = "offer_sent", alternate = "offer-sent")
     OFFER_SENT,
 
     /**
      * Step 2: Holder receives (counter) offer from issuer
      */
     @JsonProperty("offer_received")
-    @SerializedName("offer_received")
+    @SerializedName(value = "offer_received", alternate = "offer-received")
     OFFER_RECEIVED,
 
     /**
      * Step 3: Holder requests credential from issuer
      */
     @JsonProperty("request_sent")
-    @SerializedName("request_sent")
+    @SerializedName(value = "request_sent", alternate = "request-sent")
     REQUEST_SENT,
 
     /**
      * Step 3: Issuer receives credential request from holder
      */
     @JsonProperty("request_received")
-    @SerializedName("request_received")
+    @SerializedName(value = "request_received", alternate = "request-received")
     REQUEST_RECEIVED,
 
     /**
      * Step 4: Issuer sends credential to holder
      */
     @JsonProperty("credential_issued")
-    @SerializedName("credential_issued")
+    @SerializedName(value = "credential_issued", alternate = "credential-issued")
     CREDENTIAL_ISSUED,
 
     /**
      * Step 4: Holder receives credential from issuer
      */
     @JsonProperty("credential_received")
-    @SerializedName("credential_received")
+    @SerializedName(value = "credential_received", alternate = "credential-received")
     CREDENTIAL_RECEIVED,
 
     /**
@@ -84,7 +84,7 @@ public enum CredentialExchangeState {
      * Step5: Credential exchange completed
      */
     @JsonProperty("credential_acked")
-    @SerializedName("credential_acked")
+    @SerializedName(value = "credential_acked", alternate = "credential-acked")
     CREDENTIAL_ACKED,
 
     /**

@@ -24,10 +24,12 @@ import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeInitiator;
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeState;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 
 /**
  * V20CredExRecord
  */
+@SuppressWarnings("unused")
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
@@ -88,5 +90,38 @@ public class V20CredExRecord {
 
     public boolean isAutoRemoveEnabled() {
         return autoRemove != null && autoRemove;
+    }
+
+    /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
+    public V1CredentialExchange toV1CredentialExchangeFromProposal() {
+        return V1CredentialExchange
+                .builder()
+                .autoIssue(autoIssue)
+                .autoOffer(autoOffer)
+                .autoRemove(autoRemove)
+                .trace(trace)
+
+                .connectionId(connectionId)
+                .createdAt(createdAt)
+                .credentialExchangeId(credExId)
+                .errorMsg(errorMsg)
+                .threadId(threadId)
+                .parentThreadId(parentThreadId)
+                .updatedAt(updatedAt)
+                .initiator(initiator)
+
+                .schemaId(byFormat != null ? byFormat.getSchemaIdFromProposal() : null)
+                .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
+                        .builder()
+                        .schemaId(byFormat != null ? byFormat.getSchemaIdFromProposal() : null)
+                        .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
+                                .builder()
+                                .attributes(getCredProposal().getCredentialPreview().getAttributes())
+                                .build())
+                        .build())
+
+                .role(role)
+                .state(state)
+                .build();
     }
 }

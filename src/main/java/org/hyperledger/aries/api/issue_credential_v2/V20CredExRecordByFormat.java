@@ -22,8 +22,6 @@ package org.hyperledger.aries.api.issue_credential_v2;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.Optional;
-
 /**
  * V20CredExRecordByFormat
  */
@@ -37,12 +35,12 @@ public class V20CredExRecordByFormat {
     private JsonObject credProposal;
     private JsonObject credRequest;
 
-    public Optional<String> getSchemaIdFromProposal() {
-        Optional<String> result = Optional.empty();
+    public String getSchemaIdFromProposal() {
+        String result = null;
         if (credProposal != null) {
             JsonElement indy = credProposal.get("indy");
             if (indy != null) {
-                result = Optional.ofNullable(indy.getAsJsonObject().get("schema_id").getAsString());
+                result = indy.getAsJsonObject().get("schema_id").getAsString();
             }
         }
         return result;

@@ -27,7 +27,8 @@ import java.util.List;
  * Result of a credential exchange. E.g. issueCredentialSend() or issueCredentialSendProposal()
  *
  */
-@Data @NoArgsConstructor
+@SuppressWarnings("unused")
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class V1CredentialExchange {
     private Boolean autoIssue;
     private Boolean autoOffer;
@@ -95,7 +96,7 @@ public class V1CredentialExchange {
         return CredentialExchangeState.CREDENTIAL_ACKED.equals(state);
     }
 
-    @Data @NoArgsConstructor
+    @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static final class CredentialProposalDict {
         @SerializedName("@type")
         private String type;
