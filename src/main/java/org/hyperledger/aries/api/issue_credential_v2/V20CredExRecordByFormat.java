@@ -22,6 +22,11 @@ package org.hyperledger.aries.api.issue_credential_v2;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * V20CredExRecordByFormat
  */
@@ -35,7 +40,11 @@ public class V20CredExRecordByFormat {
     private JsonObject credProposal;
     private JsonObject credRequest;
 
-    public String getSchemaIdFromProposal() {
+    /**
+     * Gets schema id from indy proposal
+     * @return schema id
+     */
+    public String findSchemaIdInIndyProposal() {
         String result = null;
         if (credProposal != null) {
             JsonElement indy = credProposal.get("indy");
@@ -44,5 +53,24 @@ public class V20CredExRecordByFormat {
             }
         }
         return result;
+    }
+
+    /**
+     * Find values in issued indy credential
+     * @return credential key/value map
+     */
+    public Optional<Map<String, String>> findValuesInIndyCredIssue() {
+        if (credIssue != null) {
+            JsonObject indy = credIssue.getAsJsonObject("indy");
+            if (indy != null) {
+                final Set<Map.Entry<String, JsonElement>> attrs = indy.getAsJsonObject("values").entrySet();
+                return Optional.ofNullable(attrs
+                        .stream()
+                        .collect(Collectors.toMap(
+                                e -> e.getKey(),
+                                e -> e.getValue().getAsJsonObject().get("raw").getAsString())));
+            }
+        }
+        return Optional.empty();
     }
 }

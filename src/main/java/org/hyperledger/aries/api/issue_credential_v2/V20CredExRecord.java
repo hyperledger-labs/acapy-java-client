@@ -110,10 +110,10 @@ public class V20CredExRecord {
                 .updatedAt(updatedAt)
                 .initiator(initiator)
 
-                .schemaId(byFormat != null ? byFormat.getSchemaIdFromProposal() : null)
+                .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
                 .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
                         .builder()
-                        .schemaId(byFormat != null ? byFormat.getSchemaIdFromProposal() : null)
+                        .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
                         .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
                                 .builder()
                                 .attributes(getCredProposal().getCredentialPreview().getAttributes())

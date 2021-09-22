@@ -15,13 +15,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hyperledger.acy_py.generated.model.AttachDecorator;
+import org.hyperledger.acy_py.generated.model.IndyCredAbstract;
+import org.hyperledger.acy_py.generated.model.IndyCredRequest;
+import org.hyperledger.acy_py.generated.model.IndyCredential;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Result of a credential exchange. E.g. issueCredentialSend() or issueCredentialSendProposal()
@@ -40,25 +48,17 @@ public class V1CredentialExchange {
     private String credentialDefinitionId;
     private String credentialExchangeId;
     private String credentialId; // only set when the state is credential_acked
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject credentialOffer;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject credentialOfferDict;
+    private IndyCredAbstract credentialOffer;
+    private CredentialOfferDict credentialOfferDict;
     private CredentialProposalDict credentialProposalDict;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject credentialRequest;
+    private IndyCredRequest credentialRequest;
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject credentialRequestMetadata;
     private String errorMsg;
     private CredentialExchangeInitiator initiator;
     private String parentThreadId;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject rawCredential;
+    private IndyCredential rawCredential;
     private String revocRegId;
     private String revocationId;
     private CredentialExchangeRole role;
@@ -118,4 +118,34 @@ public class V1CredentialExchange {
             private List<CredentialAttributes> attributes;
         }
     }
+
+    @Data @NoArgsConstructor @AllArgsConstructor @Builder
+    public static final class CredentialOfferDict {
+        @SerializedName("@type")
+        private String type;
+
+        @SerializedName("@id")
+        private String id;
+
+        @SerializedName("~thread")
+        private ThreadId threadId;
+
+        private CredentialProposalDict.CredentialProposal credentialPreview;
+
+        @SerializedName("offers~attach")
+        private List<AttachDecorator> offersAttach = new ArrayList<>();
+    }
+
+    public Optional<Map<String, String>> findAttributesInCredentialOfferDict() {
+        Optional<Map<String, String>> result = Optional.empty();
+        if (credentialOfferDict != null && credentialOfferDict.credentialPreview != null) {
+            List<CredentialAttributes> attributes = credentialOfferDict.getCredentialPreview().getAttributes();
+            if (attributes != null) {
+                return Optional.of(attributes.stream()
+                        .collect(Collectors.toMap(CredentialAttributes::getName, CredentialAttributes::getValue)));
+            }
+        }
+        return result;
+    }
+
 }
