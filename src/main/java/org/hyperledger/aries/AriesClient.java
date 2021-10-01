@@ -910,11 +910,11 @@ public class AriesClient extends BaseClient {
     /**
      * Send a problem report for a credential exchange
      * @param credentialExchangeId credential exchange identifier
-     * @param request {@link V1CredentialProblemReportRequest}
+     * @param request {@link V10CredentialProblemReportRequest}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public void issueCredentialRecordsProblemReport(@NonNull String credentialExchangeId,
-            @NonNull V1CredentialProblemReportRequest request) throws IOException {
+            @NonNull V10CredentialProblemReportRequest request) throws IOException {
         Request req = buildPost(url + "/issue-credential/records/" + credentialExchangeId + "/problem-report",
                 request);
         call(req);
