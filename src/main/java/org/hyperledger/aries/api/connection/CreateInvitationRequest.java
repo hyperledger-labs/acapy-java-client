@@ -23,7 +23,7 @@ import java.util.List;
 public class CreateInvitationRequest {
     private String mediationId;
     private JsonObject metadata;
-    /** mandatory */
+    private String myLabel;
     private List<String> recipientKeys;
     private List<String> routingKeys;
     private String serviceEndpoint;

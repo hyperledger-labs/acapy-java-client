@@ -48,6 +48,14 @@ public class ConnectionRecord {
         return StringUtils.isNotEmpty(invitationKey);
     }
 
+    /**
+     * Tries to determine the direction of a connection
+     * @return true in case the connection was initiated by this agent
+     */
+    public boolean isOutgoingConnection() {
+        return StringUtils.isEmpty(invitationKey);
+    }
+
     /** Tests if this event is an OOB invitation
      * @return true if OOB invitation
      */
@@ -76,8 +84,20 @@ public class ConnectionRecord {
                 && ConnectionState.REQUEST.equals(state);
     }
 
-    public boolean isActive() {
+    public boolean stateIsRequest() {
+        return ConnectionState.REQUEST.equals(state);
+    }
+
+    public boolean stateIsResponse() {
+        return ConnectionState.RESPONSE.equals(state);
+    }
+
+    public boolean stateIsActive() {
         return ConnectionState.ACTIVE.equals(state);
+    }
+
+    public boolean stateIsCompleted() {
+        return ConnectionState.COMPLETED.equals(state);
     }
 
     public enum InvitationMode {

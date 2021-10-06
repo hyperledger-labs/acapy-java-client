@@ -84,7 +84,7 @@ public class PresentationExchangeRecord {
         return roleIsProver() && PresentationExchangeState.PRESENTATIONS_SENT.equals(state);
     }
     public boolean roleIsProverAndProposalSent() {
-        return roleIsProver() && PresentationExchangeState.PROPOSAL_SENT.equals(state);
+        return roleIsProver() && stateIsProposalSent();
     }
 
     public boolean roleIsProverAndPresentationAcked() {
@@ -93,6 +93,18 @@ public class PresentationExchangeRecord {
 
     public boolean roleIsVerifierAndRequestSent() {
         return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(state);
+    }
+
+    public boolean stateIsProposalSent() {
+        return PresentationExchangeState.PROPOSAL_SENT.equals(state);
+    }
+
+    public boolean initiatorIsSelf() {
+        return PresentationExchangeInitiator.SELF.equals(initiator);
+    }
+
+    public boolean initiatorIsExternal() {
+        return PresentationExchangeInitiator.EXTERNAL.equals(initiator);
     }
 
     public JsonObject getPresentation() {
