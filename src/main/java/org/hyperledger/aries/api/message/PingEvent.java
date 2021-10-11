@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * Ping response Webhook event
+ * Ping response webhook event
  */
 @Data @NoArgsConstructor @AllArgsConstructor @Accessors(chain = true) @Builder
 public final class PingEvent {
@@ -42,6 +42,7 @@ public final class PingEvent {
     }
 
     public boolean stateIsReceived() {
-        return "received".equals(state);
+        // < 0.7.1 state is response_received, >= 0.7.1 state is received
+        return "received".equals(state) || "response_received".equals(state);
     }
 }
