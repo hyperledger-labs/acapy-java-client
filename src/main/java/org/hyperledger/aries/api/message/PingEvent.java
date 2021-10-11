@@ -8,26 +8,40 @@
 package org.hyperledger.aries.api.message;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * Web hook event
- *
+ * Ping response Webhook event
  */
-@Data @NoArgsConstructor @AllArgsConstructor @Accessors(chain = true)
+@Data @NoArgsConstructor @AllArgsConstructor @Accessors(chain = true) @Builder
 public final class PingEvent {
+
+    private String comment;
+
+    private String connectionId;
+
+    private Boolean responded;
 
     private String threadId;
 
     private String state;
 
     public static PingEvent of(String threadId, String state) {
-        return new PingEvent(threadId, state);
+        return PingEvent.builder().threadId(threadId).state(state).build();
     }
 
     public static PingEvent of(String threadId) {
-        return new PingEvent().setThreadId(threadId);
+        return PingEvent.builder().threadId(threadId).build();
+    }
+
+    public boolean hasResponded() {
+        return responded != null && responded;
+    }
+
+    public boolean stateIsReceived() {
+        return "received".equals(state);
     }
 }
