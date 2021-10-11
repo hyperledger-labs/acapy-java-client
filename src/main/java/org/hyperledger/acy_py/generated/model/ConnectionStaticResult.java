@@ -23,15 +23,15 @@ import com.google.gson.annotations.SerializedName;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class ConnectionStaticResult {
-    public static final String SERIALIZED_NAME_MV_VERKEY = "mv_verkey";
-    @SerializedName(SERIALIZED_NAME_MV_VERKEY)
-    private String mvVerkey;
     public static final String SERIALIZED_NAME_MY_DID = "my_did";
     @SerializedName(SERIALIZED_NAME_MY_DID)
     private String myDid;
     public static final String SERIALIZED_NAME_MY_ENDPOINT = "my_endpoint";
     @SerializedName(SERIALIZED_NAME_MY_ENDPOINT)
     private String myEndpoint;
+    public static final String SERIALIZED_NAME_MY_VERKEY = "my_verkey";
+    @SerializedName(SERIALIZED_NAME_MY_VERKEY)
+    private String myVerkey;
     public static final String SERIALIZED_NAME_RECORD = "record";
     @SerializedName(SERIALIZED_NAME_RECORD)
     private ConnRecord record;

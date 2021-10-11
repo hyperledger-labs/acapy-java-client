@@ -14,6 +14,7 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,10 +37,10 @@ public class IndyProofRequest {
     private String nonce;
     public static final String SERIALIZED_NAME_REQUESTED_ATTRIBUTES = "requested_attributes";
     @SerializedName(SERIALIZED_NAME_REQUESTED_ATTRIBUTES)
-    private Map<String, IndyProofReqAttrSpec> requestedAttributes = null;
+    private Map<String, IndyProofReqAttrSpec> requestedAttributes = new HashMap<>();
     public static final String SERIALIZED_NAME_REQUESTED_PREDICATES = "requested_predicates";
     @SerializedName(SERIALIZED_NAME_REQUESTED_PREDICATES)
-    private Map<String, IndyProofReqPredSpec> requestedPredicates = null;
+    private Map<String, IndyProofReqPredSpec> requestedPredicates = new HashMap<>();
     public static final String SERIALIZED_NAME_VERSION = "version";
     @SerializedName(SERIALIZED_NAME_VERSION)
     private String version;
