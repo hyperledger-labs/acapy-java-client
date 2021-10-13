@@ -23,8 +23,6 @@ public final class PingEvent {
 
     private String connectionId;
 
-    private Boolean responded;
-
     private String threadId;
 
     private String state;
@@ -37,12 +35,7 @@ public final class PingEvent {
         return PingEvent.builder().threadId(threadId).build();
     }
 
-    public boolean hasResponded() {
-        return responded != null && responded;
-    }
-
     public boolean stateIsReceived() {
-        // < 0.7.1 state is response_received, >= 0.7.1 state is received
         return "received".equals(state) || "response_received".equals(state);
     }
 }
