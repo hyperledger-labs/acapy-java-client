@@ -1115,7 +1115,7 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<V20CredExRecord> issueCredentialV2RecordsSendRequest(
-            @NonNull String credentialExchangeId, @Nullable V20CredRequestRequest request) throws IOException {
+            @NonNull String credentialExchangeId, @NonNull V20CredRequestRequest request) throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/send-request",
                 request != null ? request : EMPTY_JSON);
         return call(req, V20CredExRecord.class);

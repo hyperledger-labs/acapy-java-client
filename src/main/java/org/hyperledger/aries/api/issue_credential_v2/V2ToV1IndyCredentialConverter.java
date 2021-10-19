@@ -9,8 +9,12 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NonNull;
 import org.hyperledger.aries.api.credentials.Credential;
+import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.config.GsonConfig;
 
 import java.util.Map;
@@ -25,17 +29,53 @@ public class V2ToV1IndyCredentialConverter {
 
     private final Gson gson = GsonConfig.defaultConfig();
 
+    public static V2ToV1IndyCredentialConverter INSTANCE() {
+        return new V2ToV1IndyCredentialConverter();
+    }
+
+    public V1CredentialExchange toV1Offer(@NonNull V20CredExRecord v2Record) {
+        IdWrapper ids = getIdsFromOffer(v2Record);
+        return V1CredentialExchange
+                .builder()
+                .state(v2Record.getState())
+                .credentialExchangeId(v2Record.getCredExId())
+                .initiator(v2Record.getInitiator())
+                .role(v2Record.getRole())
+                .updatedAt(v2Record.getUpdatedAt())
+                .autoRemove(v2Record.getAutoRemove())
+                .autoOffer(v2Record.getAutoOffer())
+                .autoIssue(v2Record.getAutoIssue())
+                .trace(v2Record.getTrace())
+                .threadId(v2Record.getThreadId())
+                .createdAt(v2Record.getCreatedAt())
+                .connectionId(v2Record.getConnectionId())
+                .credentialDefinitionId(ids.getCredentialDefinitionId())
+                .schemaId(ids.getSchemaId())
+                .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
+                        .builder()
+                        .schemaId(ids.getSchemaId())
+                        .credDefId(ids.getCredentialDefinitionId())
+                        .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
+                                .builder()
+                                .attributes(v2Record.getCredOffer() != null
+                                        && v2Record.getCredOffer().getCredentialPreview() != null
+                                        ? v2Record.getCredOffer().getCredentialPreview().getAttributes()
+                                        : null)
+                                .build())
+                        .build())
+                .build();
+    }
+
     /**
      * Converts v2 record into a {@link Credential}
      * Only works when the exchange state is 'done'
      * @param v2Record {@link V20CredExRecord}
      * @return optional {@link Credential}
      */
-    public Optional<Credential> toV1(@NonNull V20CredExRecord v2Record) {
-        Optional<Object> credential = getCredential(v2Record);
+    public Optional<Credential> toV1Credential(@NonNull V20CredExRecord v2Record) {
+        Optional<JsonObject> credential = getIndyCredential(v2Record);
         if (credential.isPresent()) {
-            JsonElement credIssue = gson.toJsonTree(credential.get());
-            JsonElement typeIndy = credIssue.getAsJsonObject().get("indy");
+            JsonElement typeIndy = credential.get().get("indy");
             if (typeIndy != null) {
                 JsonElement values = typeIndy.getAsJsonObject().get("values");
                 if (values != null) {
@@ -54,15 +94,26 @@ public class V2ToV1IndyCredentialConverter {
         return Optional.empty();
     }
 
-    public static V2ToV1IndyCredentialConverter INSTANCE() {
-        return new V2ToV1IndyCredentialConverter();
-    }
-
-    private Optional<Object> getCredential(@NonNull V20CredExRecord indy) {
+    private Optional<JsonObject> getIndyCredential(@NonNull V20CredExRecord indy) {
         if (indy.getByFormat() != null && indy.getByFormat().getCredIssue() != null) {
             return Optional.of(indy.getByFormat().getCredIssue());
         }
         else return Optional.empty();
+    }
+
+    private IdWrapper getIdsFromOffer(@NonNull V20CredExRecord indy) {
+        IdWrapper.IdWrapperBuilder b = IdWrapper.builder();
+        if (indy.getByFormat() != null && indy.getByFormat().getCredOffer() != null) {
+            JsonObject offer = indy.getByFormat().getCredOffer();
+            if (offer != null) {
+                JsonObject typeIndy = offer.getAsJsonObject("indy");
+                if (typeIndy != null) {
+                    b.schemaId(typeIndy.get("schema_id").getAsString());
+                    b.credentialDefinitionId(typeIndy.get("cred_def_id").getAsString());
+                }
+            }
+        }
+        return b.build();
     }
 
     private String getRawValue(@NonNull JsonElement el) {
@@ -71,5 +122,11 @@ public class V2ToV1IndyCredentialConverter {
             return raw.getAsString();
         }
         return "";
+    }
+
+    @Data @Builder
+    private static final class IdWrapper {
+        private String schemaId;
+        private String credentialDefinitionId;
     }
 }

@@ -21,7 +21,7 @@ public class V2ToV1IndyCredentialConverterTest extends MockedTestBase {
         String json = loader.load("files/issue-credential-v2/holder-icv2-done.json");
         V20CredExRecord v20CredExRecord = gson.fromJson(json, V20CredExRecord.class);
         V2ToV1IndyCredentialConverter c = V2ToV1IndyCredentialConverter.INSTANCE();
-        Optional<Credential> credential = c.toV1(v20CredExRecord);
+        Optional<Credential> credential = c.toV1Credential(v20CredExRecord);
         Assertions.assertTrue(credential.isPresent());
         Assertions.assertNotNull(credential.get().getAttrs());
         Assertions.assertEquals(2, credential.get().getAttrs().size());
