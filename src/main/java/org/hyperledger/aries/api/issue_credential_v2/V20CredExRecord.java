@@ -72,6 +72,10 @@ public class V20CredExRecord {
         return CredentialExchangeState.PROPOSAL_RECEIVED.equals(state);
     }
 
+    public boolean isOfferReceived() {
+        return CredentialExchangeState.OFFER_RECEIVED.equals(state);
+    }
+
     public boolean isCredentialReceived() {
         return CredentialExchangeState.CREDENTIAL_RECEIVED.equals(state);
     }

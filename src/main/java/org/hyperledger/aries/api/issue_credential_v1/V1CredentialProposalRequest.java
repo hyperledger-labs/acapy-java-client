@@ -23,6 +23,12 @@ import javax.annotation.Nullable;
 public class V1CredentialProposalRequest {
 
     /**
+     * Holder choice to auto accept offer in this credential exchange
+     * (overrides --auto-respond-credential-offer configuration setting)
+     */
+    private Boolean autoOffer;
+
+    /**
      *  Whether to remove the credential exchange record on completion
      *  (overrides --preserve-exchange-records configuration setting)
      */

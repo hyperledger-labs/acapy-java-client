@@ -68,6 +68,14 @@ public class V1CredentialExchange {
     private Boolean trace;
     private String updatedAt;
 
+    public boolean initiatorIsSelf() {
+        return CredentialExchangeInitiator.SELF.equals(initiator);
+    }
+
+    public boolean initiatorIsExternal() {
+        return CredentialExchangeInitiator.EXTERNAL.equals(initiator);
+    }
+
     public boolean isIssuer() {
         return CredentialExchangeRole.ISSUER.equals(role);
     }
