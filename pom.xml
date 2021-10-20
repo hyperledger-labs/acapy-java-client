@@ -63,7 +63,7 @@
         <lombok.version>1.18.22</lombok.version>
         <okhttp.version>4.9.2</okhttp.version>
         <pmd.version>6.39.0</pmd.version>
-        <testcontainers.version>1.16.0</testcontainers.version>
+        <testcontainers.version>1.16.1</testcontainers.version>
     </properties>
 
     <dependencyManagement>
@@ -329,7 +329,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.4.1</version>
+                <version>4.4.2.1</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -354,7 +354,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.4.1</version>
+                        <version>4.4.2</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -394,7 +394,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.3.2</version>
+                <version>6.4.1</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>
