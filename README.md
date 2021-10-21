@@ -336,9 +336,8 @@ Your event handler can then extend the abstract EventHandler class which takes c
 @Singleton
 public class MyHandler extends EventHandler {
     @Override
-    public void handleProof(PresentProofPresentation proof) {
-        if (PresentationExchangeRole.VERIFIER.equals(proof.getRole())
-                && PresentationExchangeState.VERIFIED.equals(proof.getState())) {    // received a validated proof
+    public void handleProof(PresentationExchangeRecord proof) {
+        if (roleIsVerifierAndVerified()) {    // received a validated proof
             MyCredential myCredential = proof.from(MyCredential.class);
             // If the presentation is based on multiple credentials this can be done multiple times
             // given that the POJO is annotated with @AttributeGroup e.g.

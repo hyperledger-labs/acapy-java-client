@@ -95,6 +95,10 @@ public class PresentationExchangeRecord {
         return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(state);
     }
 
+    public boolean roleIsVerifierAndVerified() {
+        return roleIsVerifier() && PresentationExchangeState.VERIFIED.equals(state);
+    }
+
     public boolean stateIsProposalSent() {
         return PresentationExchangeState.PROPOSAL_SENT.equals(state);
     }

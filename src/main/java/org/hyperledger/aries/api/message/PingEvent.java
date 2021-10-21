@@ -36,6 +36,6 @@ public final class PingEvent {
     }
 
     public boolean stateIsReceived() {
-        return "received".equals(state) || "response_received".equals(state);
+        return "response_received".equals(state);
     }
 }

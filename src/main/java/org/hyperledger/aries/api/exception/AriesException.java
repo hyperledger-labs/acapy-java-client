@@ -21,4 +21,8 @@ public class AriesException extends RuntimeException {
         this.code = code;
         this.message = message;
     }
+
+    public boolean codeIsNotFound() {
+        return 404 == code;
+    }
 }

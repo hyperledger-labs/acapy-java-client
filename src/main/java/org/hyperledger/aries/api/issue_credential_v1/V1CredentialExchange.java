@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class V1CredentialExchange {
+public class V1CredentialExchange implements CredExStateAndRoleTranslator {
     private Boolean autoIssue;
     private Boolean autoOffer;
     private Boolean autoRemove;
@@ -76,14 +76,6 @@ public class V1CredentialExchange {
         return CredentialExchangeInitiator.EXTERNAL.equals(initiator);
     }
 
-    public boolean isIssuer() {
-        return CredentialExchangeRole.ISSUER.equals(role);
-    }
-
-    public boolean isHolder() {
-        return CredentialExchangeRole.HOLDER.equals(role);
-    }
-
     public boolean isAutoIssueEnabled() {
         return autoIssue != null && autoIssue;
     }
@@ -94,42 +86,6 @@ public class V1CredentialExchange {
 
     public boolean isAutoRemoveEnabled() {
         return autoRemove != null && autoRemove;
-    }
-
-    public boolean stateIsProposalSent() {
-        return CredentialExchangeState.PROPOSAL_SENT.equals(state);
-    }
-
-    public boolean stateIsProposalReceived() {
-        return CredentialExchangeState.PROPOSAL_RECEIVED.equals(state);
-    }
-
-    public boolean stateIsOfferSent() {
-        return CredentialExchangeState.OFFER_SENT.equals(state);
-    }
-
-    public boolean stateIsOfferReceived() {
-        return CredentialExchangeState.OFFER_RECEIVED.equals(state);
-    }
-
-    public boolean stateIsRequestSent() {
-        return CredentialExchangeState.REQUEST_SENT.equals(state);
-    }
-
-    public boolean stateIsRequestReceived() {
-        return CredentialExchangeState.REQUEST_RECEIVED.equals(state);
-    }
-
-    public boolean stateIsCredentialReceived() {
-        return CredentialExchangeState.CREDENTIAL_RECEIVED.equals(state);
-    }
-
-    public boolean stateIsCredentialAcked() {
-        return CredentialExchangeState.CREDENTIAL_ACKED.equals(state);
-    }
-
-    public boolean stateIsDone() {
-        return CredentialExchangeState.DONE.equals(state);
     }
 
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
