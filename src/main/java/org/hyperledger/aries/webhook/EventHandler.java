@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.webhook;
 
+import org.hyperledger.acy_py.generated.model.V20PresExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.message.ProblemReport;
@@ -34,6 +35,8 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, ConnectionRecord.class).ifPresent(this::handleConnection);
             } else if ("present_proof".equals(eventType)) {
                 parser.parsePresentProof(json).ifPresent(this::handleProof);
+            } else if ("present_proof_v2_0".equals(eventType)) {
+                parser.parseValueSave(json, V20PresExRecord.class).ifPresent(this::handleProofV2);
             } else if ("issue_credential".equals(eventType)) {
                 parser.parseValueSave(json, V1CredentialExchange.class).ifPresent(this::handleCredential);
             } else if ("issue_credential_v2_0".equals(eventType)) {
@@ -62,6 +65,10 @@ public abstract class EventHandler {
 
     public void handleProof(PresentationExchangeRecord proof) {
         log.debug("Present Proof Event: {}", proof);
+    }
+
+    public void handleProofV2(V20PresExRecord proof) {
+        log.debug("Present Proof V2 Event: {}", proof);
     }
 
     public void handleCredential(V1CredentialExchange credential) {

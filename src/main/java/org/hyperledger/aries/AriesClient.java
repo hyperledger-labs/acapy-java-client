@@ -1117,7 +1117,7 @@ public class AriesClient extends BaseClient {
     public Optional<V20CredExRecord> issueCredentialV2RecordsSendRequest(
             @NonNull String credentialExchangeId, @NonNull V20CredRequestRequest request) throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/send-request",
-                request != null ? request : EMPTY_JSON);
+                 request);
         return call(req, V20CredExRecord.class);
     }
 
@@ -1759,11 +1759,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Sends a free presentation request not bound to any proposal
-     * @param proofRequest {@link V20PresSendRequestRequest}
+     * @param proofRequest {@link org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest}
      * @return {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20PresExRecord> presentProofV2SendRequest(@NonNull V20PresSendRequestRequest proofRequest)
+    public Optional<V20PresExRecord> presentProofV2SendRequest(@NonNull org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest proofRequest)
             throws IOException {
         Request req = buildPost(url + "/present-proof-2.0/send-request", proofRequest);
         return call(req, V20PresExRecord.class);
