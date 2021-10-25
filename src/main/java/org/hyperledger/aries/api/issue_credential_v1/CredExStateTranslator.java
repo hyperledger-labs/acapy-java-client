@@ -7,11 +7,19 @@
  */
 package org.hyperledger.aries.api.issue_credential_v1;
 
-public interface CredExStateAndRoleTranslator {
+public interface CredExStateTranslator {
 
     CredentialExchangeState getState();
 
     CredentialExchangeRole getRole();
+
+    CredentialExchangeInitiator getInitiator();
+
+    Boolean getAutoIssue();
+
+    Boolean getAutoOffer();
+
+    Boolean getAutoRemove();
 
     default boolean stateIsProposalSent() {
         return CredentialExchangeState.PROPOSAL_SENT.equals(getState());
@@ -75,5 +83,25 @@ public interface CredExStateAndRoleTranslator {
 
     default boolean roleIsHolder() {
         return CredentialExchangeRole.HOLDER.equals(getRole());
+    }
+
+    default boolean initiatorIsSelf() {
+        return CredentialExchangeInitiator.SELF.equals(getInitiator());
+    }
+
+    default boolean initiatorIsExternal() {
+        return CredentialExchangeInitiator.EXTERNAL.equals(getInitiator());
+    }
+
+    default boolean autoIssueEnabled() {
+        return getAutoIssue() != null && getAutoIssue();
+    }
+
+    default boolean autoOfferEnabled() {
+        return getAutoOffer() != null && getAutoOffer();
+    }
+
+    default boolean autoRemoveEnabled() {
+        return getAutoRemove() != null && getAutoRemove();
     }
 }

@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Data @NoArgsConstructor @AllArgsConstructor
-public class PresentationExchangeRecord {
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
+public class PresentationExchangeRecord implements PresExStateTranslator {
 
     private Boolean autoPresent;
     private String connectionId;
@@ -50,10 +50,6 @@ public class PresentationExchangeRecord {
     // part of the websocket message
     private List<Identifier> identifiers;
 
-    public boolean isVerified() {
-        return verified != null && verified;
-    }
-
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
             return identifiers.stream().anyMatch(i -> credentialDefinitionId.equals(i.getCredentialDefinitionId()));
@@ -66,49 +62,6 @@ public class PresentationExchangeRecord {
             return identifiers.stream().anyMatch(i -> schemaId.equals(i.getSchemaId()));
         }
         return false;
-    }
-
-    public boolean roleIsProver() {
-        return PresentationExchangeRole.PROVER.equals(role);
-    }
-
-    public boolean roleIsVerifier() {
-        return PresentationExchangeRole.VERIFIER.equals(role);
-    }
-
-    public boolean roleIsProverAndRequestReceived() {
-        return roleIsProver() && PresentationExchangeState.REQUEST_RECEIVED.equals(state);
-    }
-
-    public boolean roleIsProverAndPresentationSent() {
-        return roleIsProver() && PresentationExchangeState.PRESENTATIONS_SENT.equals(state);
-    }
-    public boolean roleIsProverAndProposalSent() {
-        return roleIsProver() && stateIsProposalSent();
-    }
-
-    public boolean roleIsProverAndPresentationAcked() {
-        return roleIsProver() && PresentationExchangeState.PRESENTATION_ACKED.equals(state);
-    }
-
-    public boolean roleIsVerifierAndRequestSent() {
-        return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(state);
-    }
-
-    public boolean roleIsVerifierAndVerified() {
-        return roleIsVerifier() && PresentationExchangeState.VERIFIED.equals(state);
-    }
-
-    public boolean stateIsProposalSent() {
-        return PresentationExchangeState.PROPOSAL_SENT.equals(state);
-    }
-
-    public boolean initiatorIsSelf() {
-        return PresentationExchangeInitiator.SELF.equals(initiator);
-    }
-
-    public boolean initiatorIsExternal() {
-        return PresentationExchangeInitiator.EXTERNAL.equals(initiator);
     }
 
     public JsonObject getPresentation() {

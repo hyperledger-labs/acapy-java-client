@@ -7,7 +7,6 @@
  */
 package org.hyperledger.aries.webhook;
 
-import org.hyperledger.acy_py.generated.model.V20PresExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.message.ProblemReport;
@@ -18,6 +17,7 @@ import org.hyperledger.aries.api.message.PingEvent;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
 

@@ -15,27 +15,27 @@ import com.google.gson.annotations.SerializedName;
  */
 public enum PresentationExchangeState {
     @JsonProperty("proposal_sent")
-    @SerializedName("proposal_sent")
+    @SerializedName(value = "proposal_sent", alternate = "proposal-sent")
     PROPOSAL_SENT,
 
     @JsonProperty("proposal_received")
-    @SerializedName("proposal_received")
+    @SerializedName(value = "proposal_received", alternate = "proposal-received")
     PROPOSAL_RECEIVED,
 
     @JsonProperty("request_sent")
-    @SerializedName("request_sent")
+    @SerializedName(value = "request_sent", alternate = "request-sent")
     REQUEST_SENT,
 
     @JsonProperty("request_received")
-    @SerializedName("request_received")
+    @SerializedName(value = "request_received", alternate = "request-received")
     REQUEST_RECEIVED,
 
     @JsonProperty("presentation_sent")
-    @SerializedName("presentation_sent")
+    @SerializedName(value = "presentation_sent", alternate = "presentation-sent")
     PRESENTATIONS_SENT,
 
     @JsonProperty("presentation_received")
-    @SerializedName("presentation_received")
+    @SerializedName(value = "presentation_received", alternate = "presentation-received")
     PRESENTATION_RECEIVED,
 
     /** V1 state only */

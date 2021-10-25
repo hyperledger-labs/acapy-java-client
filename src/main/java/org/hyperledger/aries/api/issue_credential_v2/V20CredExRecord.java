@@ -21,10 +21,7 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 
 import org.hyperledger.acy_py.generated.model.*;
-import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeInitiator;
-import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
-import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeState;
-import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
+import org.hyperledger.aries.api.issue_credential_v1.*;
 
 /**
  * V20CredExRecord
@@ -34,7 +31,7 @@ import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class V20CredExRecord {
+public class V20CredExRecord implements CredExStateTranslator {
     private Boolean autoIssue;
     private Boolean autoOffer;
     private Boolean autoRemove;
@@ -59,42 +56,6 @@ public class V20CredExRecord {
     private CredentialExchangeInitiator initiator;
     private CredentialExchangeRole role;
     private CredentialExchangeState state;
-
-    public boolean isIssuer() {
-        return CredentialExchangeRole.ISSUER.equals(role);
-    }
-
-    public boolean isHolder() {
-        return CredentialExchangeRole.HOLDER.equals(role);
-    }
-
-    public boolean isProposalReceived() {
-        return CredentialExchangeState.PROPOSAL_RECEIVED.equals(state);
-    }
-
-    public boolean isOfferReceived() {
-        return CredentialExchangeState.OFFER_RECEIVED.equals(state);
-    }
-
-    public boolean isCredentialReceived() {
-        return CredentialExchangeState.CREDENTIAL_RECEIVED.equals(state);
-    }
-
-    public boolean isDone() {
-        return CredentialExchangeState.DONE.equals(state);
-    }
-
-    public boolean isAutoIssueEnabled() {
-        return autoIssue != null && autoIssue;
-    }
-
-    public boolean isAutoOfferEnabled() {
-        return autoOffer != null && autoOffer;
-    }
-
-    public boolean isAutoRemoveEnabled() {
-        return autoRemove != null && autoRemove;
-    }
 
     /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
     public V1CredentialExchange toV1CredentialExchangeFromProposal() {

@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class V1CredentialExchange implements CredExStateAndRoleTranslator {
+public class V1CredentialExchange implements CredExStateTranslator {
     private Boolean autoIssue;
     private Boolean autoOffer;
     private Boolean autoRemove;
@@ -67,26 +67,6 @@ public class V1CredentialExchange implements CredExStateAndRoleTranslator {
     private String threadId;
     private Boolean trace;
     private String updatedAt;
-
-    public boolean initiatorIsSelf() {
-        return CredentialExchangeInitiator.SELF.equals(initiator);
-    }
-
-    public boolean initiatorIsExternal() {
-        return CredentialExchangeInitiator.EXTERNAL.equals(initiator);
-    }
-
-    public boolean isAutoIssueEnabled() {
-        return autoIssue != null && autoIssue;
-    }
-
-    public boolean isAutoOfferEnabled() {
-        return autoOffer != null && autoOffer;
-    }
-
-    public boolean isAutoRemoveEnabled() {
-        return autoRemove != null && autoRemove;
-    }
 
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static final class CredentialProposalDict {
