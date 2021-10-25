@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.present_proof;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
@@ -52,6 +53,7 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
     private List<Identifier> identifiers;
 
     // if the v2 to v1 converter is used this information is lost otherwise
+    @JsonIgnore
     private transient ExchangeVersion version;
 
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
