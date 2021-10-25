@@ -57,6 +57,19 @@ public class V20CredExRecord implements CredExStateTranslator {
     private CredentialExchangeRole role;
     private CredentialExchangeState state;
 
+    public boolean autoIssueEnabled() {
+        return autoIssue != null && autoIssue;
+    }
+
+    public boolean autoOfferEnabled() {
+        return autoOffer != null && autoOffer;
+    }
+
+    public boolean autoRemoveEnabled() {
+        return autoRemove != null && autoRemove;
+    }
+
+
     /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
     public V1CredentialExchange toV1CredentialExchangeFromProposal() {
         return V1CredentialExchange

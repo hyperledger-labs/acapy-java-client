@@ -27,7 +27,7 @@ public class V20PresExRecordToV1Converter {
                 .initiator(v2.getInitiator())
                 .state(v2.getState())
                 .role(v2.getRole())
-
+                .presentationRequest(v2.resolveIndyPresentationRequest().orElse(null))
                 .build();
     }
 }

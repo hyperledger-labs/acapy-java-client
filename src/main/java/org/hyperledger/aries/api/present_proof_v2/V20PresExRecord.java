@@ -12,13 +12,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.acy_py.generated.model.V20Pres;
-import org.hyperledger.acy_py.generated.model.V20PresExRecordByFormat;
 import org.hyperledger.acy_py.generated.model.V20PresProposal;
 import org.hyperledger.acy_py.generated.model.V20PresRequest;
-import org.hyperledger.aries.api.present_proof.PresExStateTranslator;
-import org.hyperledger.aries.api.present_proof.PresentationExchangeInitiator;
-import org.hyperledger.aries.api.present_proof.PresentationExchangeRole;
-import org.hyperledger.aries.api.present_proof.PresentationExchangeState;
+import org.hyperledger.aries.api.present_proof.*;
+
+import java.util.Optional;
 
 /**
  * V20PresExRecord
@@ -48,4 +46,11 @@ public class V20PresExRecord implements PresExStateTranslator {
     private V20PresExRecordByFormat byFormat;
     private V20PresProposal presProposal;
     private V20PresRequest presRequest;
+
+    public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {
+        if (byFormat != null) {
+            return byFormat.resolveIndyPresentationRequest();
+        }
+        return Optional.empty();
+    }
 }

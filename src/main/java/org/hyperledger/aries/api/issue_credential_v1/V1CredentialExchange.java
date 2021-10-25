@@ -68,6 +68,26 @@ public class V1CredentialExchange implements CredExStateTranslator {
     private Boolean trace;
     private String updatedAt;
 
+    public boolean initiatorIsSelf() {
+        return CredentialExchangeInitiator.SELF.equals(getInitiator());
+    }
+
+    public boolean initiatorIsExternal() {
+        return CredentialExchangeInitiator.EXTERNAL.equals(getInitiator());
+    }
+
+    public boolean autoIssueEnabled() {
+        return getAutoIssue() != null && getAutoIssue();
+    }
+
+    public boolean autoOfferEnabled() {
+        return getAutoOffer() != null && getAutoOffer();
+    }
+
+    public boolean autoRemoveEnabled() {
+        return getAutoRemove() != null && getAutoRemove();
+    }
+
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static final class CredentialProposalDict {
         @SerializedName("@type")
