@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
+import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -49,6 +50,9 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
 
     // part of the websocket message
     private List<Identifier> identifiers;
+
+    // if the v2 to v1 converter is used this information is lost otherwise
+    private transient ExchangeVersion version;
 
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
