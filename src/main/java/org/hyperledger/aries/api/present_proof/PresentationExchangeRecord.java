@@ -70,6 +70,10 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
         return false;
     }
 
+    public boolean versionIsV1() {
+        return version != null && versionIsV1();
+    }
+
     public JsonObject getPresentation() {
         if (presentation == null) {
             return new JsonObject();
