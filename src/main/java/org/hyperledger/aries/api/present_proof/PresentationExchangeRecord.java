@@ -83,7 +83,7 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
     }
 
     public boolean versionIsV1() {
-        return version != null && versionIsV1();
+        return ExchangeVersion.V1.equals(version);
     }
 
     public JsonObject getPresentation() {
