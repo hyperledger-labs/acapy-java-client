@@ -51,14 +51,18 @@ public class EventParser {
     public Optional<PresentationExchangeRecord> parsePresentProof(String json) {
         Optional<PresentationExchangeRecord> presentation = parseValueSave(json, PresentationExchangeRecord.class);
         if (presentation.isPresent()) {
-            JsonElement je = presentation.get()
-                    .getPresentation()
-                    .getAsJsonObject().get("identifiers")
-                    ;
-            List<Identifier> identifiers = gson.fromJson(je, IDENTIFIER_TYPE);
+            List<Identifier> identifiers = resolveIdentifiers(presentation.get().getPresentation());
             presentation.get().setIdentifiers(identifiers);
         }
         return presentation;
+    }
+
+    public static List<Identifier> resolveIdentifiers(JsonObject jo) {
+        if (jo != null) {
+            JsonElement je = jo.get("identifiers");
+            return gson.fromJson(je, IDENTIFIER_TYPE);
+        }
+        return List.of();
     }
 
     /**

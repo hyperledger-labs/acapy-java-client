@@ -41,8 +41,15 @@ public interface PresExStateTranslator {
         return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(getState());
     }
 
+    // v1 or v2
     default boolean roleIsVerifierAndVerified() {
-        return roleIsVerifier() && PresentationExchangeState.VERIFIED.equals(getState());
+        return roleIsVerifier() &&
+                (PresentationExchangeState.VERIFIED.equals(getState())
+                || PresentationExchangeState.DONE.equals(getState()));
+    }
+
+    default boolean roleIsVerifierAndDone() {
+        return roleIsVerifier() && PresentationExchangeState.DONE.equals(getState());
     }
 
     default boolean stateIsProposalSent() {

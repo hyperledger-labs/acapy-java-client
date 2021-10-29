@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.present_proof_v2;
 
+import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import org.hyperledger.acy_py.generated.model.V20PresProposal;
 import org.hyperledger.acy_py.generated.model.V20PresRequest;
 import org.hyperledger.aries.api.present_proof.*;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -52,5 +54,19 @@ public class V20PresExRecord implements PresExStateTranslator {
             return byFormat.resolveIndyPresentationRequest();
         }
         return Optional.empty();
+    }
+
+    public JsonObject resolveIndyPresentation() {
+        if (byFormat != null) {
+            return byFormat.resolveIndyPresentation();
+        }
+        return null;
+    }
+
+    public List<PresentationExchangeRecord.Identifier> resolveIndyIdentifiers() {
+        if (byFormat != null) {
+            return byFormat.resolveIndyIdentifiers();
+        }
+        return List.of();
     }
 }
