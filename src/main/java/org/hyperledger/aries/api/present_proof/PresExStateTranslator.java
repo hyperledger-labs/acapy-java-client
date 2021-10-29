@@ -13,14 +13,6 @@ public interface PresExStateTranslator {
 
     PresentationExchangeRole getRole();
 
-    PresentationExchangeInitiator getInitiator();
-
-    Boolean getVerified();
-
-    default boolean isVerified() {
-        return getVerified() != null && getVerified();
-    }
-
     default boolean roleIsProver() {
         return PresentationExchangeRole.PROVER.equals(getRole());
     }
@@ -30,7 +22,7 @@ public interface PresExStateTranslator {
     }
 
     default boolean roleIsProverAndRequestReceived() {
-        return roleIsProver() && PresentationExchangeState.REQUEST_RECEIVED.equals(getState());
+        return roleIsProver() && stateIsRequestReceived();
     }
 
     default boolean roleIsProverAndPresentationSent() {
@@ -57,11 +49,7 @@ public interface PresExStateTranslator {
         return PresentationExchangeState.PROPOSAL_SENT.equals(getState());
     }
 
-    default boolean initiatorIsSelf() {
-        return PresentationExchangeInitiator.SELF.equals(getInitiator());
-    }
-
-    default boolean initiatorIsExternal() {
-        return PresentationExchangeInitiator.EXTERNAL.equals(getInitiator());
+    default boolean stateIsRequestReceived() {
+        return PresentationExchangeState.REQUEST_RECEIVED.equals(getState());
     }
 }

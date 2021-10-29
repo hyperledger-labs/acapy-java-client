@@ -56,6 +56,18 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
     @JsonIgnore
     private transient ExchangeVersion version;
 
+    public boolean isVerified() {
+        return getVerified() != null && getVerified();
+    }
+
+    public boolean initiatorIsSelf() {
+        return PresentationExchangeInitiator.SELF.equals(getInitiator());
+    }
+
+    public boolean initiatorIsExternal() {
+        return PresentationExchangeInitiator.EXTERNAL.equals(getInitiator());
+    }
+
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
             return identifiers.stream().anyMatch(i -> credentialDefinitionId.equals(i.getCredentialDefinitionId()));
