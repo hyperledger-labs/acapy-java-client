@@ -12,7 +12,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.acy_py.generated.model.DIFProofProposal;
-import org.hyperledger.aries.api.present_proof.PresentProofProposal;
+import org.hyperledger.aries.api.present_proof.PresentProofRequest;
 
 /**
  * V20PresProposalByFormat
@@ -23,5 +23,5 @@ import org.hyperledger.aries.api.present_proof.PresentProofProposal;
 @Builder
 public class V20PresProposalByFormat {
     private DIFProofProposal dif;
-    private PresentProofProposal.PresentationPreview indy;
+    private PresentProofRequest.ProofRequest indy;
 }
