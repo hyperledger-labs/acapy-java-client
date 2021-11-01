@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Aka PresentationProposalRequest
- * This model is used to build a presentation proposal request, or in other words to send a proof.
+ * This model is used to build a presentation proposal request, or in other words to send a proof proposal.
  *
  */
 @Data @NoArgsConstructor @AllArgsConstructor @Builder

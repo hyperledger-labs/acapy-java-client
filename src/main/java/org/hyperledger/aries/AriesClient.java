@@ -63,6 +63,7 @@ import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
+import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresSpecByFormatRequest;
 import org.hyperledger.aries.api.resolver.DIDDocument;
 import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
