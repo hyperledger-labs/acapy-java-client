@@ -37,15 +37,26 @@ public interface PresExStateTranslator {
         return roleIsProver() && PresentationExchangeState.PRESENTATION_ACKED.equals(getState());
     }
 
+    // v1 or v2
+    default boolean roleIsProverAndStateIsPresentationAckedOrDone() {
+        return roleIsProver() &&
+                (PresentationExchangeState.PRESENTATION_ACKED.equals(getState())
+                || PresentationExchangeState.DONE.equals(getState()));
+    }
+
     default boolean roleIsVerifierAndRequestSent() {
         return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(getState());
     }
 
     // v1 or v2
-    default boolean roleIsVerifierAndVerified() {
+    default boolean roleIsVerifierAndStateIsVerifiedOrDone() {
         return roleIsVerifier() &&
                 (PresentationExchangeState.VERIFIED.equals(getState())
                 || PresentationExchangeState.DONE.equals(getState()));
+    }
+
+    default boolean roleIsVerifierAndVerified() {
+        return roleIsVerifier() && PresentationExchangeState.VERIFIED.equals(getState());
     }
 
     default boolean roleIsVerifierAndDone() {
