@@ -77,7 +77,7 @@ public class PresentProofProposal {
             @SerializedName(value = CredDefId.CRED_DEF_ID, alternate = CredDefId.CREDENTIAL_DEFINITION_ID)
             private String credentialDefinitionId;
             private String predicate;
-            private Integer treshold;
+            private Integer threshold;
         }
     }
 
