@@ -13,7 +13,7 @@ import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.message.BasicMessage;
-import org.hyperledger.aries.api.message.PingEvent;
+import org.hyperledger.aries.api.trustping.PingEvent;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
 import lombok.extern.slf4j.Slf4j;

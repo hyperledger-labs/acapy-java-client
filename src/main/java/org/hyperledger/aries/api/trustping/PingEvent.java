@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.message;
+package org.hyperledger.aries.api.trustping;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,9 +25,12 @@ public final class PingEvent {
 
     private String threadId;
 
-    private String state;
+    private PingEventState state;
 
-    public static PingEvent of(String threadId, String state) {
+    /** only set when being pinged */
+    private Boolean responded;
+
+    public static PingEvent of(String threadId, PingEventState state) {
         return PingEvent.builder().threadId(threadId).state(state).build();
     }
 
@@ -35,7 +38,7 @@ public final class PingEvent {
         return PingEvent.builder().threadId(threadId).build();
     }
 
-    public boolean stateIsReceived() {
-        return "response_received".equals(state);
+    public boolean stateIsResponseReceived() {
+        return PingEventState.RESPONSE_RECEIVED.equals(state);
     }
 }

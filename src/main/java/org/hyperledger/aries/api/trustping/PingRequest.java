@@ -5,13 +5,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.message;
+package org.hyperledger.aries.api.trustping;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor @AllArgsConstructor
-public class PingResponse {
-    private String threadId;
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
+public class PingRequest {
+    private String comment;
 }
