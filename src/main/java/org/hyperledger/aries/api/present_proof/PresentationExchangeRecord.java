@@ -109,6 +109,8 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
 
     /**
      * Finds the attribute names in the proof and extracts their corresponding values.
+     * Note this is brute force and simply returns the first match found for each name
+     * It's recommended to use {@link #findRevealedAttributes()} or {@link #findRevealedAttributeGroups()}
      * @param names Set of attribute names
      * @return Map containing the attribute names and their corresponding values
      */

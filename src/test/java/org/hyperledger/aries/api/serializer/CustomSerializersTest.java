@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 public class CustomSerializersTest {
 
@@ -31,7 +32,7 @@ public class CustomSerializersTest {
     @Test
     void testProofSerializeDeserializeWithJackson() throws Exception {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
+                .buildForAllAttributes("dummy", Set.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build()));
@@ -43,7 +44,7 @@ public class CustomSerializersTest {
     @Test
     void testProofSerializeDeserializeWithGson() {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", List.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
+                .buildForAllAttributes("dummy", Set.of("attr1", "attr2"), List.of(PresentProofRequest.ProofRequest.ProofRestrictions
                         .builder()
                         .issuerDid("did:sov:123")
                         .build()));

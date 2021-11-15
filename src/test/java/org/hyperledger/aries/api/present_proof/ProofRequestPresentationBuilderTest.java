@@ -31,7 +31,7 @@ class ProofRequestPresentationBuilderTest extends IntegrationTestBase {
 
         PresentProofRequest presentProofRequest = PresentProofRequestHelper.buildForEachAttribute(
                 UUID.randomUUID().toString(),
-                List.of("name", "email"),
+                Set.of("name", "email"),
                 ProofRequest.ProofRestrictions
                         .builder()
                         .schemaId("WgWxqztrNooG92RXvxSTWv:2:schema_name:1.0")

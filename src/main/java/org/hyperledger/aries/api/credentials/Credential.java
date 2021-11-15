@@ -16,8 +16,8 @@ import org.hyperledger.aries.pojo.PojoProcessor;
 import java.lang.reflect.Field;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -46,7 +46,7 @@ public class Credential {
     public <T> T to(@NonNull Class<T> type) {
         T result = PojoProcessor.getInstance(type);
 
-        List<Field> fields = PojoProcessor.fields(type);
+        Set<Field> fields = PojoProcessor.fields(type);
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
             for(Field field: fields) {
                 String fieldName = PojoProcessor.fieldName(field);

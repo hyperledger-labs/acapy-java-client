@@ -15,19 +15,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class PojoProcessor {
 
-    public static @Nonnull <T> List<String> fieldNames(@NonNull Class<T> type) {
-        return fields(type).stream().map(PojoProcessor::fieldName).collect(Collectors.toList());
+    public static @Nonnull <T> Set<String> fieldNames(@NonNull Class<T> type) {
+        return fields(type).stream().map(PojoProcessor::fieldName).collect(Collectors.toSet());
     }
 
-    public static @Nonnull <T> List<Field> fields(@NonNull Class<T> type) {
-        List<Field> result = new ArrayList<>();
+    public static @Nonnull <T> Set<Field> fields(@NonNull Class<T> type) {
+        Set<Field> result = new LinkedHashSet<>();
         Field[] fields = type.getDeclaredFields();
 
         for (Field field : fields) {
