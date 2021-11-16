@@ -17,18 +17,18 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * AdminMediationDeny
+ * SchemasInputDescriptorFilter
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class AdminMediationDeny {
-    public static final String SERIALIZED_NAME_MEDIATOR_TERMS = "mediator_terms";
-    @SerializedName(SERIALIZED_NAME_MEDIATOR_TERMS)
-    private List<String> mediatorTerms = null;
-    public static final String SERIALIZED_NAME_RECIPIENT_TERMS = "recipient_terms";
-    @SerializedName(SERIALIZED_NAME_RECIPIENT_TERMS)
-    private List<String> recipientTerms = null;
+public class SchemasInputDescriptorFilter {
+    public static final String SERIALIZED_NAME_ONEOF_FILTER = "oneof_filter";
+    @SerializedName(SERIALIZED_NAME_ONEOF_FILTER)
+    private Boolean oneofFilter;
+    public static final String SERIALIZED_NAME_URI_GROUPS = "uri_groups";
+    @SerializedName(SERIALIZED_NAME_URI_GROUPS)
+    private List<List<SchemaInputDescriptor>> uriGroups = null;
 }
