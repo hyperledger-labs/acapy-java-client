@@ -144,7 +144,7 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
     }
 
     /**
-     * Low level extractor that returns a map of all revealed attributes and their values
+     * Low level extractor that returns a map of all revealed attributes and their values.
      * <pre>{@code
      * {
      *     "iban": "4321",
@@ -156,6 +156,29 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
      */
     public Map<String, Object> findRevealedAttributes() {
         return EventParser.getValuesByRevealedAttributes(presentation.toString());
+    }
+
+    /**
+     * Low level extractor that returns a map of all revealed attributes with the all their information.
+     * This is useful for all cases where access to the sub proof index is needed to extract the matching identifier
+     * from the identifiers list.
+     * <pre>{@code
+     * "iban": {
+     *     "sub_proof_index": 0,
+     *     "raw": "4321",
+     *     "encoded": "26574491753489267293487534742481789407179815570291479106142274998003667228256"
+     * },
+     * "bic": {
+     *     "sub_proof_index": 0,
+     *     "raw": "1234",
+     *     "encoded": "95644933709556837616493211320418578774074706673436554047751118609009445904569"
+     * }
+     * }
+     * </pre>
+     * @return revealed attribute to value mapping
+     */
+    public Map<String, RevealedAttribute> findRevealedAttributedFull() {
+        return EventParser.getValuesByRevealedAttributesFull(presentation.toString());
     }
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
@@ -172,5 +195,12 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
         @Singular
         private Map<String, String> revealedAttributes;
         private Identifier identifier;
+    }
+
+    @Data @Builder @NoArgsConstructor @AllArgsConstructor
+    public static class RevealedAttribute {
+        private Integer subProofIndex;
+        private String raw;
+        private String encoded;
     }
 }

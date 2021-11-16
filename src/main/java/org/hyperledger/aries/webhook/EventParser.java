@@ -224,4 +224,11 @@ public class EventParser {
                         .toMap(Map.Entry::getKey, v -> v.getValue().getAsJsonObject().get("raw").getAsString()));
     }
 
+    public static Map<String, PresentationExchangeRecord.RevealedAttribute> getValuesByRevealedAttributesFull(@NonNull String json) {
+        return getRevealedAttributes(json)
+                .stream()
+                .collect(Collectors
+                        .toMap(Map.Entry::getKey, v -> gson.fromJson(v.getValue(), PresentationExchangeRecord.RevealedAttribute.class)));
+    }
+
 }
