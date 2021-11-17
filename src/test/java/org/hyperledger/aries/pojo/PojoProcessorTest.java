@@ -12,28 +12,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PojoProcessorTest {
 
     @Test
     void testGetAttributes() {
-        List<String> attr = PojoProcessor.fieldNames(ConcreteExample.class);
+        Set<String> attr = PojoProcessor.fieldNames(ConcreteExample.class);
         assertEquals(2, attr.size());
-        assertEquals("one", attr.get(0));
-        assertEquals("two", attr.get(1));
+        assertTrue(attr.contains("one"));
+        assertTrue(attr.contains("two"));
     }
 
     @Test
     void testGetAttributesExclusion() {
-        List<String> attr = PojoProcessor.fieldNames(ConcreteExampleWithExclusion.class);
+        Set<String> attr = PojoProcessor.fieldNames(ConcreteExampleWithExclusion.class);
         assertEquals(3, attr.size());
-        assertEquals("name", attr.get(0));
-        assertEquals("street", attr.get(1));
-        assertEquals("myCity", attr.get(2));
+        assertTrue(attr.contains("name"));
+        assertTrue(attr.contains("street"));
+        assertTrue(attr.contains("myCity"));
     }
 
     @Test

@@ -79,7 +79,7 @@ public class EventParser {
         final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(
                 json, PojoProcessor.getAttributeGroupName(type));
 
-        List<Field> fields = PojoProcessor.fields(type);
+        Set<Field> fields = PojoProcessor.fields(type);
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
             for(Field field: fields) {
                 String fieldName = PojoProcessor.fieldName(field);
@@ -97,7 +97,10 @@ public class EventParser {
     }
 
     /**
-     * Finds the attribute names in the present_proof.presentation and extracts their corresponding values.
+     * Finds the matching attribute names in the present_proof.presentation
+     * and extracts their corresponding values.
+     * Note this is brute force and simply returns the first match found for each name
+     * It's recommended to use {@link #getValuesByAttributeGroup} or {@link #getValuesByRevealedAttributes}
      * @param json present_proof.presentation
      * @param names Set of attribute names
      * @return Map containing the attribute names and their corresponding values
@@ -219,6 +222,13 @@ public class EventParser {
                 .stream()
                 .collect(Collectors
                         .toMap(Map.Entry::getKey, v -> v.getValue().getAsJsonObject().get("raw").getAsString()));
+    }
+
+    public static Map<String, PresentationExchangeRecord.RevealedAttribute> getValuesByRevealedAttributesFull(@NonNull String json) {
+        return getRevealedAttributes(json)
+                .stream()
+                .collect(Collectors
+                        .toMap(Map.Entry::getKey, v -> gson.fromJson(v.getValue(), PresentationExchangeRecord.RevealedAttribute.class)));
     }
 
 }

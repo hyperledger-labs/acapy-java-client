@@ -906,7 +906,7 @@ public class AriesClient extends BaseClient {
     public Optional<V1CredentialExchange> issueCredentialRecordsIssue(
             @NonNull String credentialExchangeId, @Nullable V1CredentialIssueRequest request) throws IOException {
         Request req = buildPost(url + "/issue-credential/records/" + credentialExchangeId + "/issue",
-                request != null ? request : EMPTY_JSON);
+                request != null ? request : V1CredentialIssueRequest.builder().build());
         return call(req, V1CredentialExchange.class);
     }
 
@@ -1066,7 +1066,7 @@ public class AriesClient extends BaseClient {
     public Optional<V20CredExRecordDetail> issueCredentialV2RecordsIssue(
             @NonNull String credentialExchangeId, @Nullable V20CredIssueRequest request) throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/records/" + credentialExchangeId + "/issue",
-                request != null ? request : EMPTY_JSON);
+                request != null ? request : V20CredIssueRequest.builder().build());
         return call(req, V20CredExRecordDetail.class);
     }
 

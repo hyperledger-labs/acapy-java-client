@@ -8,13 +8,12 @@
 package org.hyperledger.aries.api.present_proof;
 
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.pojo.PojoProcessor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,14 +30,14 @@ public class PresentProofRequestHelper {
      * "name":"proof_req_2",
      * "version":"0.1",
      * "requested_attributes": {
-     *     "attr1_referent": {
+     *     "attr1": {
      *         "name":"attr1",
      *         "restrictions": [
      *         {
      *             "schema_id": "123:2:mySchema:1.0"
      *         }, {}]
      *     },
-     *     "attr2_referent": {
+     *     "attr2": {
      *         "name":"attr2",
      *         "restrictions": [
      *         {
@@ -49,17 +48,17 @@ public class PresentProofRequestHelper {
      * "requested_predicates": {}
      * }</pre>
      * @param connectionId The connection id
-     * @param attributes List of schema attributes
+     * @param attributes Set of schema attributes
      * @param restrictions list of {@link PresentProofRequest.ProofRequest.ProofRestrictions}
      * @return {@link PresentProofRequest}
      */
     public static PresentProofRequest buildForEachAttribute(
             String connectionId,
-            @NonNull List<String> attributes,
+            @NonNull Set<String> attributes,
             @NonNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions) {
 
         Map<String, PresentProofRequest.ProofRequest.ProofRequestedAttributes> attr = new LinkedHashMap<>();
-        attributes.forEach(name -> attr.put(name + "_referent",
+        attributes.forEach(name -> attr.put(name,
                 PresentProofRequest.ProofRequest.ProofRequestedAttributes
                 .builder()
                 .name(name)
@@ -77,16 +76,16 @@ public class PresentProofRequestHelper {
     }
 
     /**
-     * Appends the restrictions for each attribute within the list
+     * Appends the restriction for each attribute within the list
      * @param connectionId The connection id
-     * @param attributes List of schema attributes
+     * @param attributes Set of schema attributes
      * @param restrictions {@link PresentProofRequest.ProofRequest.ProofRestrictions}
      * @return {@link PresentProofRequest}
      */
     public static PresentProofRequest buildForEachAttribute(
             String connectionId,
-            @NonNull List<String> attributes,
-            @Nullable PresentProofRequest.ProofRequest.ProofRestrictions restrictions) {
+            @NonNull Set<String> attributes,
+            PresentProofRequest.ProofRequest.ProofRestrictions restrictions) {
         return buildForEachAttribute(connectionId, attributes, restrictions != null ?  List.of(restrictions) : List.of());
     }
 
@@ -107,7 +106,7 @@ public class PresentProofRequestHelper {
     }
 
     /**
-     * Appends the restrictions for each field of the Pojo class
+     * Appends the restriction for each field of the Pojo class
      * @param connectionId The connection id
      * @param attributes Pojo class that represents the schema and its attributes
      * @param restrictions {@link PresentProofRequest.ProofRequest.ProofRestrictions}
@@ -130,9 +129,9 @@ public class PresentProofRequestHelper {
      */
     public static PresentProofRequest buildForAllAttributes(
             String connectionId,
-            @NonNull List<String> attributes,
+            @NonNull Set<String> attributes,
             @NonNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions) {
-        return buildForAllAttributes(connectionId, attributes, restrictions, null);
+        return buildForAllAttributes(connectionId, null, attributes, restrictions, null);
     }
 
     /**
@@ -157,6 +156,7 @@ public class PresentProofRequestHelper {
      * "requested_predicates": {}
      * }</pre>
      * @param connectionId The connection id
+     * @param attributeGroupName nullable name of the attribute group, will be 'attribute_group_0' if null
      * @param attributes List of schema attributes
      * @param restrictions list of {@link PresentProofRequest.ProofRequest.ProofRestrictions}
      * @param nonRevoked {@link PresentProofRequest.ProofRequest.ProofNonRevoked}
@@ -164,51 +164,65 @@ public class PresentProofRequestHelper {
      */
     public static PresentProofRequest buildForAllAttributes(
             String connectionId,
-            @NonNull List<String> attributes,
+            String attributeGroupName,
+            @NonNull Set<String> attributes,
             @NonNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions,
             PresentProofRequest.ProofRequest.ProofNonRevoked nonRevoked) {
         PresentProofRequest.ProofRequest.ProofRequestedAttributes attr = buildAttributeForAll(
                 attributes, restrictions, nonRevoked);
-        return buildProofRequest(connectionId, Map.of("attribute_group_0", attr));
+        return buildProofRequest(
+                connectionId, Map.of(
+                        StringUtils.isEmpty(attributeGroupName) ? "attribute_group_0" : attributeGroupName,
+                        attr));
     }
 
     /**
      * Appends the restrictions to the attribute list
      * @param connectionId The connection id
-     * @param attributes pojo class that will be converted into a list of schema attributes
+     * @param type pojo class that will be converted into a list of schema attributes
      * @param restrictions list of {@link PresentProofRequest.ProofRequest.ProofRestrictions}
      * @return {@link PresentProofRequest}
      */
     public static <T> PresentProofRequest buildForAllAttributes(
             String connectionId,
-            @NonNull Class<T> attributes,
+            @NonNull Class<T> type,
             @NonNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions) {
-        return buildForAllAttributes(connectionId, PojoProcessor.fieldNames(attributes), restrictions);
+        return buildForAllAttributes(
+                connectionId,
+                PojoProcessor.getAttributeGroupName(type),
+                PojoProcessor.fieldNames(type),
+                restrictions,
+                null);
     }
 
     /**
      * Appends the restrictions to the attribute list
      * @param connectionId The connection id
-     * @param attributes List of schema attributes
+     * @param type pojo class that will be converted into a list of schema attributes
      * @param restrictions list of {@link PresentProofRequest.ProofRequest.ProofRestrictions}
      * @param nonRevoked {@link PresentProofRequest.ProofRequest.ProofNonRevoked}
      * @return {@link PresentProofRequest}
      */
     public static <T> PresentProofRequest buildForAllAttributes(
             String connectionId,
-            @NonNull Class<T> attributes,
+            @NonNull Class<T> type,
             @NonNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions,
             PresentProofRequest.ProofRequest.ProofNonRevoked nonRevoked) {
-        return buildForAllAttributes(connectionId, PojoProcessor.fieldNames(attributes), restrictions, nonRevoked);
+        return buildForAllAttributes(
+                connectionId,
+                PojoProcessor.getAttributeGroupName(type),
+                PojoProcessor.fieldNames(type),
+                restrictions,
+                nonRevoked);
     }
 
     public static PresentProofRequest.ProofRequest.ProofRequestedAttributes buildAttributeForAll(
-            @NotNull List<String> attributes,
+            @NotNull Set<String> attributes,
             @NotNull List<PresentProofRequest.ProofRequest.ProofRestrictions> restrictions,
             PresentProofRequest.ProofRequest.ProofNonRevoked nonRevoked) {
         return PresentProofRequest.ProofRequest.ProofRequestedAttributes
                 .builder()
-                .names(attributes)
+                .names(new ArrayList<>(attributes))
                 .nonRevoked(nonRevoked)
                 .restrictions(restrictions.size() > 0
                         ? restrictions.stream().map(PresentProofRequest.ProofRequest.

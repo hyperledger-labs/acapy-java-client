@@ -91,6 +91,8 @@ public class EventParserTest {
         Assertions.assertTrue(p.isPresent());
         Map<String, Object> attrs = p.get().findRevealedAttributes();
         Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
+        PresentationExchangeRecord.RevealedAttribute city = p.get().findRevealedAttributedFull().get("4_city_uuid");
+        Assertions.assertEquals("Zürich", city.getRaw());
     }
 
     @Test

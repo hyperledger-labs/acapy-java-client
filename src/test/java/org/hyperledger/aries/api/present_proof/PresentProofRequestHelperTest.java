@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 class PresentProofRequestHelperTest extends IntegrationTestBase {
@@ -29,15 +30,16 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
     @Test
     void testBuildForEachAttributeNoRestrictions() throws Exception {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForEachAttribute("dummy", List.of("name", "email"), List.of());
+                .buildForEachAttribute("dummy", Set.of("name", "email"), List.of());
 
         log.debug("{}", GsonConfig.prettyPrinter().toJson(presentProofRequest));
 
-        Optional<PresentationExchangeRecord> resp = ac.presentProofCreateRequest(presentProofRequest);
+        PresentationExchangeRecord resp = ac.presentProofCreateRequest(presentProofRequest).orElseThrow();
 
-        Assertions.assertTrue(resp.isPresent());
-        Assertions.assertNotNull(resp.get().getPresentationExchangeId());
-        Assertions.assertEquals(2, resp.get().getPresentationRequest().getRequestedAttributes().size());
+        log.debug("{}", GsonConfig.prettyPrinter().toJson(resp));
+
+        Assertions.assertNotNull(resp.getPresentationExchangeId());
+        Assertions.assertEquals(2, resp.getPresentationRequest().getRequestedAttributes().size());
     }
 
     @Test
@@ -50,17 +52,16 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
 
         log.debug("{}", GsonConfig.prettyPrinter().toJson(presentProofRequest));
 
-        Optional<PresentationExchangeRecord> resp = ac.presentProofCreateRequest(presentProofRequest);
-        Assertions.assertTrue(resp.isPresent());
+        PresentationExchangeRecord resp = ac.presentProofCreateRequest(presentProofRequest).orElseThrow();
         Assertions.assertEquals(presentProofRequest.getProofRequest().getRequestedAttributes(),
-                resp.get().getPresentationRequest().getRequestedAttributes());
-        log.debug("{}", GsonConfig.prettyPrinter().toJson(resp.get()));
+                resp.getPresentationRequest().getRequestedAttributes());
+        log.debug("{}", GsonConfig.prettyPrinter().toJson(resp));
     }
 
     @Test
     void testBuildForAllAttributesNoRestrictions() {
         PresentProofRequest presentProofRequest = PresentProofRequestHelper
-                .buildForAllAttributes("dummy", List.of("name", "email"), List.of());
+                .buildForAllAttributes("dummy", "my-mail", Set.of("name", "email"), List.of(), null);
         log.debug("{}", GsonConfig.prettyPrinter().toJson(presentProofRequest));
         Assertions.assertThrows(AriesException.class, () -> ac.presentProofCreateRequest(presentProofRequest));
     }
@@ -75,11 +76,10 @@ class PresentProofRequestHelperTest extends IntegrationTestBase {
 
         log.debug("{}", GsonConfig.prettyPrinter().toJson(presentProofRequest));
 
-        Optional<PresentationExchangeRecord> resp = ac.presentProofCreateRequest(presentProofRequest);
-        Assertions.assertTrue(resp.isPresent());
+        PresentationExchangeRecord resp = ac.presentProofCreateRequest(presentProofRequest).orElseThrow();
         Assertions.assertEquals(presentProofRequest.getProofRequest().getRequestedAttributes(),
-                resp.get().getPresentationRequest().getRequestedAttributes());
-        log.debug("{}", GsonConfig.prettyPrinter().toJson(resp.get()));
+                resp.getPresentationRequest().getRequestedAttributes());
+        log.debug("{}", GsonConfig.prettyPrinter().toJson(resp));
     }
 
     @Test
