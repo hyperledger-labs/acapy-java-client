@@ -100,6 +100,14 @@ public class ConnectionRecord {
         return ConnectionState.COMPLETED.equals(state);
     }
 
+    public boolean protocolIsConnectionV1() {
+        return ConnectionProtocol.CONNECTION_V1.equals(connectionProtocol);
+    }
+
+    public boolean protocolIsIdDidExchangeV1() {
+        return ConnectionProtocol.DID_EXCHANGE_V1.equals(connectionProtocol);
+    }
+
     public enum InvitationMode {
         @JsonProperty("once")
         @SerializedName("once")

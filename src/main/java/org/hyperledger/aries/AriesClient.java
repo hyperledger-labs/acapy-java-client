@@ -78,6 +78,7 @@ import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
+import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.hyperledger.aries.config.TimeUtil;
 
 import javax.annotation.Nullable;
@@ -2072,7 +2073,21 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<List<DID>> walletDid() throws IOException {
-        Request req = buildGet(url + "/wallet/did");
+        return walletDid(null);
+    }
+
+    /**
+     * List wallet DIDs
+     * @param filter {@link ListWalletDidFilter}
+     * @return list of {@link DID}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<DID>> walletDid(ListWalletDidFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
         return getWrapped(raw(req), "results", WALLET_DID_TYPE);
     }
 
@@ -2088,12 +2103,36 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Rotate keypair of a did not posted to the ledger
+     * @param did fully qualified did:indy
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void walletDidLocalRotateKeypair(@NonNull String did) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did/local/rotate-keypair")).newBuilder();
+        b.addQueryParameter("did", did);
+        call(buildPatch(b.toString(), EMPTY_JSON));
+    }
+
+    /**
      * Fetch the current public DID
      * @return {@link DID}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<DID> walletDidPublic() throws IOException {
         Request req = buildGet(url + "/wallet/did/public");
+        return getWrapped(raw(req), "result", DID.class);
+    }
+
+    /**
+     * Assign the current public did
+     * @param did fully qualified did:indy
+     * @return {@link DID}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<DID> walletDidPublic(@NonNull String did) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did/public")).newBuilder();
+        b.addQueryParameter("did", did);
+        Request req = buildPost(b.toString(), EMPTY_JSON);
         return getWrapped(raw(req), "result", DID.class);
     }
 

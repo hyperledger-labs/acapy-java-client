@@ -206,7 +206,9 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 |        | **wallet**                                                  |                    |
 | GET    | /wallet/did                                                 | :white_check_mark: |
 | POST   | /wallet/did/create                                          | :white_check_mark: |
+| PATCH  | /wallet/did/local/rotate-keypair                            | :white_check_mark: |
 | GET    | /wallet/did/public                                          | :white_check_mark: |
+| POST   | /wallet/did/public                                          | :white_check_mark: |
 | GET    | /wallet/get-did-endpoint                                    | :white_check_mark: |
 | POST   | /wallet/set-did-endpoint                                    | :white_check_mark: |
 

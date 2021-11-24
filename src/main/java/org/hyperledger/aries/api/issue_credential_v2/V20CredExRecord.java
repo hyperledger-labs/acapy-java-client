@@ -71,6 +71,7 @@ public class V20CredExRecord implements CredExStateTranslator {
 
 
     /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
+    // TODO json-ld
     public V1CredentialExchange toV1CredentialExchangeFromProposal() {
         return V1CredentialExchange
                 .builder()
@@ -94,7 +95,7 @@ public class V20CredExRecord implements CredExStateTranslator {
                         .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
                         .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
                                 .builder()
-                                .attributes(getCredProposal().getCredentialPreview().getAttributes())
+                                .attributes(getCredProposal().getCredentialPreview() != null ? getCredProposal().getCredentialPreview().getAttributes() : null)
                                 .build())
                         .build())
 

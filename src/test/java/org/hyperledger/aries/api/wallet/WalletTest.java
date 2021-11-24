@@ -13,6 +13,7 @@ import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.acy_py.generated.model.DIDEndpoint;
 import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
 import org.hyperledger.aries.IntegrationTestBase;
+import org.hyperledger.aries.api.exception.AriesException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,13 +27,13 @@ public class WalletTest extends IntegrationTestBase {
     void testCreateAndListWalletDids() throws Exception {
 
         // as the wallet is empty by default create local did first
-        final Optional<DID> localDid = ac.walletDidCreate(DIDCreate
+        DID localDid = ac.walletDidCreate(DIDCreate
                 .builder()
-                .build());
-        Assertions.assertTrue(localDid.isPresent());
-        Assertions.assertNotNull(localDid.get().getVerkey());
+                .build())
+                .orElseThrow();
+        Assertions.assertNotNull(localDid.getVerkey());
 
-        // list all dids
+        // list all did's
         final Optional<List<DID>> walletDid = ac.walletDid();
         Assertions.assertTrue(walletDid.isPresent());
         Assertions.assertEquals(1, walletDid.get().size());
@@ -47,19 +48,32 @@ public class WalletTest extends IntegrationTestBase {
 
     @Test
     void testSetGetDidEndpoint() throws Exception {
-        final Optional<DID> localDid = ac.walletDidCreate(DIDCreate.builder().build());
-        Assertions.assertTrue(localDid.isPresent());
+        DID localDid = ac.walletDidCreate(DIDCreate.builder().build()).orElseThrow();
 
         final String url = "http://localhost:8031";
         DIDEndpointWithType req = DIDEndpointWithType
                 .builder()
                 .endpoint(url)
-                .did(localDid.get().getDid())
+                .did(localDid.getDid())
                 .build();
         ac.walletSetDidEndpoint(req);
 
-        final Optional<DIDEndpoint> endp = ac.walletGetDidEndpoint(localDid.get().getDid());
-        Assertions.assertTrue(endp.isPresent());
-        Assertions.assertEquals(url, endp.get().getEndpoint());
+        DIDEndpoint endp = ac.walletGetDidEndpoint(localDid.getDid()).orElseThrow();
+        Assertions.assertEquals(url, endp.getEndpoint());
+    }
+
+    @Test
+    void TestRotateKeypair() throws Exception{
+        DID localDid = ac.walletDidCreate(DIDCreate
+                .builder()
+                .build()).orElseThrow();
+        Assertions.assertNotNull(localDid.getVerkey());
+
+        ac.walletDidLocalRotateKeypair(localDid.getDid()); // returns only 200
+    }
+
+    @Test
+    void testRotateKeypairWrongDid() {
+        Assertions.assertThrows(AriesException.class, () -> ac.walletDidLocalRotateKeypair("WgWxqztrNooG92RXvxSTWx"));
     }
 }

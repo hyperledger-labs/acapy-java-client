@@ -222,7 +222,7 @@ public class PresentProofRequestHelper {
             PresentProofRequest.ProofRequest.ProofNonRevoked nonRevoked) {
         return PresentProofRequest.ProofRequest.ProofRequestedAttributes
                 .builder()
-                .names(new ArrayList<>(attributes))
+                .names(List.copyOf(attributes))
                 .nonRevoked(nonRevoked)
                 .restrictions(restrictions.size() > 0
                         ? restrictions.stream().map(PresentProofRequest.ProofRequest.
