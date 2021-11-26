@@ -52,7 +52,7 @@ public class VerifiablePresentation<T extends VerifiableCredential> {
     private List<T> verifiableCredential;
 
     @Nullable
-    private Proof proof;
+    private LinkedDataProof proof;
 
     public List<T> getVerifiableCredential() {
         return verifiableCredential != null ? verifiableCredential : new ArrayList<>();

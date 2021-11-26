@@ -69,9 +69,15 @@ public class V20CredExRecord implements CredExStateTranslator {
         return autoRemove != null && autoRemove;
     }
 
+    public boolean payloadIsIndy() {
+        return byFormat != null && byFormat.hasIndyPayload();
+    }
 
-    /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
-    // TODO json-ld
+    public boolean payloadIsLsProof() {
+        return byFormat != null && byFormat.hasLdProof();
+    }
+
+    /** Convert v2 indy credential exchange record in state proposal-received to a v1 record */
     public V1CredentialExchange toV1CredentialExchangeFromProposal() {
         return V1CredentialExchange
                 .builder()

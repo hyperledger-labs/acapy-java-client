@@ -16,7 +16,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.aries.config.CredDefId;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -29,31 +28,35 @@ import java.util.List;
 public class VerifiableCredential {
 
     @Builder.Default
-    @NonNull @Nonnull
+    @NonNull
     @SerializedName("@context")
     @JsonProperty("@context")
     private List<Object> context = List.of("https://www.w3.org/2018/credentials/v1");
-
-    @Nullable
-    private String id;
-
-    @Builder.Default
-    @NonNull @Nonnull
-    private List<String> type = List.of("VerifiableCredential");
-
-    @Nullable
-    private String issuer;
-
-    @Nullable
-    @SerializedName("issuanceDate")
-    private String issuanceDate;
 
     @Nullable
     @SerializedName("credentialSubject")
     private Object credentialSubject;
 
     @Nullable
-    private Proof proof;
+    @SerializedName("expirationDate")
+    private String expirationDate;
+
+    @Nullable
+    private String id;
+
+    @Nullable
+    @SerializedName("issuanceDate")
+    private String issuanceDate;
+
+    @Nullable
+    private String issuer;
+
+    @Nullable
+    private LinkedDataProof proof;
+
+    @Builder.Default
+    @NonNull
+    private List<String> type = List.of("VerifiableCredential");
 
     // Verifiable Indy Credential
 
