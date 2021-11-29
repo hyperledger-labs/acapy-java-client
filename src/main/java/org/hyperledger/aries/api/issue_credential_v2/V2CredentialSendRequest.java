@@ -51,10 +51,13 @@ public class V2CredentialSendRequest {
     public static class LDProofVCDetailOptions {
         private String challenge;
         private String created;
+        @SerializedName("credentialStatus")
         private CredentialStatusOptions credentialStatus;
         private String domain;
+        @SerializedName("proofPurpose")
         private String proofPurpose;
         @Builder.Default
+        @SerializedName("proofType")
         private ProofType proofType = ProofType.BbsBlsSignature2020;
     }
 
