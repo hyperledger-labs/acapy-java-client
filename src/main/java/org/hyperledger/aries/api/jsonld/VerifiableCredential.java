@@ -11,9 +11,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
+import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
 
 import javax.annotation.Nullable;
@@ -35,7 +40,9 @@ public class VerifiableCredential {
 
     @Nullable
     @SerializedName("credentialSubject")
-    private Object credentialSubject;
+    @JsonSerialize(using = JsonObjectSerializer.class)
+    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    private JsonObject credentialSubject;
 
     @Nullable
     @SerializedName("expirationDate")

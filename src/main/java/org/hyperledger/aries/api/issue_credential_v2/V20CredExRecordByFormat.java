@@ -21,6 +21,12 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.config.GsonConfig;
 
 import java.util.Map;
 import java.util.Optional;
@@ -30,10 +36,10 @@ import java.util.stream.Collectors;
 /**
  * V20CredExRecordByFormat
  */
-@lombok.Data
-@lombok.AllArgsConstructor
-@lombok.NoArgsConstructor
-@lombok.Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class V20CredExRecordByFormat {
 
     public static final String INDY = "indy";
@@ -43,6 +49,15 @@ public class V20CredExRecordByFormat {
     private JsonObject credOffer;
     private JsonObject credRequest;
     private JsonObject credIssue;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class LdProof {
+        private VerifiableCredential credential;
+        private V2CredentialSendRequest.LDProofVCDetailOptions options;
+    }
 
     /**
      * Gets schema id from indy proposal
@@ -92,11 +107,16 @@ public class V20CredExRecordByFormat {
                 ||  resolveLdPayload(credIssue) != null;
     }
 
+    public LdProof convertToLdProof(JsonObject jo) {
+        JsonObject ld = jo.getAsJsonObject(LD_PROOF);
+        return GsonConfig.defaultConfig().fromJson(ld, LdProof.class);
+    }
+
     private JsonObject resolveLdPayload(JsonObject jo) {
-        return jo.getAsJsonObject(LD_PROOF);
+        return jo != null ? jo.getAsJsonObject(LD_PROOF) : null;
     }
 
     private JsonObject resolveIndyPayload(JsonObject jo) {
-        return jo.getAsJsonObject(INDY);
+        return jo != null ? jo.getAsJsonObject(INDY) : null;
     }
 }

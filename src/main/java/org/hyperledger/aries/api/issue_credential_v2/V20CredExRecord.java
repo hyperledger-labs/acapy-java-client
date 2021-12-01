@@ -20,7 +20,9 @@
 package org.hyperledger.aries.api.issue_credential_v2;
 
 
-import org.hyperledger.acy_py.generated.model.*;
+import org.hyperledger.acy_py.generated.model.V20CredIssue;
+import org.hyperledger.acy_py.generated.model.V20CredPreview;
+import org.hyperledger.acy_py.generated.model.V20CredRequest;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 
 /**
@@ -73,7 +75,7 @@ public class V20CredExRecord implements CredExStateTranslator {
         return byFormat != null && byFormat.hasIndyPayload();
     }
 
-    public boolean payloadIsLsProof() {
+    public boolean payloadIsLdProof() {
         return byFormat != null && byFormat.hasLdProof();
     }
 
@@ -108,5 +110,33 @@ public class V20CredExRecord implements CredExStateTranslator {
                 .role(role)
                 .state(state)
                 .build();
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredOffer() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredOffer() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredOffer());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredProposal() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredProposal() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredProposal());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredRequest() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredRequest() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredRequest());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredential() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredIssue() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredIssue());
+        }
+        return null;
     }
 }
