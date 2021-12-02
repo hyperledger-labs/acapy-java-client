@@ -13,12 +13,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor
-public final class Proof {
-    private String type;
+public final class LinkedDataProof {
+    private String challenge;
     private String created;
-    @SerializedName("verificationMethod")
-    private String verificationMethod;
+    private String domain;
+    private String jws;
+    private String nonce;
     @SerializedName("proofPurpose")
     private String proofPurpose;
-    private String jws;
+    @SerializedName("proofValue")
+    private String proofValue;
+    private String type;
+    @SerializedName("verificationMethod")
+    private String verificationMethod;
 }

@@ -20,7 +20,9 @@
 package org.hyperledger.aries.api.issue_credential_v2;
 
 
-import org.hyperledger.acy_py.generated.model.*;
+import org.hyperledger.acy_py.generated.model.V20CredIssue;
+import org.hyperledger.acy_py.generated.model.V20CredPreview;
+import org.hyperledger.acy_py.generated.model.V20CredRequest;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 
 /**
@@ -69,9 +71,15 @@ public class V20CredExRecord implements CredExStateTranslator {
         return autoRemove != null && autoRemove;
     }
 
+    public boolean payloadIsIndy() {
+        return byFormat != null && byFormat.hasIndyPayload();
+    }
 
-    /** Convert V2 Credential exchange record in state proposal-received to a V1 record */
-    // TODO json-ld
+    public boolean payloadIsLdProof() {
+        return byFormat != null && byFormat.hasLdProof();
+    }
+
+    /** Convert v2 indy credential exchange record in state proposal-received to a v1 record */
     public V1CredentialExchange toV1CredentialExchangeFromProposal() {
         return V1CredentialExchange
                 .builder()
@@ -102,5 +110,33 @@ public class V20CredExRecord implements CredExStateTranslator {
                 .role(role)
                 .state(state)
                 .build();
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredOffer() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredOffer() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredOffer());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredProposal() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredProposal() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredProposal());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredRequest() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredRequest() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredRequest());
+        }
+        return null;
+    }
+
+    public V20CredExRecordByFormat.LdProof resolveLDCredential() {
+        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredIssue() != null) {
+            return byFormat.convertToLdProof(byFormat.getCredIssue());
+        }
+        return null;
     }
 }

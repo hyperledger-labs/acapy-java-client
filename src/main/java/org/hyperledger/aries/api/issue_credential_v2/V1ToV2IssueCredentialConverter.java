@@ -67,7 +67,7 @@ public class V1ToV2IssueCredentialConverter {
                         .builder()
                         .attributes(v1.getCredentialProposal() != null ? v1.getCredentialProposal().getAttributes() : null)
                         .build())
-                .filter(V20CredFilter
+                .filter(V2CredentialSendRequest.V20CredFilter
                         .builder()
                         .indy(V20CredFilterIndy
                                 .builder()
@@ -127,7 +127,9 @@ public class V1ToV2IssueCredentialConverter {
                         .build())
                 .credentialPreview(V20CredPreview
                         .builder()
-                        .attributes(toV20CredAttrSpecFromAttributes(v1Proposal.getCredentialProposal().getAttributes()))
+                        .attributes(v1Proposal.getCredentialProposal() != null ?
+                                toV20CredAttrSpecFromAttributes(v1Proposal.getCredentialProposal().getAttributes())
+                                : null)
                         .build())
                 .build();
     }

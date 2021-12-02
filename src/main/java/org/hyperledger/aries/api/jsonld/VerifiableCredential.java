@@ -11,12 +11,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
+import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -29,31 +33,37 @@ import java.util.List;
 public class VerifiableCredential {
 
     @Builder.Default
-    @NonNull @Nonnull
+    @NonNull
     @SerializedName("@context")
     @JsonProperty("@context")
     private List<Object> context = List.of("https://www.w3.org/2018/credentials/v1");
 
     @Nullable
-    private String id;
-
-    @Builder.Default
-    @NonNull @Nonnull
-    private List<String> type = List.of("VerifiableCredential");
+    @SerializedName("credentialSubject")
+    @JsonSerialize(using = JsonObjectSerializer.class)
+    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    private JsonObject credentialSubject;
 
     @Nullable
-    private String issuer;
+    @SerializedName("expirationDate")
+    private String expirationDate;
+
+    @Nullable
+    private String id;
 
     @Nullable
     @SerializedName("issuanceDate")
     private String issuanceDate;
 
     @Nullable
-    @SerializedName("credentialSubject")
-    private Object credentialSubject;
+    private String issuer;
 
     @Nullable
-    private Proof proof;
+    private LinkedDataProof proof;
+
+    @Builder.Default
+    @NonNull
+    private List<String> type = List.of("VerifiableCredential");
 
     // Verifiable Indy Credential
 

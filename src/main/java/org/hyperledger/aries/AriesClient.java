@@ -40,6 +40,7 @@ import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConver
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialSendRequest;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
+import org.hyperledger.aries.api.jsonld.LinkedDataProof;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
@@ -1219,7 +1220,7 @@ public class AriesClient extends BaseClient {
      * @param <T> class type either {@link VerifiableCredential} or {@link VerifiablePresentation}
      * @param signRequest {@link SignRequest}
      * @param t class type either {@link VerifiableCredential} or {@link VerifiablePresentation}
-     * @return either {@link VerifiableCredential} or {@link VerifiablePresentation} with {@link Proof}
+     * @return either {@link VerifiableCredential} or {@link VerifiablePresentation} with {@link LinkedDataProof}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public <T> Optional<T> jsonldSign(@NonNull SignRequest signRequest, @NonNull Type t) throws IOException {

@@ -21,6 +21,12 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.config.GsonConfig;
 
 import java.util.Map;
 import java.util.Optional;
@@ -30,15 +36,28 @@ import java.util.stream.Collectors;
 /**
  * V20CredExRecordByFormat
  */
-@lombok.Data
-@lombok.AllArgsConstructor
-@lombok.NoArgsConstructor
-@lombok.Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class V20CredExRecordByFormat {
-    private JsonObject credIssue;
-    private JsonObject credOffer;
+
+    public static final String INDY = "indy";
+    public static final String LD_PROOF = "ld_proof";
+
     private JsonObject credProposal;
+    private JsonObject credOffer;
     private JsonObject credRequest;
+    private JsonObject credIssue;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class LdProof {
+        private VerifiableCredential credential;
+        private V2CredentialSendRequest.LDProofVCDetailOptions options;
+    }
 
     /**
      * Gets schema id from indy proposal
@@ -47,7 +66,7 @@ public class V20CredExRecordByFormat {
     public String findSchemaIdInIndyProposal() {
         String result = null;
         if (credProposal != null) {
-            JsonElement indy = credProposal.get("indy");
+            JsonElement indy = resolveIndyPayload(credProposal);
             if (indy != null) {
                 result = indy.getAsJsonObject().get("schema_id").getAsString();
             }
@@ -61,16 +80,43 @@ public class V20CredExRecordByFormat {
      */
     public Optional<Map<String, String>> findValuesInIndyCredIssue() {
         if (credIssue != null) {
-            JsonObject indy = credIssue.getAsJsonObject("indy");
+            JsonObject indy = resolveIndyPayload(credIssue);
             if (indy != null) {
                 final Set<Map.Entry<String, JsonElement>> attrs = indy.getAsJsonObject("values").entrySet();
-                return Optional.ofNullable(attrs
+                return Optional.of(attrs
                         .stream()
                         .collect(Collectors.toMap(
-                                e -> e.getKey(),
+                                Map.Entry::getKey,
                                 e -> e.getValue().getAsJsonObject().get("raw").getAsString())));
             }
         }
         return Optional.empty();
+    }
+
+    public boolean hasIndyPayload() {
+        return resolveIndyPayload(credProposal) != null
+                    || resolveIndyPayload(credOffer) != null
+                    ||  resolveIndyPayload(credRequest) != null
+                    ||  resolveIndyPayload(credIssue) != null;
+    }
+
+    public boolean hasLdProof() {
+        return resolveLdPayload(credProposal) != null
+                || resolveLdPayload(credOffer) != null
+                ||  resolveLdPayload(credRequest) != null
+                ||  resolveLdPayload(credIssue) != null;
+    }
+
+    public LdProof convertToLdProof(JsonObject jo) {
+        JsonObject ld = jo.getAsJsonObject(LD_PROOF);
+        return GsonConfig.defaultConfig().fromJson(ld, LdProof.class);
+    }
+
+    private JsonObject resolveLdPayload(JsonObject jo) {
+        return jo != null ? jo.getAsJsonObject(LD_PROOF) : null;
+    }
+
+    private JsonObject resolveIndyPayload(JsonObject jo) {
+        return jo != null ? jo.getAsJsonObject(INDY) : null;
     }
 }
