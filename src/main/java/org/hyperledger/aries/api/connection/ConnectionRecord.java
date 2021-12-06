@@ -56,22 +56,16 @@ public class ConnectionRecord {
         return StringUtils.isEmpty(invitationKey);
     }
 
-    /** Tests if this event is an OOB invitation
-     * @return true if OOB invitation
-     */
-    public boolean isOOBInvitation() {
-        return StringUtils.isNotEmpty(invitationMsgId)
-                && !ConnectionState.INVITATION.equals(state);
+    public boolean isConnectionInvitation() {
+        return StringUtils.isNotEmpty(invitationMsgId) && ConnectionTheirRole.INVITER.equals(theirRole);
     }
 
     /**
-     * Tests if this event is not an connection invitation
+     * Tests if this event is not a connection invitation
      * @return true if it is not an invitation event
      */
     public boolean isNotConnectionInvitation() {
-        return StringUtils.isEmpty(invitationMsgId)
-                && !(ConnectionState.INVITATION.equals(state)
-                && ConnectionTheirRole.INVITEE.equals(theirRole));
+        return StringUtils.isEmpty(invitationMsgId) && ConnectionTheirRole.INVITEE.equals(theirRole);
     }
 
     /**
@@ -82,6 +76,10 @@ public class ConnectionRecord {
     public boolean isRequestToConnect() {
         return ConnectionAcceptance.MANUAL.equals(accept)
                 && ConnectionState.REQUEST.equals(state);
+    }
+
+    public boolean stateIsInvitation() {
+        return ConnectionState.INVITATION.equals(state);
     }
 
     public boolean stateIsRequest() {
