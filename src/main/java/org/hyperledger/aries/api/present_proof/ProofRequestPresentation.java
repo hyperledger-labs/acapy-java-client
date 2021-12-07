@@ -8,7 +8,10 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
@@ -61,7 +64,7 @@ public class ProofRequestPresentation {
         }
     }
 
-    @Data
+    @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static class ServiceDecorator {
 
         @SerializedName("recipientKeys")

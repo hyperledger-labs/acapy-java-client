@@ -21,6 +21,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
 
+/**
+ * Helper class to build a connection-less proof request
+ */
 public class ProofRequestPresentationBuilder {
 
     private static final Charset UTF_8 = StandardCharsets.UTF_8;

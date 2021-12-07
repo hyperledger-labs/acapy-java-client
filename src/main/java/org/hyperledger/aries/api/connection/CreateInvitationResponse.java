@@ -10,9 +10,11 @@ package org.hyperledger.aries.api.connection;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hyperledger.acy_py.generated.model.ConnectionInvitation;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CreateInvitationResponse {
-    private String invitationUrl;
     private String connectionId;
+    private ConnectionInvitation invitation;
+    private String invitationUrl;
 }
