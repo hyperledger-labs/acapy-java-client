@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.issue_credential_v1;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,22 @@ import java.util.List;
  */
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class V1CredentialFreeOffer {
+
+    // references to the created records - not part of the offer
+
+    /** internal mapping to the exchange record */
+    @JsonIgnore
+    private transient String credentialExchangeId;
+
+    /** internal mapping to the thread id */
+    @JsonIgnore
+    private transient String threadId;
+
+    /** internal mapping to the connection record */
+    @JsonIgnore
+    private transient String connectionId;
+
+    // offer data
 
     private String comment;
 

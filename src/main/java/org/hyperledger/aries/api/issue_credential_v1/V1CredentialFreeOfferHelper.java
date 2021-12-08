@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.issue_credential_v1;
 
+import com.google.gson.Gson;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.AriesClient;
@@ -16,12 +17,20 @@ import org.hyperledger.aries.api.connection.CreateInvitationResponse;
 import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.credentials.CredentialPreview;
 import org.hyperledger.aries.api.present_proof.ProofRequestPresentation;
+import org.hyperledger.aries.config.GsonConfig;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Map;
 
 @Slf4j
 public class V1CredentialFreeOfferHelper {
+
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
+
+    private final Gson gson = GsonConfig.defaultNoEscaping();
 
     private final AriesClient acaPy;
 
@@ -41,6 +50,8 @@ public class V1CredentialFreeOfferHelper {
                     .build();
             V1CredentialExchange ex = acaPy.issueCredentialCreate(create).orElseThrow();
             result
+                    .credentialExchangeId(ex.getCredentialExchangeId())
+                    .threadId(ex.getThreadId())
                     .type(ex.getCredentialOfferDict().getType())
                     .credentialPreview(ex.getCredentialOfferDict().getCredentialPreview())
                     .offersAttach(ex.getCredentialOfferDict().getOffersAttach());
@@ -54,7 +65,9 @@ public class V1CredentialFreeOfferHelper {
                     .build();
             CreateInvitationResponse invitation = acaPy
                     .connectionsCreateInvitation(invReq, invitationParams).orElseThrow();
-            result.service(ProofRequestPresentation.ServiceDecorator
+            result
+                    .connectionId(invitation.getConnectionId())
+                    .service(ProofRequestPresentation.ServiceDecorator
                     .builder()
                     .recipientKeys(invitation.getInvitation().getRecipientKeys())
                     .routingKeys(invitation.getInvitation().getRoutingKeys())
@@ -64,5 +77,10 @@ public class V1CredentialFreeOfferHelper {
             log.error("aca-py is not available", e);
         }
         return result.build();
+    }
+
+    public String toBase64(@NonNull V1CredentialFreeOffer offer) {
+        byte[] envelopeBase64 = Base64.getEncoder().encode(gson.toJson(offer).getBytes(UTF_8));
+        return new String(envelopeBase64, UTF_8);
     }
 }
