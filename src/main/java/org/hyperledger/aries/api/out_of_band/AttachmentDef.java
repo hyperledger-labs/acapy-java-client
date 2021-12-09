@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class AttachmentDef {
 
+    /** e.g. credential exchange id */
     private String id;
     private AttachmentType type;
 

@@ -7,30 +7,31 @@
  */
 package org.hyperledger.aries.api.issue_credential_v1;
 
-import com.google.gson.Gson;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.acy_py.generated.model.InvitationRecord;
 import org.hyperledger.aries.AriesClient;
-import org.hyperledger.aries.api.connection.CreateInvitationParams;
-import org.hyperledger.aries.api.connection.CreateInvitationRequest;
-import org.hyperledger.aries.api.connection.CreateInvitationResponse;
 import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.credentials.CredentialPreview;
-import org.hyperledger.aries.api.present_proof.ProofRequestPresentation;
-import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.api.out_of_band.AttachmentDef;
+import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
+import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Map;
 
+/**
+ * Helper class that creates a out-of-band invitation with an attached credential offer.
+ * It is uses of two api requests:
+ * 1. /issue-credential/create-offer
+ * 2. /out-of-band/create-invitation
+ * Like it is with the connection-less proof-request the barcode only points to a temporary URL which then
+ * redirects to another URL in the location header that then
+ * contains the credential offer in the m parameter like https://mydomain.com?m=ey...
+ * The base64 encoded url can be found in the invitationRecord.invitationUrl
+ */
 @Slf4j
 public class V1CredentialFreeOfferHelper {
-
-    private static final Charset UTF_8 = StandardCharsets.UTF_8;
-
-    private final Gson gson = GsonConfig.defaultNoEscaping();
 
     private final AriesClient acaPy;
 
@@ -39,48 +40,55 @@ public class V1CredentialFreeOfferHelper {
         this.acaPy = acaPy;
     }
 
-    public V1CredentialFreeOffer buildFreeOffer(@NonNull String credentialDefinitionId, Map<String, String> document) {
-        V1CredentialFreeOffer.V1CredentialFreeOfferBuilder result = V1CredentialFreeOffer.builder();
+    public CredentialFreeOffer buildFreeOffer(@NonNull String credentialDefinitionId, Map<String, String> document) {
+        CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
         try{
-            // step 1 - create credential
-            V1CredentialCreate create = V1CredentialCreate
+            // issue-credential/create in conjunction with oob invitation attachment
+            // step 1 - create credential offer
+            V1CredentialFreeOfferRequest create = V1CredentialFreeOfferRequest
                     .builder()
+                    .autoIssue(Boolean.TRUE)
+                    .autoRemove(Boolean.TRUE)
                     .credDefId(credentialDefinitionId)
-                    .credentialProposal(new CredentialPreview(CredentialAttributes.fromMap(document)))
+                    .credentialPreview(new CredentialPreview(CredentialAttributes.fromMap(document)))
                     .build();
-            V1CredentialExchange ex = acaPy.issueCredentialCreate(create).orElseThrow();
-            result
-                    .credentialExchangeId(ex.getCredentialExchangeId())
-                    .threadId(ex.getThreadId())
-                    .type(ex.getCredentialOfferDict().getType())
-                    .credentialPreview(ex.getCredentialOfferDict().getCredentialPreview())
-                    .offersAttach(ex.getCredentialOfferDict().getOffersAttach());
-
-            // step 2 - create invitation
-            CreateInvitationRequest invReq = CreateInvitationRequest.builder().build();
-            CreateInvitationParams invitationParams = CreateInvitationParams
-                    .builder()
-                    .autoAccept(Boolean.TRUE)
-                    .multiUse(Boolean.FALSE)
-                    .build();
-            CreateInvitationResponse invitation = acaPy
-                    .connectionsCreateInvitation(invReq, invitationParams).orElseThrow();
-            result
-                    .connectionId(invitation.getConnectionId())
-                    .service(ProofRequestPresentation.ServiceDecorator
-                    .builder()
-                    .recipientKeys(invitation.getInvitation().getRecipientKeys())
-                    .routingKeys(invitation.getInvitation().getRoutingKeys())
-                    .serviceEndpoint(invitation.getInvitation().getServiceEndpoint())
-                    .build());
+            V1CredentialExchange ex = acaPy.issueCredentialCreateOffer(create).orElseThrow();
+            r.threadId(ex.getThreadId());
+            r.credentialExchangeId(ex.getCredentialExchangeId());
+            r.credentialProposalDict(ex.getCredentialProposalDict());
+            // step 2 - create out-of-band invitation with attached credential offer
+            InvitationRecord invitationRecord = acaPy.outOfBandCreateInvitation(
+                    InvitationCreateRequest.builder()
+                            .usePublicDid(Boolean.TRUE)
+                            .attachment(AttachmentDef.builder()
+                                    .id(ex.getCredentialExchangeId())
+                                    .type(AttachmentDef.AttachmentType.CREDENTIAL_OFFER)
+                                    .build())
+                    .build(),
+                    CreateInvitationFilter.builder()
+                            .autoAccept(Boolean.TRUE)
+                            .build()).orElseThrow();
+            r.invitationRecord(invitationRecord);
         } catch (IOException e) {
             log.error("aca-py is not available", e);
         }
-        return result.build();
+        return r.build();
     }
 
-    public String toBase64(@NonNull V1CredentialFreeOffer offer) {
-        byte[] envelopeBase64 = Base64.getEncoder().encode(gson.toJson(offer).getBytes(UTF_8));
-        return new String(envelopeBase64, UTF_8);
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static final class CredentialFreeOffer {
+
+        /** reference to the credential exchange record */
+        private String credentialExchangeId;
+
+        /** credential exchange thread id */
+        private String threadId;
+
+        private V1CredentialExchange.CredentialProposalDict credentialProposalDict;
+
+        private InvitationRecord invitationRecord;
     }
 }

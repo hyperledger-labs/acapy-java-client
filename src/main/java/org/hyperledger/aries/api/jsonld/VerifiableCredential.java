@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * @see <a href="https://www.w3.org/2018/credentials/v1#VerifiableCredential">VerifiableCredential</a>
  */
-@Data @SuperBuilder @NoArgsConstructor
+@Data @SuperBuilder @NoArgsConstructor @AllArgsConstructor
 @JsonPropertyOrder({ "@context", "type" })
 @JsonInclude(Include.NON_NULL)
 public class VerifiableCredential {
@@ -67,7 +67,7 @@ public class VerifiableCredential {
 
     // Verifiable Indy Credential
 
-    @SuperBuilder @NoArgsConstructor
+    @SuperBuilder @NoArgsConstructor @AllArgsConstructor
     @Data @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
     @JsonInclude(Include.NON_NULL)
     public static class LabeledVerifiableCredential extends VerifiableCredential {
@@ -77,7 +77,7 @@ public class VerifiableCredential {
     /**
      * @see <a href="https://raw.githubusercontent.com/iil-network/contexts/master/indycredential.jsonld">VerifiableIndyCredential</a>
      */
-    @SuperBuilder @NoArgsConstructor
+    @SuperBuilder @NoArgsConstructor @AllArgsConstructor
     @Data @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
     @JsonInclude(Include.NON_NULL)
     public static class VerifiableIndyCredential extends LabeledVerifiableCredential {

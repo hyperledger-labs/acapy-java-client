@@ -7,18 +7,18 @@
  */
 package org.hyperledger.aries.api.out_of_band;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hyperledger.aries.api.connection.ConnectionRecord;
 
 import java.util.List;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class InvitationCreateRequest {
     private String alias;
+    @Singular
     private List<AttachmentDef> attachments;
-    private List<String> handshakeProtocols;
+    @Builder.Default
+    private List<String> handshakeProtocols = List.of(ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1.getValue());
     private String mediationId;
     private Object metadata;
     private String myLabel;

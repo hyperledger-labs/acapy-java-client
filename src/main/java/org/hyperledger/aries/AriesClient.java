@@ -59,6 +59,7 @@ import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
 import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
+import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
@@ -849,6 +850,9 @@ public class AriesClient extends BaseClient {
 
     /**
      * Send holder a credential, automating the entire flow
+     * The internal credential record will be created without the credential
+     * being sent to any connection. This can be used in conjunction with
+     * the `oob` protocols to bind messages to an out-of-band message.
      * @param request {@link V1CredentialCreate}
      * @return {@link V1CredentialExchange}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -856,6 +860,20 @@ public class AriesClient extends BaseClient {
     public Optional<V1CredentialExchange> issueCredentialCreate(@NonNull V1CredentialCreate request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential/create", request);
+        return call(req, V1CredentialExchange.class);
+    }
+
+    /**
+     * Create a credential offer, independent of any proposal or connection
+     * Unlike with `send-offer`, this credential exchange is not tied to a specific
+     * connection. It must be dispatched out-of-band by the controller.
+     * @param request {@link V1CredentialFreeOfferRequest}
+     * @return {@link V1CredentialExchange}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V1CredentialExchange> issueCredentialCreateOffer(@NonNull V1CredentialFreeOfferRequest request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential/create-offer", request);
         return call(req, V1CredentialExchange.class);
     }
 

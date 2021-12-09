@@ -114,6 +114,7 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 |        | **introduction**                                            |                    |
 |        | **issue-credential v1.0**                                   |                    |
 | POST   | /issue-credential/create                                    | :white_check_mark: |
+| POST   | /issue-credential/create-offer                              | :white_check_mark: |
 | GET    | /issue-credential/records                                   | :white_check_mark: |
 | GET    | /issue-credential/records/{cred_ex_id}                      | :white_check_mark: |
 | DELETE | /issue-credential/records/{cred_ex_id}                      | :white_check_mark: |
