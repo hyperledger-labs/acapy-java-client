@@ -38,7 +38,6 @@ public class VerifiableCredential {
     @JsonProperty("@context")
     private List<Object> context = List.of("https://www.w3.org/2018/credentials/v1");
 
-    @Nullable
     @SerializedName("credentialSubject")
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
