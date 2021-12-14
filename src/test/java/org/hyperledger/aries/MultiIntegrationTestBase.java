@@ -28,6 +28,7 @@ public abstract class MultiIntegrationTestBase {
     public static final Integer ARIES_ENDPOINT_PORT_2 = 8040;
     public static final Integer ARIES_ADMIN_PORT_2 = 8041;
 
+    protected LedgerClient lc;
     protected AriesClient ac;
     protected AriesClient ac2;
 
@@ -79,7 +80,7 @@ public abstract class MultiIntegrationTestBase {
                 .url("http://" + ariesContainer.getHost() + ":" + ariesContainer.getMappedPort(ARIES_ADMIN_PORT))
                 .build();
         ac2 = AriesClient.builder()
-                .url("http://" + ariesContainer.getHost() + ":" + ariesContainer2.getMappedPort(ARIES_ADMIN_PORT_2))
+                .url("http://" + ariesContainer2.getHost() + ":" + ariesContainer2.getMappedPort(ARIES_ADMIN_PORT_2))
                 .build();
     }
 }
