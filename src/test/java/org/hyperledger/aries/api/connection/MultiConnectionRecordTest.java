@@ -23,6 +23,27 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class MultiConnectionRecordTest extends MultiIntegrationTestBase {
 
+    protected String extraAgentArgs(int agentNum) {
+        switch (agentNum) {
+            case 1:
+                return " --genesis-url https://indy-test.bosch-digital.de/genesis"
+                     + " --auto-ping-connection"
+                     + " --wallet-type indy"
+                     + " --wallet-name agent1"
+                     + " --wallet-key agent1key"
+                     + " --auto-provision";
+            case 2:
+                return " --genesis-url https://indy-test.bosch-digital.de/genesis"
+                     + " --auto-ping-connection"
+                     + " --wallet-type indy"
+                     + " --wallet-name agent2"
+                     + " --wallet-key agent2key"
+                     + " --auto-provision";
+            default:
+                return super.extraAgentArgs(agentNum);
+        }
+    }
+
     @Test
     void testCreateConnectionBetweenAgents() throws Exception {
         String alias_1 = "my_test_1";

@@ -45,13 +45,8 @@ public abstract class MultiIntegrationTestBase {
                     + " --admin-insecure-mode"
                     + " --log-level debug"
                     + " -e http://agent_1:" + ARIES_ENDPOINT_PORT
-                    + " --genesis-url https://indy-test.bosch-digital.de/genesis"
-                    + " --auto-ping-connection"
-                    + " --wallet-type indy"
-                    + " --wallet-name agent1"
-                    + " --wallet-key agent1key"
-                    + " --auto-provision"
-                    + " --plugin aries_cloudagent.messaging.jsonld")
+                    + " --plugin aries_cloudagent.messaging.jsonld"
+                    + this.extraAgentArgs(1))
             .waitingFor(Wait.defaultWaitStrategy())
             .withLogConsumer(new Slf4jLogConsumer(log))
             ;
@@ -68,16 +63,15 @@ public abstract class MultiIntegrationTestBase {
                     + " --admin-insecure-mode"
                     + " --log-level debug"
                     + " -e http://agent_2:" + ARIES_ENDPOINT_PORT_2
-                    + " --genesis-url https://indy-test.bosch-digital.de/genesis"
-                    + " --auto-ping-connection"
-                    + " --wallet-type indy"
-                    + " --wallet-name agent2"
-                    + " --wallet-key agent2key"
-                    + " --auto-provision"
-                    + " --plugin aries_cloudagent.messaging.jsonld")
+                    + " --plugin aries_cloudagent.messaging.jsonld"
+                    + this.extraAgentArgs(2))
             .waitingFor(Wait.defaultWaitStrategy())
             .withLogConsumer(new Slf4jLogConsumer(log))
             ;
+
+    protected String extraAgentArgs(int agentNum) {
+        return " --no-ledger";
+    }
 
     @BeforeEach
     void setup() {
