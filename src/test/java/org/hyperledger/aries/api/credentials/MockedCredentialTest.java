@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api.credentials;
 
 import okhttp3.mockwebserver.MockResponse;
+import org.hyperledger.acy_py.generated.model.CredentialDefinitionGetResult;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition;
 import org.hyperledger.aries.api.credential_definition.CredentialDefinition.CredentialDefinitionRequest;
@@ -43,9 +44,9 @@ class MockedCredentialTest extends MockedTestBase {
         String json = loader.load("files/credentialDefinition.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<CredentialDefinition> cd = ac.credentialDefinitionsGetById("mocked");
+        final Optional<CredentialDefinitionGetResult> cd = ac.credentialDefinitionsGetById("mocked");
         Assertions.assertTrue(cd.isPresent());
-        Assertions.assertEquals("108", cd.get().getSchemaId());
+        Assertions.assertEquals("108", cd.get().getCredentialDefinition().getSchemaId());
     }
 
     @Test

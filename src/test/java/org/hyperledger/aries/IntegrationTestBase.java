@@ -21,7 +21,7 @@ public abstract class IntegrationTestBase {
 
     private final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
-    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.2";
+    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3-rc0";
     public static final Integer ARIES_ADMIN_PORT = 8031;
 
     protected AriesClient ac;
@@ -36,6 +36,7 @@ public abstract class IntegrationTestBase {
                     + " --log-level debug"
                     + " -e http://0.0.0.0"
                     + " --no-ledger"
+                    + " --auto-disclose-features"
                     + " --plugin aries_cloudagent.messaging.jsonld")
             .waitingFor(Wait.defaultWaitStrategy())
             .withLogConsumer(new Slf4jLogConsumer(log))

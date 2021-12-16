@@ -33,6 +33,8 @@ import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.credentials.CredentialRevokedFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
+import org.hyperledger.aries.api.discover_features.DiscoverFeaturesQueryFilter;
+import org.hyperledger.aries.api.discover_features.DiscoverFeaturesRecordsFilter;
 import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.*;
@@ -490,13 +492,24 @@ public class AriesClient extends BaseClient {
     /**
      * Gets a credential definition from the ledger
      * @param id credential definition id
-     * @return {@link CredentialDefinition}
+     * @return {@link CredentialDefinitionGetResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<CredentialDefinition> credentialDefinitionsGetById(@NonNull String id) throws IOException {
+    public Optional<CredentialDefinitionGetResult> credentialDefinitionsGetById(@NonNull String id) throws IOException {
         Request req = buildGet(url + "/credential-definitions/" + id);
-        final Optional<String> resp = raw(req);
-        return getWrapped(resp, "credential_definition", CredentialDefinition.class);
+        return call(req, CredentialDefinitionGetResult.class);
+    }
+
+    /**
+     * Writes a credential definition non-secret record to the wallet
+     * @param id credential definition id
+     * @return {@link CredentialDefinitionGetResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredentialDefinitionGetResult> credentialDefinitionsWriteRecord(
+            @NonNull String id) throws IOException {
+        Request req = buildPost(url + "/credential-definitions/" + id + "/write_record", EMPTY_JSON);
+        return call(req, CredentialDefinitionGetResult.class);
     }
 
     // ----------------------------------------------------
@@ -542,6 +555,27 @@ public class AriesClient extends BaseClient {
         }
         Request req = buildGet(b.build().toString());
         return call(req, Credential.CredentialRevokedResult.class);
+    }
+
+    /**
+     * Fetch W3C credential from wallet by id
+     * @param credentialId credential id
+     * @return {@link VCRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<VCRecord> credentialW3C(@NonNull String credentialId) throws IOException {
+        Request req = buildGet(url + "/credential/w3c/" + credentialId);
+        return call(req, VCRecord.class);
+    }
+
+    /**
+     * Remove W3C credential from wallet by id
+     * @param credentialId credential id
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void credentialW3CRemove(@NonNull String credentialId) throws IOException {
+        Request req = buildDelete(url + "/credential/w3c/" + credentialId);
+        call(req);
     }
 
     /**
@@ -594,6 +628,17 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Fetch W3C credentials from wallet
+     * @param w3cReq {@link W3CCredentialsListRequest}
+     * @return {@link VCRecordList}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<VCRecordList> credentialsW3C(@NonNull W3CCredentialsListRequest w3cReq) throws IOException {
+        Request req = buildPost(url + "/credentials/w3c", w3cReq);
+        return call(req, VCRecordList.class);
+    }
+
+    /**
      * Fetch credentials ids from wallet
      * @return only the credential IDs
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -616,8 +661,6 @@ public class AriesClient extends BaseClient {
         }
         return result;
     }
-
-    // TODO W3C queries
 
     // ----------------------------------------------------
     // DID Exchange - Connection management via DID exchange
@@ -695,6 +738,46 @@ public class AriesClient extends BaseClient {
         Request req = buildPost(b.toString(), EMPTY_JSON);
         return call(req, ConnectionRecord.class);
     }
+
+    // ----------------------------------------------------
+    // Discover Features V1 - Feature discovery v1
+    // ----------------------------------------------------
+
+    /**
+     * Query supported features
+     * @param filter {@link DiscoverFeaturesQueryFilter}
+     * @return {@link V10DiscoveryRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V10DiscoveryRecord> discoverFeaturesQuery(
+            @Nullable DiscoverFeaturesQueryFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features/query")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V10DiscoveryRecord.class);
+    }
+
+    /**
+     * Discover Features records
+     * @param filter {@link DiscoverFeaturesRecordsFilter}
+     * @return {@link V10DiscoveryRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V10DiscoveryRecord> discoverFeaturesRecords(
+            @Nullable DiscoverFeaturesRecordsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features/records")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V10DiscoveryRecord.class);
+    }
+
+    // ----------------------------------------------------
+    // Discover Features V2 - Feature discovery v2
+    // ----------------------------------------------------
 
     // ----------------------------------------------------
     // Endorse Transaction - Endorse a transaction
