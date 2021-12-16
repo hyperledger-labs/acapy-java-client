@@ -14,18 +14,25 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * QueryResult
+ * Disclosures
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class QueryResult {
-    public static final String SERIALIZED_NAME_RESULTS = "results";
-    @SerializedName(SERIALIZED_NAME_RESULTS)
-    private Map<String, Object> results = null;
+public class Disclosures {
+    public static final String SERIALIZED_NAME_AT_ID = "@id";
+    @SerializedName(SERIALIZED_NAME_AT_ID)
+    private String atId;
+    public static final String SERIALIZED_NAME_AT_TYPE = "@type";
+    @SerializedName(SERIALIZED_NAME_AT_TYPE)
+    private String atType;
+    public static final String SERIALIZED_NAME_DISCLOSURES = "disclosures";
+    @SerializedName(SERIALIZED_NAME_DISCLOSURES)
+    private List<Object> disclosures = new ArrayList<>();
 }

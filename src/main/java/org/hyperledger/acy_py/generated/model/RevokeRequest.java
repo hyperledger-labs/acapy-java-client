@@ -23,16 +23,28 @@ import com.google.gson.annotations.SerializedName;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class RevokeRequest {
+    public static final String SERIALIZED_NAME_COMMENT = "comment";
+    @SerializedName(SERIALIZED_NAME_COMMENT)
+    private String comment;
+    public static final String SERIALIZED_NAME_CONNECTION_ID = "connection_id";
+    @SerializedName(SERIALIZED_NAME_CONNECTION_ID)
+    private String connectionId;
     public static final String SERIALIZED_NAME_CRED_EX_ID = "cred_ex_id";
     @SerializedName(SERIALIZED_NAME_CRED_EX_ID)
     private String credExId;
     public static final String SERIALIZED_NAME_CRED_REV_ID = "cred_rev_id";
     @SerializedName(SERIALIZED_NAME_CRED_REV_ID)
     private String credRevId;
+    public static final String SERIALIZED_NAME_NOTIFY = "notify";
+    @SerializedName(SERIALIZED_NAME_NOTIFY)
+    private Boolean notify;
     public static final String SERIALIZED_NAME_PUBLISH = "publish";
     @SerializedName(SERIALIZED_NAME_PUBLISH)
     private Boolean publish;
     public static final String SERIALIZED_NAME_REV_REG_ID = "rev_reg_id";
     @SerializedName(SERIALIZED_NAME_REV_REG_ID)
     private String revRegId;
+    public static final String SERIALIZED_NAME_THREAD_ID = "thread_id";
+    @SerializedName(SERIALIZED_NAME_THREAD_ID)
+    private String threadId;
 }
