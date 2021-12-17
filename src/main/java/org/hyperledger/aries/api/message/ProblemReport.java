@@ -7,6 +7,8 @@
  */
 package org.hyperledger.aries.api.message;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,10 +30,27 @@ public class ProblemReport {
     private Thread thread;
 
     @SerializedName("description")
-    private String description;
+    private JsonElement description;
 
     @Data @NoArgsConstructor @AllArgsConstructor
     public static final class Thread {
         private String thid;
+    }
+
+    public String resolveProblemDescription() {
+        if (description != null && description.isJsonObject()) {
+            return description.getAsJsonObject().get("en").getAsString();
+        }
+        if (description != null && description.isJsonPrimitive()) {
+            return description.getAsString();
+        }
+        return null;
+    }
+
+    public String resolveProblemCode() {
+        if (description != null && description.isJsonObject()) {
+            return description.getAsJsonObject().get("code").getAsString();
+        }
+        return null;
     }
 }

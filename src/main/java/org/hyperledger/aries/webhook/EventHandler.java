@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.webhook;
 
+import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.message.ProblemReport;
@@ -53,6 +54,8 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, EndorseTransactionRecord.class).ifPresent(this::handleEndorseTransaction);
             } else if ("problem_report".equals(eventType)) {
                 parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
+            } else if ("dicover_feature".equals(eventType)) { // TODO fix typo when fixed upstream
+                parser.parseValueSave(json, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
@@ -77,6 +80,10 @@ public abstract class EventHandler {
 
     public void handleCredentialV2(V20CredExRecord v20Credential) {
         log.debug("Issue Credential V2 Event: {}", v20Credential);
+    }
+
+    public void handleDiscoverFeature(DiscoverFeatureEvent discoverFeature) {
+        log.debug("Discover Feature Event: {}", discoverFeature);
     }
 
     public void handleIssueCredentialV2Indy(V2IssueIndyCredentialEvent revocationInfo) {
