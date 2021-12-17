@@ -14,6 +14,7 @@ import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.message.BasicMessage;
+import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
 import org.hyperledger.aries.api.trustping.PingEvent;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
@@ -56,6 +57,8 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
             } else if ("dicover_feature".equals(eventType)) { // TODO fix typo when fixed upstream
                 parser.parseValueSave(json, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
+            } else if ("revocation-notification".equals(eventType)) {
+                parser.parseValueSave(json, RevocationNotificationEvent.class).ifPresent(this::handleRevocationNotification);
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
@@ -100,6 +103,10 @@ public abstract class EventHandler {
 
     public void handleRevocation(RevocationEvent revocation) {
         log.debug("Revocation: {}", revocation);
+    }
+
+    public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) {
+        log.debug("Revocation Notification: {}", revocationNotification);
     }
 
     public void handleEndorseTransaction(EndorseTransactionRecord transaction) {
