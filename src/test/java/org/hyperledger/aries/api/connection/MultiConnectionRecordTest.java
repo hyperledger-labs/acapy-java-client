@@ -77,7 +77,7 @@ public class MultiConnectionRecordTest extends MultiIntegrationTestBase {
                 ConnectionReceiveInvitationFilter
                         .builder()
                         .alias(alias_2)
-                        .autoAccept(false)
+                        .autoAccept(Boolean.FALSE)
                         .build());
         assertTrue(conn2.isPresent());
 
