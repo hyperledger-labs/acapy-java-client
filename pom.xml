@@ -57,7 +57,7 @@
         <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.13.0</jackson.version>
+        <jackson.version>2.13.1</jackson.version>
         <junit.jupiter.api.version>5.8.2</junit.jupiter.api.version>
         <kotlin.version>1.5.32</kotlin.version>
         <lombok.version>1.18.22</lombok.version>
@@ -168,7 +168,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.6</version>
+            <version>1.2.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -179,7 +179,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.3.0</version>
+                <version>5.3.1</version>
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
                     <skip>true</skip>
@@ -218,7 +218,7 @@
             <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.17.0</version>
+                <version>2.17.1</version>
                 <configuration>
                     <includes>
                         <include>org/hyperledger/acy_py/generated/</include>
@@ -300,7 +300,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.12.0</version>
+                        <version>1.12.2</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -329,7 +329,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.5.0.0</version>
+                <version>4.5.2.0</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -354,7 +354,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.5.0</version>
+                        <version>4.5.2</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -394,10 +394,10 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.5.0</version>
+                <version>6.5.2</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
-                    <skip>false</skip>
+                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -493,12 +493,12 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.9.1</version>
+                    <version>3.10.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0-M1</version>
+                    <version>3.0.0-M2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
