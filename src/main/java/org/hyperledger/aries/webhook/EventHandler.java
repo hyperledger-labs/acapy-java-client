@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -10,6 +10,7 @@ package org.hyperledger.aries.webhook;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
+import org.hyperledger.aries.api.issue_credential_v2.V2IssueLDCredentialEvent;
 import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
@@ -45,6 +46,8 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, V20CredExRecord.class).ifPresent(this::handleCredentialV2);
             } else if ("issue_credential_v2_0_indy".equals(eventType)) {
                 parser.parseValueSave(json, V2IssueIndyCredentialEvent.class).ifPresent(this::handleIssueCredentialV2Indy);
+            } else if ("issue_credential_v2_0_ld_proof".equals(eventType)) {
+                parser.parseValueSave(json, V2IssueLDCredentialEvent.class).ifPresent(this::handleIssueCredentialV2LD);
             } else if ("basicmessages".equals(eventType)) {
                 parser.parseValueSave(json, BasicMessage.class).ifPresent(this::handleBasicMessage);
             } else if ("ping".equals(eventType)) {
@@ -89,8 +92,12 @@ public abstract class EventHandler {
         log.debug("Discover Feature Event: {}", discoverFeature);
     }
 
-    public void handleIssueCredentialV2Indy(V2IssueIndyCredentialEvent revocationInfo) {
-        log.debug("Issue Credential V2 Indy Event: {}", revocationInfo);
+    public void handleIssueCredentialV2Indy(V2IssueIndyCredentialEvent credentialInfo) {
+        log.debug("Issue Credential V2 Indy Event: {}", credentialInfo);
+    }
+
+    public void handleIssueCredentialV2LD(V2IssueLDCredentialEvent credentialInfo) {
+        log.debug("Issue LD Credential V2 Event: {}", credentialInfo);
     }
 
     public void handleBasicMessage(BasicMessage message) {
