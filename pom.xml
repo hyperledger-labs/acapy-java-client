@@ -61,6 +61,7 @@
         <junit.jupiter.api.version>5.8.2</junit.jupiter.api.version>
         <kotlin.version>1.5.32</kotlin.version>
         <lombok.version>1.18.22</lombok.version>
+        <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
         <pmd.version>6.41.0</pmd.version>
         <testcontainers.version>1.16.2</testcontainers.version>
@@ -126,7 +127,7 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>1.6.3</version>
+            <version>1.6.4</version>
         </dependency>
         <!-- Scope Test -->
         <dependency>
@@ -254,12 +255,38 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>${lombok.maven.plugin.version}</version>
+                <configuration>
+                    <addOutputDirectory>false</addOutputDirectory>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/generated-sources/delombok</outputDirectory>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
                     <excludePackageNames>*.generated</excludePackageNames>
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <sourcepath>${project.build.directory}/generated-sources/delombok</sourcepath>
                 </configuration>
                 <executions>
                     <execution>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -20,6 +20,8 @@
 package org.hyperledger.aries.api.issue_credential_v2;
 
 
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.V20CredIssue;
 import org.hyperledger.acy_py.generated.model.V20CredPreview;
 import org.hyperledger.acy_py.generated.model.V20CredRequest;
@@ -28,16 +30,12 @@ import org.hyperledger.aries.api.issue_credential_v1.*;
 /**
  * V20CredExRecord
  */
-@SuppressWarnings("unused")
-@lombok.Data
-@lombok.AllArgsConstructor
-@lombok.NoArgsConstructor
-@lombok.Builder
-public class V20CredExRecord implements CredExStateTranslator {
-    private Boolean autoIssue;
-    private Boolean autoOffer;
-    private Boolean autoRemove;
-    private Boolean trace;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
+public class V20CredExRecord extends BaseCredExRecord {
 
     private V20CredExRecordByFormat byFormat;
 
@@ -47,69 +45,12 @@ public class V20CredExRecord implements CredExStateTranslator {
     private V20CredIssue credIssue;
     private V20CredRequest credRequest;
 
-    private String connectionId;
-    private String createdAt;
-    private String credExId;
-    private String errorMsg;
-    private String threadId;
-    private String parentThreadId;
-    private String updatedAt;
-
-    private CredentialExchangeInitiator initiator;
-    private CredentialExchangeRole role;
-    private CredentialExchangeState state;
-
-    public boolean autoIssueEnabled() {
-        return autoIssue != null && autoIssue;
-    }
-
-    public boolean autoOfferEnabled() {
-        return autoOffer != null && autoOffer;
-    }
-
-    public boolean autoRemoveEnabled() {
-        return autoRemove != null && autoRemove;
-    }
-
     public boolean payloadIsIndy() {
         return byFormat != null && byFormat.hasIndyPayload();
     }
 
     public boolean payloadIsLdProof() {
         return byFormat != null && byFormat.hasLdProof();
-    }
-
-    /** Convert v2 indy credential exchange record in state proposal-received to a v1 record */
-    public V1CredentialExchange toV1CredentialExchangeFromProposal() {
-        return V1CredentialExchange
-                .builder()
-                .autoIssue(autoIssue)
-                .autoOffer(autoOffer)
-                .autoRemove(autoRemove)
-                .trace(trace)
-
-                .connectionId(connectionId)
-                .createdAt(createdAt)
-                .credentialExchangeId(credExId)
-                .errorMsg(errorMsg)
-                .threadId(threadId)
-                .parentThreadId(parentThreadId)
-                .updatedAt(updatedAt)
-                .initiator(initiator)
-
-                .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
-                .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
-                        .builder()
-                        .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
-                        .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
-                                .builder()
-                                .attributes(getCredProposal().getCredentialPreview() != null ? getCredProposal().getCredentialPreview().getAttributes() : null)
-                                .build())
-                        .build())
-
-                .role(role)
-                .state(state)
-                .build();
     }
 
     public V20CredExRecordByFormat.LdProof resolveLDCredOffer() {

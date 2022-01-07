@@ -22,5 +22,6 @@ public class V2IssueLDCredentialEvent {
     private String updatedAt;
     private String createdAt;
     private String credExLdProofId;
+    /** w3c credential record_id */
     private String credIdStored; // only set when holder
 }
