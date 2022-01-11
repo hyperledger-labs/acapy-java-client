@@ -75,8 +75,8 @@ public class V2ToV1IndyCredentialConverter {
     }
 
     /**
-     * Converts v2 record into a {@link Credential}
-     * Only works when the exchange state is 'done'
+     * Converts v2 indy record into a {@link Credential}
+     * Only works when the exchange state is 'done' and type is 'indy'
      * @param v2Record {@link V20CredExRecord}
      * @return optional {@link Credential}
      */
