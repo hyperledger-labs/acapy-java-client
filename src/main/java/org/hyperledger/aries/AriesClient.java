@@ -33,8 +33,12 @@ import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.credentials.CredentialRevokedFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
+import org.hyperledger.aries.api.discover_features.DiscoverFeaturesQueryFilter;
+import org.hyperledger.aries.api.discover_features.DiscoverFeaturesRecordsFilter;
+import org.hyperledger.aries.api.discover_features_v2.DiscoverFeaturesV2QueriesFilter;
 import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
+import org.hyperledger.aries.api.introduction.ConnectionStartIntroductionFilter;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
@@ -45,8 +49,7 @@ import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
 import org.hyperledger.aries.api.jsonld.*;
-import org.hyperledger.aries.api.ledger.DidVerkeyResponse;
-import org.hyperledger.aries.api.ledger.EndpointResponse;
+import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.ledger.TAAAccept;
 import org.hyperledger.aries.api.ledger.TAAInfo;
 import org.hyperledger.aries.api.trustping.PingRequest;
@@ -490,13 +493,24 @@ public class AriesClient extends BaseClient {
     /**
      * Gets a credential definition from the ledger
      * @param id credential definition id
-     * @return {@link CredentialDefinition}
+     * @return {@link CredentialDefinitionGetResult}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<CredentialDefinition> credentialDefinitionsGetById(@NonNull String id) throws IOException {
+    public Optional<CredentialDefinitionGetResult> credentialDefinitionsGetById(@NonNull String id) throws IOException {
         Request req = buildGet(url + "/credential-definitions/" + id);
-        final Optional<String> resp = raw(req);
-        return getWrapped(resp, "credential_definition", CredentialDefinition.class);
+        return call(req, CredentialDefinitionGetResult.class);
+    }
+
+    /**
+     * Writes a credential definition non-secret record to the wallet
+     * @param id credential definition id
+     * @return {@link CredentialDefinitionGetResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredentialDefinitionGetResult> credentialDefinitionsWriteRecord(
+            @NonNull String id) throws IOException {
+        Request req = buildPost(url + "/credential-definitions/" + id + "/write_record", EMPTY_JSON);
+        return call(req, CredentialDefinitionGetResult.class);
     }
 
     // ----------------------------------------------------
@@ -542,6 +556,27 @@ public class AriesClient extends BaseClient {
         }
         Request req = buildGet(b.build().toString());
         return call(req, Credential.CredentialRevokedResult.class);
+    }
+
+    /**
+     * Fetch W3C credential from wallet by id
+     * @param credentialId credential id
+     * @return {@link VCRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<VCRecord> credentialW3C(@NonNull String credentialId) throws IOException {
+        Request req = buildGet(url + "/credential/w3c/" + credentialId);
+        return call(req, VCRecord.class);
+    }
+
+    /**
+     * Remove W3C credential from wallet by id
+     * @param credentialId credential id
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void credentialW3CRemove(@NonNull String credentialId) throws IOException {
+        Request req = buildDelete(url + "/credential/w3c/" + credentialId);
+        call(req);
     }
 
     /**
@@ -594,6 +629,17 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Fetch W3C credentials from wallet
+     * @param w3cReq {@link W3CCredentialsListRequest}
+     * @return {@link VCRecordList}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<VCRecordList> credentialsW3C(@NonNull W3CCredentialsListRequest w3cReq) throws IOException {
+        Request req = buildPost(url + "/credentials/w3c", w3cReq);
+        return call(req, VCRecordList.class);
+    }
+
+    /**
      * Fetch credentials ids from wallet
      * @return only the credential IDs
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -616,8 +662,6 @@ public class AriesClient extends BaseClient {
         }
         return result;
     }
-
-    // TODO W3C queries
 
     // ----------------------------------------------------
     // DID Exchange - Connection management via DID exchange
@@ -694,6 +738,78 @@ public class AriesClient extends BaseClient {
         }
         Request req = buildPost(b.toString(), EMPTY_JSON);
         return call(req, ConnectionRecord.class);
+    }
+
+    // ----------------------------------------------------
+    // Discover Features V1 - Feature discovery v1
+    // ----------------------------------------------------
+
+    /**
+     * Query supported features
+     * @param filter {@link DiscoverFeaturesQueryFilter}
+     * @return {@link V10DiscoveryRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V10DiscoveryRecord> discoverFeaturesQuery(
+            @Nullable DiscoverFeaturesQueryFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features/query")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V10DiscoveryRecord.class);
+    }
+
+    /**
+     * Discover Features records
+     * @param filter {@link DiscoverFeaturesRecordsFilter}
+     * @return {@link V10DiscoveryExchangeListResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V10DiscoveryExchangeListResult> discoverFeaturesRecords(
+            @Nullable DiscoverFeaturesRecordsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features/records")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V10DiscoveryExchangeListResult.class);
+    }
+
+    // ----------------------------------------------------
+    // Discover Features V2 - Feature discovery v2
+    // ----------------------------------------------------
+
+    /**
+     * Query supported v2 features
+     * @param filter {@link DiscoverFeaturesV2QueriesFilter}
+     * @return {@link V20DiscoveryRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20DiscoveryRecord> discoverFeaturesV2Queries(
+            @Nullable DiscoverFeaturesV2QueriesFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features-2.0/queries")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V20DiscoveryRecord.class);
+    }
+
+    /**
+     * Discover features v2 records
+     * @param filter {@link DiscoverFeaturesRecordsFilter}
+     * @return {@link V20DiscoveryExchangeListResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20DiscoveryExchangeListResult> discoverFeaturesV2Records(
+            @Nullable DiscoverFeaturesRecordsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/discover-features-2.0/records")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        return call(req, V20DiscoveryExchangeListResult.class);
     }
 
     // ----------------------------------------------------
@@ -842,7 +958,20 @@ public class AriesClient extends BaseClient {
     // Introduction - introduction of known parties
     // ----------------------------------------------------
 
-    // TODO
+    /**
+     * Start an introduction between two connections
+     * @param connectionId connection id
+     * @param filter {@link ConnectionStartIntroductionFilter}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void connectionsStartIntroduction(
+            @NonNull String connectionId, @NonNull ConnectionStartIntroductionFilter filter) throws IOException{
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/connections/" + connectionId + "/start-introduction")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        call(req);
+    }
 
     // ----------------------------------------------------
     // Issue Credential - Credential Issue v1.0
@@ -1034,6 +1163,18 @@ public class AriesClient extends BaseClient {
     public Optional<V20CredExRecord> issueCredentialV2Create(@NonNull V20IssueCredSchemaCore request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/create", request);
+        return call(req, V20CredExRecord.class);
+    }
+
+    /**
+     * Create a credential offer, independent of any proposal or connection
+     * @param request {@link V20CredOfferConnFreeRequest}
+     * @return {@link V20CredExRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<V20CredExRecord> issueCredentialV2CreateOffer(@NonNull V20CredOfferConnFreeRequest request)
+            throws IOException {
+        Request req = buildPost(url + "/issue-credential-2.0/create-offer", request);
         return call(req, V20CredExRecord.class);
     }
 
@@ -1302,6 +1443,66 @@ public class AriesClient extends BaseClient {
         b.addQueryParameter("did", did);
         Request req = buildGet(b.build().toString());
         return call(req, DidVerkeyResponse.class);
+    }
+
+    /**
+     * Get the role from the NYM registration of a public DID.
+     * @param did did of interest
+     * @return {@link GetNymRoleResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @since 0.7.3
+     */
+    public Optional<GetNymRoleResponse> ledgerGetNymRole(@NonNull String did) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/get-nym-role")).newBuilder();
+        b.addQueryParameter("did", did);
+        return call(buildGet(b.build().toString()), GetNymRoleResponse.class);
+    }
+
+    /**
+     * Fetch the multiple ledger configuration currently in use
+     * @return {@link LedgerConfig}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @since 0.7.3
+     */
+    public Optional<LedgerConfig> ledgerMultipleConfig() throws IOException {
+        Request req = buildGet(url + "/ledger/multiple/config");
+        return call(req, LedgerConfig.class);
+    }
+
+    /**
+     * Fetch the current write ledger
+     * @return {@link WriteLedgerRequest}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @since 0.7.3
+     */
+    public Optional<WriteLedgerRequest> ledgerMultipleGetWriteLedger() throws IOException {
+        Request req = buildGet(url + "/ledger/multiple/get-write-ledger");
+        return call(req, WriteLedgerRequest.class);
+    }
+
+    /**
+     * Send a NYM registration to the ledger
+     * @param filter {@link RegisterNymFilter}
+     * @return {@link RegisterLedgerNymResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @since 0.7.3
+     */
+    public Optional<RegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/register-nym")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPost(b.build().toString(), EMPTY_JSON);
+        return call(req, RegisterLedgerNymResponse.class);
+    }
+
+    /**
+     * Rotate key pair for public did
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     * @since 0.7.3
+     */
+    public void ledgerRotatePublicDidKeypair() throws IOException {
+        Request req = buildPatch(url + "/ledger/rotate-public-did-keypair", EMPTY_JSON);
+        call(req);
     }
 
     /**
@@ -1998,6 +2199,18 @@ public class AriesClient extends BaseClient {
         }
         Request req = buildGet(b.toString());
         return getWrapped(raw(req), "schema_ids", List.class);
+    }
+
+    /**
+     * Write schema non-secret record to the ledger
+     * @param schemaId schema id
+     * @return {@link Schema}
+     * @throws IOException
+     * @since 0.7.3
+     */
+    public Optional<Schema> schemasWriteRecord(@NonNull String schemaId) throws IOException {
+        Request req = buildPost(url + "/schemas/" + schemaId + "/write_record", EMPTY_JSON);
+        return getWrapped(raw(req), "schema", Schema.class);
     }
 
     // ----------------------------------------------------

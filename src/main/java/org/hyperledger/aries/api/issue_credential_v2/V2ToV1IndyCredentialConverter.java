@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -33,22 +33,30 @@ public class V2ToV1IndyCredentialConverter {
         return new V2ToV1IndyCredentialConverter();
     }
 
+    /**
+     * Convert v2 indy credential exchange record in state proposal-received to a v1 record
+     * @param v2Record {@link V20CredExRecord}
+     * @return {@link V1CredentialExchange}
+     */
+    public V1CredentialExchange toV1Proposal(@NonNull V20CredExRecord v2Record) {
+        V20CredExRecordByFormat byFormat = v2Record.getByFormat();
+        V20CredProposal credProposal = v2Record.getCredProposal();
+        return v2Record.toV1Builder()
+                .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
+                .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
+                        .builder()
+                        .schemaId(byFormat != null ? byFormat.findSchemaIdInIndyProposal() : null)
+                        .credentialProposal(V1CredentialExchange.CredentialProposalDict.CredentialProposal
+                                .builder()
+                                .attributes(credProposal.getCredentialPreview() != null ? credProposal.getCredentialPreview().getAttributes() : null)
+                                .build())
+                        .build())
+                .build();
+    }
+
     public V1CredentialExchange toV1Offer(@NonNull V20CredExRecord v2Record) {
         IdWrapper ids = getIdsFromOffer(v2Record);
-        return V1CredentialExchange
-                .builder()
-                .state(v2Record.getState())
-                .credentialExchangeId(v2Record.getCredExId())
-                .initiator(v2Record.getInitiator())
-                .role(v2Record.getRole())
-                .updatedAt(v2Record.getUpdatedAt())
-                .autoRemove(v2Record.getAutoRemove())
-                .autoOffer(v2Record.getAutoOffer())
-                .autoIssue(v2Record.getAutoIssue())
-                .trace(v2Record.getTrace())
-                .threadId(v2Record.getThreadId())
-                .createdAt(v2Record.getCreatedAt())
-                .connectionId(v2Record.getConnectionId())
+        return v2Record.toV1Builder()
                 .credentialDefinitionId(ids.getCredentialDefinitionId())
                 .schemaId(ids.getSchemaId())
                 .credentialProposalDict(V1CredentialExchange.CredentialProposalDict
@@ -67,8 +75,8 @@ public class V2ToV1IndyCredentialConverter {
     }
 
     /**
-     * Converts v2 record into a {@link Credential}
-     * Only works when the exchange state is 'done'
+     * Converts v2 indy record into a {@link Credential}
+     * Only works when the exchange state is 'done' and type is 'indy'
      * @param v2Record {@link V20CredExRecord}
      * @return optional {@link Credential}
      */

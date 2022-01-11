@@ -14,14 +14,37 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class RevokeRequest {
+
+    private String comment;
+
+    /**
+     * Needed when --notify-revocation flag is set, or notify is true
+     * @since 0.7.3
+     */
+    private String connectionId;
+
     /** Either credential exchange identifier */
     private String credExId;
 
     /** Or credential revocation identifier */
     private String credRevId;
-    /** and revocation registry identifier */
-    private String revRegId;
+
+    /**
+     * Send a notification to the credential recipient
+     * @since 0.7.3
+     */
+    private Boolean notify;
 
     /** If false, needs a call to /revocation/publish-revocations later */
     private Boolean publish;
+
+    /** and revocation registry identifier */
+    private String revRegId;
+
+    /**
+     * Thread ID of the credential exchange message thread resulting in the credential now being revoked;
+     * required if notify is true
+     * @since 0.7.3
+     */
+    private String threadId;
 }

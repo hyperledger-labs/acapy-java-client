@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -21,7 +21,7 @@ public abstract class IntegrationTestBase {
 
     private final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
-    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.2";
+    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3";
     public static final Integer ARIES_ADMIN_PORT = 8031;
 
     protected AriesClient ac;
@@ -36,6 +36,7 @@ public abstract class IntegrationTestBase {
                     + " --log-level debug"
                     + " -e http://0.0.0.0"
                     + " --no-ledger"
+                    + " --auto-disclose-features"
                     + " --plugin aries_cloudagent.messaging.jsonld")
             .waitingFor(Wait.defaultWaitStrategy())
             .withLogConsumer(new Slf4jLogConsumer(log))
