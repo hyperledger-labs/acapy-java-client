@@ -96,18 +96,18 @@ public enum CredentialExchangeState {
     DONE,
 
     /**
+     * Credential has been revoked
+     */
+    @JsonProperty("credential_revoked")
+    @SerializedName(value = "credential_revoked", alternate = {"revoked", "credential-revoked"})
+    CREDENTIAL_REVOKED,
+
+    /**
      * Not an aries state, but useful in business logic reacting on these states
      */
     @JsonProperty("declined")
     @SerializedName("declined")
     DECLINED,
-
-    /**
-     * Not an aries state, but useful in business logic reacting on these states
-     */
-    @JsonProperty("revoked")
-    @SerializedName("revoked")
-    REVOKED,
 
     /**
      * Not an aries state, but useful in business logic reacting on these states

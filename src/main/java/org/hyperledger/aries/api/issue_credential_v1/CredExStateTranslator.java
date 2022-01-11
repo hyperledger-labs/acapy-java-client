@@ -66,7 +66,7 @@ public interface CredExStateTranslator {
     }
 
     default boolean stateIsRevoked() {
-        return CredentialExchangeState.REVOKED.equals(getState());
+        return CredentialExchangeState.CREDENTIAL_REVOKED.equals(getState());
     }
 
     default boolean roleIsIssuer() {

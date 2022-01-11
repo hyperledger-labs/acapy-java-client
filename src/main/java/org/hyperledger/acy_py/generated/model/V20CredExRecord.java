@@ -195,7 +195,9 @@ public class V20CredExRecord {
 
         CREDENTIAL_RECEIVED("credential-received"),
 
-        DONE("done");
+        DONE("done"),
+
+        CREDENTIAL_REVOKED("credential-revoked");
 
         private String value;
 
