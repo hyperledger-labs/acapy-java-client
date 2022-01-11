@@ -54,7 +54,7 @@
         <gpg.passphrase>empty</gpg.passphrase>
         <!-- Plugin Versions -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
-        <maven-release-plugin.version>3.0.0-M4</maven-release-plugin.version>
+        <maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <!-- Dependency Versions -->
         <jackson.version>2.13.1</jackson.version>
@@ -356,7 +356,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.5.2.0</version>
+                <version>4.5.3.0</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
