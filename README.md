@@ -13,7 +13,7 @@ It is currently work in progress and not all endpoints of the agent are present 
 <dependency>
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
-   <version>0.7.17</version>
+   <version>0.7.20</version>
 </dependency>
 ```
 
@@ -52,13 +52,14 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 
 ## Version Compatibility
 
-| Client Version | ACA-PY Version  |
-|----------------|-----------------|
-| 0.7.0-pre.2    | 0.7.0-pre.2     |
-| 0.7.0-pre.3.2  | 0.7.0-pre.3     |
-| 0.7.0-pre.3.6  | 0.7.0.rc1       |
-| 0.7.0          | 0.7.0           |
-| > 0.7.6        | 0.7.1, 0.7.2    |
+| Client Version | ACA-PY Version |
+|---------------|----------------|
+| 0.7.0-pre.2   | 0.7.0-pre.2    |
+| 0.7.0-pre.3.2 | 0.7.0-pre.3    |
+| 0.7.0-pre.3.6 | 0.7.0.rc1      |
+| 0.7.0         | 0.7.0          |
+| 0.7.6         | 0.7.1, 0.7.2   |
+| 0.7.18        | 0.7.3          |
 
 ## Implemented Endpoints
 
@@ -89,17 +90,27 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 | POST   | /credential-definitions                                     | :white_check_mark: |
 | GET    | /credential-definitions/created                             | :white_check_mark: |
 | GET    | /credential-definitions/{cred_def_id}                       | :white_check_mark: |
+| POST   | /credential-definitions/{cred_def_id}/write_record          | :white_check_mark: |
 |        | **credentials**                                             |                    |
 | GET    | /credentials/mime-types/{credential_id}                     | :white_check_mark: |
 | GET    | /credentials/revoked/{credential_id}                        | :white_check_mark: |
+| GET    | /credential/w3c/{credential_id}                             | :white_check_mark: |
+| DELETE | /credential/w3c/{credential_id}                             | :white_check_mark: |
 | GET    | /credential/{credential_id}                                 | :white_check_mark: |
 | DELETE | /credential/{credential_id}                                 | :white_check_mark: |
 | GET    | /credentials                                                | :white_check_mark: |
+| POST   | /credentials/w3c                                            | :white_check_mark: |
 |        | **did-exchange**                                            |                    |
 | POST   | /didexchange/create-request                                 | :white_check_mark: |
 | POST   | /didexchange/receive-request                                | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-invitation                    | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-request                       | :white_check_mark: |
+|        | **discover-features**                                       |                    |
+| GET    | /discover-features/query                                    | :white_check_mark: |
+| GET    | /discover-features/records                                  | :white_check_mark: |
+|        | **discover-features v2.0**                                  |                    |
+| GET    | /discover-features-2.0/queries                              | :white_check_mark: |
+| GET    | /discover-features-2.0/records                              | :white_check_mark: |
 |        | **endorse-transaction**                                     |                    |
 | POST   | /transaction/{tran_id}/resend                               | :white_check_mark: |
 | POST   | /transactions                                               | :white_check_mark: |
@@ -112,6 +123,7 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 | POST   | /transactions/{tran_id}/refuse                              | :white_check_mark: |
 | POST   | /transactions/{tran_id}/write                               | :white_check_mark: |
 |        | **introduction**                                            |                    |
+| POST   | /connections/{conn_id}/start-introduction                   | :white_check_mark: |
 |        | **issue-credential v1.0**                                   |                    |
 | POST   | /issue-credential/create                                    | :white_check_mark: |
 | POST   | /issue-credential/create-offer                              | :white_check_mark: |
@@ -128,6 +140,7 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 | POST   | /issue-credential/send-proposal                             | :white_check_mark: |
 |        | **issue-credential v2.0**                                   |                    |
 | POST   | /issue-credential-2.0/create                                | :white_check_mark: |
+| POST   | /issue-credential-2.0/create-offer                          | :white_check_mark: |
 | GET    | /issue-credential-2.0/records                               | :white_check_mark: |
 | GET    | /issue-credential-2.0/records/{cred_ex_id}                  | :white_check_mark: |
 | DELETE | /issue-credential-2.0/records/{cred_ex_id}                  | :white_check_mark: |
@@ -146,6 +159,11 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 |        | **ledger**                                                  |                    |
 | GET    | /ledger/did-endpoint                                        | :white_check_mark: |
 | GET    | /ledger/did-verkey                                          | :white_check_mark: |
+| GET    | /ledger/get-nym-role                                        | :white_check_mark: |
+| GET    | /ledger/multiple/config                                     | :white_check_mark: |
+| GET    | /ledger/multiple/get-write-ledger                           | :white_check_mark: |
+| POST   | /ledger/register-nym                                        | :white_check_mark: |
+| PATCH  | /ledger/rotate-public-did-keypair                           | :white_check_mark: |
 | GET    | /ledger/taa                                                 | :white_check_mark: |
 | POST   | /ledger/taa/accept                                          | :white_check_mark: |
 |        | **mediation**                                               |                    |
@@ -198,6 +216,7 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 | POST   | /schemas                                                    | :white_check_mark: |
 | GET    | /schemas/created                                            | :white_check_mark: |
 | GET    | /schemas/{schema_id}                                        | :white_check_mark: |
+| POST   | /schemas/{schema_id}/write_record                           | :white_check_mark: |
 |        | **server**                                                  |                    |
 | GET    | /status/config                                              | :white_check_mark: |
 | GET    | /status/live                                                | :white_check_mark: |

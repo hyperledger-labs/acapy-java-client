@@ -1,0 +1,8 @@
+{
+  "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/notification/1.0/problem-report",
+  "@id": "da6a743c-8df0-4b87-a582-f5ba9f65da77",
+  "~thread": {
+    "thid": "eea5deff-d3c8-4053-91f6-62c240b7447d"
+  },
+  "description": "dummy"
+}

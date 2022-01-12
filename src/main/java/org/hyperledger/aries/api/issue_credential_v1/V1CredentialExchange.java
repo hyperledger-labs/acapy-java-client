@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -11,10 +11,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.AttachDecorator;
 import org.hyperledger.acy_py.generated.model.IndyCredAbstract;
 import org.hyperledger.acy_py.generated.model.IndyCredRequest;
@@ -35,19 +33,14 @@ import java.util.stream.Collectors;
  * Result of a credential exchange. E.g. issueCredentialSend() or issueCredentialSendProposal()
  *
  */
-@SuppressWarnings("unused")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class V1CredentialExchange implements CredExStateTranslator {
-    private Boolean autoIssue;
-    private Boolean autoOffer;
-    private Boolean autoRemove;
-    private String connectionId;
-    private String createdAt;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
+public class V1CredentialExchange extends BaseCredExRecord {
+
     private Credential credential;
-    @SerializedName(value = CredDefId.CRED_DEF_ID, alternate = CredDefId.CREDENTIAL_DEFINITION_ID)
-    private String credentialDefinitionId;
-    private String credentialExchangeId;
-    private String credentialId; // only set when the state is credential_acked
     private IndyCredAbstract credentialOffer;
     private CredentialOfferDict credentialOfferDict;
     private CredentialProposalDict credentialProposalDict;
@@ -55,38 +48,14 @@ public class V1CredentialExchange implements CredExStateTranslator {
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject credentialRequestMetadata;
-    private String errorMsg;
-    private CredentialExchangeInitiator initiator;
-    private String parentThreadId;
     private IndyCredential rawCredential;
+
+    private String schemaId;
+    @SerializedName(value = CredDefId.CRED_DEF_ID, alternate = CredDefId.CREDENTIAL_DEFINITION_ID)
+    private String credentialDefinitionId;
+    private String credentialId; // only set when the state is credential_acked
     private String revocRegId;
     private String revocationId;
-    private CredentialExchangeRole role;
-    private String schemaId;
-    private CredentialExchangeState state;
-    private String threadId;
-    private Boolean trace;
-    private String updatedAt;
-
-    public boolean initiatorIsSelf() {
-        return CredentialExchangeInitiator.SELF.equals(getInitiator());
-    }
-
-    public boolean initiatorIsExternal() {
-        return CredentialExchangeInitiator.EXTERNAL.equals(getInitiator());
-    }
-
-    public boolean autoIssueEnabled() {
-        return getAutoIssue() != null && getAutoIssue();
-    }
-
-    public boolean autoOfferEnabled() {
-        return getAutoOffer() != null && getAutoOffer();
-    }
-
-    public boolean autoRemoveEnabled() {
-        return getAutoRemove() != null && getAutoRemove();
-    }
 
     @Data @NoArgsConstructor @AllArgsConstructor @Builder
     public static final class CredentialProposalDict {
@@ -139,5 +108,4 @@ public class V1CredentialExchange implements CredExStateTranslator {
         }
         return result;
     }
-
 }

@@ -1,0 +1,187 @@
+{
+  "updated_at": "2021-12-17T10:03:22.409095Z",
+  "created_at": "2021-12-17T10:03:22.409095Z",
+  "trace": false,
+  "discovery_exchange_id": "a39aca46-5c68-4788-a6dd-2f277f3a90cb",
+  "connection_id": "9e2b1070-a104-4ba9-b3d7-93b8770d8511",
+  "disclosures": {
+    "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/2.0/disclosures",
+    "@id": "3fc9ca10-8b58-45d6-afa3-e9f338814771",
+    "disclosures": [
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/routing/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/notification/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/action-menu/1.0",
+        "roles": [
+          "provider"
+        ]
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/introduction-service/0.1"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/introduction-service/0.1"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/routing/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/basicmessage/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/didexchange/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/out-of-band/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/discover-features/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/issue-credential/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/coordinate-mediation/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/discover-features/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/present-proof/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/present-proof/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/discover-features/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/coordinate-mediation/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/out-of-band/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/connections/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/notification/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/trust_ping/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/issue-credential/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/revocation_notification/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/transactions/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/action-menu/1.0",
+        "roles": [
+          "provider"
+        ]
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/revocation_notification/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/trust_ping/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/connections/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/transactions/1.0"
+      },
+      {
+        "feature-type": "protocol",
+        "id": "https://didcomm.org/basicmessage/1.0"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.vc"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.vc.issue"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.vc.verify"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.transaction.endorse"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.transaction.refuse"
+      },
+      {
+        "feature-type": "goal-code",
+        "id": "aries.transaction.ledger.write"
+      }
+    ]
+  }
+}

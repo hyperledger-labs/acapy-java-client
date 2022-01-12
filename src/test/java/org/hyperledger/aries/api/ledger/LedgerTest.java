@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api.ledger;
 
 import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
+import org.hyperledger.acy_py.generated.model.LedgerConfigList;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.junit.jupiter.api.Assertions;
@@ -36,5 +37,4 @@ class LedgerTest extends IntegrationTestBase {
                 () -> ac.ledgerDidEndpoint("DYqpVuxKRgiKvc5Bz8FWuZ", DIDEndpointWithType.EndpointTypeEnum.PROFILE));
         Assertions.assertTrue(e.getMessage().startsWith("No Indy"));
     }
-
 }

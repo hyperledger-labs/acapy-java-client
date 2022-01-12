@@ -11,8 +11,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.connection.ConnectionState;
+import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
+import org.hyperledger.aries.api.message.ProblemReport;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRole;
 import org.hyperledger.aries.config.GsonConfig;
@@ -22,7 +24,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public class EventParserTest {
@@ -33,43 +34,38 @@ public class EventParserTest {
     @Test
     void testParseConnectionEvent() {
         String json = loader.load("events/connection-active.json");
-        Optional<ConnectionRecord> conn = parser.parseValueSave(json, ConnectionRecord.class);
-        Assertions.assertTrue(conn.isPresent());
-        Assertions.assertEquals(ConnectionState.ACTIVE, conn.get().getState());
+        ConnectionRecord conn = parser.parseValueSave(json, ConnectionRecord.class).orElseThrow();
+        Assertions.assertEquals(ConnectionState.ACTIVE, conn.getState());
     }
 
     @Test
     void testParseIssuedCredential() {
         String json = loader.load("events/issue-credential.json");
-        Optional<V1CredentialExchange> con = parser.parseValueSave(json, V1CredentialExchange.class);
-        Assertions.assertTrue(con.isPresent());
-        V1CredentialExchange cred = con.get();
-        Assertions.assertEquals(CredentialExchangeRole.HOLDER, cred.getRole());
-        Assertions.assertNotNull(cred.getCredentialDefinitionId());
-        Assertions.assertNotNull(cred.getCredential());
+        V1CredentialExchange ex = parser.parseValueSave(json, V1CredentialExchange.class).orElseThrow();
+        Assertions.assertEquals(CredentialExchangeRole.HOLDER, ex.getRole());
+        Assertions.assertNotNull(ex.getCredentialDefinitionId());
+        Assertions.assertNotNull(ex.getCredential());
     }
 
     @Test
     void testParseProofPresentationVerifier() {
         String json = loader.load("events/proof-valid-verifier.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        Assertions.assertEquals(PresentationExchangeRole.VERIFIER, p.get().getRole());
-        Masterdata md = p.get().from(Masterdata.class);
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        Assertions.assertEquals(PresentationExchangeRole.VERIFIER, p.getRole());
+        Masterdata md = p.from(Masterdata.class);
         Assertions.assertEquals("4", md.getStreetNumber());
         Assertions.assertEquals("8000", md.getPostalCode());
-        Assertions.assertNotNull(p.get().getIdentifiers());
-        Assertions.assertEquals(1, p.get().getIdentifiers().size());
-        Assertions.assertTrue(p.get().getIdentifiers().get(0).getSchemaId().startsWith("CHysca6fY8n8ytCDLAJGZj"));
-        Assertions.assertTrue(p.get().getIdentifiers().get(0).getCredentialDefinitionId().startsWith("CHysca6fY8n8ytCDLAJGZj"));
+        Assertions.assertNotNull(p.getIdentifiers());
+        Assertions.assertEquals(1, p.getIdentifiers().size());
+        Assertions.assertTrue(p.getIdentifiers().get(0).getSchemaId().startsWith("CHysca6fY8n8ytCDLAJGZj"));
+        Assertions.assertTrue(p.getIdentifiers().get(0).getCredentialDefinitionId().startsWith("CHysca6fY8n8ytCDLAJGZj"));
     }
 
     @Test
     void testParseProofPresentationVerifierMap() {
         String json = loader.load("events/proof-valid-verifier.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        Map<String, Object> md = p.get().from(Set.of("country", "city"));
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        Map<String, Object> md = p.from(Set.of("country", "city"));
         Assertions.assertEquals("Switzerland", md.get("country"));
         Assertions.assertEquals("Zürich", md.get("city"));
     }
@@ -77,9 +73,8 @@ public class EventParserTest {
     @Test
     void testProofPresentationGetRevealedAttributeGroups() {
         String json = loader.load("events/proof-valid-verifier-attr-group.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        Map<String, PresentationExchangeRecord.RevealedAttributeGroup> revealedAttributesByGroup = p.get().findRevealedAttributeGroups();
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        Map<String, PresentationExchangeRecord.RevealedAttributeGroup> revealedAttributesByGroup = p.findRevealedAttributeGroups();
         System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
         Assertions.assertEquals("1234", revealedAttributesByGroup.get("bank-account").getRevealedAttributes().get("bic"));
     }
@@ -87,21 +82,19 @@ public class EventParserTest {
     @Test
     void testProofPresentationGetRevealedAttributes() {
         String json = loader.load("events/proof-valid-verifier.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        Map<String, Object> attrs = p.get().findRevealedAttributes();
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        Map<String, Object> attrs = p.findRevealedAttributes();
         Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
-        PresentationExchangeRecord.RevealedAttribute city = p.get().findRevealedAttributedFull().get("4_city_uuid");
+        PresentationExchangeRecord.RevealedAttribute city = p.findRevealedAttributedFull().get("4_city_uuid");
         Assertions.assertEquals("Zürich", city.getRaw());
     }
 
     @Test
     void testParseProofPresentationProver() {
         String json = loader.load("events/proof-valid-prover.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        Assertions.assertEquals(PresentationExchangeRole.PROVER, p.get().getRole());
-        final BankAccount ba = p.get().from(BankAccount.class);
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        Assertions.assertEquals(PresentationExchangeRole.PROVER, p.getRole());
+        final BankAccount ba = p.from(BankAccount.class);
         Assertions.assertNotNull(ba);
         Assertions.assertEquals("GB33BUKB20201555555555", ba.getIban());
         Assertions.assertEquals("PBNK", ba.getBic());
@@ -110,12 +103,35 @@ public class EventParserTest {
     @Test
     void testParseProofPresentationProverMap() {
         String json = loader.load("events/proof-valid-prover.json");
-        Optional<PresentationExchangeRecord> p = parser.parsePresentProof(json);
-        Assertions.assertTrue(p.isPresent());
-        final Map<String, Object> ba = p.get().from(Set.of("iban", "bic"));
+        PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
+        final Map<String, Object> ba = p.from(Set.of("iban", "bic"));
         Assertions.assertNotNull(ba);
         Assertions.assertEquals("GB33BUKB20201555555555", ba.get("iban"));
         Assertions.assertEquals("PBNK", ba.get("bic"));
+    }
+
+    @Test
+    void testParseDiscoverFeature() {
+        String jsonIn = loader.load("events/discover-feature-event.json");
+        DiscoverFeatureEvent discoverFeatureEvent = parser.parseValueSave(jsonIn, DiscoverFeatureEvent.class).orElseThrow();
+        String jsonOut = GsonConfig.prettyPrinter().toJson(discoverFeatureEvent);
+        Assertions.assertEquals(jsonIn, jsonOut);
+    }
+
+    @Test
+    void testParseProblemReportDescriptionObject() {
+        String jsonIn = loader.load("events/problem-report-object.json");
+        ProblemReport problemReport = parser.parseValueSave(jsonIn, ProblemReport.class).orElseThrow();
+        Assertions.assertEquals("dummy", problemReport.resolveProblemDescription());
+        Assertions.assertEquals("message-parse-failure", problemReport.resolveProblemCode());
+    }
+
+    @Test
+    void testParseProblemReportDescriptionString() {
+        String jsonIn = loader.load("events/problem-report-string.json");
+        ProblemReport problemReport = parser.parseValueSave(jsonIn, ProblemReport.class).orElseThrow();
+        Assertions.assertEquals("dummy", problemReport.resolveProblemDescription());
+        Assertions.assertNull(problemReport.resolveProblemCode());
     }
 
     @Data @NoArgsConstructor
