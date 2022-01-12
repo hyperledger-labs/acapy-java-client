@@ -58,7 +58,7 @@ public abstract class EventHandler {
                 parser.parseValueSave(json, EndorseTransactionRecord.class).ifPresent(this::handleEndorseTransaction);
             } else if ("problem_report".equals(eventType)) {
                 parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
-            } else if ("dicover_feature".equals(eventType)) { // TODO fix typo when fixed upstream
+            } else if ("discover_feature".equals(eventType)) {
                 parser.parseValueSave(json, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
             } else if ("revocation-notification".equals(eventType)) {
                 parser.parseValueSave(json, RevocationNotificationEvent.class).ifPresent(this::handleRevocationNotification);

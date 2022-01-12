@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.issue_credential_v1;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.NonNull;
@@ -99,6 +100,7 @@ public enum CredentialExchangeState {
      * Credential has been revoked
      */
     @JsonProperty("credential_revoked")
+    @JsonAlias({"revoked", "credential-revoked"})
     @SerializedName(value = "credential_revoked", alternate = {"revoked", "credential-revoked"})
     CREDENTIAL_REVOKED,
 
@@ -142,6 +144,8 @@ public enum CredentialExchangeState {
                 return CREDENTIAL_RECEIVED;
             case DONE:
                 return DONE;
+            case CREDENTIAL_REVOKED:
+                return CREDENTIAL_REVOKED;
             default:
                 throw new IllegalStateException("V2 state could not be converted to its V1 counterpart");
         }
