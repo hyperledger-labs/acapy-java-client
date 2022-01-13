@@ -12,6 +12,7 @@ import org.hyperledger.aries.MultiIntegrationTestBase;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.acy_py.generated.model.ConnectionInvitation;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -45,6 +46,7 @@ public class MultiConnectionRecordTest extends MultiIntegrationTestBase {
     }
 
     @Test
+    @Tag("IntegrationTest")
     void testCreateConnectionBetweenAgents() throws Exception {
         String alias_1 = "my_test_1";
         String alias_2 = "my_test_2";

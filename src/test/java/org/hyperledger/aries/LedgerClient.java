@@ -79,30 +79,6 @@ public class LedgerClient extends BaseClient {
                 .build();
     }
 
-    private Request buildPut(String u, Object body) {
-        return request(u)
-                .put(jsonBody(gson.toJson(body)))
-                .build();
-    }
-
-    private Request buildPatch(String u, Object body) {
-        return request(u)
-                .patch(jsonBody(gson.toJson(body)))
-                .build();
-    }
-
-    private Request buildGet(String u) {
-        return request(u)
-                .get()
-                .build();
-    }
-
-    private Request buildDelete(String u) {
-        return request(u)
-                .delete()
-                .build();
-    }
-
     private Request.Builder request(String u) {
         Request.Builder b = new Request.Builder()
                 .url(u);

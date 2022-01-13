@@ -22,9 +22,9 @@ public abstract class MultiIntegrationTestBase {
 
     private final Logger log = LoggerFactory.getLogger(MultiIntegrationTestBase.class);
 
-    public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.2";
-    public static final Integer ARIES_ENDPOINT_PORT = 8030;
-    public static final Integer ARIES_ADMIN_PORT = 8031;
+    public static final String ARIES_VERSION = IntegrationTestBase.ARIES_VERSION;
+    public static final Integer ARIES_ENDPOINT_PORT = IntegrationTestBase.ARIES_ENDPOINT_PORT;
+    public static final Integer ARIES_ADMIN_PORT = IntegrationTestBase.ARIES_ADMIN_PORT;
     public static final Integer ARIES_ENDPOINT_PORT_2 = 8040;
     public static final Integer ARIES_ADMIN_PORT_2 = 8041;
 

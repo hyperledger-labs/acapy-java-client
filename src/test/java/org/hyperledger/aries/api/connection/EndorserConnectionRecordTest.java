@@ -25,6 +25,7 @@ import org.hyperledger.acy_py.generated.model.TransactionJobs;
 import org.hyperledger.acy_py.generated.model.TxnOrCredentialDefinitionSendResult;
 import org.hyperledger.acy_py.generated.model.TxnOrSchemaSendResult;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.hyperledger.aries.LedgerClient;
@@ -77,6 +78,7 @@ public class EndorserConnectionRecordTest extends MultiIntegrationTestBase {
     }
 
     @Test
+    @Tag("IntegrationTest")
     void testCreateConnectionBetweenAuthorAndEndorser() throws Exception {
         String alias_1 = "my_agent_1";
         String alias_2 = "my_agent_2";
