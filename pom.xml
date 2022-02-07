@@ -64,7 +64,7 @@
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
         <pmd.version>6.41.0</pmd.version>
-        <testcontainers.version>1.16.2</testcontainers.version>
+        <testcontainers.version>1.16.3</testcontainers.version>
     </properties>
 
     <dependencyManagement>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
+            <version>1.7.35</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -239,7 +239,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.9.0</version>
                 <configuration>
                     <release>${jdk.version}</release>
                     <source>${jdk.version}</source>
@@ -421,7 +421,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>6.5.2</version>
+                <version>6.5.3</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>

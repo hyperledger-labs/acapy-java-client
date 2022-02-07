@@ -26,6 +26,7 @@ import org.hyperledger.acy_py.generated.model.V20CredIssue;
 import org.hyperledger.acy_py.generated.model.V20CredPreview;
 import org.hyperledger.acy_py.generated.model.V20CredRequest;
 import org.hyperledger.aries.api.issue_credential_v1.*;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 
 /**
  * V20CredExRecord
@@ -76,7 +77,10 @@ public class V20CredExRecord extends BaseCredExRecord {
 
     public V20CredExRecordByFormat.LdProof resolveLDCredential() {
         if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredIssue() != null) {
-            return byFormat.convertToLdProof(byFormat.getCredIssue());
+            return V20CredExRecordByFormat.LdProof
+                    .builder()
+                    .credential(byFormat.convertToLdProof(byFormat.getCredIssue(), VerifiableCredential.class))
+                    .build();
         }
         return null;
     }

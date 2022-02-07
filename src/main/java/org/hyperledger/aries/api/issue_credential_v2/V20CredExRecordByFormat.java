@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -108,8 +108,12 @@ public class V20CredExRecordByFormat {
     }
 
     public LdProof convertToLdProof(JsonObject jo) {
+        return convertToLdProof(jo, LdProof.class);
+    }
+
+    public <T> T convertToLdProof(JsonObject jo, Class<T> type) {
         JsonObject ld = jo.getAsJsonObject(LD_PROOF);
-        return GsonConfig.defaultConfig().fromJson(ld, LdProof.class);
+        return GsonConfig.defaultConfig().fromJson(ld, type);
     }
 
     private JsonObject resolveLdPayload(JsonObject jo) {

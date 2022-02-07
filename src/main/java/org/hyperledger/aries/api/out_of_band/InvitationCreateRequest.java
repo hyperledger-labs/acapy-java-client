@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -18,7 +18,9 @@ public class InvitationCreateRequest {
     @Singular
     private List<AttachmentDef> attachments;
     @Builder.Default
-    private List<String> handshakeProtocols = List.of(ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1.getValue());
+    private List<String> handshakeProtocols = List.of(
+            ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1.getValue(),
+            ConnectionRecord.ConnectionProtocol.CONNECTION_V1.getValue());
     private String mediationId;
     private Object metadata;
     private String myLabel;

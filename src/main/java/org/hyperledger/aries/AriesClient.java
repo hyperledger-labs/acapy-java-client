@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -2268,7 +2268,7 @@ public class AriesClient extends BaseClient {
                 log.trace("aca-py not ready yet, reason: {}", e.getMessage());
             }
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 log.error("Interrupted while waiting for aca-py", e);
             }
