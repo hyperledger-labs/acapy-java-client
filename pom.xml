@@ -63,7 +63,7 @@
         <lombok.version>1.18.22</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
-        <pmd.version>6.41.0</pmd.version>
+        <pmd.version>6.42.0</pmd.version>
         <testcontainers.version>1.16.3</testcontainers.version>
     </properties>
 
@@ -180,7 +180,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>5.3.1</version>
+                <version>5.4.0</version>
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
                     <skip>true</skip>
@@ -381,7 +381,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.5.2</version>
+                        <version>4.5.3</version>
                     </dependency>
                 </dependencies>
             </plugin>

@@ -42,7 +42,7 @@ import org.hyperledger.aries.api.introduction.ConnectionStartIntroductionFilter;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
-import org.hyperledger.aries.api.issue_credential_v2.V2CredentialSendRequest;
+import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
 import org.hyperledger.aries.api.jsonld.LinkedDataProof;
 import org.hyperledger.aries.api.jsonld.SignRequest;
@@ -1312,11 +1312,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Send holder a credential, automating the entire flow
-     * @param request {@link V2CredentialSendRequest} the credential to be issued
+     * @param request {@link V2CredentialExchangeFree} the credential to be issued
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V2CredentialSendRequest request)
+    public Optional<V20CredExRecord> issueCredentialV2Send(@NonNull V2CredentialExchangeFree request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/send", request);
         return call(req, V20CredExRecord.class);
@@ -1336,7 +1336,7 @@ public class AriesClient extends BaseClient {
 
     /**
      * Send issuer a credential proposal
-     * @param request {@link V20IssueCredSchemaCore} the requested credential
+     * @param request {@link V1CredentialProposalRequest} the requested credential
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
@@ -1347,11 +1347,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Send issuer a credential proposal
-     * @param request {@link V20CredExFree} the requested credential
+     * @param request {@link V2CredentialExchangeFree} the requested credential
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V20CredExFree request)
+    public Optional<V20CredExRecord> issueCredentialV2SendProposal(@NonNull V2CredentialExchangeFree request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/send-proposal", request);
         return call(req, V20CredExRecord.class);

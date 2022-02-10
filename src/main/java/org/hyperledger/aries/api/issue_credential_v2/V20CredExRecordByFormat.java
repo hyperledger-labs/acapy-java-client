@@ -56,7 +56,7 @@ public class V20CredExRecordByFormat {
     @Builder
     public static class LdProof {
         private VerifiableCredential credential;
-        private V2CredentialSendRequest.LDProofVCDetailOptions options;
+        private V2CredentialExchangeFree.LDProofVCDetailOptions options;
     }
 
     /**

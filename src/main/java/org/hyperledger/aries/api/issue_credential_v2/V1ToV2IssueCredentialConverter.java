@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -54,20 +54,20 @@ public class V1ToV2IssueCredentialConverter {
     /**
      * Converts V1 credential proposal request into its V2 counterpart.
      * @param v1 {@link V1CredentialProposalRequest}
-     * @return {@link V2CredentialSendRequest}
+     * @return {@link V2CredentialExchangeFree}
      */
-    public static V2CredentialSendRequest toV2CredentialSendRequest(@NonNull V1CredentialProposalRequest v1) {
-        return V2CredentialSendRequest
+    public static V2CredentialExchangeFree toV2CredentialSendRequest(@NonNull V1CredentialProposalRequest v1) {
+        return V2CredentialExchangeFree
                 .builder()
-                .connectionId(v1.getConnectionId())
+                .connectionId(UUID.fromString(v1.getConnectionId()))
                 .comment(v1.getComment())
                 .trace(v1.getTrace())
                 .autoRemove(v1.getAutoRemove())
-                .credentialPreview(V2CredentialSendRequest.V2CredentialPreview
+                .credentialPreview(V2CredentialExchangeFree.V2CredentialPreview
                         .builder()
                         .attributes(v1.getCredentialProposal() != null ? v1.getCredentialProposal().getAttributes() : null)
                         .build())
-                .filter(V2CredentialSendRequest.V20CredFilter
+                .filter(V2CredentialExchangeFree.V20CredFilter
                         .builder()
                         .indy(V20CredFilterIndy
                                 .builder()
@@ -106,14 +106,14 @@ public class V1ToV2IssueCredentialConverter {
                 .collect(Collectors.toList());
     }
 
-    public static V20CredExFree toV20CredExFree(@NonNull V1CredentialProposalRequest v1Proposal) {
-        return V20CredExFree
+    public static V2CredentialExchangeFree toV20CredExFree(@NonNull V1CredentialProposalRequest v1Proposal) {
+        return V2CredentialExchangeFree
                 .builder()
                 .connectionId(UUID.fromString(v1Proposal.getConnectionId()))
                 .comment(v1Proposal.getComment())
                 .autoRemove(v1Proposal.getAutoRemove())
                 .trace(v1Proposal.getTrace())
-                .filter(V20CredFilter
+                .filter(V2CredentialExchangeFree.V20CredFilter
                         .builder()
                         .indy(V20CredFilterIndy
                                 .builder()
@@ -125,10 +125,10 @@ public class V1ToV2IssueCredentialConverter {
                                 .schemaIssuerDid(v1Proposal.getSchemaIssuerDid())
                                 .build())
                         .build())
-                .credentialPreview(V20CredPreview
+                .credentialPreview(V2CredentialExchangeFree.V2CredentialPreview
                         .builder()
                         .attributes(v1Proposal.getCredentialProposal() != null ?
-                                toV20CredAttrSpecFromAttributes(v1Proposal.getCredentialProposal().getAttributes())
+                                v1Proposal.getCredentialProposal().getAttributes()
                                 : null)
                         .build())
                 .build();

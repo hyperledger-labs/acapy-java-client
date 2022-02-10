@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -16,12 +16,13 @@ import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
-public class V2CredentialSendRequest {
+public class V2CredentialExchangeFree {
     private Boolean autoRemove;
     private String comment;
-    private String connectionId;
+    private UUID connectionId;
     private V2CredentialPreview credentialPreview;
     private V20CredFilter filter;
     private Boolean trace;
