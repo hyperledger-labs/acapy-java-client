@@ -36,7 +36,7 @@ public class V1ToV2IssueCredentialConverter {
                                 ? toV20CredAttrSpec(v1.getCounterProposal().getCredentialProposal().getAttributes())
                                 : null)
                         .build())
-                .filter(V20CredFilter
+                .filter(V2CredentialExchangeFree.V20CredFilter
                         .builder()
                         .indy(V20CredFilterIndy
                                 .builder()

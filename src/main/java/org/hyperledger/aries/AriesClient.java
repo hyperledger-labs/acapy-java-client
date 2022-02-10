@@ -41,6 +41,7 @@ import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.introduction.ConnectionStartIntroductionFilter;
 import org.hyperledger.aries.api.issue_credential_v1.*;
 import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
+import org.hyperledger.aries.api.issue_credential_v2.V20CredBoundOfferRequest;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
