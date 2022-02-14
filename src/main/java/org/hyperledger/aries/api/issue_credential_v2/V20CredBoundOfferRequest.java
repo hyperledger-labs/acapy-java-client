@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.aries.api.credentials.CredentialPreview;
 
 /**
  * V20CredBoundOfferRequest
