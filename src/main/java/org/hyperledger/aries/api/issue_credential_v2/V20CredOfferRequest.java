@@ -13,14 +13,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.aries.api.credentials.CredentialPreview;
 
+import java.util.UUID;
+
 /**
- * V20CredBoundOfferRequest
+ * V20CredOfferRequest
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class V20CredBoundOfferRequest {
-    private V2CredentialExchangeFree.V2CredentialPreview counterPreview;
+public class V20CredOfferRequest {
+    private Boolean autoIssue;
+    private Boolean autoRemove;
+    private String comment;
+    private UUID connectionId;
+    private CredentialPreview credentialPreview;
     private V2CredentialExchangeFree.V20CredFilter filter;
+    private Boolean trace;
 }

@@ -29,7 +29,7 @@ public class V1ToV2IssueCredentialConverter {
     public static V20CredBoundOfferRequest toV20CredBoundOfferRequest(@NonNull V10CredentialBoundOfferRequest v1) {
         return V20CredBoundOfferRequest
                 .builder()
-                .counterPreview(V20CredPreview
+                .counterPreview(V2CredentialExchangeFree.V2CredentialPreview
                         .builder()
                         .attributes(v1.getCounterProposal() != null
                                 && v1.getCounterProposal().getCredentialProposal() != null
@@ -82,10 +82,10 @@ public class V1ToV2IssueCredentialConverter {
                 .build();
     }
 
-    public static List<V20CredAttrSpec> toV20CredAttrSpec(@NonNull List<CredAttrSpec> attributes) {
+    public static List<CredentialAttributes> toV20CredAttrSpec(@NonNull List<CredAttrSpec> attributes) {
         return attributes
                 .stream()
-                .map(a -> V20CredAttrSpec
+                .map(a -> CredentialAttributes
                         .builder()
                         .mimeType(a.getMimeType())
                         .name(a.getName())
