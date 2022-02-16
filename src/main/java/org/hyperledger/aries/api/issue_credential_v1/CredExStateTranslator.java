@@ -69,6 +69,10 @@ public interface CredExStateTranslator {
         return CredentialExchangeState.CREDENTIAL_REVOKED.equals(getState());
     }
 
+    default boolean stateIsAbandoned() {
+        return CredentialExchangeState.ABANDONED.equals(getState());
+    }
+
     default boolean roleIsIssuer() {
         return CredentialExchangeRole.ISSUER.equals(getRole());
     }

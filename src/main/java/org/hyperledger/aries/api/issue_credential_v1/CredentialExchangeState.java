@@ -105,6 +105,13 @@ public enum CredentialExchangeState {
     CREDENTIAL_REVOKED,
 
     /**
+     * Credential exchange abandoned
+     */
+    @JsonProperty("abandoned")
+    @SerializedName(value = "abandoned")
+    ABANDONED,
+
+    /**
      * Not an aries state, but useful in business logic reacting on these states
      */
     @JsonProperty("declined")
