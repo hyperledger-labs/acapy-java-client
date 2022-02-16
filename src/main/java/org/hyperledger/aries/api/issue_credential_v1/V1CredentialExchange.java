@@ -23,10 +23,7 @@ import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.CredDefId;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -73,10 +70,19 @@ public class V1CredentialExchange extends BaseCredExRecord {
 
         @Data @NoArgsConstructor @AllArgsConstructor @Builder
         public static final class CredentialProposal {
+
+            private static final Comparator<CredentialAttributes> attributesComparator = Comparator
+                    .comparing(CredentialAttributes::getName);
+
             @SerializedName("@type")
             private String type;
 
             private List<CredentialAttributes> attributes;
+
+            public List<CredentialAttributes> getAttributes() {
+                attributes.sort(attributesComparator);
+                return attributes;
+            }
         }
     }
 
