@@ -38,9 +38,6 @@ public class InvitationMessage<T> {
     @SerializedName("@id")
     private String atId;
 
-    @SerializedName("@type")
-    private String atType;
-
     @Builder.Default
     @SerializedName("handshake_protocols")
     private List<String> handshakeProtocols = List.of("did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0");
@@ -48,7 +45,7 @@ public class InvitationMessage<T> {
     private String label;
 
     @SerializedName("requests~attach")
-    private List<AttachDecorator> requestsTildeAttach;
+    private List<AttachDecorator> requestsAttach;
 
     /** Either a DIDComm service object (as per RFC0067) or a DID string. */
     @Singular

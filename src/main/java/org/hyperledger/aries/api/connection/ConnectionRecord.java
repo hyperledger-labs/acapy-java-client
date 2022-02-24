@@ -56,16 +56,26 @@ public class ConnectionRecord {
         return StringUtils.isEmpty(invitationKey);
     }
 
-    public boolean isConnectionInvitation() {
-        return StringUtils.isNotEmpty(invitationMsgId) && ConnectionTheirRole.INVITER.equals(theirRole);
+    /**
+     * Tests if the event is on the receiving side of a connection. Meaning this agent
+     * received an invitation.
+     * @return true if this agent received the invitation
+     */
+    public boolean isInvitationResponse() {
+        return StringUtils.isNotEmpty(invitationMsgId)
+                && (ConnectionTheirRole.INVITER.equals(theirRole)
+                || ConnectionTheirRole.RESPONDER.equals(theirRole));
     }
 
     /**
-     * Tests if this event is not a connection invitation
+     * Tests if the event is not on the receiving side of a connection. Meaning this agent
+     * created an invitation.
      * @return true if it is not an invitation event
      */
-    public boolean isNotConnectionInvitation() {
-        return StringUtils.isEmpty(invitationMsgId) && ConnectionTheirRole.INVITEE.equals(theirRole);
+    public boolean isInvitationRequest() {
+        return StringUtils.isNotEmpty(invitationMsgId)
+                && (ConnectionTheirRole.INVITEE.equals(theirRole)
+                || ConnectionTheirRole.REQUESTER.equals(theirRole));
     }
 
     /**
