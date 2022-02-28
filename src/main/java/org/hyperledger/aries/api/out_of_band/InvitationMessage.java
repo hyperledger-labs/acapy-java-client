@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -41,14 +41,21 @@ public class InvitationMessage<T> {
     @SerializedName("@type")
     private String atType;
 
+    private String label;
+
+    @SerializedName("goal_code")
+    private String goalCode;
+
+    private String goal;
+
+    private List<String> accept;
+
     @Builder.Default
     @SerializedName("handshake_protocols")
     private List<String> handshakeProtocols = List.of("did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0");
 
-    private String label;
-
     @SerializedName("requests~attach")
-    private List<AttachDecorator> requestsTildeAttach;
+    private List<AttachDecorator> requestsAttach;
 
     /** Either a DIDComm service object (as per RFC0067) or a DID string. */
     @Singular
