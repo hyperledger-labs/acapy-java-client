@@ -38,11 +38,21 @@ public class InvitationMessage<T> {
     @SerializedName("@id")
     private String atId;
 
+    @SerializedName("@type")
+    private String atType;
+
+    private String label;
+
+    @SerializedName("goal_code")
+    private String goalCode;
+
+    private String goal;
+
+    private List<String> accept;
+
     @Builder.Default
     @SerializedName("handshake_protocols")
     private List<String> handshakeProtocols = List.of("did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/didexchange/1.0");
-
-    private String label;
 
     @SerializedName("requests~attach")
     private List<AttachDecorator> requestsAttach;
