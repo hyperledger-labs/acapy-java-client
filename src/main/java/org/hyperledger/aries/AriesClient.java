@@ -53,6 +53,9 @@ import org.hyperledger.aries.api.jsonld.*;
 import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.ledger.TAAAccept;
 import org.hyperledger.aries.api.ledger.TAAInfo;
+import org.hyperledger.aries.api.mediation.MediationKeyListQueryFilter;
+import org.hyperledger.aries.api.mediation.MediationKeyListsFilter;
+import org.hyperledger.aries.api.mediation.MediationRequestsFilter;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
@@ -244,18 +247,6 @@ public class AriesClient extends BaseClient {
             result = c.get().stream().map(ConnectionRecord::getConnectionId).collect(Collectors.toList());
         }
         return result;
-    }
-
-    /**
-     * Create a new connection invitation
-     * @return {@link CreateInvitationResponse}
-     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
-     * @deprecated see {@link #connectionsCreateInvitation(CreateInvitationRequest)}
-     */
-    @Deprecated
-    public Optional<CreateInvitationResponse> connectionsCreateInvitation() throws IOException {
-        Request req = buildPost(url + "/connections/create-invitation", EMPTY_JSON);
-        return call(req, CreateInvitationResponse.class);
     }
 
     /**
@@ -1531,7 +1522,157 @@ public class AriesClient extends BaseClient {
     // Mediation - Mediation management
     // ----------------------------------------------------
 
-    // TODO
+    /**
+     * Get default mediator
+     * @return {@link MediationRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationRecord> mediationDefaultMediator() throws IOException {
+        Request req = buildGet(url + "/mediation/default-mediator");
+        return call(req, MediationRecord.class);
+    }
+
+    /**
+     * Clear default mediator
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void mediationClearDefaultMediator() throws IOException {
+        // aca-py returns 500 if no mediator is set
+        Request req = buildDelete(url + "/mediation/default-mediator");
+        call(req);
+    }
+
+    /**
+     * Retrieve key lists by connection or role
+     * @param filter {@link MediationKeyListsFilter}
+     * @return list of {@link RouteRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<RouteRecord>> mediationKeyLists(MediationKeyListsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/mediation/keylists")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        final Optional<String> resp = raw(req);
+        return getWrapped(resp, "results", KEY_LISTS_TYPE);
+    }
+
+    /**
+     * Send key list query to mediator
+     * @param mediationId mediation record identifier
+     * @param request {@link KeylistQueryFilterRequest}
+     * @param filter optional {@link MediationKeyListQueryFilter}
+     * @return {@link KeylistQuery}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<KeylistQuery> mediationSendKeyListQuery(@NonNull UUID mediationId,
+            @NonNull KeylistQueryFilterRequest request, MediationKeyListQueryFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/mediation/keylists/" + mediationId + "/send-keylist-query")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildPost(b.build().toString(), request);
+        return call(req, KeylistQuery.class);
+    }
+
+    /**
+     * Send key list update to mediator
+     * @param mediationId mediation record identifier
+     * @param request {@link KeylistUpdateRequest}
+     * @return {@link KeylistUpdate}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<KeylistUpdate> mediationSendKeyListUpdate(@NonNull UUID mediationId,
+            @NonNull KeylistUpdateRequest request) throws IOException {
+        Request req = buildPost(url + "/mediation/keylists/" + mediationId + "/send-keylist-update", request);
+        return call(req, KeylistUpdate.class);
+    }
+
+    /**
+     * Request mediation from connection
+     * @param connectionId connection identifier
+     * @param request {@link MediationCreateRequest}
+     * @return {@link MediationRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationRecord> mediationRequest(@NonNull UUID connectionId,
+            @NonNull MediationCreateRequest request) throws IOException {
+        Request req = buildPost(url + "/mediation/request/" + connectionId, request);
+        return call(req, MediationRecord.class);
+    }
+
+    /**
+     * Query mediation requests, return list of all mediation records
+     * @param filter optional {@link MediationRequestsFilter}
+     * @return list of {@link MediationRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<MediationRecord>> mediationRequests(MediationRequestsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/mediation/requests")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.build().toString());
+        final Optional<String> resp = raw(req);
+        return getWrapped(resp, "results", MEDIATION_LIST_TYPE);
+    }
+
+    /**
+     * Retrieve mediation request record by id
+     * @param mediationId mediation record identifier
+     * @return {@link MediationRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationRecord> mediationRequestsGetById(@NonNull UUID mediationId) throws IOException {
+        Request req = buildGet(url + "/mediation/requests/" + mediationId);
+        return call(req, MediationRecord.class);
+    }
+
+    /**
+     * Delete mediation request by id
+     * @param mediationId mediation record identifier
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void mediationRequestsDeleteById(@NonNull UUID mediationId) throws IOException {
+        Request req = buildDelete(url + "/mediation/requests/" + mediationId);
+        call(req);
+    }
+
+    /**
+     * Deny a stored mediation request
+     * @param mediationId mediation record identifier
+     * @param request {@link AdminMediationDeny}
+     * @return {@link MediationDeny}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationDeny> mediationRequestsDeny(@NonNull UUID mediationId,
+            @NonNull AdminMediationDeny request) throws IOException {
+        Request req = buildPost(url + "/mediation/requests/" + mediationId + "/deny", request);
+        return call(req, MediationDeny.class);
+    }
+
+    /**
+     * Grant received mediation
+     * @param mediationId mediation record identifier
+     * @return {@link MediationGrant}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationGrant> mediationRequestsGrant(@NonNull UUID mediationId) throws IOException {
+        Request req = buildPost(url + "/mediation/requests/" + mediationId + "/grant", EMPTY_JSON);
+        return call(req, MediationGrant.class);
+    }
+
+    /**
+     * Set default mediator
+     * @param mediationId mediation record identifier
+     * @return {@link MediationRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<MediationRecord> mediationDefaultMediator(@NonNull UUID mediationId) throws IOException {
+        Request req = buildPut(url + "/mediation/" + mediationId + "/default-mediator", EMPTY_JSON);
+        return call(req, MediationRecord.class);
+    }
 
     // ----------------------------------------------------
     // Multitenancy - Multitenant wallet management
@@ -2206,7 +2347,7 @@ public class AriesClient extends BaseClient {
      * Write schema non-secret record to the ledger
      * @param schemaId schema id
      * @return {@link Schema}
-     * @throws IOException
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      * @since 0.7.3
      */
     public Optional<Schema> schemasWriteRecord(@NonNull String schemaId) throws IOException {

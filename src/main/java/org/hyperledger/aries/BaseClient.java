@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -14,9 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.acy_py.generated.model.DID;
-import org.hyperledger.acy_py.generated.model.V20CredExRecordDetail;
-import org.hyperledger.acy_py.generated.model.V20PresExRecord;
+import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -46,6 +44,8 @@ abstract class BaseClient {
     static final Type CREDENTIAL_TYPE = new TypeToken<Collection<Credential>>(){}.getType();
     static final Type ISSUE_CREDENTIAL_TYPE = new TypeToken<Collection<V1CredentialExchange>>(){}.getType();
     static final Type ISSUE_CREDENTIAL_V2_TYPE = new TypeToken<Collection<V20CredExRecordDetail>>(){}.getType();
+    static final Type KEY_LISTS_TYPE = new TypeToken<Collection<RouteRecord>>(){}.getType();
+    static final Type MEDIATION_LIST_TYPE = new TypeToken<Collection<MediationRecord>>(){}.getType();
     static final Type PRESENTATION_REQUEST_CREDENTIALS = new TypeToken<Collection<PresentationRequestCredentials>>(){}.getType();
     static final Type PROOF_TYPE = new TypeToken<Collection<PresentationExchangeRecord>>(){}.getType();
     static final Type PROOF_TYPE_V2 = new TypeToken<Collection<V20PresExRecord>>(){}.getType();

@@ -53,13 +53,13 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 ## Version Compatibility
 
 | Client Version | ACA-PY Version |
-|---------------|----------------|
-| 0.7.0-pre.2   | 0.7.0-pre.2    |
-| 0.7.0-pre.3.2 | 0.7.0-pre.3    |
-| 0.7.0-pre.3.6 | 0.7.0.rc1      |
-| 0.7.0         | 0.7.0          |
-| 0.7.6         | 0.7.1, 0.7.2   |
-| 0.7.18        | 0.7.3          |
+|----------------|----------------|
+| 0.7.0-pre.2    | 0.7.0-pre.2    |
+| 0.7.0-pre.3.2  | 0.7.0-pre.3    |
+| 0.7.0-pre.3.6  | 0.7.0.rc1      |
+| 0.7.0          | 0.7.0          |
+| 0.7.6          | 0.7.1, 0.7.2   |
+| \>= 0.7.18     | 0.7.3          |
 
 ## Implemented Endpoints
 
@@ -167,6 +167,18 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 | GET    | /ledger/taa                                                 | :white_check_mark: |
 | POST   | /ledger/taa/accept                                          | :white_check_mark: |
 |        | **mediation**                                               |                    |
+| GET    | /mediation/default-mediator                                 | :white_check_mark: |
+| DELETE | /mediation/default-mediator                                 | :white_check_mark: |
+| GET    | /mediation/keylists                                         | :white_check_mark: |
+| POST   | /mediation/keylists/{mediation_id}/send-keylist-query       | :white_check_mark: |
+| POST   | /mediation/keylists/{mediation_id}/send-keylist-update      | :white_check_mark: |
+| POST   | /mediation/request/{conn_id}                                | :white_check_mark: |
+| GET    | /mediation/requests                                         | :white_check_mark: |
+| GET    | /mediation/requests/{mediation_id}                          | :white_check_mark: |
+| DELETE | /mediation/requests/{mediation_id}                          | :white_check_mark: |
+| POST   | /mediation/requests/{mediation_id}/deny                     | :white_check_mark: |
+| POST   | /mediation/requests/{mediation_id}/grant                    | :white_check_mark: |
+| PUT    | /mediation/{mediation_id}/default-mediator                  | :white_check_mark: |
 |        | **multitenancy**                                            |                    |
 | POST   | /multitenancy/wallet                                        | :white_check_mark: |
 | GET    | /multitenancy/wallet/{wallet_id}                            | :white_check_mark: |
