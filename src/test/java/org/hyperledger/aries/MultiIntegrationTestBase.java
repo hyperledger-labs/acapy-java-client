@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * see the NOTICE file and/or the repository at
+ * https://github.com/hyperledger-labs/acapy-java-client
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+package org.hyperledger.aries;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+@Testcontainers
+public abstract class MultiIntegrationTestBase {
+
+    private final Logger log = LoggerFactory.getLogger(MultiIntegrationTestBase.class);
+
+    public static final String ARIES_VERSION = IntegrationTestBase.ARIES_VERSION;
+    public static final Integer ARIES_ENDPOINT_PORT = IntegrationTestBase.ARIES_ENDPOINT_PORT;
+    public static final Integer ARIES_ADMIN_PORT = IntegrationTestBase.ARIES_ADMIN_PORT;
+    public static final Integer ARIES_ENDPOINT_PORT_2 = 8040;
+    public static final Integer ARIES_ADMIN_PORT_2 = 8041;
+
+    protected LedgerClient lc;
+    protected AriesClient ac;
+    protected AriesClient ac2;
+
+    Network network = Network.newNetwork();
+
+    @Container
+    protected GenericContainer<?> ariesContainer = new GenericContainer<>(ARIES_VERSION)
+            .withNetwork(network)
+            .withNetworkAliases("agent_1")
+            .withExposedPorts(ARIES_ADMIN_PORT)
+            .withCommand("start"
+                    + " -it http 0.0.0.0 " + ARIES_ENDPOINT_PORT
+                    + " -ot http"
+                    + " --admin 0.0.0.0 " + ARIES_ADMIN_PORT
+                    + " --admin-insecure-mode"
+                    + " --log-level debug"
+                    + " -e http://agent_1:" + ARIES_ENDPOINT_PORT
+                    + " --plugin aries_cloudagent.messaging.jsonld"
+                    + this.extraAgentArgs(1))
+            .waitingFor(Wait.defaultWaitStrategy())
+            .withLogConsumer(new Slf4jLogConsumer(log))
+            ;
+
+    @Container
+    protected GenericContainer<?> ariesContainer2 = new GenericContainer<>(ARIES_VERSION)
+            .withExposedPorts(ARIES_ADMIN_PORT_2)
+            .withNetwork(network)
+            .withNetworkAliases("agent_2")
+            .withCommand("start"
+                    + " -it http 0.0.0.0 " + ARIES_ENDPOINT_PORT_2
+                    + " -ot http"
+                    + " --admin 0.0.0.0 " + ARIES_ADMIN_PORT_2
+                    + " --admin-insecure-mode"
+                    + " --log-level debug"
+                    + " -e http://agent_2:" + ARIES_ENDPOINT_PORT_2
+                    + " --plugin aries_cloudagent.messaging.jsonld"
+                    + this.extraAgentArgs(2))
+            .waitingFor(Wait.defaultWaitStrategy())
+            .withLogConsumer(new Slf4jLogConsumer(log))
+            ;
+
+    protected String extraAgentArgs(int agentNum) {
+        return " --no-ledger";
+    }
+
+    @BeforeEach
+    void setup() {
+        ac = AriesClient.builder()
+                .url("http://" + ariesContainer.getHost() + ":" + ariesContainer.getMappedPort(ARIES_ADMIN_PORT))
+                .build();
+        ac2 = AriesClient.builder()
+                .url("http://" + ariesContainer2.getHost() + ":" + ariesContainer2.getMappedPort(ARIES_ADMIN_PORT_2))
+                .build();
+    }
+}
