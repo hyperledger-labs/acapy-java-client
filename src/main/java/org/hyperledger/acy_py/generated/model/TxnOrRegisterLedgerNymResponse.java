@@ -15,17 +15,17 @@ package org.hyperledger.acy_py.generated.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * TxnOrSchemaSendResult
+ * TxnOrRegisterLedgerNymResponse
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class TxnOrSchemaSendResult {
-    public static final String SERIALIZED_NAME_SENT = "sent";
-    @SerializedName(SERIALIZED_NAME_SENT)
-    private SchemaSendResult sent;
+public class TxnOrRegisterLedgerNymResponse {
+    public static final String SERIALIZED_NAME_SUCCESS = "success";
+    @SerializedName(SERIALIZED_NAME_SUCCESS)
+    private Boolean success;
     public static final String SERIALIZED_NAME_TXN = "txn";
     @SerializedName(SERIALIZED_NAME_TXN)
     private TransactionRecord txn;
