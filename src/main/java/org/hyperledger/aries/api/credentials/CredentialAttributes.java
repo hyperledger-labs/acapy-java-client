@@ -21,6 +21,7 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
@@ -79,6 +80,11 @@ public class CredentialAttributes {
         List<CredentialAttributes> result = new ArrayList<>();
         values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v)));
         return result;
+    }
+
+    public static Map<String, String> toMap(@NonNull List<CredentialAttributes> attributes) {
+        return attributes.stream()
+                .collect(Collectors.toMap(CredentialAttributes::getName, CredentialAttributes::getValue));
     }
 
     public CredAttrSpec toCredAttrSpec() {
