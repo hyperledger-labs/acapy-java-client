@@ -27,6 +27,7 @@ import java.util.Set;
 public class PresentationExchangeRecord implements PresExStateTranslator {
 
     private Boolean autoPresent;
+    private Boolean autoVerify;
     private String connectionId;
     private String createdAt;
     private String errorMsg;

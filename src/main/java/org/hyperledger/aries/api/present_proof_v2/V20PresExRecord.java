@@ -29,6 +29,7 @@ import java.util.Optional;
 @Builder
 public class V20PresExRecord implements PresExStateTranslator {
     private Boolean autoPresent;
+    private Boolean autoVerify;
     private String createdAt;
     private String updatedAt;
     private Boolean trace;

@@ -32,14 +32,16 @@ import java.util.Map;
 @Builder
 public class PresentProofRequest {
 
+    private Boolean autoVerify;
+
+    private String comment;
+
     private String connectionId;
 
     @NonNull
     private ProofRequest proofRequest;
 
     private Boolean trace;
-
-    private String comment;
 
     @Data
     @NoArgsConstructor

@@ -16,6 +16,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.acy_py.generated.model.V20CredOfferRequest;
 import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.action_menu.PerformRequest;
 import org.hyperledger.aries.api.action_menu.SendMenu;
@@ -40,35 +41,25 @@ import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.introduction.ConnectionStartIntroductionFilter;
 import org.hyperledger.aries.api.issue_credential_v1.*;
-import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredBoundOfferRequest;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
-import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
-import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
+import org.hyperledger.aries.api.issue_credential_v2.*;
 import org.hyperledger.aries.api.jsonld.LinkedDataProof;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
 import org.hyperledger.aries.api.jsonld.*;
-import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.ledger.TAAAccept;
 import org.hyperledger.aries.api.ledger.TAAInfo;
+import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.mediation.MediationKeyListQueryFilter;
 import org.hyperledger.aries.api.mediation.MediationKeyListsFilter;
 import org.hyperledger.aries.api.mediation.MediationRequestsFilter;
-import org.hyperledger.aries.api.trustping.PingRequest;
-import org.hyperledger.aries.api.trustping.PingResponse;
-import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
-import org.hyperledger.aries.api.multitenancy.CreateWalletTokenRequest;
-import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
-import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
-import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
-import org.hyperledger.aries.api.multitenancy.WalletRecord;
+import org.hyperledger.aries.api.multitenancy.*;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
-import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
+import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
-import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
@@ -87,6 +78,8 @@ import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
+import org.hyperledger.aries.api.trustping.PingRequest;
+import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.hyperledger.aries.config.TimeUtil;
 
@@ -1475,16 +1468,16 @@ public class AriesClient extends BaseClient {
     /**
      * Send a NYM registration to the ledger
      * @param filter {@link RegisterNymFilter}
-     * @return {@link RegisterLedgerNymResponse}
+     * @return {@link TxnOrRegisterLedgerNymResponse}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      * @since 0.7.3
      */
-    public Optional<RegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
+    public Optional<TxnOrRegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
             throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/register-nym")).newBuilder();
         filter.buildParams(b);
         Request req = buildPost(b.build().toString(), EMPTY_JSON);
-        return call(req, RegisterLedgerNymResponse.class);
+        return call(req, TxnOrRegisterLedgerNymResponse.class);
     }
 
     /**
@@ -1922,12 +1915,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends presentation request in reference to a proposal
      * @param presentationExchangeId presentation exchange identifier
-     * @param request {@link AdminAPIMessageTracing}
+     * @param request {@link V10PresentationSendRequestToProposal}
      * @return {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<PresentationExchangeRecord> presentProofRecordsSendRequest(
-            @NonNull String presentationExchangeId, @NonNull AdminAPIMessageTracing request) throws IOException{
+            @NonNull String presentationExchangeId, @NonNull V10PresentationSendRequestToProposal request) throws IOException{
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/send-request",
                 request);
         return call(req, PresentationExchangeRecord.class);
@@ -2087,12 +2080,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends presentation request in reference to a proposal
      * @param presentationExchangeId presentation exchange identifier
-     * @param request {@link AdminAPIMessageTracing}
+     * @param request {@link V20PresentationSendRequestToProposal}
      * @return {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<V20PresExRecord> presentProofV2RecordsSendRequest(
-            @NonNull String presentationExchangeId, @NonNull AdminAPIMessageTracing request) throws IOException{
+            @NonNull String presentationExchangeId, @NonNull V20PresentationSendRequestToProposal request) throws IOException{
         Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/send-request",
                 request);
         return call(req, V20PresExRecord.class);

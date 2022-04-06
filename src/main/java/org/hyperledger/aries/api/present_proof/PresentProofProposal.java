@@ -25,15 +25,15 @@ import java.util.List;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class PresentProofProposal {
 
+    private Boolean autoPresent;
+
+    private String comment;
+
     private String connectionId;
 
     private PresentationPreview presentationProposal;
 
     private Boolean trace;
-
-    private Boolean autoPresent;
-
-    private String comment;
 
     public PresentProofProposal(String connectionId, List<PresAttrSpec> attr) {
         super();
