@@ -167,6 +167,8 @@ public class MultiTenantTest {
                 .bearerToken(wallet2.getToken())
                 .build();
 
+        // prepare the wallets
+
         DID did1 = sub1.walletDidCreate(DIDCreate.builder().build()).orElseThrow();
         // If running against a public ledger
         // sub1.walletDidPublic(did1.getDid());
@@ -187,10 +189,14 @@ public class MultiTenantTest {
                 .endpointType(DIDEndpointWithType.EndpointTypeEnum.ENDPOINT)
                 .build());
 
+        // Connect sub wallet 2 with sub wallet 1
+
+        // wallet 2 creates invitation
         CreateInvitationResponse sub2Invite = sub2.connectionsCreateInvitation(CreateInvitationRequest
                 .builder().build()).orElseThrow();
         ConnectionInvitation invitation2 = sub2Invite.getInvitation();
 
+        // wallet 1 receives the invitation
         ConnectionRecord cr1 = sub1.connectionsReceiveInvitation(ReceiveInvitationRequest.builder()
                         .serviceEndpoint(invitation2.getServiceEndpoint())
                         .recipientKeys(invitation2.getRecipientKeys())
@@ -198,6 +204,7 @@ public class MultiTenantTest {
                 .orElseThrow();
         log.debug("{}", cr1);
 
+        // waiting in wallet 2 for the connection to become active
         int i = 0;
         while(i < 10) {
             List<ConnectionRecord> connectionRecords = sub2.connections(ConnectionFilter.builder().build()).orElseThrow();
@@ -208,6 +215,7 @@ public class MultiTenantTest {
                 log.debug("Connected: {}", connectionRecords.get(0));
                 break;
             } else if (hasConnections && connectionRecords.get(0).stateIsRequest()) {
+                // wallet2 accepts the connection
                 sub2.connectionsAcceptRequest(connectionRecords.get(0).getConnectionId(), null);
                 log.debug("Sub2 accepting invitation");
             } else if (i == 10){
