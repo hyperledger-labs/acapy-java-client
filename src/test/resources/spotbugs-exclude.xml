@@ -20,6 +20,11 @@
         </And>
     </Match>
 
+    <Match>
+       <Class name="org.hyperledger.aries.webhook.WebSocketListener" />
+       <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+    </Match>
+    
     <!-- Exclude generated code -->
     <Match>
         <Package name="org.hyperledger.acy_py.generated.model" />

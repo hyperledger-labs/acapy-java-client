@@ -38,7 +38,7 @@ hs_err_pid*
 .vscode
 
 # Build
-**/target/**
+target/
 
 # Generator
 java/.openapi-generator

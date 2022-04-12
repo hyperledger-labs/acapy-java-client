@@ -35,92 +35,94 @@ public abstract class EventHandler {
 
         try {
             if ("connections".equals(eventType)) {
-                parser.parseValueSave(json, ConnectionRecord.class).ifPresent(this::handleConnection);
+                handleConnection(parser.parseValueSave(json, ConnectionRecord.class).get());
             } else if ("present_proof".equals(eventType)) {
-                parser.parsePresentProof(json).ifPresent(this::handleProof);
+                handleProof(parser.parsePresentProof(json).get());
             } else if ("present_proof_v2_0".equals(eventType)) {
-                parser.parseValueSave(json, V20PresExRecord.class).ifPresent(this::handleProofV2);
+                handleProofV2(parser.parseValueSave(json, V20PresExRecord.class).get());
             } else if ("issue_credential".equals(eventType)) {
-                parser.parseValueSave(json, V1CredentialExchange.class).ifPresent(this::handleCredential);
+                handleCredential(parser.parseValueSave(json, V1CredentialExchange.class).get());
             } else if ("issue_credential_v2_0".equals(eventType)) {
-                parser.parseValueSave(json, V20CredExRecord.class).ifPresent(this::handleCredentialV2);
+                handleCredentialV2(parser.parseValueSave(json, V20CredExRecord.class).get());
             } else if ("issue_credential_v2_0_indy".equals(eventType)) {
-                parser.parseValueSave(json, V2IssueIndyCredentialEvent.class).ifPresent(this::handleIssueCredentialV2Indy);
+                handleIssueCredentialV2Indy(parser.parseValueSave(json, V2IssueIndyCredentialEvent.class).get());
             } else if ("issue_credential_v2_0_ld_proof".equals(eventType)) {
-                parser.parseValueSave(json, V2IssueLDCredentialEvent.class).ifPresent(this::handleIssueCredentialV2LD);
+                handleIssueCredentialV2LD(parser.parseValueSave(json, V2IssueLDCredentialEvent.class).get());
             } else if ("basicmessages".equals(eventType)) {
-                parser.parseValueSave(json, BasicMessage.class).ifPresent(this::handleBasicMessage);
+                handleBasicMessage(parser.parseValueSave(json, BasicMessage.class).get());
             } else if ("ping".equals(eventType)) {
-                parser.parseValueSave(json, PingEvent.class).ifPresent(this::handlePing);
+                // WebSocket ping events may not have a payload
+                if (json != null)
+                    handlePing(parser.parseValueSave(json, PingEvent.class).get());
             } else if ("issuer_cred_rev".equals(eventType)) {
-                parser.parseValueSave(json, RevocationEvent.class).ifPresent(this::handleRevocation);
+                handleRevocation(parser.parseValueSave(json, RevocationEvent.class).get());
             } else if ("endorse_transaction".equals(eventType)) {
-                parser.parseValueSave(json, EndorseTransactionRecord.class).ifPresent(this::handleEndorseTransaction);
+                handleEndorseTransaction(parser.parseValueSave(json, EndorseTransactionRecord.class).get());
             } else if ("problem_report".equals(eventType)) {
-                parser.parseValueSave(json, ProblemReport.class).ifPresent(this::handleProblemReport);
+                handleProblemReport(parser.parseValueSave(json, ProblemReport.class).get());
             } else if ("discover_feature".equals(eventType)) {
-                parser.parseValueSave(json, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
+                handleDiscoverFeature(parser.parseValueSave(json, DiscoverFeatureEvent.class).get());
             } else if ("revocation-notification".equals(eventType)) {
-                parser.parseValueSave(json, RevocationNotificationEvent.class).ifPresent(this::handleRevocationNotification);
+                handleRevocationNotification(parser.parseValueSave(json, RevocationNotificationEvent.class).get());
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
         }
     }
 
-    public void handleConnection(ConnectionRecord connection) {
+    public void handleConnection(ConnectionRecord connection) throws Exception {
         log.debug("Connection Event: {}", connection);
     }
-
-    public void handleProof(PresentationExchangeRecord proof) {
+    
+    public void handleProof(PresentationExchangeRecord proof) throws Exception {
         log.debug("Present Proof Event: {}", proof);
     }
 
-    public void handleProofV2(V20PresExRecord proof) {
+    public void handleProofV2(V20PresExRecord proof) throws Exception {
         log.debug("Present Proof V2 Event: {}", proof);
     }
 
-    public void handleCredential(V1CredentialExchange credential) {
+    public void handleCredential(V1CredentialExchange credential) throws Exception {
         log.debug("Issue Credential Event: {}", credential);
     }
 
-    public void handleCredentialV2(V20CredExRecord v20Credential) {
+    public void handleCredentialV2(V20CredExRecord v20Credential) throws Exception {
         log.debug("Issue Credential V2 Event: {}", v20Credential);
     }
 
-    public void handleDiscoverFeature(DiscoverFeatureEvent discoverFeature) {
+    public void handleDiscoverFeature(DiscoverFeatureEvent discoverFeature) throws Exception {
         log.debug("Discover Feature Event: {}", discoverFeature);
     }
 
-    public void handleIssueCredentialV2Indy(V2IssueIndyCredentialEvent credentialInfo) {
+    public void handleIssueCredentialV2Indy(V2IssueIndyCredentialEvent credentialInfo) throws Exception {
         log.debug("Issue Credential V2 Indy Event: {}", credentialInfo);
     }
 
-    public void handleIssueCredentialV2LD(V2IssueLDCredentialEvent credentialInfo) {
+    public void handleIssueCredentialV2LD(V2IssueLDCredentialEvent credentialInfo) throws Exception {
         log.debug("Issue LD Credential V2 Event: {}", credentialInfo);
     }
 
-    public void handleBasicMessage(BasicMessage message) {
+    public void handleBasicMessage(BasicMessage message) throws Exception {
         log.debug("Basic Message: {}", message);
     }
 
-    public void handlePing(PingEvent ping) {
+    public void handlePing(PingEvent ping) throws Exception {
         log.debug("Ping: {}", ping);
     }
 
-    public void handleRevocation(RevocationEvent revocation) {
+    public void handleRevocation(RevocationEvent revocation) throws Exception {
         log.debug("Revocation: {}", revocation);
     }
 
-    public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) {
+    public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) throws Exception {
         log.debug("Revocation Notification: {}", revocationNotification);
     }
 
-    public void handleEndorseTransaction(EndorseTransactionRecord transaction) {
+    public void handleEndorseTransaction(EndorseTransactionRecord transaction) throws Exception {
         log.debug("Endorse Transaction: {}", transaction);
     }
 
-    public void handleProblemReport(ProblemReport report) {
+    public void handleProblemReport(ProblemReport report) throws Exception {
         log.debug("Problem Report: {}", report);
     }
 
