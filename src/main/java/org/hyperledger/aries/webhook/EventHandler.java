@@ -59,7 +59,9 @@ public abstract class EventHandler implements IEventHandler {
             } else if (EventType.BASIC_MESSAGES.valueEquals(topic)) {
                 parser.parseValueSave(payload, BasicMessage.class).ifPresent(this::handleBasicMessage);
             } else if (EventType.PING.valueEquals(topic)) {
-                parser.parseValueSave(payload, PingEvent.class).ifPresent(this::handlePing);
+                // WebSocket ping events may not have a payload
+                if (payload == null) handlePing(null);
+                else parser.parseValueSave(payload, PingEvent.class).ifPresent(this::handlePing);
             } else if (EventType.ISSUER_CRED_REV.valueEquals(topic)) {
                 parser.parseValueSave(payload, RevocationEvent.class).ifPresent(this::handleRevocation);
             } else if (EventType.ENDORSE_TRANSACTION.valueEquals(topic)) {

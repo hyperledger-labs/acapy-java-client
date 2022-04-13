@@ -64,7 +64,9 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
             } else if (EventType.BASIC_MESSAGES.valueEquals(topic)) {
                 parser.parseValueSave(payload, BasicMessage.class).ifPresent(v -> handleBasicMessage(walletId, v));
             } else if (EventType.PING.valueEquals(topic)) {
-                parser.parseValueSave(payload, PingEvent.class).ifPresent(v -> handlePing(walletId, v));
+                // WebSocket ping events may not have a payload
+                if (payload == null) handlePing(walletId, null);
+                else parser.parseValueSave(payload, PingEvent.class).ifPresent(v -> handlePing(walletId, v));
             } else if (EventType.ISSUER_CRED_REV.valueEquals(topic)) {
                 parser.parseValueSave(payload, RevocationEvent.class).ifPresent(v -> handleRevocation(walletId, v));
             } else if (EventType.ENDORSE_TRANSACTION.valueEquals(topic)) {
