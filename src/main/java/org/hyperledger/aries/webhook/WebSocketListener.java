@@ -42,7 +42,8 @@ public class WebSocketListener extends okhttp3.WebSocketListener {
             JsonObject json = gson.fromJson(message, JsonObject.class);
             String topic = json.get("topic").getAsString();
             String payload = json.has("payload") ? json.get("payload").toString() : null;
-            handler.handleEvent(topic, payload);
+            String walletId = json.has("wallet_id") ? json.get("wallet_id").getAsString() : null;
+            handler.handleEvent(topic, walletId, payload);
         } catch (JsonSyntaxException ex) {
             log.error("JsonSyntaxException", ex);
         }
