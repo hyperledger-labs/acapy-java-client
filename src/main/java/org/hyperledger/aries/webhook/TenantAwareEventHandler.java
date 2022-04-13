@@ -48,92 +48,92 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
 
         try {
             if (EventType.CONNECTIONS.valueEquals(topic)) {
-                parser.parseValueSave(payload, ConnectionRecord.class).ifPresent(v -> handleConnection(walletId, v));
+                handleConnection(walletId, parser.parseValueSave(payload, ConnectionRecord.class).orElseThrow());
             } else if (EventType.PRESENT_PROOF.valueEquals(topic)) {
-                parser.parsePresentProof(payload).ifPresent(v -> handleProof(walletId, v));
+                handleProof(walletId, parser.parsePresentProof(payload).orElseThrow());
             } else if (EventType.PRESENT_PROOF_V2.valueEquals(topic)) {
-                parser.parseValueSave(payload, V20PresExRecord.class).ifPresent(v -> handleProofV2(walletId, v));
+                handleProofV2(walletId, parser.parseValueSave(payload, V20PresExRecord.class).orElseThrow());
             } else if (EventType.ISSUE_CREDENTIAL.valueEquals(topic)) {
-                parser.parseValueSave(payload, V1CredentialExchange.class).ifPresent(v -> handleCredential(walletId, v));
+                handleCredential(walletId, parser.parseValueSave(payload, V1CredentialExchange.class).orElseThrow());
             } else if (EventType.ISSUE_CREDENTIAL_V2.valueEquals(topic)) {
-                parser.parseValueSave(payload, V20CredExRecord.class).ifPresent(v -> handleCredentialV2(walletId, v));
+                handleCredentialV2(walletId, parser.parseValueSave(payload, V20CredExRecord.class).orElseThrow());
             } else if (EventType.ISSUE_CREDENTIAL_V2_INDY.valueEquals(topic)) {
-                parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class).ifPresent(v -> handleIssueCredentialV2Indy(walletId, v));
+                handleIssueCredentialV2Indy(walletId, parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class).orElseThrow());
             } else if (EventType.ISSUE_CREDENTIAL_V2_LD_PROOF.valueEquals(topic)) {
-                parser.parseValueSave(payload, V2IssueLDCredentialEvent.class).ifPresent(v -> handleIssueCredentialV2LD(walletId, v));
+                handleIssueCredentialV2LD(walletId, parser.parseValueSave(payload, V2IssueLDCredentialEvent.class).orElseThrow());
             } else if (EventType.BASIC_MESSAGES.valueEquals(topic)) {
-                parser.parseValueSave(payload, BasicMessage.class).ifPresent(v -> handleBasicMessage(walletId, v));
+                handleBasicMessage(walletId, parser.parseValueSave(payload, BasicMessage.class).orElseThrow());
             } else if (EventType.PING.valueEquals(topic)) {
-                parser.parseValueSave(payload, PingEvent.class).ifPresent(v -> handlePing(walletId, v));
+                handlePing(walletId, parser.parseValueSave(payload, PingEvent.class).orElseThrow());
             } else if (EventType.ISSUER_CRED_REV.valueEquals(topic)) {
-                parser.parseValueSave(payload, RevocationEvent.class).ifPresent(v -> handleRevocation(walletId, v));
+                handleRevocation(walletId, parser.parseValueSave(payload, RevocationEvent.class).orElseThrow());
             } else if (EventType.ENDORSE_TRANSACTION.valueEquals(topic)) {
-                parser.parseValueSave(payload, EndorseTransactionRecord.class).ifPresent(v -> handleEndorseTransaction(walletId, v));
+                handleEndorseTransaction(walletId, parser.parseValueSave(payload, EndorseTransactionRecord.class).orElseThrow());
             } else if (EventType.PROBLEM_REPORT.valueEquals(topic)) {
-                parser.parseValueSave(payload, ProblemReport.class).ifPresent(v -> handleProblemReport(walletId, v));
+                handleProblemReport(walletId, parser.parseValueSave(payload, ProblemReport.class).orElseThrow());
             } else if (EventType.DISCOVER_FEATURE.valueEquals(topic)) {
-                parser.parseValueSave(payload, DiscoverFeatureEvent.class).ifPresent(v -> handleDiscoverFeature(walletId, v));
+                handleDiscoverFeature(walletId, parser.parseValueSave(payload, DiscoverFeatureEvent.class).orElseThrow());
             } else if (EventType.REVOCATION_NOTIFICATION.valueEquals(topic)) {
-                parser.parseValueSave(payload, RevocationNotificationEvent.class).ifPresent(v -> handleRevocationNotification(walletId, v));
+                handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
         }
     }
 
-    public void handleConnection(String walletId, ConnectionRecord connection) {
+    public void handleConnection(String walletId, ConnectionRecord connection) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.CONNECTIONS, connection);
     }
 
-    public void handleProof(String walletId, PresentationExchangeRecord proof) {
+    public void handleProof(String walletId, PresentationExchangeRecord proof) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PRESENT_PROOF, proof);
     }
 
-    public void handleProofV2(String walletId, V20PresExRecord proof) {
+    public void handleProofV2(String walletId, V20PresExRecord proof) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PRESENT_PROOF_V2, proof);
     }
 
-    public void handleCredential(String walletId, V1CredentialExchange credential) {
+    public void handleCredential(String walletId, V1CredentialExchange credential) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ISSUE_CREDENTIAL, credential);
     }
 
-    public void handleCredentialV2(String walletId, V20CredExRecord v20Credential) {
+    public void handleCredentialV2(String walletId, V20CredExRecord v20Credential) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ISSUE_CREDENTIAL_V2, v20Credential);
     }
 
-    public void handleDiscoverFeature(String walletId, DiscoverFeatureEvent discoverFeature) {
+    public void handleDiscoverFeature(String walletId, DiscoverFeatureEvent discoverFeature) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.DISCOVER_FEATURE, discoverFeature);
     }
 
-    public void handleIssueCredentialV2Indy(String walletId, V2IssueIndyCredentialEvent credentialInfo) {
+    public void handleIssueCredentialV2Indy(String walletId, V2IssueIndyCredentialEvent credentialInfo) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ISSUE_CREDENTIAL_V2_INDY, credentialInfo);
     }
 
-    public void handleIssueCredentialV2LD(String walletId, V2IssueLDCredentialEvent credentialInfo) {
+    public void handleIssueCredentialV2LD(String walletId, V2IssueLDCredentialEvent credentialInfo) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ISSUE_CREDENTIAL_V2_LD_PROOF, credentialInfo);
     }
 
-    public void handleBasicMessage(String walletId, BasicMessage message) {
+    public void handleBasicMessage(String walletId, BasicMessage message) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.BASIC_MESSAGES, message);
     }
 
-    public void handlePing(String walletId, PingEvent ping) {
+    public void handlePing(String walletId, PingEvent ping) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PING, ping);
     }
 
-    public void handleRevocation(String walletId, RevocationEvent revocation) {
+    public void handleRevocation(String walletId, RevocationEvent revocation) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ISSUER_CRED_REV, revocation);
     }
 
-    public void handleRevocationNotification(String walletId, RevocationNotificationEvent revocationNotification) {
+    public void handleRevocationNotification(String walletId, RevocationNotificationEvent revocationNotification) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.REVOCATION_NOTIFICATION, revocationNotification);
     }
 
-    public void handleEndorseTransaction(String walletId, EndorseTransactionRecord transaction) {
+    public void handleEndorseTransaction(String walletId, EndorseTransactionRecord transaction) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.ENDORSE_TRANSACTION, transaction);
     }
 
-    public void handleProblemReport(String walletId, ProblemReport report) {
+    public void handleProblemReport(String walletId, ProblemReport report) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PROBLEM_REPORT, report);
     }
 
