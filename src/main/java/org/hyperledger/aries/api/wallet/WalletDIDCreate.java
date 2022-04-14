@@ -7,19 +7,12 @@
  */
 package org.hyperledger.aries.api.wallet;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotations.JsonAdapter;
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.acy_py.generated.model.DIDCreateOptions;
-
-import java.io.IOException;
 
 /**
  * DIDCreate
