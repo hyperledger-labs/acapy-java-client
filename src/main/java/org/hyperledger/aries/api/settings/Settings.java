@@ -7,23 +7,26 @@
  */
 package org.hyperledger.aries.api.settings;
 
-import com.google.gson.annotations.SerializedName;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * "payload": {"authenticated": true, "label": "Aries Cloud Agent", "endpoint": "http://localhost:8030", "no_receive_invites": false, "help_link": null}
+ * Websocket event payload
+ * <pre>{@code
+ * "payload": {
+ *     "authenticated": true,
+ *     "label": "Aries Cloud Agent",
+ *     "endpoint": "http://localhost:8030",
+ *     "no_receive_invites": false,
+ *     "help_link": null
+ * }
+ * }</pre>
  */
-@Data @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor
 public class Settings {
-
     private boolean authenticated;
-    @SerializedName("no_receive_invites")
-    private boolean noInvites;
+    private boolean noReceiveInvites;
     private String label;
     private String endpoint;
-    @SerializedName("help_link")
     private String helpLink;
 }

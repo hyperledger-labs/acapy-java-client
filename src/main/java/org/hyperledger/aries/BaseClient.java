@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-abstract class BaseClient {
+public abstract class BaseClient {
 
     static final MediaType JSON_TYPE = MediaType.get("application/json; charset=utf-8");
 
@@ -54,17 +54,17 @@ abstract class BaseClient {
     static final Type WALLET_RECORD_TYPE = new TypeToken<Collection<WalletRecord>>(){}.getType();
     static final Type MAP_TYPE = new TypeToken<Map<String, String>>(){}.getType();
 
-    static final String X_API_KEY = "X-API-Key";
-    static final String AUTHORIZATION = "Authorization";
-    static final String BEARER = "Bearer ";
+    protected static final String X_API_KEY = "X-API-Key";
+    protected static final String AUTHORIZATION = "Authorization";
+    protected static final String BEARER = "Bearer ";
 
-    static final String EMPTY_JSON = "{}";
+    public static final String EMPTY_JSON = "{}";
 
     final Gson gson = GsonConfig.defaultConfig();
 
-    final OkHttpClient client;
+    protected final OkHttpClient client;
 
-    BaseClient(@Nullable OkHttpClient client) {
+    protected BaseClient(@Nullable OkHttpClient client) {
         this.client = Objects.requireNonNullElseGet(client, () -> new OkHttpClient.Builder()
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
