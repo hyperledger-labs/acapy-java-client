@@ -21,6 +21,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
+import org.hyperledger.aries.api.settings.Settings;
 import org.hyperledger.aries.api.trustping.PingEvent;
 
 /**
@@ -70,6 +71,8 @@ public abstract class EventHandler implements IEventHandler {
                 parser.parseValueSave(payload, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
             } else if (EventType.REVOCATION_NOTIFICATION.valueEquals(topic)) {
                 parser.parseValueSave(payload, RevocationNotificationEvent.class).ifPresent(this::handleRevocationNotification);
+            } else if (EventType.SETTINGS.valueEquals(topic)) {
+                parser.parseValueSave(payload, Settings.class).ifPresent(this::handleSettings);
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
@@ -130,6 +133,10 @@ public abstract class EventHandler implements IEventHandler {
 
     public void handleProblemReport(ProblemReport report) {
         log.debug(LOG_MSG_SINGLE, EventType.PROBLEM_REPORT, report);
+    }
+
+    public void handleSettings(Settings settings) {
+        log.debug(LOG_MSG_SINGLE, EventType.SETTINGS, settings);
     }
 
     public void handleRaw(String eventType, String json) {

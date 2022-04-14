@@ -21,6 +21,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
+import org.hyperledger.aries.api.settings.Settings;
 import org.hyperledger.aries.api.trustping.PingEvent;
 
 /**
@@ -75,6 +76,8 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                 handleDiscoverFeature(walletId, parser.parseValueSave(payload, DiscoverFeatureEvent.class).orElseThrow());
             } else if (EventType.REVOCATION_NOTIFICATION.valueEquals(topic)) {
                 handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
+            } else if (EventType.SETTINGS.valueEquals(topic)) {
+                handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
             }
         } catch (Throwable e) {
             log.error("Error in webhook event handler:", e);
@@ -137,6 +140,10 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PROBLEM_REPORT, report);
     }
 
+    public void handleSettings(String walletId, Settings settings) {
+        log.debug(LOG_MSG_MULTI, walletId, EventType.SETTINGS, settings);
+    }
+    
     public void handleRaw(String walletId, String eventType, String json) {
         if (log.isTraceEnabled()) {
             log.trace(LOG_MSG_MULTI, walletId, eventType, parser.prettyJson(json));

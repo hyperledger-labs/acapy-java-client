@@ -30,7 +30,8 @@ public enum EventType {
     PRESENT_PROOF("present_proof"),
     PRESENT_PROOF_V2("present_proof_v2_0"),
     PROBLEM_REPORT("problem_report"),
-    REVOCATION_NOTIFICATION("revocation-notification")
+    REVOCATION_NOTIFICATION("revocation-notification"),
+    SETTINGS("settings")
     ;
 
     @Getter
