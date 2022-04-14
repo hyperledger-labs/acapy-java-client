@@ -1480,10 +1480,9 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      * @since 0.7.3
      */
-    public Optional<RegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
-            throws IOException {
+    public Optional<RegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/register-nym")).newBuilder();
-        filter.buildParams(b);
+        filter.buildParams(b, true);
         Request req = buildPost(b.build().toString(), EMPTY_JSON);
         return call(req, RegisterLedgerNymResponse.class);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -33,6 +33,14 @@ public class AcaPyRequestFilterTest {
         Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).myBool(Boolean.TRUE).build();
         Assertions.assertEquals(url + "?test_my_data=abc&test=value1&my_bool=true",
                 d.buildParams(b).toString());
+    }
+
+    @Test
+    void testCaseSensitiveEnumFilter() {
+        HttpUrl.Builder b = Objects.requireNonNull(base).newBuilder();
+        Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).myBool(Boolean.TRUE).build();
+        Assertions.assertEquals(url + "?test_my_data=abc&test=VALUE1&my_bool=true",
+                d.buildParams(b, true).toString());
     }
 
     @Test
