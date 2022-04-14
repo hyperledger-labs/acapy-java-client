@@ -104,10 +104,11 @@ public class AriesClient extends BaseClient {
     private final String bearerToken;
 
     /**
+     * Create a new aries client, supports builder methods like: {@code AriesClient.builder().build()}
      * @param url The aca-py admin api URL without a path e.g. protocol://host:[port]
-     * @param apiKey The admin api api key
-     * @param bearerToken the Bearer token used in the Authorization header when running in multi tenant mode
-     * @param client {@link OkHttpClient} if null a default client is created
+     * @param apiKey Optional: The admin api key, if security is enabled
+     * @param bearerToken Optional: The Bearer token used in the Authorization header when running in multi tenant mode
+     * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
      */
     @Builder
     public AriesClient(@NonNull String url, @Nullable String apiKey,
@@ -2470,7 +2471,7 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Rotate keypair of a did not posted to the ledger
+     * Rotate keypair of a did that was not posted to the ledger
      * @param did fully qualified did:indy
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */

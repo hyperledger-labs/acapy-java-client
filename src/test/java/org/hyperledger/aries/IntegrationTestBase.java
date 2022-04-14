@@ -22,6 +22,7 @@ public abstract class IntegrationTestBase {
     private final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
     public static final String ARIES_VERSION = "bcgovimages/aries-cloudagent:py36-1.16-1_0.7.3";
+    public static final Integer ARIES_INBOUND_PORT = 8030;
     public static final Integer ARIES_ADMIN_PORT = 8031;
 
     protected AriesClient ac;
@@ -30,7 +31,7 @@ public abstract class IntegrationTestBase {
     protected GenericContainer<?> ariesContainer = new GenericContainer<>(ARIES_VERSION)
             .withExposedPorts(ARIES_ADMIN_PORT)
             .withCommand("start"
-                    + " -it http 0.0.0.0 8030"
+                    + " -it http 0.0.0.0 " + ARIES_INBOUND_PORT
                     + " -ot http --admin 0.0.0.0 " + ARIES_ADMIN_PORT
                     + " --admin-insecure-mode"
                     + " --log-level debug"
