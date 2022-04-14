@@ -4,8 +4,7 @@
 [![CI/CD](https://github.com/hyperledger-labs/acapy-java-client/workflows/CI/CD/badge.svg)](https://github.com/hyperledger-labs/acapy-java-client/actions?query=workflow%3ACI%2FCD+branch%3Amain)
 ![Maven Central](https://img.shields.io/maven-central/v/network.idu.acapy/aries-client-python)
 
-Convenience library based on okhttp and gson to interact with [aries cloud agent python](https://github.com/hyperledger/aries-cloudagent-python) (aca-py) instances.  
-It is currently work in progress and not all endpoints of the agent are present in the client.
+Convenience library based on okhttp and gson to interact with [aries cloud agent python](https://github.com/hyperledger/aries-cloudagent-python) (aca-py) instances.
 
 ## Use it in your project
 
@@ -14,24 +13,6 @@ It is currently work in progress and not all endpoints of the agent are present 
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
    <version>0.7.23</version>
-</dependency>
-```
-
-For an aca-py 0.6.0 compatible client version you can use the following repository:
-
-```xml
-<repositories>
-    <repository>
-        <id>acapy-java-client</id>
-        <url>https://nexus.bosch-digital.com/repository/bds-all</url>
-    </repository>
-</repositories>
-```
-```xml
-<dependency>
-    <groupId>org.hyperledger</groupId>
-    <artifactId>aries-client-python</artifactId>
-    <version>0.23.0</version>
 </dependency>
 ```
 
@@ -246,7 +227,11 @@ For an aca-py 0.6.0 compatible client version you can use the following reposito
 
 ## Client Examples
 
-### Create the aca-py rest client
+### Sending Requests: Create the aca-py Rest Client
+
+The rest client is used to send requests against aca-py's admin rest endpoint.
+
+Related aca-py config flags are: `--admin <host> <port>`, `--admin-api-key <api-key>`
 
 The default assumes you are running against a single wallet. In case of multi tenancy with base and sub wallets
 the bearerToken needs to be set as well.
@@ -258,6 +243,105 @@ AriesClient ac = AriesClient
         .apiKey("secret") // optional - admin api key if set
         .bearerToken("123.456.789") // optional - jwt token - only when running in multi tenant mode
         .build();
+```
+
+### Receiving Events: Webhook and Websocket Handler Support
+
+With aca-py you have three options on how to receive status changes:
+1. Poll the rest API - this is not recommended
+2. Register a webhook URL
+3. Connect to aca-py's websocket
+
+#### Webhook
+
+Related aca-py config flag: `--webhook-url <url#api_key>`
+
+##### Single Tenant Controller Example
+
+If running a single wallet and not in multi tenant mode.
+
+```java
+@Controller
+public class WebhookController {
+
+   private EventHandler handler = new EventHandler.DefaultEventHandler();
+
+   @Post("/webhook/{topic}")
+   public void handleWebhookEvent(
+           @PathVariable String topic,
+           @Body String payload) {
+      handler.handleEvent(topic, payload);
+   }
+}
+```
+
+##### Multi Tenant Example
+
+If running in multi tenant mode.
+
+```java
+@Controller
+public class WebhookController {
+
+   private EventHandler handler = new TenantAwareEventHandler.DefaultTenantAwareEventHandler();
+
+   @Post("/webhook/{topic}")
+   public void handleWebhookEvent(
+           @PathVariable String topic,
+           @Body String payload,
+           HttpRequest request) {
+      String walletId = request.getHeaders().get("x-wallet-id");
+      handler.handleEvent(walletId, topic, payload);
+   }
+}
+```
+
+#### Websocket
+
+If the admin api is enabled aca-py also supports a websocket endpoint under `ws(s)://<host>:<port>/ws`
+
+To connect with the websocket you can use the `AriesWebSocketClient` like:
+
+```java
+@Factory
+public class AriesSocketFactory {
+
+   @Value("${acapy.ws.url}")
+   private String url;
+   @Value("${acapy.admin.apiKey}")
+   private String apiKey;
+   
+   @Singleton
+   @Bean(preDestroy = "closeWebsocket")
+   public AriesWebSocketClient ariesWebSocketClient() {
+      return AriesWebSocketClient
+              .builder()
+              .url(url) // optional - defaults to ws://localhost:8031/ws
+              .apiKey(apiKey) // optional - admin api key if set
+              .handler(new EventHandler.DefaultEventHandler()) // optional - your handler implementation
+              // .bearerToken(bearer) // optional - jwt token - only when running in multi tenant mode
+              .build();
+   }
+}
+```
+
+#### Custom Event Handler Implementation
+
+To add your own event handler implementation you can extend the abstract `EventHandler` or `TenantAwareEventHandler` classes which already take care of type conversion so that you can immediately start implementing your business logic.
+
+```java
+@Singleton
+public class MyHandler extends EventHandler {
+    @Override
+    public void handleProof(PresentationExchangeRecord proof) {
+        if (roleIsVerifierAndVerified()) {    // received a validated proof
+            MyCredential myCredential = proof.from(MyCredential.class);
+            // If the presentation is based on multiple credentials this can be done multiple times
+            // given that the POJO is annotated with @AttributeGroup e.g.
+           MyOtherCredential otherCredential = proof.from(MyOtherCredential.class);
+        }
+    }
+}
 ```
 
 ### A Word on Credential POJO's
@@ -320,66 +404,6 @@ PresentProofRequest proofRequest = PresentProofRequestHelper.buildForEachAttribu
 ac.presentProofSendRequest(proofRequest);
 ```
 
-## Webhook/Websocket Handler Support
-
-Webhook controller example
-
-```java
-@Controller
-public class WebhookController {
-
-    @Inject private EventHandler handler;
-
-    @Post("/webhook/{topic}")
-    public void ariesEvent(
-            @PathVariable String topic,
-            @Body String message) {
-        handler.handleEvent(topic, message);
-    }
-}
-```
-
-Websocket client example
-
-```java
-import org.hyperledger.aries.config.GsonConfig;
-import org.hyperledger.aries.webhook.WebsocketMessage;
-
-public class AcyPyWebsocketClient extends WebSocketClient {
-    
-    private Gson gson = GsonConfig.defaultConfig();
-    private EventHandler handler = new MyHandler();
-    
-    @OnMessage
-    public void onMessage(String message) {
-        WebsocketMessage msg = gson.fromJson(message, WebsocketMessage.class);
-        handler.handleEvent(msg.getTopic(), msg.getPayload());
-    }
-
-    public static void main(String[] args) throws URISyntaxException {
-        AcyPyWebsocketClient c = new AcyPyWebsocketClient(new URI(
-                "ws://localhost:8031/ws"));
-        c.connect();
-    }
-}
-```
-
-Your event handler can then extend the abstract EventHandler class which takes care of type conversion so that you can immediately implement your business logic.
-
-```java
-@Singleton
-public class MyHandler extends EventHandler {
-    @Override
-    public void handleProof(PresentationExchangeRecord proof) {
-        if (roleIsVerifierAndVerified()) {    // received a validated proof
-            MyCredential myCredential = proof.from(MyCredential.class);
-            // If the presentation is based on multiple credentials this can be done multiple times
-            // given that the POJO is annotated with @AttributeGroup e.g.
-           MyOtherCredential otherCredential = proof.from(MyOtherCredential.class);
-        }
-    }
-}
-```
 ## Build Connectionless Proof Request
 
 Connectionless proofs are more a thing of mobile wallets, because mostly they involve something that is presented to a human
