@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.webhook;
 
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
@@ -143,5 +144,10 @@ public abstract class EventHandler implements IEventHandler {
         if (log.isTraceEnabled()) {
             log.trace(LOG_MSG_SINGLE, eventType, parser.prettyJson(json));
         }
+    }
+
+    @NoArgsConstructor
+    public static final class DefaultEventHandler extends EventHandler {
+        //
     }
 }

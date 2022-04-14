@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.aries.BaseClient;
 import org.hyperledger.aries.config.GsonConfig;
 
 @Slf4j
@@ -45,13 +46,18 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String message) {
-        log.debug(appendLabel("Event: {}"), message);
+        log.trace(appendLabel("Event: {}"), message);
         try {
             JsonObject json = gson.fromJson(message, JsonObject.class);
             String walletId = json.has("wallet_id") ? json.get("wallet_id").getAsString() : null;
             String topic = json.get("topic").getAsString();
-            String payload = json.has("payload") ? json.get("payload").toString() : "{}";
-            handler.handleEvent(walletId, topic, payload);
+            String payload = json.has("payload") ? json.get("payload").toString() : BaseClient.EMPTY_JSON;
+
+            // drop ws ping messages, not to be confused with aca-py ping message
+            // https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2
+            if (notWsPing(topic, payload)) {
+                handler.handleEvent(walletId, topic, payload);
+            }
         } catch (JsonSyntaxException ex) {
             log.error("JsonSyntaxException", ex);
         }
@@ -72,5 +78,9 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
     @Override
     public void onClosed(@NonNull WebSocket webSocket, int code, @NonNull String reason) {
         log.debug(appendLabel("Closed: {} {}"), code, reason);
+    }
+
+    private boolean notWsPing(String topic, String payload) {
+        return !(EventType.PING.valueEquals(topic) && BaseClient.EMPTY_JSON.equals(payload));
     }
 }
