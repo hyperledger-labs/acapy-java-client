@@ -7,9 +7,24 @@
  */
 package org.hyperledger.aries.api.ledger;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+
 public enum IndyLedgerRoles {
+
+    @JsonProperty("steward")
+    @SerializedName("steward")
     STEWARD,
+
+    @JsonProperty("trustee")
+    @SerializedName("trustee")
     TRUSTEE,
+
+    @JsonProperty("endorser")
+    @SerializedName("endorser")
     ENDORSER,
+
+    @JsonProperty("network_monitor")
+    @SerializedName("network_monitor")
     NETWORK_MONITOR
 }
