@@ -12,19 +12,23 @@ import com.google.gson.annotations.SerializedName;
 
 public enum IndyLedgerRoles {
 
-    @JsonProperty("steward")
-    @SerializedName("steward")
+    @JsonProperty("STEWARD")
+    @SerializedName("STEWARD")
     STEWARD,
 
-    @JsonProperty("trustee")
-    @SerializedName("trustee")
+    @JsonProperty("TRUSTEE")
+    @SerializedName("TRUSTEE")
     TRUSTEE,
 
-    @JsonProperty("endorser")
-    @SerializedName("endorser")
+    @JsonProperty("ENDORSER")
+    @SerializedName("ENDORSER")
     ENDORSER,
 
-    @JsonProperty("network_monitor")
-    @SerializedName("network_monitor")
-    NETWORK_MONITOR
+    @JsonProperty("NETWORK_MONITOR")
+    @SerializedName("NETWORK_MONITOR")
+    NETWORK_MONITOR,
+
+    @JsonProperty("reset")
+    @SerializedName("reset")
+    RESET
 }

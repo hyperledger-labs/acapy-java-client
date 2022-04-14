@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import okhttp3.HttpUrl;
@@ -30,8 +31,8 @@ public class AcaPyRequestFilterTest {
     @Test
     void testFilter() {
         HttpUrl.Builder b = Objects.requireNonNull(base).newBuilder();
-        Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).myBool(Boolean.TRUE).build();
-        Assertions.assertEquals(url + "?test_my_data=abc&test=value1&my_bool=true",
+        Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).test2(AnnotatedDummyEnum.VALUE2).myBool(Boolean.TRUE).build();
+        Assertions.assertEquals(url + "?test_my_data=abc&test=value1&test2=value_2&my_bool=true",
                 d.buildParams(b).toString());
     }
 
@@ -47,10 +48,16 @@ public class AcaPyRequestFilterTest {
         private String testMyData;
         public String publicValue;
         private DummyEnum test;
+        private AnnotatedDummyEnum test2;
         private Boolean myBool;
     }
 
     private enum DummyEnum {
         VALUE1
+    }
+
+    private enum AnnotatedDummyEnum {
+        @SerializedName("value_2")
+        VALUE2
     }
 }
