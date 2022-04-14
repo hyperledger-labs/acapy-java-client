@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -14,6 +14,7 @@ import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.jsonld.SignRequest.SignDocument.Options;
 import org.hyperledger.aries.api.jsonld.VerifiableCredential.VerifiableIndyCredential;
+import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
@@ -104,7 +105,7 @@ class JsonldTest extends IntegrationTestBase {
     }
 
     private DID createLocalDid() throws Exception {
-        final Optional<DID> localDid = ac.walletDidCreate(DIDCreate
+        final Optional<DID> localDid = ac.walletDidCreate(WalletDIDCreate
                 .builder()
                 .method(DIDCreate.MethodEnum.SOV)
                 .build());

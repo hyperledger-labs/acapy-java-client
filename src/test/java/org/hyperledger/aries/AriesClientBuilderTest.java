@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -15,13 +15,9 @@ import static org.junit.Assert.assertThrows;
 class AriesClientBuilderTest {
 
     @Test
-    void testEmptyUrl() {
-        assertThrows(NullPointerException.class, () -> AriesClient.builder().url(null).build());
-    }
-
-    @Test
     void testBuild() {
         final String url = "https://foo.fr";
+        AriesClient.builder().build();
         AriesClient.builder().url(url).build();
 
         AriesClient.builder().url(url).apiKey(null).build();

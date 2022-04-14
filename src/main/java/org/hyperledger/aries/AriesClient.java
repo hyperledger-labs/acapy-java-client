@@ -55,7 +55,12 @@ import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.mediation.MediationKeyListQueryFilter;
 import org.hyperledger.aries.api.mediation.MediationKeyListsFilter;
 import org.hyperledger.aries.api.mediation.MediationRequestsFilter;
-import org.hyperledger.aries.api.multitenancy.*;
+import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
+import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
+import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
@@ -81,6 +86,7 @@ import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
+import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.TimeUtil;
 
 import javax.annotation.Nullable;
@@ -2465,7 +2471,7 @@ public class AriesClient extends BaseClient {
      * @return {@link DID}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<DID> walletDidCreate(@NonNull DIDCreate didCreate) throws IOException {
+    public Optional<DID> walletDidCreate(@NonNull WalletDIDCreate didCreate) throws IOException {
         Request req = buildPost(url + "/wallet/did/create", didCreate);
         return getWrapped(raw(req), "result", DID.class);
     }
