@@ -27,6 +27,14 @@ public class AriesWebSocketClient extends BaseClient {
     @Getter
     private WebSocket webSocket;
 
+    /**
+     * Create a new websocket client, supports builder methods like: {@code AriesWebSocketClient.builder().build()}
+     * @param url Optional: The aca-py ws URL e.g. ws(s)://host:[port]/ws, defaults to localhost
+     * @param apiKey Optional: The admin api key if security is enabled
+     * @param bearerToken Optional: The Bearer token used in the Authorization header when running in multi tenant mode
+     * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
+     * @param handler Optional: Custom event handler implementation, defaults to {@link EventHandler.DefaultEventHandler}
+     */
     @Builder
     public AriesWebSocketClient(@Nullable String url, @Nullable String apiKey,
         @Nullable String bearerToken, @Nullable OkHttpClient client, @Nullable IEventHandler handler) {
