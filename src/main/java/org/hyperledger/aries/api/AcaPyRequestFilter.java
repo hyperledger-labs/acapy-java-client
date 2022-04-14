@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api;
 
 import com.google.gson.FieldNamingPolicy;
+import com.google.gson.annotations.SerializedName;
 import lombok.NonNull;
 import okhttp3.HttpUrl;
 import org.hyperledger.aries.pojo.PojoProcessor;
@@ -33,7 +34,17 @@ public interface AcaPyRequestFilter {
                     if (f.getType().isAssignableFrom(String.class)) {
                         value = (String) o;
                     } else if (f.getType().isEnum()) {
-                        value = o.toString().toLowerCase(Locale.US);
+                        SerializedName sn = null;
+                        try {
+                            sn = o.getClass().getField(o.toString()).getAnnotation(SerializedName.class);
+                        } catch (NoSuchFieldException e) {
+                            log.error("No field found for name: {}", o, e);
+                        }
+                        if (sn != null) {
+                            value = sn.value();
+                        } else {
+                            value = o.toString().toLowerCase(Locale.US);
+                        }
                     } else if (f.getType().isAssignableFrom(Boolean.class)) {
                         value = ((Boolean) o).toString().toLowerCase(Locale.US);
                     }
