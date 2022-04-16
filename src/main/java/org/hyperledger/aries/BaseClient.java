@@ -63,6 +63,9 @@ public abstract class BaseClient {
     final Gson gson = GsonConfig.defaultConfig();
 
     final OkHttpClient client;
+    
+    private static final ThreadLocal<String> requestBodyTracer = new ThreadLocal<>();
+    private static final Gson pretty = GsonConfig.prettyPrinter();
 
     BaseClient(@Nullable OkHttpClient client) {
         this.client = Objects.requireNonNullElseGet(client, () -> new OkHttpClient.Builder()
@@ -74,6 +77,7 @@ public abstract class BaseClient {
     }
 
     static RequestBody jsonBody(String json) {
+        requestBodyTracer.set(json);
         return RequestBody.create(json, JSON_TYPE);
     }
 
@@ -82,12 +86,30 @@ public abstract class BaseClient {
     }
 
     <T> Optional<T> call(Request req, Type t) throws IOException {
+        if (log.isTraceEnabled()) {
+            log.trace("{}", req);
+            RequestBody reqBody = req.body();
+            if (reqBody != null && JSON_TYPE.equals(reqBody.contentType())) {
+                String jsonBody = requestBodyTracer.get();
+                JsonElement el = JsonParser.parseString(jsonBody);
+                log.trace("RequestBody\n{}", pretty.toJson(el));
+            }
+        }
         Optional<T> result = Optional.empty();
-        try (Response resp = client.newCall(req).execute()) {
-            if (resp.isSuccessful() && resp.body() != null) {
-                result = Optional.of(gson.fromJson(resp.body().string(), t));
-            } else if (!resp.isSuccessful()) {
-                handleError(resp);
+        try (Response res = client.newCall(req).execute()) {
+            ResponseBody resBody = res.body();
+            if (res.isSuccessful() && resBody != null) {
+                String jsonBody = resBody.string();
+                if (log.isTraceEnabled()) {
+                    log.trace("{}", res);
+                    if (JSON_TYPE.equals(resBody.contentType())) {
+                        JsonElement el = JsonParser.parseString(jsonBody);
+                        log.trace("ResposeBody\n{}", pretty.toJson(el));
+                    }
+                }
+                result = Optional.of(gson.fromJson(jsonBody, t));
+            } else if (!res.isSuccessful()) {
+                handleError(res);
             }
         }
         return result;
