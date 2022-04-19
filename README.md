@@ -200,10 +200,17 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /revocation/active-registry/{cred_def_id}                   | :white_check_mark: |
 | POST   | /revocation/clear-pending-revocations                       | :white_check_mark: |
 | POST   | /revocation/create-registry                                 | :white_check_mark: |
+| GET    | /revocation/credential-record                               | :white_check_mark: |
 | POST   | /revocation/publish-revocations                             | :white_check_mark: |
 | GET    | /revocation/registries/created                              | :white_check_mark: |
 | GET    | /revocation/registry/{rev_reg_id}                           | :white_check_mark: |
 | PATCH  | /revocation/registry/{rev_reg_id}                           | :white_check_mark: |
+| POST   | /revocation/registry/{rev_reg_id}/definition                | :white_check_mark: |
+| POST   | /revocation/registry/{rev_reg_id}/entry                     | :white_check_mark: |
+| GET    | /revocation/registry/{rev_reg_id}/issued                    | :white_check_mark: |
+| PATCH  | /revocation/registry/{rev_reg_id}/set-state                 | :white_check_mark: |
+| PUT    | /revocation/registry/{rev_reg_id}/tails-file                | :white_check_mark: |
+| GET    | /revocation/registry/{rev_reg_id}/tails-file                | :white_check_mark: |
 | POST   | /revocation/revoke                                          | :white_check_mark: |
 |        | **schema**                                                  |                    |
 | POST   | /schemas                                                    | :white_check_mark: |

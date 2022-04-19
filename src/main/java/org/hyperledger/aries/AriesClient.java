@@ -2176,13 +2176,13 @@ public class AriesClient extends BaseClient {
     /**
      * Get an active revocation registry by credential definition id
      * @param credentialDefinitionId the credential definition id
-     * @return {@link RevRegCreateResponse}
+     * @return {@link IssuerRevRegRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<RevRegCreateResponse> revocationActiveRegistry(@NonNull String credentialDefinitionId)
+    public Optional<IssuerRevRegRecord> revocationActiveRegistry(@NonNull String credentialDefinitionId)
             throws IOException {
         Request req = buildGet(url + "/revocation/active-registry/" + credentialDefinitionId);
-        return getWrapped(raw(req), "result", RevRegCreateResponse.class);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
     }
 
     /**
@@ -2206,13 +2206,30 @@ public class AriesClient extends BaseClient {
      * Second: publish the URI of the tails file {@link #revocationRegistryUpdateUri}
      * Third: Set the registry to active {@link #revocationActiveRegistry}
      * @param revRegRequest {@link RevRegCreateRequest}
-     * @return {@link RevRegCreateResponse}
+     * @return {@link IssuerRevRegRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<RevRegCreateResponse> revocationCreateRegistry(@NonNull RevRegCreateRequest revRegRequest)
+    public Optional<IssuerRevRegRecord> revocationCreateRegistry(@NonNull RevRegCreateRequest revRegRequest)
             throws IOException {
         Request req = buildPost(url + "/revocation/create-registry", revRegRequest);
-        return getWrapped(raw(req), "result", RevRegCreateResponse.class);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
+    }
+
+    /**
+     * Get credential revocation status
+     * @param filter {@link RevocationCredentialRecordFilter}
+     * @return {@link IssuerRevRegRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<IssuerRevRegRecord> revocationCredentialRecord(RevocationCredentialRecordFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/credential-record")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
     }
 
     /**
@@ -2221,24 +2238,9 @@ public class AriesClient extends BaseClient {
      * @return {@link PublishRevocations}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<PublishRevocations> revocationPublishRevocations(@NonNull PublishRevocations request)
+    public Optional<TxnOrPublishRevocationsResult> revocationPublishRevocations(@NonNull PublishRevocations request)
             throws IOException {
         Request req = buildPost(url + "/revocation/publish-revocations", request);
-        return call(req, PublishRevocations.class);
-    }
-
-    /**
-     * Publish pending revocations to ledger via an endorser
-     * @param request {@link PublishRevocations}
-     * @return {@link TxnOrPublishRevocationsResult}
-     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
-     */
-    public Optional<TxnOrPublishRevocationsResult> revocationPublishRevocations(@NonNull PublishRevocations request, @NonNull EndorserInfoFilter filter)
-            throws IOException {
-        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
-                .parse(url + "/revocation/publish-revocations")).newBuilder();
-        filter.buildParams(b);
-        Request req = buildPost(b.toString(), request);
         return call(req, TxnOrPublishRevocationsResult.class);
     }
 
@@ -2266,27 +2268,114 @@ public class AriesClient extends BaseClient {
     /**
      * Gets revocation registry by revocation registry id
      * @param revRegId the revocation registry id
-     * @return {@link RevRegCreateResponse}
+     * @return {@link IssuerRevRegRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<RevRegCreateResponse> revocationRegistryGetById(@NonNull String revRegId)
+    public Optional<IssuerRevRegRecord> revocationRegistryGetById(@NonNull String revRegId)
             throws IOException {
         Request req = buildGet(url + "/revocation/registry/" + revRegId);
-        return getWrapped(raw(req), "result", RevRegCreateResponse.class);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
     }
 
     /**
      * Update revocation registry with new public URI to the tails file.
      * @param revRegId the revocation registry id
      * @param tailsFileUri {@link RevRegUpdateTailsFileUri} the URI of the tails file
-     * @return {@link RevRegCreateResponse}
+     * @return {@link IssuerRevRegRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<RevRegCreateResponse> revocationRegistryUpdateUri(
+    public Optional<IssuerRevRegRecord> revocationRegistryUpdateUri(
             @NonNull String revRegId, @NonNull RevRegUpdateTailsFileUri tailsFileUri)
             throws IOException {
         Request req = buildPatch(url + "/revocation/registry/" + revRegId, tailsFileUri);
-        return getWrapped(raw(req), "result", RevRegCreateResponse.class);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
+    }
+
+    /**
+     * Send revocation registry definition to ledger
+     * @param revRegId revocation registry identifier
+     * @param filter {@link EndorserInfoFilter}
+     * @return {@link TxnOrRevRegResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TxnOrRevRegResult> revocationRegistrySendDefinition(@NonNull String revRegId, EndorserInfoFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/registry/" + revRegId + "/definition")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        return call(req, TxnOrRevRegResult.class);
+    }
+
+    /**
+     * Send revocation registry entry to ledger
+     * @param revRegId revocation registry identifier
+     * @param filter {@link EndorserInfoFilter}
+     * @return {@link IssuerRevRegRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<IssuerRevRegRecord> revocationRegistrySendEntry(@NonNull String revRegId, EndorserInfoFilter filter)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/registry/" + revRegId + "/entry")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
+    }
+
+    /**
+     * Get number of credentials issued against revocation registry
+     * @param revRegId revocation registry identifier
+     * @return {@link RevRegIssuedResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<RevRegIssuedResult> revocationRegistryIssuedCredentials(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued");
+        return call(req, RevRegIssuedResult.class);
+    }
+
+    /**
+     * Set revocation registry state manually
+     * @param revRegId revocation registry identifier
+     * @param state {@link RevocationRegistryState}
+     * @return {@link IssuerRevRegRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<IssuerRevRegRecord> revocationRegistrySetState(
+            @NonNull String revRegId, @NonNull RevocationRegistryState state)
+            throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/registry/" + revRegId + "/set-state")).newBuilder();
+        b.addQueryParameter("state", state.getValue());
+        Request req = buildPatch(b.toString(), EMPTY_JSON);
+        return getWrapped(raw(req), "result", IssuerRevRegRecord.class);
+    }
+
+    /**
+     * Upload local tails file to server
+     * @param revRegId revocation registry identifier
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void revocationRegistryTailsFile(@NonNull String revRegId) throws IOException {
+        Request req = buildPut(url + "/revocation/registry/" + revRegId + "/tails-file", EMPTY_JSON);
+        call(req);
+    }
+
+    /**
+     * Download tails file
+     * @param revRegId revocation registry identifier
+     * @return string with binary encoded payload
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<String> revocationRegistryDownloadTailsFile(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/tails-file");
+        return raw(req);
     }
 
     /**
@@ -2345,7 +2434,7 @@ public class AriesClient extends BaseClient {
     }
     
     /**
-     * Loads all schemas from the ledger, which where created by the DID of this cloudagent.
+     * Loads all schemas from the ledger, which where created by the DID of this cloud agent.
      * 
      * @param filter allows looking only for some schemas
      * @return List of Schema names
