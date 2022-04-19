@@ -1,10 +1,16 @@
 {
+  "created_at": "2020-08-06 08:40:35.369109Z",
+  "cred_def_id": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
+  "issuer_did": "VoSfM3eGaPxduty34ySygw",
+  "max_cred_num": 100,
+  "pending_pub": [],
+  "record_id": "58d9bb8c-a156-42a1-980f-d2ced76e09c6",
+  "revoc_def_type": "CL_ACCUM",
   "revoc_reg_def": {
-    "ver": "1.0",
+    "credDefId": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
     "id": "VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:58d9bb8c-a156-42a1-980f-d2ced76e09c6",
     "revocDefType": "CL_ACCUM",
     "tag": "58d9bb8c-a156-42a1-980f-d2ced76e09c6",
-    "credDefId": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
     "value": {
       "issuanceType": "ISSUANCE_BY_DEFAULT",
       "maxCredNum": 100,
@@ -15,25 +21,19 @@
       },
       "tailsHash": "BbDRLDMdR6vaC2esHmmyjdrnAfc88mY3ZE453uRvLS9R",
       "tailsLocation": "/home/indy/.indy_client/tails/.hopper/BbDRLDMdR6vaC2esHmmyjdrnAfc88mY3ZE453uRvLS9R"
-    }
+    },
+    "ver": "1.0"
   },
-  "tails_hash": "BbDRLDMdR6vaC2esHmmyjdrnAfc88mY3ZE453uRvLS9R",
-  "record_id": "58d9bb8c-a156-42a1-980f-d2ced76e09c6",
-  "updated_at": "2020-08-06 08:40:35.729281Z",
-  "state": "generated",
-  "revoc_def_type": "CL_ACCUM",
-  "cred_def_id": "VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank",
   "revoc_reg_entry": {
-    "ver": "1.0",
     "value": {
       "accum": "21 13B66CD6FDF99A80122CB35AE091E2380C86D5A67D0F39AE66893FD16C7756B66 21 10D09AC9340C04F529D0ECB4FA4CC8397316B9623A16B023D47DB127B35D244A9 6 7DC9BCBA4D8CB3CAB3E7A453231FB0F11CDDDDC203D2E7B220F8D009E2846D84 4 1EEE53D7B531B24BA16430D85B6D9846AC38C9E7EFEB6C062967BE71E1631907 6 7AB01AD5C025AE6A1B778F2A9DCA33BF67518C035CB41E04261F94F8D75208B4 4 29DAE370574DE7D66D7C4C8CD9B143821F81A9274259DA175E25558D0B755D7E"
-    }
+    },
+    "ver": "1.0"
   },
-  "pending_pub": [],
   "revoc_reg_id": "VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:58d9bb8c-a156-42a1-980f-d2ced76e09c6",
-  "created_at": "2020-08-06 08:40:35.369109Z",
-  "max_cred_num": 100,
+  "state": "generated",
+  "tag": "58d9bb8c-a156-42a1-980f-d2ced76e09c6",
+  "tails_hash": "BbDRLDMdR6vaC2esHmmyjdrnAfc88mY3ZE453uRvLS9R",
   "tails_local_path": "/home/indy/.indy_client/tails/VoSfM3eGaPxduty34ySygw:4:VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank:CL_ACCUM:58d9bb8c-a156-42a1-980f-d2ced76e09c6/BbDRLDMdR6vaC2esHmmyjdrnAfc88mY3ZE453uRvLS9R",
-  "issuer_did": "VoSfM3eGaPxduty34ySygw",
-  "tag": "58d9bb8c-a156-42a1-980f-d2ced76e09c6"
+  "updated_at": "2020-08-06 08:40:35.729281Z"
 }

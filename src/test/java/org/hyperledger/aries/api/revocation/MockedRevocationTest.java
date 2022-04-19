@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api.revocation;
 
 import okhttp3.mockwebserver.MockResponse;
+import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
@@ -24,13 +25,13 @@ class MockedRevocationTest extends MockedTestBase {
     void testCreateRevReg() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationCreateRegistry(RevRegCreateRequest
+        IssuerRevRegRecord reg = ac.revocationCreateRegistry(RevRegCreateRequest
                 .builder()
                 .credentialDefinitionId("VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank")
-                .build());
+                .build())
+                .orElseThrow();
 
-        Assertions.assertTrue(reg.isPresent());
-        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg.get()));
+        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg));
     }
 
     @Test
@@ -39,32 +40,29 @@ class MockedRevocationTest extends MockedTestBase {
 
         server.enqueue(new MockResponse().setBody(reqCreated));
 
-        final Optional<RevRegsCreated> created = ac.revocationRegistriesCreated(null, null);
+        RevRegsCreated created = ac.revocationRegistriesCreated(null, null).orElseThrow();
 
-        Assertions.assertTrue(created.isPresent());
-        Assertions.assertEquals(2, created.get().getRevRegIds().size());
-        Assertions.assertTrue(created.get().getRevRegIds().get(0).startsWith("VoSfM3eGaPxduty34ySygw"));
+        Assertions.assertEquals(2, created.getRevRegIds().size());
+        Assertions.assertTrue(created.getRevRegIds().get(0).startsWith("VoSfM3eGaPxduty34ySygw"));
     }
 
     @Test
     void testGetRevRegById() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationRegistryGetById("mocked");
+        IssuerRevRegRecord reg = ac.revocationRegistryGetById("mocked").orElseThrow();
 
-        Assertions.assertTrue(reg.isPresent());
-        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg.get()));
+        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg));
     }
 
     @Test
     void testUpdateRegistryUri() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationRegistryUpdateUri("mocked",
-                new RevRegUpdateTailsFileUri("https://something.bar"));
+        IssuerRevRegRecord reg = ac.revocationRegistryUpdateUri("mocked",
+                new RevRegUpdateTailsFileUri("https://something.bar")).orElseThrow();
 
-        Assertions.assertTrue(reg.isPresent());
-        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg.get()));
+        Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg));
     }
 
     @Test
@@ -74,10 +72,9 @@ class MockedRevocationTest extends MockedTestBase {
 
         server.enqueue(new MockResponse().setBody(respActive));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationActiveRegistry("mocked");
+        IssuerRevRegRecord reg = ac.revocationActiveRegistry("mocked").orElseThrow();
 
-        Assertions.assertTrue(reg.isPresent());
-        Assertions.assertEquals(parsedActive, GsonConfig.prettyPrinter().toJson(reg.get()));
+        Assertions.assertEquals(parsedActive, GsonConfig.prettyPrinter().toJson(reg));
     }
 
 }
