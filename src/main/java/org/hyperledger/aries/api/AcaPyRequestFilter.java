@@ -35,7 +35,16 @@ public interface AcaPyRequestFilter {
                     if (f.getType().isAssignableFrom(String.class)) {
                         value = (String) o;
                     } else if (f.getType().isEnum()) {
-                        value = getSerializedName(o);
+                        Field field = FieldUtils.getDeclaredField(o.getClass(), o.toString());
+                        if (field != null) {
+                            SerializedName sn = field.getAnnotation(SerializedName.class);
+                            if (sn != null) {
+                                value = sn.value();
+                            }
+                        }
+                        if (value == null) {
+                            value = o.toString().toLowerCase(Locale.US);
+                        }
                     } else if (f.getType().isAssignableFrom(Boolean.class)) {
                         value = ((Boolean) o).toString().toLowerCase(Locale.US);
                     }
@@ -48,16 +57,5 @@ public interface AcaPyRequestFilter {
             }
         });
         return b;
-    }
-
-    private String getSerializedName(@NonNull Object o) {
-        Field field = FieldUtils.getDeclaredField(o.getClass(), o.toString());
-        if (field != null) {
-            SerializedName sn = field.getAnnotation(SerializedName.class);
-            if (sn != null) {
-                return sn.value();
-            }
-        }
-        return o.toString().toLowerCase(Locale.US);
     }
 }

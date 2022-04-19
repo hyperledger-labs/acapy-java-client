@@ -7,12 +7,11 @@
  */
 package org.hyperledger.aries.api.connection;
 
-import lombok.*;
-import okhttp3.HttpUrl;
-import org.apache.commons.lang3.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
-
-import java.util.Locale;
 
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class CreateInvitationParams implements AcaPyRequestFilter {
