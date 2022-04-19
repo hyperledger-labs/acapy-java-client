@@ -16,10 +16,11 @@ import javax.annotation.Nullable;
 @Data @Builder
 public class ConnectionFilter implements AcaPyRequestFilter {
     @Nullable private String alias;
-    @Nullable private ConnectionInitiator initiator;
+    @Nullable private ConnectionRecord.ConnectionProtocol connectionProtocol;
     @Nullable private String invitationKey;
     @Nullable private String myDid;
     @Nullable private ConnectionState state;
     @Nullable private String theirDid;
-    @Nullable private String theirRole;
+    @Nullable private String theirPublicDid;
+    @Nullable private ConnectionTheirRole theirRole;
 }
