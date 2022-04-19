@@ -141,7 +141,7 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
         log.debug(LOG_MSG_MULTI, walletId, EventType.PROBLEM_REPORT, report);
     }
 
-    public void handleSettings(String walletId, Settings settings) {
+    public void handleSettings(String walletId, Settings settings) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.SETTINGS, settings);
     }
     

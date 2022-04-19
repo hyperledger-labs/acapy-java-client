@@ -70,6 +70,7 @@ import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresSpecByFormatRequest;
+import org.hyperledger.aries.api.present_proof_v2.V2PresentProofRecordsFilter;
 import org.hyperledger.aries.api.resolver.DIDDocument;
 import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
 import org.hyperledger.aries.api.revocation.RevRegUpdateTailsFileUri;
@@ -861,7 +862,7 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<EndorserInfo> endorseTransactionSetEndorserInfo(
-            @NonNull String connectionId, @NonNull SetEndorserInfoFilter filter) throws IOException{
+            @NonNull String connectionId, @NonNull SetEndorserInfoFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(
                 HttpUrl.parse(url + "/transactions/" + connectionId + "/set-endorser-info")).newBuilder();
         filter.buildParams(b);
@@ -878,7 +879,7 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<TransactionJobs> endorseTransactionSetEndorserRole(
-            @NonNull String connectionId, @NonNull SetEndorserRoleFilter filter) throws IOException{
+            @NonNull String connectionId, @NonNull SetEndorserRoleFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(
                 HttpUrl.parse(url + "/transactions/" + connectionId + "/set-endorser-role")).newBuilder();
         filter.buildParams(b);
@@ -905,7 +906,7 @@ public class AriesClient extends BaseClient {
      * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<EndorseTransactionRecord> endorseTransactionCancel(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionCancel(@NonNull String trxId) throws IOException {
         Request req = buildPost(url + "/transactions/" + trxId + "/cancel", EMPTY_JSON);
         return call(req, EndorseTransactionRecord.class);
     }
@@ -917,8 +918,25 @@ public class AriesClient extends BaseClient {
      * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<EndorseTransactionRecord> endorseTransactionEndorse(@NonNull String trxId) throws IOException{
-        Request req = buildPost(url + "/transactions/" + trxId + "/endorse", EMPTY_JSON);
+    public Optional<EndorseTransactionRecord> endorseTransactionEndorse(@NonNull String trxId) throws IOException {
+        return endorseTransactionEndorse(trxId, null);
+    }
+
+    /**
+     * For Endorser to endorse a particular transaction record
+     * @since aca-py 0.7.0
+     * @param trxId transaction id
+     * @param endorserDid optional endorser DID
+     * @return {@link EndorseTransactionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<EndorseTransactionRecord> endorseTransactionEndorse(@NonNull String trxId, String endorserDid) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/transactions/" + trxId + "/endorse")).newBuilder();
+        if (StringUtils.isNotEmpty(endorserDid)) {
+            b.addQueryParameter("endorser_did", endorserDid);
+        }
+        Request req = buildPost(b.toString(), EMPTY_JSON);
         return call(req, EndorseTransactionRecord.class);
     }
 
@@ -929,7 +947,7 @@ public class AriesClient extends BaseClient {
      * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<EndorseTransactionRecord> endorseTransactionRefuse(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionRefuse(@NonNull String trxId) throws IOException {
         Request req = buildPost(url + "/transactions/" + trxId + "/refuse", EMPTY_JSON);
         return call(req, EndorseTransactionRecord.class);
     }
@@ -941,7 +959,7 @@ public class AriesClient extends BaseClient {
      * @return {@link EndorseTransactionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<EndorseTransactionRecord> endorseTransactionWrite(@NonNull String trxId) throws IOException{
+    public Optional<EndorseTransactionRecord> endorseTransactionWrite(@NonNull String trxId) throws IOException {
         Request req = buildPost(url + "/transactions/" + trxId + "/write", EMPTY_JSON);
         return call(req, EndorseTransactionRecord.class);
     }
@@ -957,7 +975,7 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public void connectionsStartIntroduction(
-            @NonNull String connectionId, @NonNull ConnectionStartIntroductionFilter filter) throws IOException{
+            @NonNull String connectionId, @NonNull ConnectionStartIntroductionFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(
                 HttpUrl.parse(url + "/connections/" + connectionId + "/start-introduction")).newBuilder();
         filter.buildParams(b);
@@ -2002,11 +2020,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Fetch all present-proof exchange records
-     * @param filter {@link PresentProofRecordsFilter}
+     * @param filter {@link V2PresentProofRecordsFilter}
      * @return list of {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<List<V20PresExRecord>> presentProofV2Records(@Nullable PresentProofRecordsFilter filter)
+    public Optional<List<V20PresExRecord>> presentProofV2Records(@Nullable V2PresentProofRecordsFilter filter)
             throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/present-proof-2.0/records")).newBuilder();
         if (filter != null) {
@@ -2505,6 +2523,21 @@ public class AriesClient extends BaseClient {
      */
     public Optional<DID> walletDidPublic(@NonNull String did) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did/public")).newBuilder();
+        b.addQueryParameter("did", did);
+        Request req = buildPost(b.toString(), EMPTY_JSON);
+        return getWrapped(raw(req), "result", DID.class);
+    }
+
+    /**
+     * Assign the current public did as an endorser
+     * @param did fully qualified did:indy
+     * @param endorserInfoFilter {@link EndorserInfoFilter}
+     * @return {@link DID}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<DID> walletDidPublic(@NonNull String did, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did/public")).newBuilder();
+        endorserInfoFilter.buildParams(b);
         b.addQueryParameter("did", did);
         Request req = buildPost(b.toString(), EMPTY_JSON);
         return getWrapped(raw(req), "result", DID.class);

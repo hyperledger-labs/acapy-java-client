@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -8,8 +8,10 @@
 package org.hyperledger.aries.api;
 
 import com.google.gson.FieldNamingPolicy;
+import com.google.gson.annotations.SerializedName;
 import lombok.NonNull;
 import okhttp3.HttpUrl;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.hyperledger.aries.pojo.PojoProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +35,16 @@ public interface AcaPyRequestFilter {
                     if (f.getType().isAssignableFrom(String.class)) {
                         value = (String) o;
                     } else if (f.getType().isEnum()) {
-                        value = o.toString().toLowerCase(Locale.US);
+                        Field field = FieldUtils.getDeclaredField(o.getClass(), o.toString());
+                        if (field != null) {
+                            SerializedName sn = field.getAnnotation(SerializedName.class);
+                            if (sn != null) {
+                                value = sn.value();
+                            }
+                        }
+                        if (value == null) {
+                            value = o.toString().toLowerCase(Locale.US);
+                        }
                     } else if (f.getType().isAssignableFrom(Boolean.class)) {
                         value = ((Boolean) o).toString().toLowerCase(Locale.US);
                     }

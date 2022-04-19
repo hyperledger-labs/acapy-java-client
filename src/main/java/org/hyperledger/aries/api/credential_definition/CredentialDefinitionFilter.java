@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -15,7 +15,9 @@ import javax.annotation.Nullable;
 
 @Data @Builder
 public class CredentialDefinitionFilter implements AcaPyRequestFilter {
-    @Nullable private String credentialDefinitionId;
+    @Deprecated @Nullable private String credentialDefinitionId;
+    @Nullable private String credDefId;
+
     @Nullable private String issuerDid;
     @Nullable private String schemaId;
     @Nullable private String schemaIssuerDid;
