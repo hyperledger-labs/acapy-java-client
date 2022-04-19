@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api.revocation;
 
 import okhttp3.mockwebserver.MockResponse;
+import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +25,7 @@ class MockedRevocationTest extends MockedTestBase {
     void testCreateRevReg() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationCreateRegistry(RevRegCreateRequest
+        final Optional<IssuerRevRegRecord> reg = ac.revocationCreateRegistry(RevRegCreateRequest
                 .builder()
                 .credentialDefinitionId("VoSfM3eGaPxduty34ySygw:3:CL:571:sparta_bank")
                 .build());
@@ -50,7 +51,7 @@ class MockedRevocationTest extends MockedTestBase {
     void testGetRevRegById() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationRegistryGetById("mocked");
+        final Optional<IssuerRevRegRecord> reg = ac.revocationRegistryGetById("mocked");
 
         Assertions.assertTrue(reg.isPresent());
         Assertions.assertEquals(parsed, GsonConfig.prettyPrinter().toJson(reg.get()));
@@ -60,7 +61,7 @@ class MockedRevocationTest extends MockedTestBase {
     void testUpdateRegistryUri() throws Exception {
         server.enqueue(new MockResponse().setBody(response));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationRegistryUpdateUri("mocked",
+        final Optional<IssuerRevRegRecord> reg = ac.revocationRegistryUpdateUri("mocked",
                 new RevRegUpdateTailsFileUri("https://something.bar"));
 
         Assertions.assertTrue(reg.isPresent());
@@ -74,7 +75,7 @@ class MockedRevocationTest extends MockedTestBase {
 
         server.enqueue(new MockResponse().setBody(respActive));
 
-        final Optional<RevRegCreateResponse> reg = ac.revocationActiveRegistry("mocked");
+        final Optional<IssuerRevRegRecord> reg = ac.revocationActiveRegistry("mocked");
 
         Assertions.assertTrue(reg.isPresent());
         Assertions.assertEquals(parsedActive, GsonConfig.prettyPrinter().toJson(reg.get()));
