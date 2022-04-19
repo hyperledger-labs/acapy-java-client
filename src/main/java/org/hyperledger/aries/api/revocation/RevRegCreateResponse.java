@@ -7,21 +7,8 @@
  */
 package org.hyperledger.aries.api.revocation;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.hyperledger.acy_py.generated.model.IndyRevRegDef;
-import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
-import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
-import org.hyperledger.aries.config.CredDefId;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data @NoArgsConstructor
 public class RevRegCreateResponse {
