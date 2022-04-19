@@ -5,48 +5,35 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.issue_credential_v2;
+package org.hyperledger.aries.api.present_proof_v2;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
-import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeRole;
+import org.hyperledger.aries.api.present_proof.PresentationExchangeRole;
 
 import javax.annotation.Nullable;
 
 @Data @Builder
-public class V2IssueCredentialRecordsFilter implements AcaPyRequestFilter {
+public class V2PresentProofRecordsFilter implements AcaPyRequestFilter {
     @Nullable private String connectionId;
-    @Nullable private CredentialExchangeRole role;
-    @Nullable private V2CredExRecordState state;
+    @Nullable private PresentationExchangeRole role;
+    @Nullable private PresentProofRecordsFilterState state;
     @Nullable private String threadId;
 
-    public enum V2CredExRecordState {
-
-        /**
-         * @since 0.7.4
-         */
+    public enum PresentProofRecordsFilterState {
         @SerializedName("abandoned")
         ABANDONED,
-
-        @SerializedName("credential-issued")
-        CREDENTIAL_ISSUED,
-
-        @SerializedName("credential-received")
-        CREDENTIAL_RECEIVED,
-
-        @SerializedName("credential-revoked")
-        CREDENTIAL_REVOKED,
 
         @SerializedName("done")
         DONE,
 
-        @SerializedName("offer-received")
-        OFFER_RECEIVED,
+        @SerializedName("presentation-sent")
+        PRESENTATIONS_SENT,
 
-        @SerializedName("offer-sent")
-        OFFER_SENT,
+        @SerializedName("presentation-received")
+        PRESENTATION_RECEIVED,
 
         @SerializedName("proposal-received")
         PROPOSAL_RECEIVED,

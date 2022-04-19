@@ -52,9 +52,11 @@ public interface AcaPyRequestFilter {
 
     private String getSerializedName(@NonNull Object o) {
         Field field = FieldUtils.getDeclaredField(o.getClass(), o.toString());
-        SerializedName sn = field.getAnnotation(SerializedName.class);
-        if (sn != null) {
-            return sn.value();
+        if (field != null) {
+            SerializedName sn = field.getAnnotation(SerializedName.class);
+            if (sn != null) {
+                return sn.value();
+            }
         }
         return o.toString().toLowerCase(Locale.US);
     }
