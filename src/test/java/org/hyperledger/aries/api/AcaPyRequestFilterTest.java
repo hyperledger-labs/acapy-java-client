@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Data;
 import okhttp3.HttpUrl;
 import org.hyperledger.acy_py.generated.model.DID;
-import org.hyperledger.acy_py.generated.model.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +21,7 @@ import java.util.Objects;
 
 public class AcaPyRequestFilterTest {
 
-    private final String url = "http://foo.bar/";
+    private final String url = "https://foo.bar/";
     private final HttpUrl base =  HttpUrl.parse(url);
 
     @Test
