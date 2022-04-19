@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -17,6 +17,9 @@ public class DidExchangeCreateRequestFilter implements AcaPyRequestFilter {
     /** Public DID to which to request connection */
     private String theirPublicDid;
 
+    /** Alias for connection */
+    private String alias;
+
     /** Identifier for active mediation record to be used */
     private String mediationId;
 
@@ -30,9 +33,10 @@ public class DidExchangeCreateRequestFilter implements AcaPyRequestFilter {
     private Boolean usePublicDid;
 
     @Builder
-    public DidExchangeCreateRequestFilter(@NonNull String theirPublicDid, String mediationId,
+    public DidExchangeCreateRequestFilter(@NonNull String theirPublicDid, String alias, String mediationId,
         String myEndpoint, String myLabel, Boolean usePublicDid) {
         this.theirPublicDid = theirPublicDid;
+        this.alias = alias;
         this.mediationId = mediationId;
         this.myEndpoint = myEndpoint;
         this.myLabel = myLabel;
