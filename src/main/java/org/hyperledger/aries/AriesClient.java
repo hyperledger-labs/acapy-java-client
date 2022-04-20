@@ -32,6 +32,7 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilte
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.credentials.CredentialRevokedFilter;
+import org.hyperledger.aries.api.credentials.ListCredentialsFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.discover_features.DiscoverFeaturesQueryFilter;
@@ -599,11 +600,26 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<List<Credential>> credentials() throws IOException {
-        return credentials(null);
+        return credentials(ListCredentialsFilter.builder().build());
     }
 
     /**
      * Fetch credentials from wallet
+     * @param filter {@link ListCredentialsFilter}
+     * @return All credentials or credentials that match the filter criteria
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<Credential>> credentials(@Nullable ListCredentialsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/credentials")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
+        return getWrapped(raw(req), "results", CREDENTIAL_TYPE);
+    }
+
+    /**
+     * Fetch credentials from wallet - filter results in memory
      * @param filter see {@link CredentialFilter} for prepared filters
      * @return Credentials that match the filter criteria
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
