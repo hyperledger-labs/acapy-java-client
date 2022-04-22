@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.Singular;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Response;
 import okhttp3.WebSocket;
@@ -19,17 +20,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.BaseClient;
 import org.hyperledger.aries.config.GsonConfig;
 
+import java.util.List;
+
 @Slf4j
 public class AriesWebSocketListener extends okhttp3.WebSocketListener {
 
     private final Gson gson = GsonConfig.defaultConfig();
 
     private final String label;
-    private final IEventHandler handler;
+    private final List<IEventHandler> handler;
     private final boolean withLabel;
 
     @Builder
-    public AriesWebSocketListener(String label, @NonNull IEventHandler handler) {
+    public AriesWebSocketListener(String label, @NonNull @Singular("handler") List<IEventHandler> handler) {
         this.label = label;
         this.handler = handler;
         this.withLabel = StringUtils.isNotEmpty(label);
@@ -56,7 +59,7 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
             // drop ws ping messages, not to be confused with aca-py ping message
             // https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2
             if (notWsPing(topic, payload)) {
-                handler.handleEvent(walletId, topic, payload);
+                handler.forEach(h -> h.handleEvent(walletId, topic, payload));
             }
         } catch (JsonSyntaxException ex) {
             log.error("JsonSyntaxException", ex);
@@ -81,6 +84,6 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
     }
 
     private boolean notWsPing(String topic, String payload) {
-        return !(EventType.PING.valueEquals(topic) && BaseClient.EMPTY_JSON.equals(payload));
+        return !(EventType.PING.topicEquals(topic) && BaseClient.EMPTY_JSON.equals(payload));
     }
 }

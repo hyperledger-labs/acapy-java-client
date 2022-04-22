@@ -9,6 +9,7 @@ package org.hyperledger.aries;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Singular;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
@@ -18,6 +19,7 @@ import org.hyperledger.aries.webhook.EventHandler;
 import org.hyperledger.aries.webhook.IEventHandler;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * ACA-PY Websocket Client: Receives events from aca-py
@@ -27,7 +29,7 @@ public class AriesWebSocketClient extends BaseClient {
     private final String url;
     private final String apiKey;
     private final String bearerToken;
-    private final IEventHandler handler;
+    private final List<IEventHandler> handler;
 
     @Getter
     private WebSocket webSocket;
@@ -38,16 +40,16 @@ public class AriesWebSocketClient extends BaseClient {
      * @param apiKey Optional: The admin api key if security is enabled
      * @param bearerToken Optional: The Bearer token used in the Authorization header when running in multi tenant mode
      * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
-     * @param handler Optional: Custom event handler implementation, defaults to {@link EventHandler.DefaultEventHandler}
+     * @param handler Optional: None, one or many custom event handler implementations, defaults to {@link EventHandler.DefaultEventHandler}
      */
     @Builder
     public AriesWebSocketClient(@Nullable String url, @Nullable String apiKey,
-        @Nullable String bearerToken, @Nullable OkHttpClient client, @Nullable IEventHandler handler) {
+        @Nullable String bearerToken, @Nullable OkHttpClient client, @Nullable @Singular("handler") List<IEventHandler> handler) {
         super(client);
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
-        this.handler = handler != null ? handler : new EventHandler.DefaultEventHandler();
+        this.handler = handler != null ? handler : List.of(new EventHandler.DefaultEventHandler());
         openWebSocket();
     }
 
@@ -67,7 +69,7 @@ public class AriesWebSocketClient extends BaseClient {
 
     public void closeWebsocket() {
         if (webSocket != null) {
-            webSocket.close(1001, "Going Down");
+            webSocket.close(1001, null);
         }
     }
 }

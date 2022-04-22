@@ -15,7 +15,8 @@ import org.hyperledger.aries.AriesClient;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.multitenancy.*;
-import org.hyperledger.aries.webhook.AriesWebSocketClient;
+import org.hyperledger.aries.AriesWebSocketClient;
+import org.hyperledger.aries.webhook.TenantAwareEventHandler;
 import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -171,13 +172,13 @@ public class MultiTenantTest {
                 .apiKey(adminApiKey)
                 .bearerToken(wallet2.getToken())
                 .build();
-        ReactiveEventHandler rx = new ReactiveEventHandler();
+        ReactiveEventHandler rx = ReactiveEventHandler.builder().walletId(wallet2.getWalletId()).build();
         AriesWebSocketClient socket = AriesWebSocketClient.builder()
                 .apiKey(adminApiKey)
                 .url("ws://localhost:" + ariesContainer.getMappedPort(IntegrationTestBase.ARIES_ADMIN_PORT) + "/ws")
                 .bearerToken(wallet2.getToken())
                 .handler(rx)
-                // .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
+                .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
                 .build();
 
         // prepare the wallets
@@ -218,7 +219,7 @@ public class MultiTenantTest {
                 .orElseThrow();
         log.debug("connection record wallet-1: {}", cr1);
 
-        rx.connections().filter(c -> c.stateIsRequest() && c.getConnectionId().equals(sub2Invite.getConnectionId())).subscribe(s -> {
+        rx.connection().filter(ConnectionRecord::stateIsRequest).subscribe(s -> {
             log.debug("wallet-2 accepting connection request: {}", s);
             try {
                 sub2.connectionsAcceptRequest(s.getConnectionId(), null);
@@ -227,8 +228,8 @@ public class MultiTenantTest {
             }
         });
 
-        ConnectionRecord active = rx.connections()
-                .filter(c -> c.stateIsActive() && c.getConnectionId().equals(sub2Invite.getConnectionId()))
+        ConnectionRecord active = rx.connection()
+                .filter(ConnectionRecord::stateIsActive)
                 .blockFirst(Duration.ofSeconds(5));
         Assertions.assertNotNull(active);
         Assertions.assertEquals(cr1.getInvitationKey(), active.getInvitationKey());

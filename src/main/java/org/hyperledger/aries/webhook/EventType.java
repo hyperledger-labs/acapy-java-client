@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Optional;
+
 /**
  * List of aca-py webhook/websocket event types/topics.
  */
@@ -35,14 +37,23 @@ public enum EventType {
     ;
 
     @Getter
-    private final String value;
+    private final String topic;
 
-    public boolean valueEquals(String other) {
-        return StringUtils.equals(value, other);
+    public boolean topicEquals(String other) {
+        return StringUtils.equals(topic, other);
     }
 
     @Override
     public String toString() {
-        return this.value;
+        return this.topic;
+    }
+
+    public static Optional<EventType> fromTopic(String topic) {
+        for (EventType t : EventType.values()) {
+            if (t.getTopic().equalsIgnoreCase(topic)) {
+                return Optional.of(t);
+            }
+        }
+        return Optional.empty();
     }
 }

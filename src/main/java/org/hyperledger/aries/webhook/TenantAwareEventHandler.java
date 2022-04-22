@@ -48,41 +48,59 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
 
         handleRaw(walletId, topic, payload);
 
-        try {
-            if (EventType.CONNECTIONS.valueEquals(topic)) {
-                handleConnection(walletId, parser.parseValueSave(payload, ConnectionRecord.class).orElseThrow());
-            } else if (EventType.PRESENT_PROOF.valueEquals(topic)) {
-                handleProof(walletId, parser.parsePresentProof(payload).orElseThrow());
-            } else if (EventType.PRESENT_PROOF_V2.valueEquals(topic)) {
-                handleProofV2(walletId, parser.parseValueSave(payload, V20PresExRecord.class).orElseThrow());
-            } else if (EventType.ISSUE_CREDENTIAL.valueEquals(topic)) {
-                handleCredential(walletId, parser.parseValueSave(payload, V1CredentialExchange.class).orElseThrow());
-            } else if (EventType.ISSUE_CREDENTIAL_V2.valueEquals(topic)) {
-                handleCredentialV2(walletId, parser.parseValueSave(payload, V20CredExRecord.class).orElseThrow());
-            } else if (EventType.ISSUE_CREDENTIAL_V2_INDY.valueEquals(topic)) {
-                handleIssueCredentialV2Indy(walletId, parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class).orElseThrow());
-            } else if (EventType.ISSUE_CREDENTIAL_V2_LD_PROOF.valueEquals(topic)) {
-                handleIssueCredentialV2LD(walletId, parser.parseValueSave(payload, V2IssueLDCredentialEvent.class).orElseThrow());
-            } else if (EventType.BASIC_MESSAGES.valueEquals(topic)) {
-                handleBasicMessage(walletId, parser.parseValueSave(payload, BasicMessage.class).orElseThrow());
-            } else if (EventType.PING.valueEquals(topic)) {
-                handlePing(walletId, parser.parseValueSave(payload, PingEvent.class).orElseThrow());
-            } else if (EventType.ISSUER_CRED_REV.valueEquals(topic)) {
-                handleRevocation(walletId, parser.parseValueSave(payload, RevocationEvent.class).orElseThrow());
-            } else if (EventType.ENDORSE_TRANSACTION.valueEquals(topic)) {
-                handleEndorseTransaction(walletId, parser.parseValueSave(payload, EndorseTransactionRecord.class).orElseThrow());
-            } else if (EventType.PROBLEM_REPORT.valueEquals(topic)) {
-                handleProblemReport(walletId, parser.parseValueSave(payload, ProblemReport.class).orElseThrow());
-            } else if (EventType.DISCOVER_FEATURE.valueEquals(topic)) {
-                handleDiscoverFeature(walletId, parser.parseValueSave(payload, DiscoverFeatureEvent.class).orElseThrow());
-            } else if (EventType.REVOCATION_NOTIFICATION.valueEquals(topic)) {
-                handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
-            } else if (EventType.SETTINGS.valueEquals(topic)) {
-                handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
+        EventType.fromTopic(topic).ifPresent(t -> {
+            try {
+                switch (t) {
+                    case CONNECTIONS:
+                        handleConnection(walletId, parser.parseValueSave(payload, ConnectionRecord.class).orElseThrow());
+                        break;
+                    case PRESENT_PROOF:
+                        handleProof(walletId, parser.parsePresentProof(payload).orElseThrow());
+                        break;
+                    case PRESENT_PROOF_V2:
+                        handleProofV2(walletId, parser.parseValueSave(payload, V20PresExRecord.class).orElseThrow());
+                        break;
+                    case ISSUE_CREDENTIAL:
+                        handleCredential(walletId, parser.parseValueSave(payload, V1CredentialExchange.class).orElseThrow());
+                        break;
+                    case ISSUE_CREDENTIAL_V2:
+                        handleCredentialV2(walletId, parser.parseValueSave(payload, V20CredExRecord.class).orElseThrow());
+                        break;
+                    case ISSUE_CREDENTIAL_V2_INDY:
+                        handleIssueCredentialV2Indy(walletId, parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class).orElseThrow());
+                        break;
+                    case ISSUE_CREDENTIAL_V2_LD_PROOF:
+                        handleIssueCredentialV2LD(walletId, parser.parseValueSave(payload, V2IssueLDCredentialEvent.class).orElseThrow());
+                        break;
+                    case BASIC_MESSAGES:
+                        handleBasicMessage(walletId, parser.parseValueSave(payload, BasicMessage.class).orElseThrow());
+                        break;
+                    case PING:
+                        handlePing(walletId, parser.parseValueSave(payload, PingEvent.class).orElseThrow());
+                        break;
+                    case ISSUER_CRED_REV:
+                        handleRevocation(walletId, parser.parseValueSave(payload, RevocationEvent.class).orElseThrow());
+                        break;
+                    case ENDORSE_TRANSACTION:
+                        handleEndorseTransaction(walletId, parser.parseValueSave(payload, EndorseTransactionRecord.class).orElseThrow());
+                        break;
+                    case PROBLEM_REPORT:
+                        handleProblemReport(walletId, parser.parseValueSave(payload, ProblemReport.class).orElseThrow());
+                        break;
+                    case DISCOVER_FEATURE:
+                        handleDiscoverFeature(walletId, parser.parseValueSave(payload, DiscoverFeatureEvent.class).orElseThrow());
+                        break;
+                    case REVOCATION_NOTIFICATION:
+                        handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
+                        break;
+                    case SETTINGS:
+                        handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
+                        break;
+                }
+            } catch (Throwable e) {
+                log.error("Error in webhook event handler:", e);
             }
-        } catch (Throwable e) {
-            log.error("Error in webhook event handler:", e);
-        }
+        });
     }
 
     public void handleConnection(String walletId, ConnectionRecord connection) throws Exception {
