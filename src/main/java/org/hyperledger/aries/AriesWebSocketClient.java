@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.webhook;
+package org.hyperledger.aries;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +13,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.aries.BaseClient;
+import org.hyperledger.aries.webhook.AriesWebSocketListener;
+import org.hyperledger.aries.webhook.EventHandler;
+import org.hyperledger.aries.webhook.IEventHandler;
 
 import javax.annotation.Nullable;
 
+/**
+ * ACA-PY Websocket Client: Receives events from aca-py
+ */
 public class AriesWebSocketClient extends BaseClient {
 
     private final String url;
@@ -49,7 +54,7 @@ public class AriesWebSocketClient extends BaseClient {
     private void openWebSocket() {
         Request.Builder b = new Request.Builder();
         b.url(url);
-        if(apiKey != null) {
+        if (apiKey != null) {
             b.header(X_API_KEY, apiKey);
         }
         if (bearerToken != null) {
