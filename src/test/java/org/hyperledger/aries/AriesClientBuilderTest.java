@@ -10,8 +10,6 @@ package org.hyperledger.aries;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertThrows;
-
 class AriesClientBuilderTest {
 
     @Test
