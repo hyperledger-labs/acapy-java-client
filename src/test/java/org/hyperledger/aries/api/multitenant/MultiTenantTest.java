@@ -15,6 +15,8 @@ import org.hyperledger.aries.AriesClient;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.multitenancy.*;
+import org.hyperledger.aries.webhook.AriesWebSocketClient;
+import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -25,6 +27,8 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 
 @Testcontainers
@@ -51,7 +55,7 @@ public class MultiTenantTest {
                     + " --multitenant"
                     + " --jwt-secret " + jwtSecret
                     + " --multitenant-admin"
-                    + " --log-level info")
+                    + " --log-level error")
             .waitingFor(Wait.defaultWaitStrategy())
             .withLogConsumer(new Slf4jLogConsumer(log))
             ;
@@ -137,20 +141,21 @@ public class MultiTenantTest {
                 .walletName("wallet1")
                 .label("mySubWallet1")
                 .walletType(WalletType.ASKAR)
+                .walletDispatchType(WalletDispatchType.BOTH)
                 .build()).orElseThrow();
-        log.debug("{}", wallet1);
+        log.debug("wallet 1: {}", wallet1);
 
         WalletRecord wallet2 = base.multitenancyWalletCreate(CreateWalletRequest.builder()
                 .walletKey("wallet2")
                 .walletName("wallet2")
                 .label("mySubWallet2")
                 .walletType(WalletType.ASKAR)
+                .walletDispatchType(WalletDispatchType.BOTH)
                 .build()).orElseThrow();
-        log.debug("{}", wallet1);
+        log.debug("wallet 2: {}", wallet2);
 
         // test get sub wallets
         List<WalletRecord> walletRecords = base.multitenancyWallets(null).orElseThrow();
-        log.debug("{}", walletRecords);
         Assertions.assertEquals(2, walletRecords.size());
 
         // create client for sub wallet 1
@@ -165,6 +170,14 @@ public class MultiTenantTest {
                 .url(adminUrl)
                 .apiKey(adminApiKey)
                 .bearerToken(wallet2.getToken())
+                .build();
+        ReactiveEventHandler rx = new ReactiveEventHandler();
+        AriesWebSocketClient socket = AriesWebSocketClient.builder()
+                .apiKey(adminApiKey)
+                .url("ws://localhost:" + ariesContainer.getMappedPort(IntegrationTestBase.ARIES_ADMIN_PORT) + "/ws")
+                .bearerToken(wallet2.getToken())
+                .handler(rx)
+                // .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
                 .build();
 
         // prepare the wallets
@@ -195,6 +208,7 @@ public class MultiTenantTest {
         CreateInvitationResponse sub2Invite = sub2.connectionsCreateInvitation(CreateInvitationRequest
                 .builder().build()).orElseThrow();
         ConnectionInvitation invitation2 = sub2Invite.getInvitation();
+        log.debug("Invitation wallet-2: {}", sub2Invite);
 
         // wallet 1 receives the invitation
         ConnectionRecord cr1 = sub1.connectionsReceiveInvitation(ReceiveInvitationRequest.builder()
@@ -202,27 +216,22 @@ public class MultiTenantTest {
                         .recipientKeys(invitation2.getRecipientKeys())
                         .build(), ConnectionReceiveInvitationFilter.builder().autoAccept(true).build())
                 .orElseThrow();
-        log.debug("{}", cr1);
+        log.debug("connection record wallet-1: {}", cr1);
 
-        // waiting in wallet 2 for the connection to become active
-        int i = 0;
-        while(i < 10) {
-            List<ConnectionRecord> connectionRecords = sub2.connections(ConnectionFilter.builder().build()).orElseThrow();
-            i++;
-            boolean hasConnections = !connectionRecords.isEmpty();
-            if (hasConnections && connectionRecords.get(0).stateIsActive()) {
-                Assertions.assertEquals(cr1.getInvitationKey(), connectionRecords.get(0).getInvitationKey());
-                log.debug("Connected: {}", connectionRecords.get(0));
-                break;
-            } else if (hasConnections && connectionRecords.get(0).stateIsRequest()) {
-                // wallet2 accepts the connection
-                sub2.connectionsAcceptRequest(connectionRecords.get(0).getConnectionId(), null);
-                log.debug("Sub2 accepting invitation");
-            } else if (i == 10){
-                Assertions.fail("Sub wallet 2 was unable to connect with sub wallet 1");
+        rx.connections().filter(c -> c.stateIsRequest() && c.getConnectionId().equals(sub2Invite.getConnectionId())).subscribe(s -> {
+            log.debug("wallet-2 accepting connection request: {}", s);
+            try {
+                sub2.connectionsAcceptRequest(s.getConnectionId(), null);
+            } catch (IOException e) {
+                Assertions.fail("expecting to connect", e);
             }
-            Thread.sleep(1000);
-        }
+        });
+
+        ConnectionRecord active = rx.connections()
+                .filter(c -> c.stateIsActive() && c.getConnectionId().equals(sub2Invite.getConnectionId()))
+                .blockFirst(Duration.ofSeconds(5));
+        Assertions.assertNotNull(active);
+        Assertions.assertEquals(cr1.getInvitationKey(), active.getInvitationKey());
 
         // test delete wallet
         base.multitenancyWalletRemove(wallet1.getWalletId(), RemoveWalletRequest.builder()
@@ -235,5 +244,7 @@ public class MultiTenantTest {
         // test delete success
         walletRecords = base.multitenancyWallets(null).orElseThrow();
         Assertions.assertEquals(0, walletRecords.size());
+
+        socket.closeWebsocket();
     }
 }

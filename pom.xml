@@ -60,7 +60,7 @@
         <jackson.version>2.13.2</jackson.version>
         <junit.jupiter.api.version>5.8.2</junit.jupiter.api.version>
         <kotlin.version>1.6.20</kotlin.version>
-        <lombok.version>1.18.22</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
         <pmd.version>6.44.0</pmd.version>
@@ -88,6 +88,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.4.17</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

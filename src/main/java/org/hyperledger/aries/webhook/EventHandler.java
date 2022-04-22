@@ -45,7 +45,7 @@ public abstract class EventHandler implements IEventHandler {
 
         try {
             if (EventType.CONNECTIONS.valueEquals(topic)) {
-                parser.parseValueSave(payload, ConnectionRecord.class).ifPresent(this::handleConnection);
+                parser.parseValueSave(payload, ConnectionRecord.class, this::handleConnection);
             } else if (EventType.PRESENT_PROOF.valueEquals(topic)) {
                 parser.parsePresentProof(payload).ifPresent(this::handleProof);
             } else if (EventType.PRESENT_PROOF_V2.valueEquals(topic)) {
