@@ -91,6 +91,8 @@ public abstract class EventHandler implements IEventHandler {
                     case SETTINGS:
                         parser.parseValueSave(payload, Settings.class, this::handleSettings);
                         break;
+                    default:
+                        break;
                 }
             } catch (Throwable e) {
                 log.error("Error in webhook event handler:", e);

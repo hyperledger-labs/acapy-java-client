@@ -96,6 +96,8 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                     case SETTINGS:
                         handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
                         break;
+                    default:
+                        break;
                 }
             } catch (Throwable e) {
                 log.error("Error in webhook event handler:", e);

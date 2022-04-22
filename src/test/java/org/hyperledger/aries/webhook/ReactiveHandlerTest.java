@@ -10,29 +10,38 @@ package org.hyperledger.aries.webhook;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.connection.ConnectionState;
 import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reactor.core.Disposable;
 
 public class ReactiveHandlerTest {
 
     @Test
-    void testReactiveSink() {
-        ReactiveEventHandler h = new ReactiveEventHandler();
+    void testSubscribeAfterDispose() {
+        ReactiveEventHandler h = ReactiveEventHandler.builder().build();
+        Disposable s1 = h.connection().subscribe(System.out::println);
+        Disposable s2 = h.connection().subscribe(System.out::println);
 
-        ConnectionRecord c1 = new ConnectionRecord();
-        c1.setState(ConnectionState.REQUEST);
-        ConnectionRecord c2 = new ConnectionRecord();
-        c2.setState(ConnectionState.ACTIVE);
+        h.handleEvent("connections", "{}");
 
-        h.connections().filter(ConnectionRecord::stateIsActive).subscribe(System.out::println);
-        h.connections().filter(ConnectionRecord::stateIsActive).subscribe(System.out::println);
+        s1.dispose();
+        s2.dispose();
 
-        //h.handleConnection(c1);
-        //h.handleConnection(c2);
+        Disposable s3 = h.connection().subscribe(System.out::println);
 
-        //h.handleConnection(c1);
-        //h.handleConnection(c2);
+        h.handleEvent("connections", "{}");
 
-        //subscribe.dispose();
+        s3.dispose();
+    }
+
+    @Test
+    void testBlockingGet() {
+        ReactiveEventHandler h1 = ReactiveEventHandler.builder().walletId("1").build();
+
+        h1.handleEvent("1", "connections", "{\"state\": \"active\"}");
+
+
+        ConnectionRecord c1 = h1.connection().filter(ConnectionRecord::stateIsActive).blockFirst();
+        Assertions.assertTrue(c1.stateIsActive());
     }
 }

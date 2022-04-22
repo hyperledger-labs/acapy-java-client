@@ -50,7 +50,7 @@ public class EventParser {
     }
 
     public <T> void parseValueSave(@NonNull String json, @NonNull Class<T> valueType, Consumer<T> consumer) {
-        parseValueSave(json, valueType).ifPresent(parsed -> consumer.accept(parsed));
+        parseValueSave(json, valueType).ifPresent(consumer);
     }
 
     public Optional<PresentationExchangeRecord> parsePresentProof(String json) {

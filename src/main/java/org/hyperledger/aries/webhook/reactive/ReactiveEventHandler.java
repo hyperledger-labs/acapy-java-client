@@ -121,6 +121,8 @@ public class ReactiveEventHandler implements IEventHandler {
                     case REVOCATION_NOTIFICATION:
                         parser.parseValueSave(payload, RevocationNotificationEvent.class, revocationNotificationSink::tryEmitNext);
                         break;
+                    default:
+                        break;
                 }
             } catch (Throwable e) {
                 log.error("Error in reactive event handler:", e);

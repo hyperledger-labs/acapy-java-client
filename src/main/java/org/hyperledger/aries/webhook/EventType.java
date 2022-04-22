@@ -50,7 +50,7 @@ public enum EventType {
 
     public static Optional<EventType> fromTopic(String topic) {
         for (EventType t : EventType.values()) {
-            if (t.getTopic().equalsIgnoreCase(topic)) {
+            if (StringUtils.equalsIgnoreCase(t.getTopic(), topic)) {
                 return Optional.of(t);
             }
         }
