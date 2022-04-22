@@ -243,10 +243,19 @@ Related aca-py config flags are: `--admin <host> <port>`, `--admin-api-key <api-
 The default assumes you are running against a single wallet. In case of multi tenancy with base and sub wallets
 the bearerToken needs to be set as well.
 
+Example aca-py config flags:
+
+```shell
+--admin 0.0.0.0 8031
+--admin-api-key secret
+```
+
+Example client builder:
+
 ```java
 AriesClient ac = AriesClient
         .builder()
-        .url("https://myacapy.com:8031")
+        .url("http://localhost:8031") // optional - defaults to localhost:8031
         .apiKey("secret") // optional - admin api key if set
         .bearerToken("123.456.789") // optional - jwt token - only when running in multi tenant mode
         .build();
@@ -267,6 +276,8 @@ Related aca-py config flag: `--webhook-url <url#api_key>`
 
 If running a single wallet and not in multi tenant mode.
 
+Example aca-py config flag: `--webhook-url http://localhost:8080/webhook`
+
 ```java
 @Controller
 public class WebhookController {
@@ -285,6 +296,17 @@ public class WebhookController {
 ##### Multi Tenant Example
 
 If running in multi tenant mode.
+
+Example aca-py config flags:
+
+```shell
+--webhook-url http://localhost:8080/webhook
+--multitenant
+--jwt-secret 1234
+--multitenant-admin
+```
+
+Example multi tenant webhook controller
 
 ```java
 @Controller
@@ -305,7 +327,9 @@ public class WebhookController {
 
 #### Websocket
 
-If the admin api is enabled aca-py also supports a websocket endpoint under `ws(s)://<host>:<port>/ws`
+If the admin api is enabled aca-py also supports a websocket endpoint under `ws(s)://<host>:<admin-port>/ws`
+
+Example aca-py config flag: `--admin 0.0.0.0 8031`
 
 To connect with the websocket you can use the `AriesWebSocketClient` like:
 

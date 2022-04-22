@@ -101,7 +101,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * ACA-PY client
+ * ACA-PY Rest Client: Sends requests against rest API
  */
 @Slf4j
 @SuppressWarnings("unused")
@@ -113,16 +113,16 @@ public class AriesClient extends BaseClient {
 
     /**
      * Create a new aries client, supports builder methods like: {@code AriesClient.builder().build()}
-     * @param url The aca-py admin api URL without a path e.g. protocol://host:[port]
+     * @param url Optional: The aca-py admin api URL without a path e.g. http(s)://host:[port], defaults to localhost
      * @param apiKey Optional: The admin api key, if security is enabled
      * @param bearerToken Optional: The Bearer token used in the Authorization header when running in multi tenant mode
      * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
      */
     @Builder
-    public AriesClient(@NonNull String url, @Nullable String apiKey,
+    public AriesClient(@Nullable String url, @Nullable String apiKey,
                        @Nullable String bearerToken, @Nullable OkHttpClient client) {
         super(client);
-        this.url = StringUtils.trim(url);
+        this.url = StringUtils.isEmpty(url) ? "http://localhost:8031" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
     }
