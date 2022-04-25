@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -74,14 +74,12 @@ class MockedCredentialTest extends MockedTestBase {
         String json = loader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        Optional<List<Credential>> credentials = ac.credentials(
-                CredentialFilter.schemaId(schemaId));
+        Optional<List<Credential>> credentials = ac.credentials(CredentialFilter.schemaId(schemaId));
         Assertions.assertTrue(credentials.isPresent());
         Assertions.assertEquals(4, credentials.get().size());
 
         server.enqueue(new MockResponse().setBody(json));
-        credentials = ac.credentials(
-                CredentialFilter.schemaId(schemaId).negate());
+        credentials = ac.credentials(CredentialFilter.schemaId(schemaId).negate());
         Assertions.assertTrue(credentials.isPresent());
         Assertions.assertEquals(1, credentials.get().size());
     }
@@ -91,8 +89,8 @@ class MockedCredentialTest extends MockedTestBase {
         String json = loader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<List<Credential>> credentials = ac.credentials(
-                CredentialFilter.credentialDefinitionId(credentialDefinitionId));
+        final Optional<List<Credential>> credentials = ac
+                .credentials(CredentialFilter.credentialDefinitionId(credentialDefinitionId));
         Assertions.assertTrue(credentials.isPresent());
         Assertions.assertEquals(1, credentials.get().size());
     }
@@ -102,9 +100,8 @@ class MockedCredentialTest extends MockedTestBase {
         String json = loader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final List<String> credentials = ac.credentialIds(
-                CredentialFilter.credentialDefinitionId(credentialDefinitionId)
-                .and(CredentialFilter.schemaId(schemaId)));
+        final List<String> credentials = ac.credentialIds(CredentialFilter
+                .credentialDefinitionId(credentialDefinitionId).and(CredentialFilter.schemaId(schemaId)));
         Assertions.assertEquals(1, credentials.size());
         Assertions.assertEquals("60591077-717b-429b-bda1-f5930d2870c7", credentials.get(0));
     }
@@ -114,8 +111,8 @@ class MockedCredentialTest extends MockedTestBase {
         String json = loader.load("files/issueCredentialRecords");
         server.enqueue(new MockResponse().setBody(json));
 
-        Optional<List<V1CredentialExchange>> exchanges = ac.issueCredentialRecords(IssueCredentialRecordsFilter.builder()
-                .state(CredentialExchangeState.PROPOSAL_RECEIVED).build());
+        Optional<List<V1CredentialExchange>> exchanges = ac.issueCredentialRecords(
+                IssueCredentialRecordsFilter.builder().state(CredentialExchangeState.PROPOSAL_RECEIVED).build());
         Assertions.assertTrue(exchanges.isPresent());
         Assertions.assertEquals(2, exchanges.get().size());
         Assertions.assertEquals(CredentialExchangeState.PROPOSAL_RECEIVED, exchanges.get().get(0).getState());

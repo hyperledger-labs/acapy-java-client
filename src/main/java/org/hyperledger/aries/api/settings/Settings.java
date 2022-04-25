@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 
 /**
  * Websocket event payload
- * <pre>{@code
+ *
+ * <pre>
+ * {@code
  * "payload": {
  *     "authenticated": true,
  *     "label": "Aries Cloud Agent",
@@ -20,9 +22,11 @@ import lombok.NoArgsConstructor;
  *     "no_receive_invites": false,
  *     "help_link": null
  * }
- * }</pre>
+ * }
+ * </pre>
  */
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
 public class Settings {
     private boolean authenticated;
     private boolean noReceiveInvites;

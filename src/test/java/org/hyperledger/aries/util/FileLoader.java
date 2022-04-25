@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -31,7 +31,7 @@ public class FileLoader {
 
         InputStream is = getClass().getClassLoader().getResourceAsStream(fn);
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            result =  buffer.lines().collect(Collectors.joining("\n"));
+            result = buffer.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             log.error("Could not read from input stream.", e);
         }

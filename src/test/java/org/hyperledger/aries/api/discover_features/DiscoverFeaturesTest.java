@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -16,8 +16,8 @@ public class DiscoverFeaturesTest extends IntegrationTestBase {
 
     @Test
     void testQuery() throws Exception {
-        V10DiscoveryRecord v10DiscoveryRecord = ac.discoverFeaturesQuery(DiscoverFeaturesQueryFilter
-                .builder().build()).orElseThrow();
+        V10DiscoveryRecord v10DiscoveryRecord = ac.discoverFeaturesQuery(DiscoverFeaturesQueryFilter.builder().build())
+                .orElseThrow();
         Assertions.assertNotNull(v10DiscoveryRecord.getDisclose());
         Assertions.assertNotNull(v10DiscoveryRecord.getDisclose().getAtId());
     }
