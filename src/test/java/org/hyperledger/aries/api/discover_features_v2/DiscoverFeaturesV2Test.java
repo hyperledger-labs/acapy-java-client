@@ -16,8 +16,8 @@ public class DiscoverFeaturesV2Test extends IntegrationTestBase {
 
     @Test
     void testQueryV2() throws Exception {
-        V20DiscoveryRecord v20DiscoveryRecord = ac.discoverFeaturesV2Queries(DiscoverFeaturesV2QueriesFilter
-                .builder().build()).orElseThrow();
+        V20DiscoveryRecord v20DiscoveryRecord = ac
+                .discoverFeaturesV2Queries(DiscoverFeaturesV2QueriesFilter.builder().build()).orElseThrow();
         Assertions.assertNotNull(v20DiscoveryRecord.getDisclosures());
         Assertions.assertNotNull(v20DiscoveryRecord.getDisclosures().getAtType());
     }

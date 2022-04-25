@@ -43,7 +43,7 @@ public class PresentationRequestCredentialsFilter implements AcaPyRequestFilter 
         if (referent != null && referent.size() > 0) {
             StringBuilder sb = new StringBuilder();
             Iterator<String> it = referent.stream().iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 sb.append(it.next());
                 if (it.hasNext()) {
                     sb.append(",");

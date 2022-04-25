@@ -76,14 +76,15 @@ public class EventParser {
         T result = PojoProcessor.getInstance(type);
 
         final Set<Entry<String, JsonElement>> revealedAttrs = getRevealedAttributes(json);
-        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(
-                json, PojoProcessor.getAttributeGroupName(type));
+        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(json,
+                PojoProcessor.getAttributeGroupName(type));
 
         Set<Field> fields = PojoProcessor.fields(type);
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            for(Field field: fields) {
+            for (Field field : fields) {
                 String fieldName = PojoProcessor.fieldName(field);
-                String fieldValue = getValueFor(fieldName, revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
+                String fieldValue = getValueFor(fieldName,
+                        revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
                 try {
                     field.setAccessible(true);
                     field.set(result, fieldValue);

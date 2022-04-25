@@ -17,6 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateWalletTokenRequest {
-    /** Master key used for key derivation. Only required for unamanged wallets.*/
+    /** Master key used for key derivation. Only required for unamanged wallets. */
     private String walletKey;
 }

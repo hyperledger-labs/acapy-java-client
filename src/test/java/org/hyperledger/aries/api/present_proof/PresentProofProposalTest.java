@@ -43,8 +43,8 @@ public class PresentProofProposalTest extends IntegrationTestBase {
 
     @Test
     void testPresentProofRecordsVerifyPresentation() {
-        AriesException e = Assertions.assertThrows(AriesException.class, () ->
-                ac.presentProofRecordsVerifyPresentation(UUID.randomUUID().toString()));
+        AriesException e = Assertions.assertThrows(AriesException.class,
+                () -> ac.presentProofRecordsVerifyPresentation(UUID.randomUUID().toString()));
         assertTrue(e.getMessage().startsWith("Record not found:"));
     }
 }

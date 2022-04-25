@@ -16,7 +16,7 @@ public class AriesException extends RuntimeException {
     @Getter private final int code;
     @Getter private final String message;
 
-    public AriesException (int code, String message) {
+    public AriesException(int code, String message) {
         super(message);
         this.code = code;
         this.message = message;

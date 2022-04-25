@@ -17,6 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RemoveWalletRequest {
-    /** Master key used for key derivation. Only required for unmanaged wallets.*/
+    /** Master key used for key derivation. Only required for unmanaged wallets. */
     private String walletKey;
 }

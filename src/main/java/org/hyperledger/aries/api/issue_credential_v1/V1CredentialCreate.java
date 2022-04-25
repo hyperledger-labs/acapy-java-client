@@ -17,7 +17,7 @@ import org.hyperledger.aries.api.credentials.CredentialPreview;
 public class V1CredentialCreate {
     private Boolean autoRemove;
     private String comment;
-    private String credDefId ;
+    private String credDefId;
     private CredentialPreview credentialProposal;
     private String issuerDid;
     private String schemaId;

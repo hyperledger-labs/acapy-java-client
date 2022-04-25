@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"token"})
+@ToString(exclude = { "token" })
 public class WalletRecord {
     private String createdAt;
     private KeyManagementMode keyManagementMode;

@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CreateWalletTokenResponse {
-    /** Authorization token to authenticate wallet requests*/
+    /** Authorization token to authenticate wallet requests */
     private String token;
 }

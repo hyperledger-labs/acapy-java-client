@@ -16,7 +16,7 @@ public class MenuFormParam {
     @SerializedName("default")
     private String _default;
 
-    private String description ;
+    private String description;
 
     private String name;
 

@@ -18,17 +18,17 @@ class LedgerTest extends IntegrationTestBase {
 
     @Test
     void testGetTaa() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerTaa());
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerTaa());
     }
 
     @Test
     void testAcceptTaa() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerTaaAccept(new TAAAccept()));
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerTaaAccept(new TAAAccept()));
     }
 
     @Test
     void testDidVerkey() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerDidVerkey("5mwQSWnRePrZ3oF67C4Kqe"));
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerDidVerkey("5mwQSWnRePrZ3oF67C4Kqe"));
     }
 
     @Test

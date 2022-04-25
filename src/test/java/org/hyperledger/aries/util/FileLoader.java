@@ -31,7 +31,7 @@ public class FileLoader {
 
         InputStream is = getClass().getClassLoader().getResourceAsStream(fn);
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            result =  buffer.lines().collect(Collectors.joining("\n"));
+            result = buffer.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
             log.error("Could not read from input stream.", e);
         }

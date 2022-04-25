@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * Used to influence field handling in POJOs
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ ElementType.FIELD })
 public @interface AttributeName {
 
     /**

@@ -18,11 +18,11 @@ import java.util.List;
 public class JsonObjectArraySerializer extends JsonSerializer<List<JsonObject>> {
 
     @Override
-    public void serialize(List<JsonObject> jo, JsonGenerator gen,
-                          SerializerProvider serializerProvider) throws IOException {
+    public void serialize(List<JsonObject> jo, JsonGenerator gen, SerializerProvider serializerProvider)
+            throws IOException {
         gen.writeStartArray();
         if (jo != null && jo.size() > 0) {
-            for(JsonObject o : jo) {
+            for (JsonObject o : jo) {
                 gen.writeRawValue(o.toString());
             }
         }
