@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -16,7 +16,7 @@ public class AriesException extends RuntimeException {
     @Getter private final int code;
     @Getter private final String message;
 
-    public AriesException (int code, String message) {
+    public AriesException(int code, String message) {
         super(message);
         this.code = code;
         this.message = message;

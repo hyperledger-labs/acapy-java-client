@@ -24,7 +24,7 @@ public abstract class BaseCredExRecord implements CredExStateTranslator {
     private Boolean trace;
 
     private String connectionId;
-    @SerializedName(value = "credential_exchange_id", alternate = {"cred_ex_id", "credExId", "credentialExchangeId"})
+    @SerializedName(value = "credential_exchange_id", alternate = { "cred_ex_id", "credExId", "credentialExchangeId" })
     private String credentialExchangeId;
     private String threadId;
     private String parentThreadId;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -76,14 +76,15 @@ public class EventParser {
         T result = PojoProcessor.getInstance(type);
 
         final Set<Entry<String, JsonElement>> revealedAttrs = getRevealedAttributes(json);
-        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(
-                json, PojoProcessor.getAttributeGroupName(type));
+        final Set<Entry<String, JsonElement>> revealedAttrGroups = aggregateRevealedAttrGroups(json,
+                PojoProcessor.getAttributeGroupName(type));
 
         Set<Field> fields = PojoProcessor.fields(type);
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            for(Field field: fields) {
+            for (Field field : fields) {
                 String fieldName = PojoProcessor.fieldName(field);
-                String fieldValue = getValueFor(fieldName, revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
+                String fieldValue = getValueFor(fieldName,
+                        revealedAttrs.isEmpty() ? revealedAttrGroups : revealedAttrs);
                 try {
                     field.setAccessible(true);
                     field.set(result, fieldValue);
