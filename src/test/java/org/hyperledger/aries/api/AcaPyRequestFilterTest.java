@@ -22,7 +22,7 @@ import java.util.Objects;
 public class AcaPyRequestFilterTest {
 
     private final String url = "https://foo.bar/";
-    private final HttpUrl base =  HttpUrl.parse(url);
+    private final HttpUrl base = HttpUrl.parse(url);
 
     @Test
     void testAllNull() {
@@ -34,7 +34,8 @@ public class AcaPyRequestFilterTest {
     @Test
     void testFilter() {
         HttpUrl.Builder b = Objects.requireNonNull(base).newBuilder();
-        Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).test2(AnnotatedDummyEnum.VALUE2).myBool(Boolean.TRUE).build();
+        Dummy d = Dummy.builder().testMyData("abc").test(DummyEnum.VALUE1).test2(AnnotatedDummyEnum.VALUE2)
+                .myBool(Boolean.TRUE).build();
         Assertions.assertEquals(url + "?test_my_data=abc&test=value1&test2=value_2&my_bool=true",
                 d.buildParams(b).toString());
     }

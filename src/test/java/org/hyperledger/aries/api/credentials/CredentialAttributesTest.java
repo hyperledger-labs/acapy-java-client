@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -21,8 +21,8 @@ public class CredentialAttributesTest {
 
     @Test
     void testNoExclusions() {
-        List<CredentialAttributes> creds = CredentialAttributes.from(
-                new ConcreteCredential("testname", "teststreet", "bar"));
+        List<CredentialAttributes> creds = CredentialAttributes
+                .from(new ConcreteCredential("testname", "teststreet", "bar"));
         assertEquals(3, creds.size());
         assertEquals("name", creds.get(0).getName());
         assertEquals("testname", creds.get(0).getValue());
@@ -30,28 +30,31 @@ public class CredentialAttributesTest {
 
     @Test
     void testWithExclusions() {
-        List<CredentialAttributes> creds = CredentialAttributes.from(
-                new ConcreteCredentialWithExclusion());
+        List<CredentialAttributes> creds = CredentialAttributes.from(new ConcreteCredentialWithExclusion());
         assertEquals(2, creds.size());
     }
 
     @Test
     void testWithAttributeName() {
-        List<CredentialAttributes> creds = CredentialAttributes.from(
-                new ConcreteCredentialWithName("testname", "teststreet", "bar"));
+        List<CredentialAttributes> creds = CredentialAttributes
+                .from(new ConcreteCredentialWithName("testname", "teststreet", "bar"));
         assertEquals(3, creds.size());
         assertEquals("custom", creds.get(2).getName());
         assertEquals("bar", creds.get(2).getValue());
     }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class ConcreteCredential {
         private String name;
         private String street;
         private String other_foo;
     }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class ConcreteCredentialWithExclusion {
         private String name;
         @AttributeName("street")
@@ -60,7 +63,9 @@ public class CredentialAttributesTest {
         private String other;
     }
 
-    @Data @NoArgsConstructor @AllArgsConstructor
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     static class ConcreteCredentialWithName {
         private String name;
         private String street;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -18,17 +18,17 @@ class LedgerTest extends IntegrationTestBase {
 
     @Test
     void testGetTaa() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerTaa());
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerTaa());
     }
 
     @Test
     void testAcceptTaa() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerTaaAccept(new TAAAccept()));
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerTaaAccept(new TAAAccept()));
     }
 
     @Test
     void testDidVerkey() {
-        Assertions.assertThrows(AriesException.class, ()-> ac.ledgerDidVerkey("5mwQSWnRePrZ3oF67C4Kqe"));
+        Assertions.assertThrows(AriesException.class, () -> ac.ledgerDidVerkey("5mwQSWnRePrZ3oF67C4Kqe"));
     }
 
     @Test

@@ -32,8 +32,8 @@ class MockedConnectionTest extends MockedTestBase {
         String json = loader.load("files/connectionsActive.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<List<ConnectionRecord>> c = ac.connections(
-                ConnectionFilter.builder().state(ConnectionState.ACTIVE).build());
+        final Optional<List<ConnectionRecord>> c = ac
+                .connections(ConnectionFilter.builder().state(ConnectionState.ACTIVE).build());
         Assertions.assertTrue(c.isPresent());
         Assertions.assertEquals(9, c.get().size());
     }
@@ -61,8 +61,8 @@ class MockedConnectionTest extends MockedTestBase {
         String json = loader.load("files/invitation.json");
         server.enqueue(new MockResponse().setBody(json));
 
-        final Optional<CreateInvitationResponse> inv = ac.connectionsCreateInvitation(CreateInvitationRequest.builder()
-                .build());
+        final Optional<CreateInvitationResponse> inv = ac
+                .connectionsCreateInvitation(CreateInvitationRequest.builder().build());
         Assertions.assertTrue(inv.isPresent());
         Assertions.assertTrue(inv.get().getConnectionId().startsWith("d16dc0bf"));
     }

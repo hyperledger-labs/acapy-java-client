@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -17,7 +17,7 @@ import org.hyperledger.aries.api.credentials.CredentialPreview;
 public class V1CredentialCreate {
     private Boolean autoRemove;
     private String comment;
-    private String credDefId ;
+    private String credDefId;
     private CredentialPreview credentialProposal;
     private String issuerDid;
     private String schemaId;

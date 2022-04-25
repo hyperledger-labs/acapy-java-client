@@ -100,8 +100,8 @@ public enum CredentialExchangeState {
      * Credential has been revoked
      */
     @JsonProperty("credential_revoked")
-    @JsonAlias({"revoked", "credential-revoked"})
-    @SerializedName(value = "credential_revoked", alternate = {"revoked", "credential-revoked"})
+    @JsonAlias({ "revoked", "credential-revoked" })
+    @SerializedName(value = "credential_revoked", alternate = { "revoked", "credential-revoked" })
     CREDENTIAL_REVOKED,
 
     /**
