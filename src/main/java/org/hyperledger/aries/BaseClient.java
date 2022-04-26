@@ -79,7 +79,7 @@ public abstract class BaseClient {
     HttpLoggingInterceptor defaultLoggingInterceptor() {
         Gson pretty = GsonConfig.prettyPrinter();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> {
-            if (StringUtils.isNotEmpty(msg)) {
+            if (log.isTraceEnabled() && StringUtils.isNotEmpty(msg)) {
                 if (msg.startsWith("{")) {
                     try {
                         Object json = gson.fromJson(msg, Object.class);
