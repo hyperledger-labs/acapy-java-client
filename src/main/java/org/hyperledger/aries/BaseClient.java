@@ -76,7 +76,7 @@ public abstract class BaseClient {
                 .build());
     }
 
-    HttpLoggingInterceptor defaultLoggingInterceptor() {
+    private HttpLoggingInterceptor defaultLoggingInterceptor() {
         Gson pretty = GsonConfig.prettyPrinter();
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> {
             if (log.isTraceEnabled() && StringUtils.isNotEmpty(msg)) {
