@@ -9,6 +9,7 @@ package org.hyperledger.aries.webhook;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -88,6 +89,9 @@ public abstract class EventHandler implements IEventHandler {
                     case REVOCATION_NOTIFICATION:
                         parser.parseValueSave(payload, RevocationNotificationEvent.class, this::handleRevocationNotification);
                         break;
+                    case REVOCATION_REGISTRY:
+                        parser.parseValueSave(payload, IssuerRevRegRecord.class, this::handleRevocationRegistry);
+                        break;
                     case SETTINGS:
                         parser.parseValueSave(payload, Settings.class, this::handleSettings);
                         break;
@@ -146,6 +150,10 @@ public abstract class EventHandler implements IEventHandler {
 
     public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) {
         log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_NOTIFICATION, revocationNotification);
+    }
+
+    public void handleRevocationRegistry(IssuerRevRegRecord revocationRegistry) {
+        log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_REGISTRY, revocationRegistry);
     }
 
     public void handleEndorseTransaction(EndorseTransactionRecord transaction) {

@@ -9,6 +9,7 @@ package org.hyperledger.aries.webhook;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -93,6 +94,9 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                     case REVOCATION_NOTIFICATION:
                         handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
                         break;
+                    case REVOCATION_REGISTRY:
+                        handleRevocationRegistry(walletId, parser.parseValueSave(payload, IssuerRevRegRecord.class).orElseThrow());
+                        break;
                     case SETTINGS:
                         handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
                         break;
@@ -151,6 +155,10 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
 
     public void handleRevocationNotification(String walletId, RevocationNotificationEvent revocationNotification) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.REVOCATION_NOTIFICATION, revocationNotification);
+    }
+
+    public void handleRevocationRegistry(String walletId, IssuerRevRegRecord revocationRegistry) throws Exception {
+        log.debug(LOG_MSG_MULTI, walletId, EventType.REVOCATION_REGISTRY, revocationRegistry);
     }
 
     public void handleEndorseTransaction(String walletId, EndorseTransactionRecord transaction) throws Exception {

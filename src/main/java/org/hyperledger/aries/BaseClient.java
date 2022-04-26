@@ -10,9 +10,11 @@ package org.hyperledger.aries;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
@@ -70,7 +72,30 @@ public abstract class BaseClient {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .callTimeout(60, TimeUnit.SECONDS)
+                .addInterceptor(defaultLoggingInterceptor())
                 .build());
+    }
+
+    private HttpLoggingInterceptor defaultLoggingInterceptor() {
+        Gson pretty = GsonConfig.prettyPrinter();
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> {
+            if (log.isTraceEnabled() && StringUtils.isNotEmpty(msg)) {
+                if (msg.startsWith("{")) {
+                    try {
+                        Object json = gson.fromJson(msg, Object.class);
+                        log.trace("\n{}", pretty.toJson(json));
+                    } catch (JsonSyntaxException e) {
+                        log.trace("{}", msg);
+                    }
+                } else {
+                    log.trace("{}", msg);
+                }
+            }
+        });
+        logging.level(HttpLoggingInterceptor.Level.BODY);
+        logging.redactHeader(X_API_KEY);
+        logging.redactHeader(AUTHORIZATION);
+        return logging;
     }
 
     static RequestBody jsonBody(String json) {

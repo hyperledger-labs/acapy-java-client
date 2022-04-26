@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -33,6 +34,7 @@ public enum EventType {
     PRESENT_PROOF_V2("present_proof_v2_0"),
     PROBLEM_REPORT("problem_report"),
     REVOCATION_NOTIFICATION("revocation-notification"),
+    REVOCATION_REGISTRY("revocation_registry"),
     SETTINGS("settings")
     ;
 
@@ -49,11 +51,8 @@ public enum EventType {
     }
 
     public static Optional<EventType> fromTopic(String topic) {
-        for (EventType t : EventType.values()) {
-            if (StringUtils.equalsIgnoreCase(t.getTopic(), topic)) {
-                return Optional.of(t);
-            }
-        }
-        return Optional.empty();
+        return Arrays.stream(EventType.values())
+                .filter(e -> StringUtils.equalsIgnoreCase(e.getTopic(), topic))
+                .findFirst();
     }
 }
