@@ -91,6 +91,7 @@ public abstract class EventHandler implements IEventHandler {
                         break;
                     case REVOCATION_REGISTRY:
                         parser.parseValueSave(payload, IssuerRevRegRecord.class, this::handleRevocationRegistry);
+                        break;
                     case SETTINGS:
                         parser.parseValueSave(payload, Settings.class, this::handleSettings);
                         break;

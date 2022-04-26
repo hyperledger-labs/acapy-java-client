@@ -96,6 +96,7 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                         break;
                     case REVOCATION_REGISTRY:
                         handleRevocationRegistry(walletId, parser.parseValueSave(payload, IssuerRevRegRecord.class).orElseThrow());
+                        break;
                     case SETTINGS:
                         handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
                         break;
