@@ -9,6 +9,7 @@ package org.hyperledger.aries.webhook;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
 import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
@@ -43,41 +44,64 @@ public abstract class EventHandler implements IEventHandler {
 
         handleRaw(topic, payload);
 
-        try {
-            if (EventType.CONNECTIONS.valueEquals(topic)) {
-                parser.parseValueSave(payload, ConnectionRecord.class).ifPresent(this::handleConnection);
-            } else if (EventType.PRESENT_PROOF.valueEquals(topic)) {
-                parser.parsePresentProof(payload).ifPresent(this::handleProof);
-            } else if (EventType.PRESENT_PROOF_V2.valueEquals(topic)) {
-                parser.parseValueSave(payload, V20PresExRecord.class).ifPresent(this::handleProofV2);
-            } else if (EventType.ISSUE_CREDENTIAL.valueEquals(topic)) {
-                parser.parseValueSave(payload, V1CredentialExchange.class).ifPresent(this::handleCredential);
-            } else if (EventType.ISSUE_CREDENTIAL_V2.valueEquals(topic)) {
-                parser.parseValueSave(payload, V20CredExRecord.class).ifPresent(this::handleCredentialV2);
-            } else if (EventType.ISSUE_CREDENTIAL_V2_INDY.valueEquals(topic)) {
-                parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class).ifPresent(this::handleIssueCredentialV2Indy);
-            } else if (EventType.ISSUE_CREDENTIAL_V2_LD_PROOF.valueEquals(topic)) {
-                parser.parseValueSave(payload, V2IssueLDCredentialEvent.class).ifPresent(this::handleIssueCredentialV2LD);
-            } else if (EventType.BASIC_MESSAGES.valueEquals(topic)) {
-                parser.parseValueSave(payload, BasicMessage.class).ifPresent(this::handleBasicMessage);
-            } else if (EventType.PING.valueEquals(topic)) {
-                parser.parseValueSave(payload, PingEvent.class).ifPresent(this::handlePing);
-            } else if (EventType.ISSUER_CRED_REV.valueEquals(topic)) {
-                parser.parseValueSave(payload, RevocationEvent.class).ifPresent(this::handleRevocation);
-            } else if (EventType.ENDORSE_TRANSACTION.valueEquals(topic)) {
-                parser.parseValueSave(payload, EndorseTransactionRecord.class).ifPresent(this::handleEndorseTransaction);
-            } else if (EventType.PROBLEM_REPORT.valueEquals(topic)) {
-                parser.parseValueSave(payload, ProblemReport.class).ifPresent(this::handleProblemReport);
-            } else if (EventType.DISCOVER_FEATURE.valueEquals(topic)) {
-                parser.parseValueSave(payload, DiscoverFeatureEvent.class).ifPresent(this::handleDiscoverFeature);
-            } else if (EventType.REVOCATION_NOTIFICATION.valueEquals(topic)) {
-                parser.parseValueSave(payload, RevocationNotificationEvent.class).ifPresent(this::handleRevocationNotification);
-            } else if (EventType.SETTINGS.valueEquals(topic)) {
-                parser.parseValueSave(payload, Settings.class).ifPresent(this::handleSettings);
+        EventType.fromTopic(topic).ifPresent(t -> {
+            try {
+                switch (t) {
+                    case CONNECTIONS:
+                        parser.parseValueSave(payload, ConnectionRecord.class, this::handleConnection);
+                        break;
+                    case PRESENT_PROOF:
+                        parser.parsePresentProof(payload).ifPresent(this::handleProof);
+                        break;
+                    case PRESENT_PROOF_V2:
+                        parser.parseValueSave(payload, V20PresExRecord.class, this::handleProofV2);
+                        break;
+                    case ISSUE_CREDENTIAL:
+                        parser.parseValueSave(payload, V1CredentialExchange.class, this::handleCredential);
+                        break;
+                    case ISSUE_CREDENTIAL_V2:
+                        parser.parseValueSave(payload, V20CredExRecord.class, this::handleCredentialV2);
+                        break;
+                    case ISSUE_CREDENTIAL_V2_INDY:
+                        parser.parseValueSave(payload, V2IssueIndyCredentialEvent.class, this::handleIssueCredentialV2Indy);
+                        break;
+                    case ISSUE_CREDENTIAL_V2_LD_PROOF:
+                        parser.parseValueSave(payload, V2IssueLDCredentialEvent.class, this::handleIssueCredentialV2LD);
+                        break;
+                    case BASIC_MESSAGES:
+                        parser.parseValueSave(payload, BasicMessage.class, this::handleBasicMessage);
+                        break;
+                    case PING:
+                        parser.parseValueSave(payload, PingEvent.class, this::handlePing);
+                        break;
+                    case ISSUER_CRED_REV:
+                        parser.parseValueSave(payload, RevocationEvent.class, this::handleRevocation);
+                        break;
+                    case ENDORSE_TRANSACTION:
+                        parser.parseValueSave(payload, EndorseTransactionRecord.class, this::handleEndorseTransaction);
+                        break;
+                    case PROBLEM_REPORT:
+                        parser.parseValueSave(payload, ProblemReport.class, this::handleProblemReport);
+                        break;
+                    case DISCOVER_FEATURE:
+                        parser.parseValueSave(payload, DiscoverFeatureEvent.class, this::handleDiscoverFeature);
+                        break;
+                    case REVOCATION_NOTIFICATION:
+                        parser.parseValueSave(payload, RevocationNotificationEvent.class, this::handleRevocationNotification);
+                        break;
+                    case REVOCATION_REGISTRY:
+                        parser.parseValueSave(payload, IssuerRevRegRecord.class, this::handleRevocationRegistry);
+                        break;
+                    case SETTINGS:
+                        parser.parseValueSave(payload, Settings.class, this::handleSettings);
+                        break;
+                    default:
+                        break;
+                }
+            } catch (Throwable e) {
+                log.error("Error in webhook event handler:", e);
             }
-        } catch (Throwable e) {
-            log.error("Error in webhook event handler:", e);
-        }
+        });
     }
 
     public void handleConnection(ConnectionRecord connection) {
@@ -126,6 +150,10 @@ public abstract class EventHandler implements IEventHandler {
 
     public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) {
         log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_NOTIFICATION, revocationNotification);
+    }
+
+    public void handleRevocationRegistry(IssuerRevRegRecord revocationRegistry) {
+        log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_REGISTRY, revocationRegistry);
     }
 
     public void handleEndorseTransaction(EndorseTransactionRecord transaction) {

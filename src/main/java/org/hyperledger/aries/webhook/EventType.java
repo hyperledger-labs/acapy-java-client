@@ -11,6 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * List of aca-py webhook/websocket event types/topics.
  */
@@ -31,18 +34,25 @@ public enum EventType {
     PRESENT_PROOF_V2("present_proof_v2_0"),
     PROBLEM_REPORT("problem_report"),
     REVOCATION_NOTIFICATION("revocation-notification"),
+    REVOCATION_REGISTRY("revocation_registry"),
     SETTINGS("settings")
     ;
 
     @Getter
-    private final String value;
+    private final String topic;
 
-    public boolean valueEquals(String other) {
-        return StringUtils.equals(value, other);
+    public boolean topicEquals(String other) {
+        return StringUtils.equals(topic, other);
     }
 
     @Override
     public String toString() {
-        return this.value;
+        return this.topic;
+    }
+
+    public static Optional<EventType> fromTopic(String topic) {
+        return Arrays.stream(EventType.values())
+                .filter(e -> StringUtils.equalsIgnoreCase(e.getTopic(), topic))
+                .findFirst();
     }
 }

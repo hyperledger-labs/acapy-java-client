@@ -23,6 +23,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -46,6 +47,10 @@ public class EventParser {
             log.error("Could not format json body", e);
         }
         return t;
+    }
+
+    public <T> void parseValueSave(@NonNull String json, @NonNull Class<T> valueType, Consumer<T> consumer) {
+        parseValueSave(json, valueType).ifPresent(consumer);
     }
 
     public Optional<PresentationExchangeRecord> parsePresentProof(String json) {

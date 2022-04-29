@@ -81,6 +81,6 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
     }
 
     private boolean notWsPing(String topic, String payload) {
-        return !(EventType.PING.valueEquals(topic) && BaseClient.EMPTY_JSON.equals(payload));
+        return !(EventType.PING.topicEquals(topic) && BaseClient.EMPTY_JSON.equals(payload));
     }
 }
