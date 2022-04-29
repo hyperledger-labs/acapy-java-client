@@ -19,10 +19,7 @@ import org.hyperledger.aries.webhook.IEventHandler;
 import org.hyperledger.aries.webhook.ReactiveEventHandler;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * ACA-PY Websocket Client: Receives events from aca-py
@@ -52,7 +49,7 @@ public class AriesWebSocketClient extends ReactiveEventHandler {
                                 @Nullable String apiKey,
                                 @Nullable String bearerToken,
                                 @Nullable OkHttpClient client,
-                                @Nullable @Singular("handler") List<IEventHandler> handler,
+                                @Singular("handler") List<IEventHandler> handler,
                                 @Nullable @Singular("walletId") List<String> walletIdFilter) {
         this.client = Objects.requireNonNullElseGet(client, OkHttpClient::new);
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
@@ -60,8 +57,9 @@ public class AriesWebSocketClient extends ReactiveEventHandler {
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
         this.walletIdFilter = walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null;
 
-        List<IEventHandler> tempHandler = Arrays.asList(this);
-        Collections.copy(tempHandler, handler != null ? handler : List.of(new EventHandler.DefaultEventHandler()));
+        List<IEventHandler> tempHandler = new ArrayList<>();
+        tempHandler.add(this);
+        tempHandler.addAll(handler.isEmpty() ? List.of(new EventHandler.DefaultEventHandler()) : handler);
         this.handler = Collections.unmodifiableList(tempHandler);
 
         openWebSocket();
