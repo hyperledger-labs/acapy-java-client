@@ -23,9 +23,6 @@ import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
 import org.hyperledger.aries.api.trustping.PingEvent;
-import org.hyperledger.aries.webhook.EventParser;
-import org.hyperledger.aries.webhook.EventType;
-import org.hyperledger.aries.webhook.IEventHandler;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 

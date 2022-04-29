@@ -17,6 +17,7 @@ import org.hyperledger.aries.webhook.AriesWebSocketListener;
 import org.hyperledger.aries.webhook.EventHandler;
 import org.hyperledger.aries.webhook.IEventHandler;
 import org.hyperledger.aries.webhook.ReactiveEventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -56,12 +57,7 @@ public class AriesWebSocketClient extends ReactiveEventHandler {
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
         this.walletIdFilter = walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null;
-
-        List<IEventHandler> tempHandler = new ArrayList<>();
-        tempHandler.add(this);
-        tempHandler.addAll(handler.isEmpty() ? List.of(new EventHandler.DefaultEventHandler()) : handler);
-        this.handler = Collections.unmodifiableList(tempHandler);
-
+        this.handler = mergeHandler(handler);
         openWebSocket();
     }
 
@@ -86,5 +82,13 @@ public class AriesWebSocketClient extends ReactiveEventHandler {
         if (webSocket != null) {
             webSocket.close(1001, null);
         }
+    }
+
+    @NotNull
+    private List<IEventHandler> mergeHandler(List<IEventHandler> handler) {
+        List<IEventHandler> tempHandler = new ArrayList<>();
+        tempHandler.add(this);
+        tempHandler.addAll(handler.isEmpty() ? List.of(new EventHandler.DefaultEventHandler()) : handler);
+        return Collections.unmodifiableList(tempHandler);
     }
 }
