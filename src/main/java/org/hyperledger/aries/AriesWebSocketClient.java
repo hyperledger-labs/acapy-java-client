@@ -8,7 +8,6 @@
 package org.hyperledger.aries;
 
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Singular;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,23 +16,26 @@ import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.webhook.AriesWebSocketListener;
 import org.hyperledger.aries.webhook.EventHandler;
 import org.hyperledger.aries.webhook.IEventHandler;
+import org.hyperledger.aries.webhook.ReactiveEventHandler;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ACA-PY Websocket Client: Receives events from aca-py
  */
-public class AriesWebSocketClient extends BaseClient {
+public class AriesWebSocketClient extends ReactiveEventHandler {
 
+    private final OkHttpClient client;
     private final String url;
     private final String apiKey;
     private final String bearerToken;
     private final List<IEventHandler> handler;
-
     private final List<String> walletIdFilter;
 
-    @Getter
     private WebSocket webSocket;
 
     /**
@@ -51,13 +53,17 @@ public class AriesWebSocketClient extends BaseClient {
                                 @Nullable String bearerToken,
                                 @Nullable OkHttpClient client,
                                 @Nullable @Singular("handler") List<IEventHandler> handler,
-                                @Singular("walletId") List<String> walletIdFilter) {
-        super(client);
+                                @Nullable @Singular("walletId") List<String> walletIdFilter) {
+        this.client = Objects.requireNonNullElseGet(client, OkHttpClient::new);
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
-        this.handler = handler != null ? handler : List.of(new EventHandler.DefaultEventHandler());
-        this.walletIdFilter = walletIdFilter;
+        this.walletIdFilter = walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null;
+
+        List<IEventHandler> tempHandler = Arrays.asList(this);
+        Collections.copy(tempHandler, handler != null ? handler : List.of(new EventHandler.DefaultEventHandler()));
+        this.handler = Collections.unmodifiableList(tempHandler);
+
         openWebSocket();
     }
 
@@ -65,10 +71,10 @@ public class AriesWebSocketClient extends BaseClient {
         Request.Builder b = new Request.Builder();
         b.url(url);
         if (apiKey != null) {
-            b.header(X_API_KEY, apiKey);
+            b.header(BaseClient.X_API_KEY, apiKey);
         }
         if (bearerToken != null) {
-            b.header(AUTHORIZATION, BEARER + bearerToken);
+            b.header(BaseClient.AUTHORIZATION, BaseClient.BEARER + bearerToken);
         }
         webSocket = client.newWebSocket(
                 b.build(),

@@ -30,7 +30,6 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
 
     private final String label;
     private final List<IEventHandler> handler;
-
     private final List<String> walletIdFilter;
     private final boolean withLabel;
 

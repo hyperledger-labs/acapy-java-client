@@ -8,7 +8,6 @@
 package org.hyperledger.aries.webhook;
 
 import org.hyperledger.aries.api.connection.ConnectionRecord;
-import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reactor.core.Disposable;
@@ -17,7 +16,7 @@ public class ReactiveHandlerTest {
 
     @Test
     void testSubscribeAfterDispose() {
-        ReactiveEventHandler h = ReactiveEventHandler.builder().build();
+        ReactiveEventHandler h = new ReactiveEventHandler();
         Disposable s1 = h.connection().subscribe(System.out::println);
         Disposable s2 = h.connection().subscribe(System.out::println);
 
@@ -41,6 +40,7 @@ public class ReactiveHandlerTest {
 
 
         ConnectionRecord c1 = h1.connection().filter(ConnectionRecord::stateIsActive).blockFirst();
+        Assertions.assertNotNull(c1);
         Assertions.assertTrue(c1.stateIsActive());
     }
 }

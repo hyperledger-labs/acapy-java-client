@@ -12,12 +12,11 @@ import org.hyperledger.acy_py.generated.model.DID;
 import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
 import org.hyperledger.aries.AriesClient;
+import org.hyperledger.aries.AriesWebSocketClient;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.multitenancy.*;
-import org.hyperledger.aries.AriesWebSocketClient;
 import org.hyperledger.aries.webhook.TenantAwareEventHandler;
-import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -172,14 +171,12 @@ public class MultiTenantTest {
                 .apiKey(adminApiKey)
                 .bearerToken(wallet2.getToken())
                 .build();
-        ReactiveEventHandler rx = ReactiveEventHandler.builder().build();
-        AriesWebSocketClient socket = AriesWebSocketClient.builder()
+        AriesWebSocketClient sub2WS = AriesWebSocketClient.builder()
                 .apiKey(adminApiKey)
                 .url("ws://localhost:" + ariesContainer.getMappedPort(IntegrationTestBase.ARIES_ADMIN_PORT) + "/ws")
+                .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
                 .bearerToken(wallet2.getToken())
                 .walletId(wallet2.getWalletId())
-                .handler(rx)
-                .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
                 .build();
 
         // prepare the wallets
@@ -220,7 +217,7 @@ public class MultiTenantTest {
                 .orElseThrow();
         log.debug("connection record wallet-1: {}", cr1);
 
-        rx.connection().filter(ConnectionRecord::stateIsRequest).subscribe(s -> {
+        sub2WS.connection().filter(ConnectionRecord::stateIsRequest).subscribe(s -> {
             log.debug("wallet-2 accepting connection request: {}", s);
             try {
                 sub2.connectionsAcceptRequest(s.getConnectionId(), null);
@@ -229,7 +226,7 @@ public class MultiTenantTest {
             }
         });
 
-        ConnectionRecord active = rx.connection()
+        ConnectionRecord active = sub2WS.connection()
                 .filter(ConnectionRecord::stateIsActive)
                 .blockFirst(Duration.ofSeconds(5));
         Assertions.assertNotNull(active);
@@ -247,6 +244,6 @@ public class MultiTenantTest {
         walletRecords = base.multitenancyWallets(null).orElseThrow();
         Assertions.assertEquals(0, walletRecords.size());
 
-        socket.closeWebsocket();
+        sub2WS.closeWebsocket();
     }
 }

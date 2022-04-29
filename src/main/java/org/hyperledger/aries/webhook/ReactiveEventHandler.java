@@ -5,9 +5,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.webhook.reactive;
+package org.hyperledger.aries.webhook;
 
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
@@ -35,7 +34,6 @@ import reactor.core.publisher.Sinks;
  */
 @Slf4j
 @NoArgsConstructor
-@Builder
 public class ReactiveEventHandler implements IEventHandler {
 
     private static final int BUFFER_SIZE = 100;
