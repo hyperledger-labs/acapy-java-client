@@ -8,7 +8,6 @@
 package org.hyperledger.aries.webhook;
 
 import org.hyperledger.aries.api.connection.ConnectionRecord;
-import org.hyperledger.aries.api.connection.ConnectionState;
 import org.hyperledger.aries.webhook.reactive.ReactiveEventHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,7 @@ public class ReactiveHandlerTest {
 
     @Test
     void testBlockingGet() {
-        ReactiveEventHandler h1 = ReactiveEventHandler.builder().walletId("1").build();
+        ReactiveEventHandler h1 = new ReactiveEventHandler();
 
         h1.handleEvent("1", "connections", "{\"state\": \"active\"}");
 

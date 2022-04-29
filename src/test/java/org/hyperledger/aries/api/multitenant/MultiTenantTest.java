@@ -172,11 +172,12 @@ public class MultiTenantTest {
                 .apiKey(adminApiKey)
                 .bearerToken(wallet2.getToken())
                 .build();
-        ReactiveEventHandler rx = ReactiveEventHandler.builder().walletId(wallet2.getWalletId()).build();
+        ReactiveEventHandler rx = ReactiveEventHandler.builder().build();
         AriesWebSocketClient socket = AriesWebSocketClient.builder()
                 .apiKey(adminApiKey)
                 .url("ws://localhost:" + ariesContainer.getMappedPort(IntegrationTestBase.ARIES_ADMIN_PORT) + "/ws")
                 .bearerToken(wallet2.getToken())
+                .walletId(wallet2.getWalletId())
                 .handler(rx)
                 .handler(new TenantAwareEventHandler.DefaultTenantAwareEventHandler())
                 .build();

@@ -8,6 +8,7 @@
 package org.hyperledger.aries.webhook.reactive;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
@@ -29,12 +30,15 @@ import org.hyperledger.aries.webhook.IEventHandler;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
+/**
+ * Reactive event handler
+ */
 @Slf4j
+@NoArgsConstructor
+@Builder
 public class ReactiveEventHandler implements IEventHandler {
 
     private static final int BUFFER_SIZE = 100;
-
-    private final String walletId;
 
     private final EventParser parser = new EventParser();
 
@@ -57,24 +61,11 @@ public class ReactiveEventHandler implements IEventHandler {
     private final Sinks.Many<DiscoverFeatureEvent> discoverFeatureSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
     private final Sinks.Many<RevocationNotificationEvent> revocationNotificationSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
 
-    /**
-     * Reactive event handler
-     * @param walletId Optional: If set only forwards events for this walletId, all otherwise
-     */
-    @Builder
-    public ReactiveEventHandler(String walletId) {
-        this.walletId = walletId;
-    }
-
     public void handleEvent(String topic, String payload) {
         handleEvent(null, topic, payload);
     }
 
     public void handleEvent(String walletId, String topic, String payload) {
-
-        if (isOtherWalletId(walletId)) {
-            return;
-        }
 
         EventType.fromTopic(topic).ifPresent(t -> {
             try {
@@ -128,10 +119,6 @@ public class ReactiveEventHandler implements IEventHandler {
                 log.error("Error in reactive event handler:", e);
             }
         });
-    }
-
-    private boolean isOtherWalletId(String walletId) {
-        return this.walletId != null && !this.walletId.equals(walletId);
     }
 
     // Event Streams

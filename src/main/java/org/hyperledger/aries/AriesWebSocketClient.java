@@ -31,6 +31,8 @@ public class AriesWebSocketClient extends BaseClient {
     private final String bearerToken;
     private final List<IEventHandler> handler;
 
+    private final List<String> walletIdFilter;
+
     @Getter
     private WebSocket webSocket;
 
@@ -41,15 +43,21 @@ public class AriesWebSocketClient extends BaseClient {
      * @param bearerToken Optional: The Bearer token used in the Authorization header when running in multi tenant mode
      * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
      * @param handler Optional: None, one or many custom event handler implementations, defaults to {@link EventHandler.DefaultEventHandler}
+     * @param walletIdFilter Optional: Filter events by provided walletId
      */
     @Builder
-    public AriesWebSocketClient(@Nullable String url, @Nullable String apiKey,
-        @Nullable String bearerToken, @Nullable OkHttpClient client, @Nullable @Singular("handler") List<IEventHandler> handler) {
+    public AriesWebSocketClient(@Nullable String url,
+                                @Nullable String apiKey,
+                                @Nullable String bearerToken,
+                                @Nullable OkHttpClient client,
+                                @Nullable @Singular("handler") List<IEventHandler> handler,
+                                @Singular("walletId") List<String> walletIdFilter) {
         super(client);
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
         this.handler = handler != null ? handler : List.of(new EventHandler.DefaultEventHandler());
+        this.walletIdFilter = walletIdFilter;
         openWebSocket();
     }
 
@@ -64,7 +72,10 @@ public class AriesWebSocketClient extends BaseClient {
         }
         webSocket = client.newWebSocket(
                 b.build(),
-                AriesWebSocketListener.builder().handler(handler).build());
+                AriesWebSocketListener.builder()
+                        .handler(handler)
+                        .walletIdFilter(walletIdFilter)
+                        .build());
     }
 
     public void closeWebsocket() {
