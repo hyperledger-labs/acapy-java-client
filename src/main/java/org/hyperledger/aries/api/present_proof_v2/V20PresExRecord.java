@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 import org.hyperledger.acy_py.generated.model.V20Pres;
 import org.hyperledger.acy_py.generated.model.V20PresProposal;
 import org.hyperledger.acy_py.generated.model.V20PresRequest;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
 import org.hyperledger.aries.api.present_proof.*;
 
 import java.util.List;
@@ -49,6 +51,14 @@ public class V20PresExRecord implements PresExStateTranslator {
     private V20PresProposal presProposal;
     private V20PresRequest presRequest;
 
+    public boolean isIndy() {
+        return byFormat != null && byFormat.isIndy();
+    }
+
+    public boolean isDif() {
+        return byFormat != null && byFormat.isDif();
+    }
+
     public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {
         if (byFormat != null) {
             return byFormat.resolveIndyPresentationRequest();
@@ -56,9 +66,23 @@ public class V20PresExRecord implements PresExStateTranslator {
         return Optional.empty();
     }
 
+    public Optional<V2DIFProofRequest> resolveDifPresentationRequest() {
+        if (byFormat != null) {
+            return byFormat.resolveDifPresentationRequest();
+        }
+        return Optional.empty();
+    }
+
     public JsonObject resolveIndyPresentation() {
         if (byFormat != null) {
             return byFormat.resolveIndyPresentation();
+        }
+        return null;
+    }
+
+    public VerifiablePresentation<VerifiableCredential> resolveDifPresentation() {
+        if (byFormat != null) {
+            return byFormat.resolveDifPresentation();
         }
         return null;
     }
