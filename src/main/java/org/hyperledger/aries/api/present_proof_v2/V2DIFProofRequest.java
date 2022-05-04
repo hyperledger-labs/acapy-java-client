@@ -20,11 +20,13 @@ package org.hyperledger.aries.api.present_proof_v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.reflect.TypeToken;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,19 +37,25 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class V2DIFProofRequest {
+public class V2DIFProofRequest<T extends V2DIFProofRequest.PresentationDefinition.InputDescriptors> {
+
+    public static final Type INPUT_URI_TYPE =
+            new TypeToken<V2DIFProofRequest<PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>>(){}.getType();
+
+    public static final Type INPUT_GROUP_TYPE =
+            new TypeToken<V2DIFProofRequest<PresentationDefinition.InputDescriptors.SchemaInputDescriptorGroupFilter>>(){}.getType();
 
     private DIFOptions options;
-    private PresentationDefinition presentationDefinition;
+    private PresentationDefinition<T> presentationDefinition;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class PresentationDefinition {
+    public static class PresentationDefinition<T extends PresentationDefinition.InputDescriptors> {
         private ClaimFormat format;
         private UUID id;
-        private List<InputDescriptors> inputDescriptors;
+        private List<T> inputDescriptors;
         private String name;
         private String purpose;
         private List<SubmissionRequirements> submissionRequirements;

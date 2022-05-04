@@ -17,6 +17,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.webhook.EventParser;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,12 +49,19 @@ public class V20PresExRecordByFormat {
         return parseValue(indy, PresentProofRequest.ProofRequest.class);
     }
 
-    public Optional<V2DIFProofRequest> resolveDifPresentationRequest() {
+    public <T> Optional<T> resolveDifPresentationRequest(Type type) {
         JsonElement dif = getByFormat(Format.DIF, presRequest);
-        return parseValue(dif, V2DIFProofRequest.class);
+        return parseValue(dif, type);
     }
 
     private <T> Optional<T> parseValue(JsonElement json, @NonNull Class<T> valueType) {
+        if (json == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(GsonConfig.defaultConfig().fromJson(json, valueType));
+    }
+
+    private <T> Optional<T> parseValue(JsonElement json, @NonNull Type valueType) {
         if (json == null) {
             return Optional.empty();
         }

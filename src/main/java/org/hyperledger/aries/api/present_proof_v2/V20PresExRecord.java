@@ -19,6 +19,7 @@ import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
 import org.hyperledger.aries.api.present_proof.*;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,9 +67,9 @@ public class V20PresExRecord implements PresExStateTranslator {
         return Optional.empty();
     }
 
-    public Optional<V2DIFProofRequest> resolveDifPresentationRequest() {
+    public <T> Optional<T> resolveDifPresentationRequest(Type type) {
         if (byFormat != null) {
-            return byFormat.resolveDifPresentationRequest();
+            return byFormat.resolveDifPresentationRequest(type);
         }
         return Optional.empty();
     }

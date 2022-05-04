@@ -1,0 +1,324 @@
+{
+  "role": "verifier",
+  "updated_at": "2022-05-03T12:06:44.420137Z",
+  "state": "done",
+  "trace": false,
+  "verified": "False",
+  "pres_ex_id": "d92199c9-e1f1-4cd8-925a-1baaa49bc3ea",
+  "pres": {
+    "@type": "https://didcomm.org/present-proof/2.0/presentation",
+    "@id": "f101ccbf-afcc-481a-ad33-e755442d196f",
+    "~thread": {
+      "thid": "e6d5f24a-e831-4c2b-b89b-2b4d688c3a07"
+    },
+    "comment": "auto-presented for proof requests, pres_ex_record: adcef182-48fb-4bf0-835d-cd7f705be041",
+    "presentations~attach": [
+      {
+        "@id": "dif",
+        "mime-type": "application/json",
+        "data": {
+          "json": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://w3id.org/security/bbs/v1"
+            ],
+            "type": [
+              "VerifiablePresentation"
+            ],
+            "verifiableCredential": [
+              {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://w3id.org/security/bbs/v1",
+                  "https://w3id.org/citizenship/v1"
+                ],
+                "id": "urn:bnid:_:c14n0",
+                "type": [
+                  "PermanentResident",
+                  "VerifiableCredential"
+                ],
+                "credentialSubject": {
+                  "id": "did:sov:2BgZAEcbXcBfqW2R2VmFET",
+                  "name": "Camille"
+                },
+                "issuanceDate": "2022-05-03T11:18:15Z",
+                "issuer": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+                "proof": {
+                  "type": "BbsBlsSignatureProof2020",
+                  "nonce": "8mgx/Xj1wZO/1JrHsvAAi079dxGqry0U7x21NT86V+0BYfxokiFVdQKrkaYO13V2Ero=",
+                  "proofValue": "AAsH77aRqeJ1EtPOlCZDdLr1Y8DuyGkm0bWgPbUUOLZJEZAMQ8JwrkdyTBw1e0LDqMKH5aJuenClOHQBJYc5hEYOHDM2w6jECrJUgmIFUtD9eHn2ogQ6mT6CNWY4Q7pzxGtCzpXTMOdxkYUODUSP/2lkPyhAjZmipGlfB4D+IF7ghr4ucAotkmj8NdM7KUjVP7O8AgAAAHSGqvoWMfGp6AiqxIEnZZtbcXdOe8ww1kpEQx9QoxzkF2yMHx4U85S0u6GOPoNkyTwAAAACBzIuuLMNdbvnKLVgad1iFRp1HgCPUKeVq3yDsVNE8lpesnWrWEnBqNLC4buY0aXYDMCFCa2yGdRntAcMjnlLmovJOU1vvcuKJAqkvrR1VDkcdQmcaD/Q1j1cS5pqUoChbl6S8JJjKYlTJwUuEyt1XgAAAANET7EQVhvbrgWZ66nUxXy4jiUdovEoaKTMxYCbWjqyek0uA6etEyD8+jkcor8fsnn6t7aofGP6BWDZbTjEddHTAh+PXiLYfulU5BfSJyW8eho/Hikgaq5oVL1IeTWM67A=",
+                  "verificationMethod": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw#zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+                  "proofPurpose": "assertionMethod",
+                  "created": "2022-05-03T11:18:18.822101+00:00"
+                }
+              },
+              {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  "https://w3id.org/citizenship/v1",
+                  "https://w3id.org/security/bbs/v1"
+                ],
+                "id": "urn:bnid:_:c14n0",
+                "type": [
+                  "PermanentResident",
+                  "VerifiableCredential"
+                ],
+                "credentialSubject": {
+                  "id": "did:sov:2BgZAEcbXcBfqW2R2VmFET",
+                  "name": "Camille"
+                },
+                "issuanceDate": "2022-05-03T09:46:29Z",
+                "issuer": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+                "proof": {
+                  "type": "BbsBlsSignatureProof2020",
+                  "nonce": "tf1RbkL+JQPW3iajYGxmXlOhoTAGZzpjwQK+myxClYz1KZvSXUyyU3C2jNRpQITj+fg=",
+                  "proofValue": "AAsH75lsGyXx5KYNPOwiPJgVDgcyZwHSiaSw4obSy+u0G4tMgbuoet8Gfu9NA1aM4GZLX6vDgPJpkc/uzmW32/qMKnCJueq52LrQquyT3Z9mgJzpd1M2uYNhn+hN1X3m83qiNqCdItPkf2oE5giHawhLYn6y22D2Xu1le766pp9G8uqcIV3eM4M0ylsxgUcVViGcCAAAAHSYLd+Lw9dnajUHT/ThH8/IpkE30cF8uk8ec47kWo+nfJlI3pYJuEmMh4BB/sgZKlYAAAACYT3Gg3PPgYOIFeboXCinsNxz3y05RsybYdLKEAVMaY88/iAC7xzD8ZQHt5JOI17Nccp6a0Qv4l4kAy/FddCcyKH9+sGUqblJxqYTIABYurfLcdWva577eyf1XMQ9u7/aKpBObrQTwVFfAj39z6XD+gAAAANxXxgoUZrS9MNmXp4FGLR7rBkoy5RNJ4ZxjCWHM6pUbgkke7tHBERLzs/uwz4b4Un8btuPyTluBumUP+MSxP9NYrr2WqjwidHCBvK1WNwzfDFkZl9zT7NY6Kx6AWq0Cbo=",
+                  "verificationMethod": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw#zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+                  "proofPurpose": "assertionMethod",
+                  "created": "2022-05-03T09:46:31.855552+00:00"
+                }
+              }
+            ],
+            "presentation_submission": {
+              "id": "0b247fe9-ca13-4680-baec-4751c33f2dbf",
+              "definition_id": "32f54163-7166-48f1-93d8-ff217bdb0654",
+              "descriptor_map": [
+                {
+                  "id": "citizenship_input_1",
+                  "format": "ldp_vp",
+                  "path": "$.verifiableCredential[0]"
+                },
+                {
+                  "id": "citizenship_input_1",
+                  "format": "ldp_vp",
+                  "path": "$.verifiableCredential[1]"
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "formats": [
+      {
+        "attach_id": "dif",
+        "format": "dif/presentation-exchange/submission@v1.0"
+      }
+    ]
+  },
+  "auto_present": false,
+  "connection_id": "9333ffaf-e6a3-4ebd-a445-957bc9fb467b",
+  "thread_id": "e6d5f24a-e831-4c2b-b89b-2b4d688c3a07",
+  "created_at": "2022-05-03T12:06:31.950645Z",
+  "by_format": {
+    "pres_request": {
+      "dif": {
+        "options": {
+          "challenge": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+          "domain": "4jt78h47fh47"
+        },
+        "presentation_definition": {
+          "id": "32f54163-7166-48f1-93d8-ff217bdb0654",
+          "format": {
+            "ldp_vp": {
+              "proof_type": [
+                "BbsBlsSignature2020"
+              ]
+            }
+          },
+          "input_descriptors": [
+            {
+              "id": "citizenship_input_1",
+              "name": "My ID",
+              "schema": [
+                {
+                  "uri": "https://www.w3.org/2018/credentials#VerifiableCredential"
+                },
+                {
+                  "uri": "https://w3id.org/citizenship#PermanentResident"
+                }
+              ],
+              "constraints": {
+                "limit_disclosure": "required",
+                "is_holder": [
+                  {
+                    "directive": "required",
+                    "field_id": [
+                      "1f44d55f-f161-4938-a659-f8026467f126"
+                    ]
+                  }
+                ],
+                "fields": [
+                  {
+                    "id": "1f44d55f-f161-4938-a659-f8026467f126",
+                    "path": [
+                      "$.credentialSubject.name"
+                    ],
+                    "purpose": "The claim must be from one of the specified issuers",
+                    "filter": {
+                      "const": "Camille"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "pres": {
+      "dif": {
+        "@context": [
+          "https://www.w3.org/2018/credentials/v1",
+          "https://w3id.org/security/bbs/v1"
+        ],
+        "type": [
+          "VerifiablePresentation"
+        ],
+        "verifiableCredential": [
+          {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://w3id.org/security/bbs/v1",
+              "https://w3id.org/citizenship/v1"
+            ],
+            "id": "urn:bnid:_:c14n0",
+            "type": [
+              "PermanentResident",
+              "VerifiableCredential"
+            ],
+            "credentialSubject": {
+              "id": "did:sov:2BgZAEcbXcBfqW2R2VmFET",
+              "name": "Camille"
+            },
+            "issuanceDate": "2022-05-03T11:18:15Z",
+            "issuer": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+            "proof": {
+              "type": "BbsBlsSignatureProof2020",
+              "nonce": "8mgx/Xj1wZO/1JrHsvAAi079dxGqry0U7x21NT86V+0BYfxokiFVdQKrkaYO13V2Ero=",
+              "proofValue": "AAsH77aRqeJ1EtPOlCZDdLr1Y8DuyGkm0bWgPbUUOLZJEZAMQ8JwrkdyTBw1e0LDqMKH5aJuenClOHQBJYc5hEYOHDM2w6jECrJUgmIFUtD9eHn2ogQ6mT6CNWY4Q7pzxGtCzpXTMOdxkYUODUSP/2lkPyhAjZmipGlfB4D+IF7ghr4ucAotkmj8NdM7KUjVP7O8AgAAAHSGqvoWMfGp6AiqxIEnZZtbcXdOe8ww1kpEQx9QoxzkF2yMHx4U85S0u6GOPoNkyTwAAAACBzIuuLMNdbvnKLVgad1iFRp1HgCPUKeVq3yDsVNE8lpesnWrWEnBqNLC4buY0aXYDMCFCa2yGdRntAcMjnlLmovJOU1vvcuKJAqkvrR1VDkcdQmcaD/Q1j1cS5pqUoChbl6S8JJjKYlTJwUuEyt1XgAAAANET7EQVhvbrgWZ66nUxXy4jiUdovEoaKTMxYCbWjqyek0uA6etEyD8+jkcor8fsnn6t7aofGP6BWDZbTjEddHTAh+PXiLYfulU5BfSJyW8eho/Hikgaq5oVL1IeTWM67A=",
+              "verificationMethod": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw#zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+              "proofPurpose": "assertionMethod",
+              "created": "2022-05-03T11:18:18.822101+00:00"
+            }
+          },
+          {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://w3id.org/citizenship/v1",
+              "https://w3id.org/security/bbs/v1"
+            ],
+            "id": "urn:bnid:_:c14n0",
+            "type": [
+              "PermanentResident",
+              "VerifiableCredential"
+            ],
+            "credentialSubject": {
+              "id": "did:sov:2BgZAEcbXcBfqW2R2VmFET",
+              "name": "Camille"
+            },
+            "issuanceDate": "2022-05-03T09:46:29Z",
+            "issuer": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+            "proof": {
+              "type": "BbsBlsSignatureProof2020",
+              "nonce": "tf1RbkL+JQPW3iajYGxmXlOhoTAGZzpjwQK+myxClYz1KZvSXUyyU3C2jNRpQITj+fg=",
+              "proofValue": "AAsH75lsGyXx5KYNPOwiPJgVDgcyZwHSiaSw4obSy+u0G4tMgbuoet8Gfu9NA1aM4GZLX6vDgPJpkc/uzmW32/qMKnCJueq52LrQquyT3Z9mgJzpd1M2uYNhn+hN1X3m83qiNqCdItPkf2oE5giHawhLYn6y22D2Xu1le766pp9G8uqcIV3eM4M0ylsxgUcVViGcCAAAAHSYLd+Lw9dnajUHT/ThH8/IpkE30cF8uk8ec47kWo+nfJlI3pYJuEmMh4BB/sgZKlYAAAACYT3Gg3PPgYOIFeboXCinsNxz3y05RsybYdLKEAVMaY88/iAC7xzD8ZQHt5JOI17Nccp6a0Qv4l4kAy/FddCcyKH9+sGUqblJxqYTIABYurfLcdWva577eyf1XMQ9u7/aKpBObrQTwVFfAj39z6XD+gAAAANxXxgoUZrS9MNmXp4FGLR7rBkoy5RNJ4ZxjCWHM6pUbgkke7tHBERLzs/uwz4b4Un8btuPyTluBumUP+MSxP9NYrr2WqjwidHCBvK1WNwzfDFkZl9zT7NY6Kx6AWq0Cbo=",
+              "verificationMethod": "did:key:zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw#zUC78QyD4V5nXNzTUt2sUGe5jTtR9MdtBSeGiQUEdCC8DERX1VzMh6XLrbipT6VxRAdP7jdZJWBhPhuYkY9BJV99a3TfL9PJTECJ5Vxa41bYRhquBYcMFBhVtYFnzpYHSnR9HQw",
+              "proofPurpose": "assertionMethod",
+              "created": "2022-05-03T09:46:31.855552+00:00"
+            }
+          }
+        ],
+        "presentation_submission": {
+          "id": "0b247fe9-ca13-4680-baec-4751c33f2dbf",
+          "definition_id": "32f54163-7166-48f1-93d8-ff217bdb0654",
+          "descriptor_map": [
+            {
+              "id": "citizenship_input_1",
+              "format": "ldp_vp",
+              "path": "$.verifiableCredential[0]"
+            },
+            {
+              "id": "citizenship_input_1",
+              "format": "ldp_vp",
+              "path": "$.verifiableCredential[1]"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "pres_request": {
+    "@type": "https://didcomm.org/present-proof/2.0/request-presentation",
+    "@id": "e6d5f24a-e831-4c2b-b89b-2b4d688c3a07",
+    "request_presentations~attach": [
+      {
+        "@id": "dif",
+        "mime-type": "application/json",
+        "data": {
+          "json": {
+            "options": {
+              "challenge": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
+              "domain": "4jt78h47fh47"
+            },
+            "presentation_definition": {
+              "id": "32f54163-7166-48f1-93d8-ff217bdb0654",
+              "format": {
+                "ldp_vp": {
+                  "proof_type": [
+                    "BbsBlsSignature2020"
+                  ]
+                }
+              },
+              "input_descriptors": [
+                {
+                  "id": "citizenship_input_1",
+                  "name": "My ID",
+                  "schema": [
+                    {
+                      "uri": "https://www.w3.org/2018/credentials#VerifiableCredential"
+                    },
+                    {
+                      "uri": "https://w3id.org/citizenship#PermanentResident"
+                    }
+                  ],
+                  "constraints": {
+                    "limit_disclosure": "required",
+                    "is_holder": [
+                      {
+                        "directive": "required",
+                        "field_id": [
+                          "1f44d55f-f161-4938-a659-f8026467f126"
+                        ]
+                      }
+                    ],
+                    "fields": [
+                      {
+                        "id": "1f44d55f-f161-4938-a659-f8026467f126",
+                        "path": [
+                          "$.credentialSubject.name"
+                        ],
+                        "purpose": "The claim must be from one of the specified issuers",
+                        "filter": {
+                          "const": "Camille"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    ],
+    "will_confirm": true,
+    "formats": [
+      {
+        "attach_id": "dif",
+        "format": "dif/presentation-exchange/definitions@v1.0"
+      }
+    ]
+  },
+  "initiator": "self"
+}
