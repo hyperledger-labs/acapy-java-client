@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.present_proof;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,6 +41,7 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private PresentationExchangeRole role;
     private PresentationExchangeState state;
 
+    @JsonIgnore
     public String getPresExId() {
         return this.presentationExchangeId;
     }
