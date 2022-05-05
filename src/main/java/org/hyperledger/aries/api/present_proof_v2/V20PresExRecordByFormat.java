@@ -46,26 +46,12 @@ public class V20PresExRecordByFormat {
 
     public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {
         JsonElement indy = getByFormat(Format.INDY, presRequest);
-        return parseValue(indy, PresentProofRequest.ProofRequest.class);
+        return EventParser.parseElement(indy, PresentProofRequest.ProofRequest.class);
     }
 
     public <T> Optional<T> resolveDifPresentationRequest(Type type) {
         JsonElement dif = getByFormat(Format.DIF, presRequest);
-        return parseValue(dif, type);
-    }
-
-    private <T> Optional<T> parseValue(JsonElement json, @NonNull Class<T> valueType) {
-        if (json == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(GsonConfig.defaultConfig().fromJson(json, valueType));
-    }
-
-    private <T> Optional<T> parseValue(JsonElement json, @NonNull Type valueType) {
-        if (json == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(GsonConfig.defaultConfig().fromJson(json, valueType));
+        return EventParser.parseElement(dif, type);
     }
 
     public JsonObject resolveIndyPresentation() {

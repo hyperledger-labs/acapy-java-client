@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * see the NOTICE file and/or the repository at
+ * https://github.com/hyperledger-labs/acapy-java-client
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package org.hyperledger.aries.api.present_proof_v2;
 
 import com.google.gson.Gson;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
 import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 public class DifPresentationExchangeTest {
 
@@ -17,8 +28,15 @@ public class DifPresentationExchangeTest {
         V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
 
         Assertions.assertTrue(v2.isDif());
-        Assertions.assertTrue(v2.resolveDifPresentationRequest(V2DIFProofRequest.INPUT_URI_TYPE).isPresent());
-        Assertions.assertNotNull(v2.resolveDifPresentation());
+        Optional<V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>> pr =
+                v2.resolveDifPresentationRequest(V2DIFProofRequest.INPUT_URI_TYPE);
+        Assertions.assertTrue(pr.isPresent());
+        Assertions.assertEquals("https://w3id.org/citizenship#PermanentResident",
+                pr.get().getPresentationDefinition().getInputDescriptors().get(0).getSchema().get(1).getUri());
 
+
+        VerifiablePresentation<VerifiableCredential> vp = v2.resolveDifPresentation();
+        Assertions.assertNotNull(vp);
+        Assertions.assertEquals("Camille", vp.getVerifiableCredential().get(0).getCredentialSubject().get("name").getAsString());
     }
 }
