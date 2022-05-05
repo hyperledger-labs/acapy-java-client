@@ -36,23 +36,8 @@
     </Match>
 
     <Match>
-       <Class name="org.hyperledger.aries.AriesClient$AriesClientBuilder" />
-       <Bug pattern="URF_UNREAD_FIELD" />
-    </Match>
-
-    <Match>
-       <Class name="~.*org.hyperledger.aries.api.jsonld.Verifiable.*" />
-       <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
-    </Match>
-
-    <Match>
-       <Class name="org.hyperledger.aries.api.present_proof.PresentationRequest" />
-       <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
-    </Match>
-
-    <Match>
-        <Class name="org.hyperledger.aries.api.present_proof.PresentProofRequest$ProofRequest" />
-        <Bug pattern="SE_BAD_FIELD,SE_NO_SERIALVERSIONID" />
+        <Class name="org.hyperledger.aries.webhook.TenantAwareEventHandler" />
+        <Bug pattern="THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION" />
     </Match>
 
     <Match>

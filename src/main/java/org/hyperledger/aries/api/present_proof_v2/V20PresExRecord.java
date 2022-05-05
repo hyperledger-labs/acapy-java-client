@@ -8,10 +8,8 @@
 package org.hyperledger.aries.api.present_proof_v2;
 
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.V20Pres;
 import org.hyperledger.acy_py.generated.model.V20PresProposal;
 import org.hyperledger.acy_py.generated.model.V20PresRequest;
@@ -29,28 +27,14 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class V20PresExRecord implements PresExStateTranslator {
-    private Boolean autoPresent;
-    private String createdAt;
-    private String updatedAt;
-    private Boolean trace;
-    private String errorMsg;
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
+public class V20PresExRecord extends BasePresExRecord {
 
-    private Boolean verified;
-
-    private String connectionId;
-    private String presExId;
-    private String threadId;
-
-    private PresentationExchangeInitiator initiator;
-    private PresentationExchangeRole role;
-    private PresentationExchangeState state;
-
-    private V20Pres pres;
-    private V20PresExRecordByFormat byFormat;
     private V20PresProposal presProposal;
     private V20PresRequest presRequest;
+    private V20Pres pres;
+    private V20PresExRecordByFormat byFormat;
 
     public boolean isIndy() {
         return byFormat != null && byFormat.isIndy();

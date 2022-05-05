@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
@@ -23,31 +24,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class PresentationExchangeRecord implements PresExStateTranslator {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
+public class PresentationExchangeRecord extends BasePresExRecord {
 
-    private Boolean autoPresent;
-    private String connectionId;
-    private String createdAt;
-    private String errorMsg;
-    private PresentationExchangeInitiator initiator;
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject presentation;
-    private String presentationExchangeId;
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject presentationProposalDict;
+
     private PresentProofRequest.ProofRequest presentationRequest;
+
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject presentationRequestDict;
-    private PresentationExchangeRole role;
-    private PresentationExchangeState state;
-    private String threadId;
-    private Boolean trace;
-    private String updatedAt;
-    private Boolean verified;
+
+    @JsonSerialize(using = JsonObjectSerializer.class)
+    @JsonDeserialize(using = JsonObjectDeserializer.class)
+    private JsonObject presentation;
 
     // part of the websocket message
     private List<Identifier> identifiers;
@@ -55,18 +51,6 @@ public class PresentationExchangeRecord implements PresExStateTranslator {
     // if the v2 to v1 converter is used this information is lost otherwise
     @JsonIgnore
     private transient ExchangeVersion version;
-
-    public boolean isVerified() {
-        return getVerified() != null && getVerified();
-    }
-
-    public boolean initiatorIsSelf() {
-        return PresentationExchangeInitiator.SELF.equals(getInitiator());
-    }
-
-    public boolean initiatorIsExternal() {
-        return PresentationExchangeInitiator.EXTERNAL.equals(getInitiator());
-    }
 
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
