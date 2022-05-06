@@ -37,51 +37,42 @@ public class V20PresExRecordByFormat {
     private JsonObject presRequest;
 
     public boolean isIndy() {
-        return getByFormat(Format.INDY, presRequest) != null;
+        return getByFormat(PresentationFormat.INDY, presRequest) != null;
     }
 
     public boolean isDif() {
-        return getByFormat(Format.DIF, presRequest) != null;
+        return getByFormat(PresentationFormat.DIF, presRequest) != null;
     }
 
     public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {
-        JsonElement indy = getByFormat(Format.INDY, presRequest);
+        JsonElement indy = getByFormat(PresentationFormat.INDY, presRequest);
         return EventParser.parseElement(indy, PresentProofRequest.ProofRequest.class);
     }
 
     public <T> Optional<T> resolveDifPresentationRequest(Type type) {
-        JsonElement dif = getByFormat(Format.DIF, presRequest);
+        JsonElement dif = getByFormat(PresentationFormat.DIF, presRequest);
         return EventParser.parseElement(dif, type);
     }
 
     public JsonObject resolveIndyPresentation() {
-        JsonElement indy = getByFormat(Format.INDY, pres);
+        JsonElement indy = getByFormat(PresentationFormat.INDY, pres);
         return indy != null ? indy.getAsJsonObject() : null;
     }
 
     public VerifiablePresentation<VerifiableCredential> resolveDifPresentation() {
-        JsonElement dif = getByFormat(Format.DIF, pres);
+        JsonElement dif = getByFormat(PresentationFormat.DIF, pres);
         return GsonConfig.defaultConfig().fromJson(dif, VerifiablePresentation.VERIFIABLE_CREDENTIAL_TYPE);
     }
 
     public List<PresentationExchangeRecord.Identifier> resolveIndyIdentifiers() {
-        JsonElement indy = getByFormat(Format.INDY, pres);
+        JsonElement indy = getByFormat(PresentationFormat.INDY, pres);
         return EventParser.resolveIdentifiers(indy != null ? indy.getAsJsonObject() : null);
     }
 
-    private JsonElement getByFormat(Format f, JsonObject o) {
+    private JsonElement getByFormat(PresentationFormat f, JsonObject o) {
         if (o != null) {
             return o.get(f.getValue());
         }
         return null;
-    }
-
-    @AllArgsConstructor
-    private enum Format {
-        INDY("indy"),
-        DIF("dif");
-
-        @Getter
-        private final String value;
     }
 }
