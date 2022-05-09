@@ -7,12 +7,14 @@
  */
 package org.hyperledger.aries.api.present_proof_v2;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.JsonObject;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.V20Pres;
 import org.hyperledger.acy_py.generated.model.V20PresProposal;
 import org.hyperledger.acy_py.generated.model.V20PresRequest;
+import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
 import org.hyperledger.aries.api.present_proof.*;
@@ -42,6 +44,16 @@ public class V20PresExRecord extends BasePresExRecord {
 
     public boolean isDif() {
         return byFormat != null && byFormat.isDif();
+    }
+
+    @Override
+    public boolean versionIsV1() {
+        return false;
+    }
+
+    @JsonIgnore
+    public ExchangeVersion getVersion() {
+        return ExchangeVersion.V2;
     }
 
     public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {

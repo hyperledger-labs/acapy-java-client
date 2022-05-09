@@ -7,14 +7,12 @@
  */
 package org.hyperledger.aries.api.present_proof;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -48,10 +46,6 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     // part of the websocket message
     private List<Identifier> identifiers;
 
-    // if the v2 to v1 converter is used this information is lost otherwise
-    @JsonIgnore
-    private transient ExchangeVersion version;
-
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
             return identifiers.stream().anyMatch(i -> credentialDefinitionId.equals(i.getCredentialDefinitionId()));
@@ -64,10 +58,6 @@ public class PresentationExchangeRecord extends BasePresExRecord {
             return identifiers.stream().anyMatch(i -> schemaId.equals(i.getSchemaId()));
         }
         return false;
-    }
-
-    public boolean versionIsV1() {
-        return ExchangeVersion.V1.equals(version);
     }
 
     public JsonObject getPresentation() {

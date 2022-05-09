@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.aries.api.ExchangeVersion;
 
 /**
  * Keeps track of fields that are common to both V1 abd V2 presentation exchanges.
@@ -41,6 +42,10 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private PresentationExchangeRole role;
     private PresentationExchangeState state;
 
+    // if the v2 to v1 converter is used this information is lost otherwise
+    @JsonIgnore
+    private transient ExchangeVersion version;
+
     @JsonIgnore
     public String getPresExId() {
         return this.presentationExchangeId;
@@ -56,5 +61,9 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
 
     public boolean initiatorIsExternal() {
         return PresentationExchangeInitiator.EXTERNAL.equals(getInitiator());
+    }
+
+    public boolean versionIsV1() {
+        return ExchangeVersion.V1.equals(version);
     }
 }
