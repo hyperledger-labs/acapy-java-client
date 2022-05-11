@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class DifPresentationExchangeTest {
+public class DifPresExTest {
 
     private final FileLoader loader = FileLoader.newLoader();
     private final Gson gson = GsonConfig.defaultConfig();

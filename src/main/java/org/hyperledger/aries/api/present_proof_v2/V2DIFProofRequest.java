@@ -24,7 +24,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.*;
-import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
+import org.hyperledger.aries.api.jsonld.ProofType;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -79,7 +79,7 @@ public class V2DIFProofRequest<T extends V2DIFProofRequest.PresentationDefinitio
             @NoArgsConstructor
             @Builder
             private static class LdpVp {
-                List<V2CredentialExchangeFree.ProofType> proofType;
+                List<ProofType> proofType;
             }
         }
 

@@ -23,6 +23,7 @@ import org.hyperledger.aries.api.endorser.EndorseTransactionRecord;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.api.jsonld.ErrorResponse;
+import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationRequestCredentials;
@@ -48,7 +49,8 @@ public abstract class BaseClient {
     static final Type ISSUE_CREDENTIAL_V2_TYPE = new TypeToken<Collection<V20CredExRecordDetail>>(){}.getType();
     static final Type KEY_LISTS_TYPE = new TypeToken<Collection<RouteRecord>>(){}.getType();
     static final Type MEDIATION_LIST_TYPE = new TypeToken<Collection<MediationRecord>>(){}.getType();
-    static final Type PRESENTATION_REQUEST_CREDENTIALS = new TypeToken<Collection<PresentationRequestCredentials>>(){}.getType();
+    static final Type PRESENTATION_REQUEST_CREDENTIALS_INDY = new TypeToken<Collection<PresentationRequestCredentials>>(){}.getType();
+    static final Type PRESENTATION_REQUEST_CREDENTIALS_DIF = new TypeToken<Collection<VerifiableCredential.VerifiableCredentialMatch>>(){}.getType();
     static final Type PROOF_TYPE = new TypeToken<Collection<PresentationExchangeRecord>>(){}.getType();
     static final Type PROOF_TYPE_V2 = new TypeToken<Collection<V20PresExRecord>>(){}.getType();
     static final Type TRX_RECORD_TYPE = new TypeToken<Collection<EndorseTransactionRecord>>(){}.getType();
