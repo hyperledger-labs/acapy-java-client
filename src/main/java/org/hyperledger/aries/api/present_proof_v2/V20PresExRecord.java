@@ -63,6 +63,12 @@ public class V20PresExRecord extends BasePresExRecord {
         return Optional.empty();
     }
 
+    /**
+     * Returns typed dif presentation request
+     * @param type either {@link V2DIFProofRequest#INPUT_URI_TYPE} or {@link V2DIFProofRequest#INPUT_GROUP_TYPE}
+     * @return {@link V2DIFProofRequest}
+     * @param <T> either {@link V2DIFProofRequest#INPUT_URI_TYPE} or {@link V2DIFProofRequest#INPUT_GROUP_TYPE}
+     */
     public <T> Optional<T> resolveDifPresentationRequest(Type type) {
         if (byFormat != null) {
             return byFormat.resolveDifPresentationRequest(type);

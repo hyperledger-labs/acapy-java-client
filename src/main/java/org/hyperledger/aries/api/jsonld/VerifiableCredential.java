@@ -23,6 +23,8 @@ import org.hyperledger.aries.config.CredDefId;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @see <a href="https://www.w3.org/2018/credentials/v1#VerifiableCredential">VerifiableCredential</a>
@@ -63,6 +65,11 @@ public class VerifiableCredential {
     @Builder.Default
     @NonNull
     private List<String> type = List.of("VerifiableCredential");
+
+    public Map<String, String> subjectToFlatMap() {
+        return credentialSubject == null ? Map.of() : credentialSubject.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getAsString()));
+    }
 
     // Verifiable Indy Credential
 
