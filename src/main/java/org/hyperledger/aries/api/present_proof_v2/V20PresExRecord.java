@@ -17,9 +17,10 @@ import org.hyperledger.acy_py.generated.model.V20PresRequest;
 import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 import org.hyperledger.aries.api.jsonld.VerifiablePresentation;
-import org.hyperledger.aries.api.present_proof.*;
+import org.hyperledger.aries.api.present_proof.BasePresExRecord;
+import org.hyperledger.aries.api.present_proof.PresentProofRequest;
+import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,24 +57,24 @@ public class V20PresExRecord extends BasePresExRecord {
         return ExchangeVersion.V2;
     }
 
-    public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {
+    public PresentProofRequest.ProofRequest resolveIndyPresentationRequest() {
         if (byFormat != null) {
-            return byFormat.resolveIndyPresentationRequest();
+            return byFormat.resolveIndyPresentationRequest().orElse(null);
         }
-        return Optional.empty();
+        return null;
     }
 
     /**
      * Returns typed dif presentation request
-     * @param type either {@link V2DIFProofRequest#INPUT_URI_TYPE} or {@link V2DIFProofRequest#INPUT_GROUP_TYPE}
      * @return {@link V2DIFProofRequest}
-     * @param <T> either {@link V2DIFProofRequest#INPUT_URI_TYPE} or {@link V2DIFProofRequest#INPUT_GROUP_TYPE}
      */
-    public <T> Optional<T> resolveDifPresentationRequest(Type type) {
+    public V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter> resolveDifPresentationRequest() {
         if (byFormat != null) {
-            return byFormat.resolveDifPresentationRequest(type);
+            Optional<V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>>
+                    res = byFormat.resolveDifPresentationRequest(V2DIFProofRequest.INPUT_URI_TYPE);
+            return res.orElse(null);
         }
-        return Optional.empty();
+        return null;
     }
 
     public JsonObject resolveIndyPresentation() {

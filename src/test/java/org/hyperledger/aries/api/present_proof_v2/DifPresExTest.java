@@ -15,8 +15,6 @@ import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 public class DifPresExTest {
 
     private final FileLoader loader = FileLoader.newLoader();
@@ -28,11 +26,11 @@ public class DifPresExTest {
         V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
 
         Assertions.assertTrue(v2.isDif());
-        Optional<V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>> pr =
-                v2.resolveDifPresentationRequest(V2DIFProofRequest.INPUT_URI_TYPE);
-        Assertions.assertTrue(pr.isPresent());
+        V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter> pr =
+                v2.resolveDifPresentationRequest();
+        Assertions.assertNotNull(pr);
         Assertions.assertEquals("https://w3id.org/citizenship#PermanentResident",
-                pr.get().getPresentationDefinition().getInputDescriptors().get(0).getSchema().get(1).getUri());
+                pr.getPresentationDefinition().getInputDescriptors().get(0).getSchema().get(1).getUri());
 
 
         VerifiablePresentation<VerifiableCredential> vp = v2.resolveDifPresentation();

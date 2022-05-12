@@ -29,7 +29,7 @@ public class V20PresExRecordToV1Converter {
                 .state(v2.getState())
                 .role(v2.getRole())
                 .version(ExchangeVersion.V2)
-                .presentationRequest(v2.resolveIndyPresentationRequest().orElse(null))
+                .presentationRequest(v2.resolveIndyPresentationRequest())
                 .presentation(v2.resolveIndyPresentation())
                 .identifiers(v2.resolveIndyIdentifiers())
                 .build();
