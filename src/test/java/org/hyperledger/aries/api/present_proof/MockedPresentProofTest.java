@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -8,10 +8,13 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
+import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -82,6 +85,11 @@ public class MockedPresentProofTest extends MockedTestBase {
 
     @Test
     void testJacksonSerialization() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(JsonObject.class, new JsonObjectSerializer());
+        mapper.registerModule(module);
+
         String json = loader.load("files/present-proof-records.json");
         server.enqueue(new MockResponse().setBody(json));
 
@@ -90,13 +98,12 @@ public class MockedPresentProofTest extends MockedTestBase {
         Assertions.assertTrue(res.isPresent());
         assertEquals(2, res.get().size());
 
-        ObjectMapper mapper = new ObjectMapper();
         assertEquals(
-                mapper.writeValueAsString(res.get().get(0)),
-                GsonConfig.jacksonBehaviour().toJson(res.get().get(0)));
+                mapper.writeValueAsString(res.get().get(0).getPresentationProposalDict()),
+                GsonConfig.jacksonBehaviour().toJson(res.get().get(0).getPresentationProposalDict()));
 
         assertEquals(
-                mapper.writeValueAsString(res.get().get(1)),
-                GsonConfig.jacksonBehaviour().toJson(res.get().get(1)));
+                mapper.writeValueAsString(res.get().get(1).getPresentation()),
+                GsonConfig.jacksonBehaviour().toJson(res.get().get(1).getPresentation()));
     }
 }
