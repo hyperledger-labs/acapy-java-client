@@ -57,6 +57,14 @@ public class V20CredExRecordByFormat {
     public static class LdProof {
         private VerifiableCredential credential;
         private V2CredentialExchangeFree.LDProofVCDetailOptions options;
+
+        /**
+         * Assumes that the credential subject is a flat key/value map.
+         * @return the credential subject as map
+         */
+        public Map<String, String> toFlatMap() {
+            return credential == null ? Map.of() : credential.subjectToFlatMap();
+        }
     }
 
     /**

@@ -12,6 +12,7 @@ import lombok.*;
 import org.hyperledger.acy_py.generated.model.CredentialStatusOptions;
 import org.hyperledger.acy_py.generated.model.V20CredFilterIndy;
 import org.hyperledger.aries.api.credentials.CredentialAttributes;
+import org.hyperledger.aries.api.jsonld.ProofType;
 import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 
 import java.util.ArrayList;
@@ -60,10 +61,5 @@ public class V2CredentialExchangeFree {
         @Builder.Default
         @SerializedName("proofType")
         private ProofType proofType = ProofType.BbsBlsSignature2020;
-    }
-
-    public enum ProofType {
-        Ed25519Signature2018,
-        BbsBlsSignature2020
     }
 }

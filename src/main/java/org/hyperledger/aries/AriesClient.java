@@ -1908,7 +1908,7 @@ public class AriesClient extends BaseClient {
             filter.buildParams(b);
         }
         Request req = buildGet(b.build().toString());
-        return call(req, PRESENTATION_REQUEST_CREDENTIALS);
+        return call(req, PRESENTATION_REQUEST_CREDENTIALS_INDY);
     }
 
     /**
@@ -2059,7 +2059,7 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Fetch credentials for a presentation request from wallet
+     * Fetch matching indy credentials for a presentation request from wallet.
      * @param presentationExchangeId the presentation exchange id
      * @param filter {@link PresentationRequestCredentialsFilter}
      * @return list of {@link PresentationRequestCredentials}
@@ -2068,13 +2068,32 @@ public class AriesClient extends BaseClient {
     public Optional<List<PresentationRequestCredentials>> presentProofV2RecordsCredentials(
             @NonNull String presentationExchangeId, @Nullable PresentationRequestCredentialsFilter filter)
             throws IOException {
+        return presentProofV2RecordsCredentialsInternal(presentationExchangeId, filter, PRESENTATION_REQUEST_CREDENTIALS_INDY);
+    }
+
+    /**
+     * Fetch matching dif credentials for a presentation request from wallet
+     * @param presentationExchangeId the presentation exchange id
+     * @param filter {@link PresentationRequestCredentialsFilter}
+     * @return list of {@link VerifiableCredential.VerifiableCredentialMatch}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<VerifiableCredential.VerifiableCredentialMatch>> presentProofV2RecordsCredentialsDif(
+            @NonNull String presentationExchangeId, @Nullable PresentationRequestCredentialsFilter filter)
+            throws IOException {
+        return presentProofV2RecordsCredentialsInternal(presentationExchangeId, filter, PRESENTATION_REQUEST_CREDENTIALS_DIF);
+    }
+
+    private <T> Optional<T> presentProofV2RecordsCredentialsInternal(
+            @NonNull String presentationExchangeId, @Nullable PresentationRequestCredentialsFilter filter, @NonNull Type t)
+            throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
                 .parse(url + "/present-proof-2.0/records/" + presentationExchangeId + "/credentials")).newBuilder();
         if (filter != null) {
             filter.buildParams(b);
         }
         Request req = buildGet(b.build().toString());
-        return call(req, PRESENTATION_REQUEST_CREDENTIALS);
+        return call(req, t);
     }
 
     /**

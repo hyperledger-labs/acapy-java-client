@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -9,6 +9,7 @@ package org.hyperledger.aries.pojo;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.hyperledger.aries.api.exception.ParsingException;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
@@ -66,7 +67,7 @@ public class PojoProcessor {
             } catch (Exception e) {
                 String msg = "Class: " + type.getName() + " is missing a public default constructor.";
                 log.error(msg, e);
-                throw new RuntimeException(msg);
+                throw new ParsingException(msg);
             }
             return result;
         });
