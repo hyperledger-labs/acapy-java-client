@@ -49,6 +49,14 @@ public class EventParser {
         return t;
     }
 
+    public static <T> Optional<T> parseElement(JsonElement json, @NonNull Class<T> valueType) {
+        return Optional.ofNullable(gson.fromJson(json, valueType));
+    }
+
+    public static <T> Optional<T> parseElement(JsonElement json, @NonNull Type valueType) {
+        return Optional.ofNullable(gson.fromJson(json, valueType));
+    }
+
     public <T> void parseValueSave(@NonNull String json, @NonNull Class<T> valueType, Consumer<T> consumer) {
         parseValueSave(json, valueType).ifPresent(consumer);
     }

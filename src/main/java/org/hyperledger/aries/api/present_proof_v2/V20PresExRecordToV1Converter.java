@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -29,7 +29,7 @@ public class V20PresExRecordToV1Converter {
                 .state(v2.getState())
                 .role(v2.getRole())
                 .version(ExchangeVersion.V2)
-                .presentationRequest(v2.resolveIndyPresentationRequest().orElse(null))
+                .presentationRequest(v2.resolveIndyPresentationRequest())
                 .presentation(v2.resolveIndyPresentation())
                 .identifiers(v2.resolveIndyIdentifiers())
                 .build();
