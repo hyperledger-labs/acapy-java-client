@@ -244,6 +244,6 @@ public class MultiTenantTest {
         walletRecords = base.multitenancyWallets(null).orElseThrow();
         Assertions.assertEquals(0, walletRecords.size());
 
-        sub2WS.closeWebsocket();
+        sub2WS.close();
     }
 }

@@ -356,23 +356,50 @@ public class AriesSocketFactory {
 }
 ```
 
-#### Custom Event Handler Implementation
+#### Writing Custom Event Handlers
 
-To add your own event handler implementation you can extend the abstract `EventHandler` or `TenantAwareEventHandler` classes which already take care of type conversion so that you can immediately start implementing your business logic.
+To add your own event handler implementation to use in webhooks or in the websocket client, you can either extend or instantiate one of the following classes:
+
+1. `EventHandler`
+2. `TenantAwareEventHandler` 
+3. `ReactiveEventHandler`
+
+All classes take care of type conversion so that you can immediately start implementing your business logic.
+
+#### Basic EventHandler
 
 ```java
 @Singleton
 public class MyHandler extends EventHandler {
     @Override
     public void handleProof(PresentationExchangeRecord proof) {
-        if (roleIsVerifierAndVerified()) {    // received a validated proof
+        if (proof.roleIsVerifierAndVerified()) {    // received a validated proof
             MyCredential myCredential = proof.from(MyCredential.class);
             // If the presentation is based on multiple credentials this can be done multiple times
             // given that the POJO is annotated with @AttributeGroup e.g.
-           MyOtherCredential otherCredential = proof.from(MyOtherCredential.class);
+            MyOtherCredential otherCredential = proof.from(MyOtherCredential.class);
         }
     }
 }
+```
+
+#### Reactive Event Handler
+
+As the websocket client already implements the EventHandler interface you can directly use it like:
+
+```java
+AriesWebSocketClient ws = AriesWebSocketClient.builder().build();
+
+// do some stuff, create a connection, or receive invitation
+
+// blocking wait 
+ConnectionRecord active = ws.connection()
+    .filter(ConnectionRecord::stateIsActive)
+    .blockFirst(Duration.ofSeconds(5));
+// none blocking
+ws.connection()
+    .filter(ConnectionRecord::stateIsActive)
+    .subscribe(System.out::println);
 ```
 
 ### A Word on Credential POJO's

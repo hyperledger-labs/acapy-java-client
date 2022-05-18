@@ -20,12 +20,15 @@ import org.hyperledger.aries.webhook.ReactiveEventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * ACA-PY Websocket Client: Receives events from aca-py
  */
-public class AriesWebSocketClient extends ReactiveEventHandler {
+public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCloseable {
 
     private final OkHttpClient client;
     private final String url;
@@ -78,7 +81,8 @@ public class AriesWebSocketClient extends ReactiveEventHandler {
                         .build());
     }
 
-    public void closeWebsocket() {
+    @Override
+    public void close() {
         if (webSocket != null) {
             webSocket.close(1001, null);
         }
