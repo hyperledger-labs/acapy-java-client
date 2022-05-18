@@ -57,13 +57,13 @@
         <maven-release-plugin.version>3.0.0-M5</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M5</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.13.2</jackson.version>
+        <jackson.version>2.13.3</jackson.version>
         <junit.jupiter.api.version>5.8.2</junit.jupiter.api.version>
         <kotlin.version>1.6.21</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.9.3</okhttp.version>
-        <pmd.version>6.44.0</pmd.version>
+        <pmd.version>6.45.0</pmd.version>
         <testcontainers.version>1.17.1</testcontainers.version>
     </properties>
 
@@ -88,6 +88,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.4.18</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -127,7 +132,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.2.2</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger</groupId>
