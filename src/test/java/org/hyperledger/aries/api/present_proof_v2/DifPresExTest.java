@@ -26,7 +26,7 @@ public class DifPresExTest {
         V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
 
         Assertions.assertTrue(v2.isDif());
-        V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter> pr =
+        V2DIFProofRequest pr =
                 v2.resolveDifPresentationRequest();
         Assertions.assertNotNull(pr);
         Assertions.assertEquals("https://w3id.org/citizenship#PermanentResident",
@@ -36,5 +36,15 @@ public class DifPresExTest {
         VerifiablePresentation<VerifiableCredential> vp = v2.resolveDifPresentation();
         Assertions.assertNotNull(vp);
         Assertions.assertEquals("Camille", vp.getVerifiableCredential().get(0).getCredentialSubject().get("name").getAsString());
+    }
+
+    @Test
+    void testParsePresentation() {
+        String json = loader.load("files/present-proof-v2/verifier-proposal-received.json");
+        V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
+
+        V20PresProposalByFormat.DIFProofProposal presDef = v2.resolveDifPresentationProposal();
+        Assertions.assertEquals(1, presDef.getInputDescriptors().size());
+        Assertions.assertEquals(2, presDef.getInputDescriptors().get(0).getConstraints().getFields().size());
     }
 }

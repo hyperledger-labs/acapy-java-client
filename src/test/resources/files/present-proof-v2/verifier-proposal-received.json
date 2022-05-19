@@ -1,0 +1,147 @@
+{
+  "auto_verify": false,
+  "thread_id": "1dfb0d5f-4d2a-4267-a629-e888d54a43f1",
+  "initiator": "external",
+  "connection_id": "20625115-1a1e-460b-ab05-872b51387495",
+  "pres_ex_id": "ae1b12af-ef1a-45b0-94dd-93f4af301325",
+  "updated_at": "2022-05-19T10:01:30.881017Z",
+  "role": "verifier",
+  "pres_proposal": {
+    "@type": "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/present-proof/2.0/propose-presentation",
+    "@id": "1dfb0d5f-4d2a-4267-a629-e888d54a43f1",
+    "proposals~attach": [
+      {
+        "@id": "dif",
+        "mime-type": "application/json",
+        "data": {
+          "json": {
+            "input_descriptors": [
+              {
+                "constraints": {
+                  "fields": [
+                    {
+                      "filter": {
+                        "const": "Test"
+                      },
+                      "id": "9a891213-5f13-44de-9edc-cafca1cff65a",
+                      "path": [
+                        "$.credentialSubject.description"
+                      ]
+                    },
+                    {
+                      "filter": {
+                        "const": "user"
+                      },
+                      "id": "f61d84b3-89fd-4923-b665-e4a25c907428",
+                      "path": [
+                        "$.credentialSubject.name"
+                      ]
+                    }
+                  ],
+                  "is_holder": [
+                    {
+                      "directive": "preferred",
+                      "field_id": [
+                        "9a891213-5f13-44de-9edc-cafca1cff65a"
+                      ]
+                    },
+                    {
+                      "directive": "preferred",
+                      "field_id": [
+                        "f61d84b3-89fd-4923-b665-e4a25c907428"
+                      ]
+                    }
+                  ]
+                },
+                "id": "c647c0c2-df10-41ca-8e54-8d7952273138",
+                "name": "PermanentResident",
+                "schema": [
+                  {
+                    "uri": "https://w3id.org/citizenship#PermanentResident"
+                  },
+                  {
+                    "uri": "https://www.w3.org/2018/credentials#VerifiableCredential"
+                  }
+                ]
+              }
+            ],
+            "options": {
+              "challenge": "c8878554-3419-4aab-b3c1-a1597505682e",
+              "domain": "7c201427-7ec4-4c69-b195-15ed45f31868"
+            }
+          }
+        }
+      }
+    ],
+    "formats": [
+      {
+        "attach_id": "dif",
+        "format": "dif/presentation-exchange/definitions@v1.0"
+      }
+    ]
+  },
+  "state": "proposal-received",
+  "auto_present": false,
+  "by_format": {
+    "pres_proposal": {
+      "dif": {
+        "input_descriptors": [
+          {
+            "constraints": {
+              "fields": [
+                {
+                  "filter": {
+                    "const": "Test"
+                  },
+                  "id": "9a891213-5f13-44de-9edc-cafca1cff65a",
+                  "path": [
+                    "$.credentialSubject.description"
+                  ]
+                },
+                {
+                  "filter": {
+                    "const": "user"
+                  },
+                  "id": "f61d84b3-89fd-4923-b665-e4a25c907428",
+                  "path": [
+                    "$.credentialSubject.name"
+                  ]
+                }
+              ],
+              "is_holder": [
+                {
+                  "directive": "preferred",
+                  "field_id": [
+                    "9a891213-5f13-44de-9edc-cafca1cff65a"
+                  ]
+                },
+                {
+                  "directive": "preferred",
+                  "field_id": [
+                    "f61d84b3-89fd-4923-b665-e4a25c907428"
+                  ]
+                }
+              ]
+            },
+            "id": "c647c0c2-df10-41ca-8e54-8d7952273138",
+            "name": "PermanentResident",
+            "schema": [
+              {
+                "uri": "https://w3id.org/citizenship#PermanentResident"
+              },
+              {
+                "uri": "https://www.w3.org/2018/credentials#VerifiableCredential"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "challenge": "c8878554-3419-4aab-b3c1-a1597505682e",
+          "domain": "7c201427-7ec4-4c69-b195-15ed45f31868"
+        }
+      }
+    }
+  },
+  "trace": false,
+  "created_at": "2022-05-19T10:01:30.881017Z"
+}
