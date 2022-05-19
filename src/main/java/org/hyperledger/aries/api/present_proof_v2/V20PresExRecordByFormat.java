@@ -42,7 +42,9 @@ public class V20PresExRecordByFormat {
     }
 
     public boolean isDif() {
-        return getByFormat(PresentationFormat.DIF, presRequest) != null;
+        return getByFormat(PresentationFormat.DIF, presProposal) != null
+                || getByFormat(PresentationFormat.DIF, presRequest) != null
+                || getByFormat(PresentationFormat.DIF, pres) != null;
     }
 
     public <T> Optional<T> resolveDifPresentationProposal(Type type) {
