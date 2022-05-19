@@ -50,7 +50,7 @@ public interface PresExStateTranslator {
         return PresentationExchangeState.PRESENTATIONS_SENT.equals(getState());
     }
 
-    // V1 Sates
+    // V1 States
 
     default boolean stateIsPresentationAcked() {
         return PresentationExchangeState.PRESENTATION_ACKED.equals(getState());
