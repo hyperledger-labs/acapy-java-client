@@ -52,6 +52,7 @@ public class V20PresExRecord extends BasePresExRecord {
         return false;
     }
 
+    @Override
     @JsonIgnore
     public ExchangeVersion getVersion() {
         return ExchangeVersion.V2;

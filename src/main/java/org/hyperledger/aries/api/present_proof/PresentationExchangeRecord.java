@@ -7,12 +7,14 @@
  */
 package org.hyperledger.aries.api.present_proof;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -176,5 +178,11 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private Integer subProofIndex;
         private String raw;
         private String encoded;
+    }
+
+    @Override
+    @JsonIgnore
+    public ExchangeVersion getVersion() {
+        return ExchangeVersion.V1;
     }
 }
