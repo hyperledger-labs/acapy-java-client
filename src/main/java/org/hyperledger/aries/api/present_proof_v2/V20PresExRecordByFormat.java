@@ -32,9 +32,10 @@ import java.util.Optional;
 @NoArgsConstructor
 @Builder
 public class V20PresExRecordByFormat {
-    private JsonObject pres;
+
     private JsonObject presProposal;
     private JsonObject presRequest;
+    private JsonObject pres;
 
     public boolean isIndy() {
         return getByFormat(PresentationFormat.INDY, presRequest) != null;
@@ -42,6 +43,11 @@ public class V20PresExRecordByFormat {
 
     public boolean isDif() {
         return getByFormat(PresentationFormat.DIF, presRequest) != null;
+    }
+
+    public <T> Optional<T> resolveDifPresentationProposal(Type type) {
+        JsonElement dif = getByFormat(PresentationFormat.DIF, presProposal);
+        return EventParser.parseElement(dif, type);
     }
 
     public Optional<PresentProofRequest.ProofRequest> resolveIndyPresentationRequest() {

@@ -57,6 +57,15 @@ public class V20PresExRecord extends BasePresExRecord {
         return ExchangeVersion.V2;
     }
 
+    public V20PresProposalByFormat.DIFProofProposal resolveDifPresentationProposal() {
+        if (byFormat != null) {
+            Optional<V20PresProposalByFormat.DIFProofProposal>
+                    res = byFormat.resolveDifPresentationProposal(V20PresProposalByFormat.DIFProofProposal.class);
+            return res.orElse(null);
+        }
+        return null;
+    }
+
     public PresentProofRequest.ProofRequest resolveIndyPresentationRequest() {
         if (byFormat != null) {
             return byFormat.resolveIndyPresentationRequest().orElse(null);
@@ -68,10 +77,9 @@ public class V20PresExRecord extends BasePresExRecord {
      * Returns typed dif presentation request
      * @return {@link V2DIFProofRequest}
      */
-    public V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter> resolveDifPresentationRequest() {
+    public V2DIFProofRequest resolveDifPresentationRequest() {
         if (byFormat != null) {
-            Optional<V2DIFProofRequest<V2DIFProofRequest.PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>>
-                    res = byFormat.resolveDifPresentationRequest(V2DIFProofRequest.INPUT_URI_TYPE);
+            Optional<V2DIFProofRequest> res = byFormat.resolveDifPresentationRequest(V2DIFProofRequest.class);
             return res.orElse(null);
         }
         return null;
