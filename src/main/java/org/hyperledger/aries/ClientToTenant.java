@@ -40,7 +40,7 @@ public class ClientToTenant extends WalletRecord implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         this.webSocketClient.close();
     }
 }
