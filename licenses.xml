@@ -21,6 +21,12 @@
                 <name>MIT License</name>
             </names>
         </license>
+        <license>
+            <name>Creative Commons</name>
+            <names>
+                <name>CC0</name>
+            </names>
+        </license>
     </valid>
     <forbidden>
         <license>

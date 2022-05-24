@@ -43,10 +43,6 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private PresentationExchangeRole role;
     private PresentationExchangeState state;
 
-    // if the v2 to v1 converter is used this information is lost otherwise
-    @JsonIgnore
-    private transient ExchangeVersion version;
-
     @JsonIgnore
     public String getPresExId() {
         return this.presentationExchangeId;
@@ -65,6 +61,8 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     }
 
     public boolean versionIsV1() {
-        return ExchangeVersion.V1.equals(version);
+        return ExchangeVersion.V1.equals(getVersion());
     }
+
+    public abstract ExchangeVersion getVersion();
 }

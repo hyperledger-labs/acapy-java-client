@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -13,6 +13,8 @@ public interface PresExStateTranslator {
 
     PresentationExchangeRole getRole();
 
+    // Roles
+
     default boolean roleIsProver() {
         return PresentationExchangeRole.PROVER.equals(getRole());
     }
@@ -21,12 +23,59 @@ public interface PresExStateTranslator {
         return PresentationExchangeRole.VERIFIER.equals(getRole());
     }
 
+    // Verifier States
+
+    default boolean stateIsRequestSent() {
+        return PresentationExchangeState.REQUEST_SENT.equals(getState());
+    }
+
+    default boolean stateIsProposalReceived() {
+        return PresentationExchangeState.PROPOSAL_RECEIVED.equals(getState());
+    }
+
+    default boolean stateIsPresentationReceived() {
+        return PresentationExchangeState.PRESENTATION_RECEIVED.equals(getState());
+    }
+
+    // Prover States
+
+    default boolean stateIsRequestReceived() {
+        return PresentationExchangeState.REQUEST_RECEIVED.equals(getState());
+    }
+    default boolean stateIsProposalSent() {
+        return PresentationExchangeState.PROPOSAL_SENT.equals(getState());
+    }
+
+    default boolean stateIsPresentationSent() {
+        return PresentationExchangeState.PRESENTATIONS_SENT.equals(getState());
+    }
+
+    // V1 States
+
+    default boolean stateIsPresentationAcked() {
+        return PresentationExchangeState.PRESENTATION_ACKED.equals(getState());
+    }
+
+    default boolean stateIsVerified() {
+        return PresentationExchangeState.VERIFIED.equals(getState());
+    }
+
+    // General States
+
+    default boolean stateIsAbandoned() {
+        return PresentationExchangeState.ABANDONED.equals(getState());
+    }
+
+    default boolean stateIsDone() {
+        return PresentationExchangeState.DONE.equals(getState());
+    }
+
     default boolean roleIsProverAndRequestReceived() {
         return roleIsProver() && stateIsRequestReceived();
     }
 
     default boolean roleIsProverAndPresentationSent() {
-        return roleIsProver() && PresentationExchangeState.PRESENTATIONS_SENT.equals(getState());
+        return roleIsProver() && stateIsPresentationSent();
     }
 
     default boolean roleIsProverAndProposalSent() {
@@ -34,40 +83,28 @@ public interface PresExStateTranslator {
     }
 
     default boolean roleIsProverAndPresentationAcked() {
-        return roleIsProver() && PresentationExchangeState.PRESENTATION_ACKED.equals(getState());
+        return roleIsProver() && stateIsPresentationAcked();
     }
 
     // v1 or v2
     default boolean roleIsProverAndStateIsPresentationAckedOrDone() {
-        return roleIsProver() &&
-                (PresentationExchangeState.PRESENTATION_ACKED.equals(getState())
-                || PresentationExchangeState.DONE.equals(getState()));
+        return roleIsProver() && (stateIsPresentationAcked() || stateIsDone());
     }
 
     default boolean roleIsVerifierAndRequestSent() {
-        return roleIsVerifier() && PresentationExchangeState.REQUEST_SENT.equals(getState());
+        return roleIsVerifier() && stateIsRequestSent();
     }
 
     // v1 or v2
     default boolean roleIsVerifierAndStateIsVerifiedOrDone() {
-        return roleIsVerifier() &&
-                (PresentationExchangeState.VERIFIED.equals(getState())
-                || PresentationExchangeState.DONE.equals(getState()));
+        return roleIsVerifier() && (stateIsVerified() || stateIsDone());
     }
 
     default boolean roleIsVerifierAndVerified() {
-        return roleIsVerifier() && PresentationExchangeState.VERIFIED.equals(getState());
+        return roleIsVerifier() && stateIsVerified();
     }
 
     default boolean roleIsVerifierAndDone() {
-        return roleIsVerifier() && PresentationExchangeState.DONE.equals(getState());
-    }
-
-    default boolean stateIsProposalSent() {
-        return PresentationExchangeState.PROPOSAL_SENT.equals(getState());
-    }
-
-    default boolean stateIsRequestReceived() {
-        return PresentationExchangeState.REQUEST_RECEIVED.equals(getState());
+        return roleIsVerifier() && stateIsDone();
     }
 }

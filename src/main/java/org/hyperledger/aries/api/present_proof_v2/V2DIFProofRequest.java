@@ -20,13 +20,16 @@ package org.hyperledger.aries.api.present_proof_v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.hyperledger.acy_py.generated.model.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hyperledger.acy_py.generated.model.DIFField;
+import org.hyperledger.acy_py.generated.model.DIFHolder;
+import org.hyperledger.acy_py.generated.model.DIFOptions;
+import org.hyperledger.acy_py.generated.model.SubmissionRequirements;
 import org.hyperledger.aries.api.jsonld.ProofType;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,25 +40,19 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class V2DIFProofRequest<T extends V2DIFProofRequest.PresentationDefinition.InputDescriptors> {
-
-    public static final Type INPUT_URI_TYPE =
-            new TypeToken<V2DIFProofRequest<PresentationDefinition.InputDescriptors.SchemaInputDescriptorUriFilter>>(){}.getType();
-
-    public static final Type INPUT_GROUP_TYPE =
-            new TypeToken<V2DIFProofRequest<PresentationDefinition.InputDescriptors.SchemaInputDescriptorGroupFilter>>(){}.getType();
+public class V2DIFProofRequest {
 
     private DIFOptions options;
-    private PresentationDefinition<T> presentationDefinition;
+    private PresentationDefinition presentationDefinition;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class PresentationDefinition<T extends PresentationDefinition.InputDescriptors> {
+    public static class PresentationDefinition {
         private ClaimFormat format;
         private UUID id;
-        private List<T> inputDescriptors;
+        private List<InputDescriptors> inputDescriptors;
         private String name;
         private String purpose;
         private List<SubmissionRequirements> submissionRequirements;
@@ -86,8 +83,8 @@ public class V2DIFProofRequest<T extends V2DIFProofRequest.PresentationDefinitio
         @Data
         @AllArgsConstructor
         @NoArgsConstructor
-        @SuperBuilder
-        public abstract static class InputDescriptors {
+        @Builder
+        public static class InputDescriptors {
 
             private Constraints constraints;
             private List<String> group;
@@ -95,31 +92,14 @@ public class V2DIFProofRequest<T extends V2DIFProofRequest.PresentationDefinitio
             private Object metadata;
             private String name;
             private String purpose;
+            private List<SchemaInputDescriptorUri> schema;
 
             @Data
             @AllArgsConstructor
             @NoArgsConstructor
-            @SuperBuilder
-            @EqualsAndHashCode(callSuper = true)
-            public static class SchemaInputDescriptorUriFilter extends InputDescriptors {
-                private List<SchemaInputDescriptorUri> schema;
-
-                @Data
-                @AllArgsConstructor
-                @NoArgsConstructor
-                @Builder
-                public static class SchemaInputDescriptorUri {
-                    private String uri;
-                }
-            }
-
-            @Data
-            @AllArgsConstructor
-            @NoArgsConstructor
-            @SuperBuilder
-            @EqualsAndHashCode(callSuper = true)
-            public static class SchemaInputDescriptorGroupFilter extends InputDescriptors {
-                private SchemasInputDescriptorFilter schema;
+            @Builder
+            public static class SchemaInputDescriptorUri {
+                private String uri;
             }
         }
 
