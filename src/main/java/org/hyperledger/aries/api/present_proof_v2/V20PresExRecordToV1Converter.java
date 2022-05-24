@@ -8,6 +8,7 @@
 package org.hyperledger.aries.api.present_proof_v2;
 
 import lombok.NonNull;
+import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 
 public class V20PresExRecordToV1Converter {
@@ -30,6 +31,7 @@ public class V20PresExRecordToV1Converter {
                 .presentationRequest(v2.resolveIndyPresentationRequest())
                 .presentation(v2.resolveIndyPresentation())
                 .identifiers(v2.resolveIndyIdentifiers())
+                .version(ExchangeVersion.V2)
                 .build();
     }
 }

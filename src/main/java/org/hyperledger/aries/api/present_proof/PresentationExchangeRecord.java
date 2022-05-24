@@ -48,6 +48,8 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     // part of the websocket message
     private List<Identifier> identifiers;
 
+    private transient ExchangeVersion version;
+
     public boolean hasCredentialDefinitionId(@NonNull String credentialDefinitionId) {
         if (identifiers != null) {
             return identifiers.stream().anyMatch(i -> credentialDefinitionId.equals(i.getCredentialDefinitionId()));
@@ -183,6 +185,6 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     @Override
     @JsonIgnore
     public ExchangeVersion getVersion() {
-        return ExchangeVersion.V1;
+        return version == null ? ExchangeVersion.V1 : version;
     }
 }
