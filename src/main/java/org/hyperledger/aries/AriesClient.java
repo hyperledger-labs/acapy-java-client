@@ -16,6 +16,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.acy_py.generated.model.V20CredOfferRequest;
 import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.action_menu.PerformRequest;
 import org.hyperledger.aries.api.action_menu.SendMenu;
@@ -40,34 +41,24 @@ import org.hyperledger.aries.api.endorser.*;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.api.introduction.ConnectionStartIntroductionFilter;
 import org.hyperledger.aries.api.issue_credential_v1.*;
-import org.hyperledger.aries.api.issue_credential_v2.V1ToV2IssueCredentialConverter;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredBoundOfferRequest;
 import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
-import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
-import org.hyperledger.aries.api.issue_credential_v2.V2IssueCredentialRecordsFilter;
+import org.hyperledger.aries.api.issue_credential_v2.*;
 import org.hyperledger.aries.api.jsonld.LinkedDataProof;
 import org.hyperledger.aries.api.jsonld.SignRequest;
 import org.hyperledger.aries.api.jsonld.VerifyRequest;
 import org.hyperledger.aries.api.jsonld.VerifyResponse;
 import org.hyperledger.aries.api.jsonld.*;
-import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.ledger.TAAAccept;
 import org.hyperledger.aries.api.ledger.TAAInfo;
+import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.mediation.MediationKeyListQueryFilter;
 import org.hyperledger.aries.api.mediation.MediationKeyListsFilter;
 import org.hyperledger.aries.api.mediation.MediationRequestsFilter;
-import org.hyperledger.aries.api.present_proof_v2.V2PresentProofRecordsFilter;
-import org.hyperledger.aries.api.trustping.PingRequest;
-import org.hyperledger.aries.api.trustping.PingResponse;
-import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
-import org.hyperledger.aries.api.multitenancy.CreateWalletTokenRequest;
-import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
-import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
-import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
-import org.hyperledger.aries.api.multitenancy.WalletRecord;
+import org.hyperledger.aries.api.multitenancy.*;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
-import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
+import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
@@ -75,6 +66,7 @@ import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresSpecByFormatRequest;
+import org.hyperledger.aries.api.present_proof_v2.V2PresentProofRecordsFilter;
 import org.hyperledger.aries.api.resolver.DIDDocument;
 import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
 import org.hyperledger.aries.api.revocation.RevRegUpdateTailsFileUri;
@@ -88,12 +80,15 @@ import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
+import org.hyperledger.aries.api.trustping.PingRequest;
+import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.hyperledger.aries.config.TimeUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -1706,6 +1701,36 @@ public class AriesClient extends BaseClient {
     public Optional<WalletRecord> multitenancyWalletCreate(@NonNull CreateWalletRequest request) throws IOException {
         Request req = buildPost(url + "/multitenancy/wallet", request);
         return call(req, WalletRecord.class);
+    }
+
+    /**
+     * Create sub wallet and initialise rest and websocket clients based on this client's configuration.
+     * @param request {@link CreateWalletRequest}
+     * @return {@link ClientToTenant}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public ClientToTenant multitenancyWalletCreateWithClient(@NonNull CreateWalletRequest request) throws IOException {
+        if (StringUtils.isNotEmpty(bearerToken)) {
+            throw new IllegalStateException("You can not create a sub wallet from a sub wallet.");
+        }
+        URI uri = URI.create(url);
+        String scheme = uri.getScheme().equals("https") ? "wss" : "ws";
+        String host = uri.getHost();
+        int port = uri.getPort();
+        WalletRecord wr = multitenancyWalletCreate(request).orElseThrow();
+        return new ClientToTenant(
+                AriesClient.builder()
+                    .apiKey(this.apiKey)
+                    .bearerToken(wr.getToken())
+                    .url(this.url)
+                    .build(),
+                AriesWebSocketClient.builder()
+                    .apiKey(this.apiKey)
+                    .bearerToken(wr.getToken())
+                    .walletId(wr.getWalletId())
+                    .url(scheme + "://" + host + ":" + port + "/ws")
+                    .build(),
+                wr);
     }
 
     /**
