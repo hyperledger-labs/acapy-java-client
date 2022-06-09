@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -34,6 +34,12 @@ public class RevokeRequest {
      * @since 0.7.3
      */
     private Boolean notify;
+
+    /**
+     * Specify which version of the revocation notification should be sent
+     * @since 0.7.4
+     */
+    private org.hyperledger.acy_py.generated.model.RevokeRequest.NotifyVersionEnum notifyVersion;
 
     /** If false, needs a call to /revocation/publish-revocations later */
     private Boolean publish;

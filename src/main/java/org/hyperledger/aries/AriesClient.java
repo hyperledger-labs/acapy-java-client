@@ -2394,6 +2394,22 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Fix revocation state in wallet and return number of updated entries
+     * @param revRegId revocation registry identifier
+     * @param filter {@link FixRevocationEntryStateFilter}
+     * @return {@link RevRegWalletUpdatedResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<RevRegWalletUpdatedResult> revocationRegistryFixRevocationEntryState(@NonNull String revRegId,
+            @NonNull FixRevocationEntryStateFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/registry/" + revRegId + "/fix-revocation-entry-state")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPut(b.toString(), EMPTY_JSON);
+        return call(req, RevRegWalletUpdatedResult.class);
+    }
+
+    /**
      * Get number of credentials issued against revocation registry
      * @param revRegId revocation registry identifier
      * @return {@link RevRegIssuedResult}
@@ -2403,6 +2419,30 @@ public class AriesClient extends BaseClient {
             throws IOException {
         Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued");
         return call(req, RevRegIssuedResult.class);
+    }
+
+    /**
+     * Get details of credentials issued against revocation registry
+     * @param revRegId revocation registry identifier
+     * @return {@link CredRevRecordDetailsResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredRevRecordDetailsResult> revocationRegistryIssuedCredentialsDetails(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued/details");
+        return call(req, CredRevRecordDetailsResult.class);
+    }
+
+    /**
+     * Get details of revoked credentials from ledger
+     * @param revRegId revocation registry identifier
+     * @return {@link CredRevIndyRecordsResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredRevIndyRecordsResult> revocationRegistryRevokedCredentialsDetails(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued/indy_recs");
+        return call(req, CredRevIndyRecordsResult.class);
     }
 
     /**
