@@ -94,6 +94,7 @@ import org.hyperledger.aries.config.TimeUtil;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -1721,6 +1722,36 @@ public class AriesClient extends BaseClient {
     public Optional<WalletRecord> multitenancyWalletCreate(@NonNull CreateWalletRequest request) throws IOException {
         Request req = buildPost(url + "/multitenancy/wallet", request);
         return call(req, WalletRecord.class);
+    }
+
+    /**
+     * Create sub wallet and initialise rest and websocket clients based on this client's configuration.
+     * @param request {@link CreateWalletRequest}
+     * @return {@link ClientToTenant}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public ClientToTenant multitenancyWalletCreateWithClient(@NonNull CreateWalletRequest request) throws IOException {
+        if (StringUtils.isNotEmpty(bearerToken)) {
+            throw new IllegalStateException("You can not create a sub wallet from a sub wallet.");
+        }
+        URI uri = URI.create(url);
+        String scheme = uri.getScheme().equals("https") ? "wss" : "ws";
+        String host = uri.getHost();
+        int port = uri.getPort();
+        WalletRecord wr = multitenancyWalletCreate(request).orElseThrow();
+        return new ClientToTenant(
+                AriesClient.builder()
+                    .apiKey(this.apiKey)
+                    .bearerToken(wr.getToken())
+                    .url(this.url)
+                    .build(),
+                AriesWebSocketClient.builder()
+                    .apiKey(this.apiKey)
+                    .bearerToken(wr.getToken())
+                    .walletId(wr.getWalletId())
+                    .url(scheme + "://" + host + ":" + port + "/ws")
+                    .build(),
+                wr);
     }
 
     /**

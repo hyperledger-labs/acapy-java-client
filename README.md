@@ -12,7 +12,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 <dependency>
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
-   <version>0.7.23</version>
+   <version>0.7.24</version>
 </dependency>
 ```
 
