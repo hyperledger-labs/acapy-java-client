@@ -7,6 +7,8 @@
  */
 package org.hyperledger.aries.api.revocation;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,7 +41,8 @@ public class RevokeRequest {
      * Specify which version of the revocation notification should be sent
      * @since 0.7.4
      */
-    private org.hyperledger.acy_py.generated.model.RevokeRequest.NotifyVersionEnum notifyVersion;
+    @Builder.Default
+    private NotifyVersion notifyVersion = NotifyVersion.V1_0;
 
     /** If false, needs a call to /revocation/publish-revocations later */
     private Boolean publish;
@@ -53,4 +56,19 @@ public class RevokeRequest {
      * @since 0.7.3
      */
     private String threadId;
+
+    /**
+     * Specifies the revocation notification event type that should be sent, either:
+     * revocation-notification {@link RevocationNotificationEvent}
+     * or revocation-notification-v2 {@link RevocationNotificationEventV2}
+     */
+    public enum NotifyVersion {
+        @JsonProperty("v1_0")
+        @SerializedName("v1_0")
+        V1_0,
+
+        @JsonProperty("v2_0")
+        @SerializedName("v2_0")
+        V2_0
+    }
 }

@@ -23,6 +23,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
+import org.hyperledger.aries.api.revocation.RevocationNotificationEventV2;
 import org.hyperledger.aries.api.settings.Settings;
 import org.hyperledger.aries.api.trustping.PingEvent;
 
@@ -94,6 +95,9 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                     case REVOCATION_NOTIFICATION:
                         handleRevocationNotification(walletId, parser.parseValueSave(payload, RevocationNotificationEvent.class).orElseThrow());
                         break;
+                    case REVOCATION_NOTIFICATION_V2:
+                        handleRevocationNotificationV2(walletId, parser.parseValueSave(payload, RevocationNotificationEventV2.class).orElseThrow());
+                        break;
                     case REVOCATION_REGISTRY:
                         handleRevocationRegistry(walletId, parser.parseValueSave(payload, IssuerRevRegRecord.class).orElseThrow());
                         break;
@@ -155,6 +159,10 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
 
     public void handleRevocationNotification(String walletId, RevocationNotificationEvent revocationNotification) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.REVOCATION_NOTIFICATION, revocationNotification);
+    }
+
+    public void handleRevocationNotificationV2(String walletId, RevocationNotificationEventV2 revocationNotificationV2) throws Exception {
+        log.debug(LOG_MSG_MULTI, walletId, EventType.REVOCATION_NOTIFICATION_V2, revocationNotificationV2);
     }
 
     public void handleRevocationRegistry(String walletId, IssuerRevRegRecord revocationRegistry) throws Exception {
