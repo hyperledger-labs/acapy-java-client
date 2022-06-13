@@ -33,7 +33,7 @@ class IssueCredentialTest extends IntegrationTestBase {
             ac.issueCredentialRecordsStore(uuid, V1CredentialStoreRequest.builder().credentialId(uuid).build());
             Assertions.fail("Expected AriesException to be thrown");
         } catch (AriesException e) {
-            Assertions.assertTrue(e.getMessage().startsWith("Record not found: " + uuid + "."));
+            Assertions.assertEquals(404, e.getCode());
         }
     }
 
