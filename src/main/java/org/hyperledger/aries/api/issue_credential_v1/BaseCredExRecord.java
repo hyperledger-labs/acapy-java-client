@@ -50,6 +50,10 @@ public abstract class BaseCredExRecord implements CredExStateTranslator {
         return getAutoIssue() != null && getAutoIssue();
     }
 
+    public boolean autoIssueOff() {
+        return !autoIssueEnabled();
+    }
+
     public boolean autoOfferEnabled() {
         return getAutoOffer() != null && getAutoOffer();
     }
