@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.acy_py.generated.model.DIFProofRequest;
 import org.hyperledger.aries.api.present_proof.PresentProofRequest;
 
 /**
@@ -33,7 +32,7 @@ public class V20PresSendRequestRequest {
     @NoArgsConstructor
     @Builder
     public static class V20PresRequestByFormat {
-        private DIFProofRequest dif;
+        private V2DIFProofRequest dif;
         private PresentProofRequest.ProofRequest indy;
     }
 }

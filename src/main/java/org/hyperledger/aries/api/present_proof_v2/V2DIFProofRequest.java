@@ -24,7 +24,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.acy_py.generated.model.DIFField;
 import org.hyperledger.acy_py.generated.model.DIFHolder;
 import org.hyperledger.acy_py.generated.model.DIFOptions;
 import org.hyperledger.acy_py.generated.model.SubmissionRequirements;

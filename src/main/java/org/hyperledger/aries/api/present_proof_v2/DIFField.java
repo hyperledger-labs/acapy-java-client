@@ -30,29 +30,34 @@ import org.hyperledger.acy_py.generated.model.DIFField.PredicateEnum;
 import java.util.List;
 
 /**
- * DIFField
+ * DIFField as part of the Input Descriptor Object
+ * @see <a href="https://identity.foundation/presentation-exchange/#input-descriptor-object">input-descriptor-object</a>
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class DIFField {
+
     private Filter filter;
+
     private String id;
+
     /** array of JSONPath string expressions */
     private List<String> path;
+
     /**
      * required: limit submitted fields to those listed in the fields array (if present).
      * preferred: submitted fields should be limited to those listed in the fields array (if present).
      */
     private PredicateEnum predicate;
-    private String purpose;
 
+    private String purpose;
 
     /**
      * A JSON Schema descriptor used to filter against the values returned from evaluation
      * of the JSONPath string expressions in the path array.
-     * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6"></a>
+     * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6">rfc.section.6</a>
      */
     @Data
     @AllArgsConstructor
@@ -62,27 +67,27 @@ public class DIFField {
 
         /**
          * Value may be of any type including null
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.3"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.3">rfc.section.6.1.3</a>
          */
         @SerializedName("const")
         private Object _const;
 
         /**
          * Same as const but as list where there has to be at least one match
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.2"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.2">rfc.section.6.1.2</a>
          */
         @SerializedName("enum")
         private List<Object> _enum;
 
         /**
          * less than (not equal to)
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3">rfc.section.6.2.3</a>
          */
         private Number exclusiveMaximum;
 
         /**
          * greater than (not equal to)
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5"</a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5">rfc.section.6.2.5</a>
          */
         private Number exclusiveMinimum;
 
@@ -98,7 +103,7 @@ public class DIFField {
 
         /**
          * RFC, ISO... standard describing email, hostname, datetime etc.
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.7"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.7">rfc.section.7</a>
          */
         private String format;
 
@@ -106,7 +111,7 @@ public class DIFField {
 
         /**
          * ECMA-262 regular expression
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.3.3"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.3.3">rfc.section.6.3.3</a>
          */
         private String pattern;
 
@@ -114,7 +119,7 @@ public class DIFField {
 
         /**
          * JSON schema type
-         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.1"></a>
+         * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.1">rfc.section.6.1.1</a>
          */
         public enum Type {
             @JsonProperty("null")
