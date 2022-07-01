@@ -7,10 +7,7 @@
  */
 package org.hyperledger.aries.api.present_proof_v2;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hyperledger.acy_py.generated.model.DIFOptions;
 import org.hyperledger.aries.api.present_proof.PresentProofRequest;
 
@@ -32,6 +29,7 @@ public class V20PresProposalByFormat {
     @NoArgsConstructor
     @Builder
     public static class DIFProofProposal {
+        @Singular
         private List<V2DIFProofRequest.PresentationDefinition.InputDescriptors> inputDescriptors;
         private DIFOptions options;
     }

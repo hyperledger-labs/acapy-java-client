@@ -55,15 +55,15 @@
         <!-- Plugin Versions -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
-        <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+        <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <!-- Dependency Versions -->
         <jackson.version>2.13.3</jackson.version>
         <junit.jupiter.api.version>5.8.2</junit.jupiter.api.version>
         <kotlin.version>1.6.21</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
-        <okhttp.version>4.9.3</okhttp.version>
-        <pmd.version>6.46.0</pmd.version>
+        <okhttp.version>4.10.0</okhttp.version>
+        <pmd.version>6.47.0</pmd.version>
         <testcontainers.version>1.17.2</testcontainers.version>
     </properties>
 
@@ -397,7 +397,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.7.0</version>
+                        <version>4.7.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -437,7 +437,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.1.0</version>
+                <version>7.1.1</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>

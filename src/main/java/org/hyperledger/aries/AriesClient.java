@@ -68,6 +68,7 @@ import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
+import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresSpecByFormatRequest;

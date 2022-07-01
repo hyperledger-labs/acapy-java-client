@@ -11,29 +11,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.aries.api.present_proof.PresentProofRequest;
 
-/**
- * V20PresSendRequestRequest
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class V20PresSendRequestRequest {
-
+public class V20PresCreateRequestRequest {
     private Boolean autoVerify;
     private String comment;
-    private String connectionId;
-    private V20PresRequestByFormat presentationRequest;
+    private V20PresSendRequestRequest.V20PresRequestByFormat presentationRequest;
     private Boolean trace;
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class V20PresRequestByFormat {
-        private V2DIFProofRequest dif;
-        private PresentProofRequest.ProofRequest indy;
-    }
 }
