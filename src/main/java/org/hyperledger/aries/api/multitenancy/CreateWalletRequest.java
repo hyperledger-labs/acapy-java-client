@@ -40,6 +40,9 @@ public class CreateWalletRequest {
     /** Master key used for key derivation. */
     private String walletKey;
 
+    /** Wallet key derivation method */
+    private WalletKeyDerivation walletKeyDerivation;
+
     /** Wallet name */
     private String walletName;
 

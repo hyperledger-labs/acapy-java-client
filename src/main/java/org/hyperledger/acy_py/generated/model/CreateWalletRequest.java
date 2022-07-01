@@ -143,6 +143,60 @@ public class CreateWalletRequest {
     public static final String SERIALIZED_NAME_WALLET_KEY = "wallet_key";
     @SerializedName(SERIALIZED_NAME_WALLET_KEY)
     private String walletKey;
+
+    /**
+     * Key derivation
+     */
+    @JsonAdapter(WalletKeyDerivationEnum.Adapter.class)
+    public enum WalletKeyDerivationEnum {
+        ARGON2I_MOD("ARGON2I_MOD"),
+
+        ARGON2I_INT("ARGON2I_INT"),
+
+        RAW("RAW");
+
+        private String value;
+
+        WalletKeyDerivationEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static WalletKeyDerivationEnum fromValue(String value) {
+            for (WalletKeyDerivationEnum b : WalletKeyDerivationEnum.values()) {
+                if (b.value.equals(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
+
+        public static class Adapter extends TypeAdapter<WalletKeyDerivationEnum> {
+            @Override
+            public void write(final JsonWriter jsonWriter, final WalletKeyDerivationEnum enumeration)
+                    throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public WalletKeyDerivationEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return WalletKeyDerivationEnum.fromValue(value);
+            }
+        }
+    }
+
+    public static final String SERIALIZED_NAME_WALLET_KEY_DERIVATION = "wallet_key_derivation";
+    @SerializedName(SERIALIZED_NAME_WALLET_KEY_DERIVATION)
+    private WalletKeyDerivationEnum walletKeyDerivation;
     public static final String SERIALIZED_NAME_WALLET_NAME = "wallet_name";
     @SerializedName(SERIALIZED_NAME_WALLET_NAME)
     private String walletName;
