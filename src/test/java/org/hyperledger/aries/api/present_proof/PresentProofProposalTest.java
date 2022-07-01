@@ -38,7 +38,7 @@ public class PresentProofProposalTest extends IntegrationTestBase {
 
         // no credential and no connection, but expecting no parsing errors to happen here.
         AriesException e = assertThrows(AriesException.class, () -> ac.presentProofSendProposal(proposal));
-        assertTrue(e.getMessage().startsWith("Record not found: d0fb05d0-b7bb-4b08-9c82-1199133458c4."));
+        assertTrue(e.getMessage().startsWith("Record not found: connection/d0fb05d0-b7bb-4b08-9c82-1199133458c4."));
     }
 
     @Test

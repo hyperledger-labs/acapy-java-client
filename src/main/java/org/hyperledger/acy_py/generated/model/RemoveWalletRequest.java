@@ -14,21 +14,16 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
- * DIFProofProposal
+ * RemoveWalletRequest
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class DIFProofProposal {
-    public static final String SERIALIZED_NAME_INPUT_DESCRIPTORS = "input_descriptors";
-    @SerializedName(SERIALIZED_NAME_INPUT_DESCRIPTORS)
-    private List<InputDescriptors> inputDescriptors = null;
-    public static final String SERIALIZED_NAME_OPTIONS = "options";
-    @SerializedName(SERIALIZED_NAME_OPTIONS)
-    private DIFOptions options;
+public class RemoveWalletRequest {
+    public static final String SERIALIZED_NAME_WALLET_KEY = "wallet_key";
+    @SerializedName(SERIALIZED_NAME_WALLET_KEY)
+    private String walletKey;
 }

@@ -32,6 +32,7 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinitionFilte
 import org.hyperledger.aries.api.credentials.Credential;
 import org.hyperledger.aries.api.credentials.CredentialFilter;
 import org.hyperledger.aries.api.credentials.CredentialRevokedFilter;
+import org.hyperledger.aries.api.credentials.ListCredentialsFilter;
 import org.hyperledger.aries.api.did_exchange.DIDXRequest;
 import org.hyperledger.aries.api.did_exchange.*;
 import org.hyperledger.aries.api.discover_features.DiscoverFeaturesQueryFilter;
@@ -55,12 +56,16 @@ import org.hyperledger.aries.api.ledger.*;
 import org.hyperledger.aries.api.mediation.MediationKeyListQueryFilter;
 import org.hyperledger.aries.api.mediation.MediationKeyListsFilter;
 import org.hyperledger.aries.api.mediation.MediationRequestsFilter;
-import org.hyperledger.aries.api.multitenancy.*;
+import org.hyperledger.aries.api.multitenancy.CreateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenRequest;
+import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
+import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
+import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
+import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
-import org.hyperledger.aries.api.present_proof.AdminAPIMessageTracing;
 import org.hyperledger.aries.api.present_proof.PresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
@@ -84,6 +89,7 @@ import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
+import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.TimeUtil;
 
 import javax.annotation.Nullable;
@@ -596,11 +602,26 @@ public class AriesClient extends BaseClient {
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<List<Credential>> credentials() throws IOException {
-        return credentials(null);
+        return credentials(ListCredentialsFilter.builder().build());
     }
 
     /**
      * Fetch credentials from wallet
+     * @param filter {@link ListCredentialsFilter}
+     * @return All credentials or credentials that match the filter criteria
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<Credential>> credentials(@Nullable ListCredentialsFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/credentials")).newBuilder();
+        if (filter != null) {
+            filter.buildParams(b);
+        }
+        Request req = buildGet(b.toString());
+        return getWrapped(raw(req), "results", CREDENTIAL_TYPE);
+    }
+
+    /**
+     * Fetch credentials from wallet - filter results in memory
      * @param filter see {@link CredentialFilter} for prepared filters
      * @return Credentials that match the filter criteria
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -1490,16 +1511,16 @@ public class AriesClient extends BaseClient {
     /**
      * Send a NYM registration to the ledger
      * @param filter {@link RegisterNymFilter}
-     * @return {@link RegisterLedgerNymResponse}
+     * @return {@link TxnOrRegisterLedgerNymResponse}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      * @since 0.7.3
      */
-    public Optional<RegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
+    public Optional<TxnOrRegisterLedgerNymResponse> ledgerRegisterNym(@NonNull RegisterNymFilter filter)
             throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/register-nym")).newBuilder();
         filter.buildParams(b);
         Request req = buildPost(b.build().toString(), EMPTY_JSON);
-        return call(req, RegisterLedgerNymResponse.class);
+        return call(req, TxnOrRegisterLedgerNymResponse.class);
     }
 
     /**
@@ -1967,12 +1988,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends presentation request in reference to a proposal
      * @param presentationExchangeId presentation exchange identifier
-     * @param request {@link AdminAPIMessageTracing}
+     * @param request {@link V10PresentationSendRequestToProposal}
      * @return {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<PresentationExchangeRecord> presentProofRecordsSendRequest(
-            @NonNull String presentationExchangeId, @NonNull AdminAPIMessageTracing request) throws IOException{
+            @NonNull String presentationExchangeId, @NonNull V10PresentationSendRequestToProposal request) throws IOException{
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/send-request",
                 request);
         return call(req, PresentationExchangeRecord.class);
@@ -2151,12 +2172,12 @@ public class AriesClient extends BaseClient {
     /**
      * Sends presentation request in reference to a proposal
      * @param presentationExchangeId presentation exchange identifier
-     * @param request {@link AdminAPIMessageTracing}
+     * @param request {@link V20PresentationSendRequestToProposal}
      * @return {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<V20PresExRecord> presentProofV2RecordsSendRequest(
-            @NonNull String presentationExchangeId, @NonNull AdminAPIMessageTracing request) throws IOException{
+            @NonNull String presentationExchangeId, @NonNull V20PresentationSendRequestToProposal request) throws IOException{
         Request req = buildPost(url + "/present-proof-2.0/records/" + presentationExchangeId + "/send-request",
                 request);
         return call(req, V20PresExRecord.class);
@@ -2374,6 +2395,22 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Fix revocation state in wallet and return number of updated entries
+     * @param revRegId revocation registry identifier
+     * @param filter {@link FixRevocationEntryStateFilter}
+     * @return {@link RevRegWalletUpdatedResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<RevRegWalletUpdatedResult> revocationRegistryFixRevocationEntryState(@NonNull String revRegId,
+            @NonNull FixRevocationEntryStateFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl
+                .parse(url + "/revocation/registry/" + revRegId + "/fix-revocation-entry-state")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildPut(b.toString(), EMPTY_JSON);
+        return call(req, RevRegWalletUpdatedResult.class);
+    }
+
+    /**
      * Get number of credentials issued against revocation registry
      * @param revRegId revocation registry identifier
      * @return {@link RevRegIssuedResult}
@@ -2383,6 +2420,30 @@ public class AriesClient extends BaseClient {
             throws IOException {
         Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued");
         return call(req, RevRegIssuedResult.class);
+    }
+
+    /**
+     * Get details of credentials issued against revocation registry
+     * @param revRegId revocation registry identifier
+     * @return {@link CredRevRecordDetailsResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredRevRecordDetailsResult> revocationRegistryIssuedCredentialsDetails(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued/details");
+        return call(req, CredRevRecordDetailsResult.class);
+    }
+
+    /**
+     * Get details of revoked credentials from ledger
+     * @param revRegId revocation registry identifier
+     * @return {@link CredRevIndyRecordsResult}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<CredRevIndyRecordsResult> revocationRegistryRevokedCredentialsDetails(@NonNull String revRegId)
+            throws IOException {
+        Request req = buildGet(url + "/revocation/registry/" + revRegId + "/issued/indy_recs");
+        return call(req, CredRevIndyRecordsResult.class);
     }
 
     /**
@@ -2624,7 +2685,7 @@ public class AriesClient extends BaseClient {
      * @return {@link DID}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<DID> walletDidCreate(@NonNull DIDCreate didCreate) throws IOException {
+    public Optional<DID> walletDidCreate(@NonNull WalletDIDCreate didCreate) throws IOException {
         Request req = buildPost(url + "/wallet/did/create", didCreate);
         return getWrapped(raw(req), "result", DID.class);
     }

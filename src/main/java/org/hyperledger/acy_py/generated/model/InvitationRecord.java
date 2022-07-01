@@ -38,6 +38,9 @@ public class InvitationRecord {
     public static final String SERIALIZED_NAME_INVITATION_URL = "invitation_url";
     @SerializedName(SERIALIZED_NAME_INVITATION_URL)
     private String invitationUrl;
+    public static final String SERIALIZED_NAME_OOB_ID = "oob_id";
+    @SerializedName(SERIALIZED_NAME_OOB_ID)
+    private String oobId;
     public static final String SERIALIZED_NAME_STATE = "state";
     @SerializedName(SERIALIZED_NAME_STATE)
     private String state;

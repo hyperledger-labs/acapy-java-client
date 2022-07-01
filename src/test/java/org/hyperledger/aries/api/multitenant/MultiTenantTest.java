@@ -9,13 +9,13 @@ package org.hyperledger.aries.api.multitenant;
 
 import org.hyperledger.acy_py.generated.model.ConnectionInvitation;
 import org.hyperledger.acy_py.generated.model.DID;
-import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
 import org.hyperledger.aries.AriesClient;
 import org.hyperledger.aries.ClientToTenant;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.connection.*;
 import org.hyperledger.aries.api.multitenancy.*;
+import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -159,7 +159,8 @@ public class MultiTenantTest {
 
         // prepare the wallets
 
-        DID did1 = wallet1.send().walletDidCreate(DIDCreate.builder().build()).orElseThrow();
+        DID did1 = wallet1.send().walletDidCreate(WalletDIDCreate.builder().build()).orElseThrow();
+
         // If running against a public ledger
         // sub1.walletDidPublic(did1.getDid());
         wallet1.send().walletSetDidEndpoint(DIDEndpointWithType
@@ -169,7 +170,8 @@ public class MultiTenantTest {
                 .endpointType(DIDEndpointWithType.EndpointTypeEnum.ENDPOINT)
                 .build());
 
-        DID did2 = wallet2.send().walletDidCreate(DIDCreate.builder().build()).orElseThrow();
+        DID did2 = wallet2.send().walletDidCreate(WalletDIDCreate.builder().build()).orElseThrow();
+
         // If running against a public ledger
         // sub2.walletDidPublic(did2.getDid());
         wallet2.send().walletSetDidEndpoint(DIDEndpointWithType

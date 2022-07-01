@@ -25,6 +25,9 @@ import java.util.UUID;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class V20PresSendRequestRequest {
+    public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
+    @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
+    private Boolean autoVerify;
     public static final String SERIALIZED_NAME_COMMENT = "comment";
     @SerializedName(SERIALIZED_NAME_COMMENT)
     private String comment;

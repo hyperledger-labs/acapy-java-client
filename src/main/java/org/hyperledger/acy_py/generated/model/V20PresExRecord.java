@@ -32,6 +32,9 @@ public class V20PresExRecord {
     public static final String SERIALIZED_NAME_AUTO_PRESENT = "auto_present";
     @SerializedName(SERIALIZED_NAME_AUTO_PRESENT)
     private Boolean autoPresent;
+    public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
+    @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
+    private Boolean autoVerify;
     public static final String SERIALIZED_NAME_BY_FORMAT = "by_format";
     @SerializedName(SERIALIZED_NAME_BY_FORMAT)
     private V20PresExRecordByFormat byFormat;

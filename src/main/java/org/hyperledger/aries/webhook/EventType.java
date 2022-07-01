@@ -34,6 +34,7 @@ public enum EventType {
     PRESENT_PROOF_V2("present_proof_v2_0"),
     PROBLEM_REPORT("problem_report"),
     REVOCATION_NOTIFICATION("revocation-notification"),
+    REVOCATION_NOTIFICATION_V2("revocation-notification-v2"),
     REVOCATION_REGISTRY("revocation_registry"),
     SETTINGS("settings")
     ;

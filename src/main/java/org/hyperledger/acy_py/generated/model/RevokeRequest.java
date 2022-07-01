@@ -12,7 +12,13 @@
 
 package org.hyperledger.acy_py.generated.model;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 
 /**
  * RevokeRequest
@@ -38,6 +44,57 @@ public class RevokeRequest {
     public static final String SERIALIZED_NAME_NOTIFY = "notify";
     @SerializedName(SERIALIZED_NAME_NOTIFY)
     private Boolean notify;
+
+    /**
+     * Specify which version of the revocation notification should be sent
+     */
+    @JsonAdapter(NotifyVersionEnum.Adapter.class)
+    public enum NotifyVersionEnum {
+        V1_0("v1_0"),
+
+        V2_0("v2_0");
+
+        private String value;
+
+        NotifyVersionEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static NotifyVersionEnum fromValue(String value) {
+            for (NotifyVersionEnum b : NotifyVersionEnum.values()) {
+                if (b.value.equals(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
+
+        public static class Adapter extends TypeAdapter<NotifyVersionEnum> {
+            @Override
+            public void write(final JsonWriter jsonWriter, final NotifyVersionEnum enumeration) throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public NotifyVersionEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return NotifyVersionEnum.fromValue(value);
+            }
+        }
+    }
+
+    public static final String SERIALIZED_NAME_NOTIFY_VERSION = "notify_version";
+    @SerializedName(SERIALIZED_NAME_NOTIFY_VERSION)
+    private NotifyVersionEnum notifyVersion;
     public static final String SERIALIZED_NAME_PUBLISH = "publish";
     @SerializedName(SERIALIZED_NAME_PUBLISH)
     private Boolean publish;
