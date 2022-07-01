@@ -15,23 +15,17 @@ package org.hyperledger.acy_py.generated.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * V10PresentationCreateRequestRequest
+ * V10PresentationSendRequestToProposal
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class V10PresentationCreateRequestRequest {
+public class V10PresentationSendRequestToProposal {
     public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
     @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
     private Boolean autoVerify;
-    public static final String SERIALIZED_NAME_COMMENT = "comment";
-    @SerializedName(SERIALIZED_NAME_COMMENT)
-    private String comment;
-    public static final String SERIALIZED_NAME_PROOF_REQUEST = "proof_request";
-    @SerializedName(SERIALIZED_NAME_PROOF_REQUEST)
-    private IndyProofRequest proofRequest;
     public static final String SERIALIZED_NAME_TRACE = "trace";
     @SerializedName(SERIALIZED_NAME_TRACE)
     private Boolean trace;

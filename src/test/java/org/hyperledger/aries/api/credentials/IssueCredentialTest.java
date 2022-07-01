@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -33,7 +33,7 @@ class IssueCredentialTest extends IntegrationTestBase {
             ac.issueCredentialRecordsStore(uuid, V1CredentialStoreRequest.builder().credentialId(uuid).build());
             Assertions.fail("Expected AriesException to be thrown");
         } catch (AriesException e) {
-            Assertions.assertTrue(e.getMessage().startsWith("Record not found: " + uuid + "."));
+            Assertions.assertEquals(404, e.getCode());
         }
     }
 

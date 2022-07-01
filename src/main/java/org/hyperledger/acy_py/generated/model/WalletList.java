@@ -17,18 +17,15 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * DIFProofProposal
+ * WalletList
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class DIFProofProposal {
-    public static final String SERIALIZED_NAME_INPUT_DESCRIPTORS = "input_descriptors";
-    @SerializedName(SERIALIZED_NAME_INPUT_DESCRIPTORS)
-    private List<InputDescriptors> inputDescriptors = null;
-    public static final String SERIALIZED_NAME_OPTIONS = "options";
-    @SerializedName(SERIALIZED_NAME_OPTIONS)
-    private DIFOptions options;
+public class WalletList {
+    public static final String SERIALIZED_NAME_RESULTS = "results";
+    @SerializedName(SERIALIZED_NAME_RESULTS)
+    private List<WalletRecord> results = null;
 }

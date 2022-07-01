@@ -14,21 +14,19 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
- * DIFProofProposal
+ * TxnOrRegisterLedgerNymResponse
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class DIFProofProposal {
-    public static final String SERIALIZED_NAME_INPUT_DESCRIPTORS = "input_descriptors";
-    @SerializedName(SERIALIZED_NAME_INPUT_DESCRIPTORS)
-    private List<InputDescriptors> inputDescriptors = null;
-    public static final String SERIALIZED_NAME_OPTIONS = "options";
-    @SerializedName(SERIALIZED_NAME_OPTIONS)
-    private DIFOptions options;
+public class TxnOrRegisterLedgerNymResponse {
+    public static final String SERIALIZED_NAME_SUCCESS = "success";
+    @SerializedName(SERIALIZED_NAME_SUCCESS)
+    private Boolean success;
+    public static final String SERIALIZED_NAME_TXN = "txn";
+    @SerializedName(SERIALIZED_NAME_TXN)
+    private TransactionRecord txn;
 }

@@ -14,16 +14,18 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.time.OffsetDateTime;
+
 /**
- * AdminAPIMessageTracing
+ * Date
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class AdminAPIMessageTracing {
-    public static final String SERIALIZED_NAME_TRACE = "trace";
-    @SerializedName(SERIALIZED_NAME_TRACE)
-    private Boolean trace;
+public class Date {
+    public static final String SERIALIZED_NAME_EXPIRES_TIME = "expires_time";
+    @SerializedName(SERIALIZED_NAME_EXPIRES_TIME)
+    private OffsetDateTime expiresTime;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -9,7 +9,6 @@ package org.hyperledger.aries.api.wallet;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.acy_py.generated.model.DID;
-import org.hyperledger.acy_py.generated.model.DIDCreate;
 import org.hyperledger.acy_py.generated.model.DIDEndpoint;
 import org.hyperledger.acy_py.generated.model.DIDEndpointWithType;
 import org.hyperledger.aries.IntegrationTestBase;
@@ -27,7 +26,7 @@ public class WalletTest extends IntegrationTestBase {
     void testCreateAndListWalletDids() throws Exception {
 
         // as the wallet is empty by default create local did first
-        DID localDid = ac.walletDidCreate(DIDCreate
+        DID localDid = ac.walletDidCreate(WalletDIDCreate
                 .builder()
                 .build())
                 .orElseThrow();
@@ -48,7 +47,7 @@ public class WalletTest extends IntegrationTestBase {
 
     @Test
     void testSetGetDidEndpoint() throws Exception {
-        DID localDid = ac.walletDidCreate(DIDCreate.builder().build()).orElseThrow();
+        DID localDid = ac.walletDidCreate(WalletDIDCreate.builder().build()).orElseThrow();
 
         final String url = "http://localhost:8031";
         DIDEndpointWithType req = DIDEndpointWithType
@@ -64,7 +63,7 @@ public class WalletTest extends IntegrationTestBase {
 
     @Test
     void TestRotateKeypair() throws Exception{
-        DID localDid = ac.walletDidCreate(DIDCreate
+        DID localDid = ac.walletDidCreate(WalletDIDCreate
                 .builder()
                 .build()).orElseThrow();
         Assertions.assertNotNull(localDid.getVerkey());

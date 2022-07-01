@@ -23,6 +23,7 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
 import org.hyperledger.aries.api.revocation.RevocationNotificationEvent;
+import org.hyperledger.aries.api.revocation.RevocationNotificationEventV2;
 import org.hyperledger.aries.api.settings.Settings;
 import org.hyperledger.aries.api.trustping.PingEvent;
 
@@ -89,6 +90,9 @@ public abstract class EventHandler implements IEventHandler {
                     case REVOCATION_NOTIFICATION:
                         parser.parseValueSave(payload, RevocationNotificationEvent.class, this::handleRevocationNotification);
                         break;
+                    case REVOCATION_NOTIFICATION_V2:
+                        parser.parseValueSave(payload, RevocationNotificationEventV2.class, this::handleRevocationNotificationV2);
+                        break;
                     case REVOCATION_REGISTRY:
                         parser.parseValueSave(payload, IssuerRevRegRecord.class, this::handleRevocationRegistry);
                         break;
@@ -150,6 +154,10 @@ public abstract class EventHandler implements IEventHandler {
 
     public void handleRevocationNotification(RevocationNotificationEvent revocationNotification) {
         log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_NOTIFICATION, revocationNotification);
+    }
+
+    public void handleRevocationNotificationV2(RevocationNotificationEventV2 revocationNotificationV2) {
+        log.debug(LOG_MSG_SINGLE, EventType.REVOCATION_NOTIFICATION_V2, revocationNotificationV2);
     }
 
     public void handleRevocationRegistry(IssuerRevRegRecord revocationRegistry) {

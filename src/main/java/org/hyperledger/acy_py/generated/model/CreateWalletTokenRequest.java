@@ -15,15 +15,15 @@ package org.hyperledger.acy_py.generated.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * RegisterLedgerNymResponse
+ * CreateWalletTokenRequest
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class RegisterLedgerNymResponse {
-    public static final String SERIALIZED_NAME_SUCCESS = "success";
-    @SerializedName(SERIALIZED_NAME_SUCCESS)
-    private Boolean success;
+public class CreateWalletTokenRequest {
+    public static final String SERIALIZED_NAME_WALLET_KEY = "wallet_key";
+    @SerializedName(SERIALIZED_NAME_WALLET_KEY)
+    private String walletKey;
 }
