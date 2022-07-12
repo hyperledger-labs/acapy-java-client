@@ -106,8 +106,8 @@ public class V2DIFProofRequest {
         @Builder
         public static class Constraints {
             private List<DIFField> fields;
-            /** required means selective disclosure */
             private List<DIFHolder> isHolder;
+            /** required means selective disclosure */
             private SubjectEnum limitDisclosure;
             private StatusEnum statusActive;
             private StatusEnum statusRevoked;

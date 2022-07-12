@@ -19,6 +19,7 @@
 
 package org.hyperledger.aries.api.present_proof_v2;
 
+import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,5 +53,5 @@ public class DIFPresSpec {
     /**
      * reveal doc [JSON-LD frame] dict used to derive the credential when selective disclosure is required
      */
-    private Object revealDoc;
+    private JsonObject revealDoc;
 }
