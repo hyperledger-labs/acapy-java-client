@@ -27,6 +27,7 @@ public abstract class RevocationNotificationBase {
         return b.build();
     }
 
+    abstract RevocationInfo toRevocationInfo();
 
     @Data
     @Builder

@@ -20,10 +20,7 @@ package org.hyperledger.aries.api.present_proof_v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hyperledger.acy_py.generated.model.DIFHolder;
 import org.hyperledger.acy_py.generated.model.DIFOptions;
 import org.hyperledger.acy_py.generated.model.SubmissionRequirements;
@@ -74,7 +71,8 @@ public class V2DIFProofRequest {
             @AllArgsConstructor
             @NoArgsConstructor
             @Builder
-            private static class LdpVp {
+            public static class LdpVp {
+                @Singular("addProofType")
                 List<ProofType> proofType;
             }
         }
@@ -108,6 +106,7 @@ public class V2DIFProofRequest {
         @Builder
         public static class Constraints {
             private List<DIFField> fields;
+            /** required means selective disclosure */
             private List<DIFHolder> isHolder;
             private SubjectEnum limitDisclosure;
             private StatusEnum statusActive;
