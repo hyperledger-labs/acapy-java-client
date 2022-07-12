@@ -141,4 +141,19 @@ public class V2DIFProofRequest {
             }
         }
     }
+
+    /**
+     * When using the /send-presentation endpoint aca-py needs the presentation request,
+     * but without the holder.
+     */
+    public V2DIFProofRequest resetHolderConstraints() {
+        if (presentationDefinition != null && presentationDefinition.getInputDescriptors() != null) {
+            presentationDefinition.getInputDescriptors().forEach(id -> {
+                if (id.getConstraints() != null) {
+                    id.getConstraints().setIsHolder(null);
+                }
+            });
+        }
+        return this;
+    }
 }
