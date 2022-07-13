@@ -38,19 +38,29 @@ import java.util.Map;
 public class DIFPresSpec {
 
     /**
-     * Issuer identifier to sign the presentation, if different from current public DID
+     * Optional, but causes issues if not set.
+     * Confusing naming on the aca-py side, because in some cases this is the (public) DID of the holder.
+     * If this field is not set the presentation will not be signed correctly and hence not validate
+     * correctly on the verifier side.
      */
     private String issuerId;
 
+    /**
+     * Optional, but causes issues if not set.
+     * Received presentation definition from the presentation request but without the holder information, see
+     * {@link V2DIFProofRequest#resetHolderConstraints()}
+     */
     private V2DIFProofRequest.PresentationDefinition presentationDefinition;
 
     /**
+     * Optional, but causes issues if not set.
      * Mapping of input_descriptor id to list of stored W3C credential record_id
      * example: {@code "<input descriptor id_1>": ["<record id_1>", "<record id_2>"]}
      */
     private Map<String, List<String>> recordIds;
 
     /**
+     * Optional,
      * reveal doc [JSON-LD frame] dict used to derive the credential when selective disclosure is required
      */
     private JsonObject revealDoc;

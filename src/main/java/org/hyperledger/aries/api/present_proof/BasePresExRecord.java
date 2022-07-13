@@ -49,7 +49,23 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     }
 
     public boolean isVerified() {
-        return getVerified() != null && getVerified();
+        return Boolean.TRUE.equals(verified);
+    }
+
+    public boolean isAutoPresent() {
+        return Boolean.TRUE.equals(autoPresent);
+    }
+
+    public boolean isNotAutoPresent() {
+        return !isAutoPresent();
+    }
+
+    public boolean isAutoVerify() {
+        return Boolean.TRUE.equals(autoVerify);
+    }
+
+    public boolean isNotAutoVerify() {
+        return !isAutoVerify();
     }
 
     public boolean initiatorIsSelf() {
