@@ -71,22 +71,26 @@ public class DIFField {
          * less than (not equal to)
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3">rfc.section.6.2.3</a>
          */
-        private Number exclusiveMaximum;
+        @SerializedName("exclusiveMaximum")
+        private String exclusiveMaximum;
 
         /**
          * greater than (not equal to)
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5">rfc.section.6.2.5</a>
          */
-        private Number exclusiveMinimum;
+        @SerializedName("exclusiveMinimum")
+        private String exclusiveMinimum;
 
         /** less than or exactly equal to */
-        private Number maximum;
+        private String maximum;
         /** greater than or exactly equal to */
-        private Number minimum;
+        private String minimum;
 
         /** String length, valid if length is less than, or equal to */
+        @SerializedName("maxLength")
         private Integer maxLength;
         /** String length,  valid if length is greater than, or equal to */
+        @SerializedName("minLength")
         private Integer minLength;
 
         /**
