@@ -53,6 +53,8 @@ public class DIFField {
     @Builder
     public static class Filter {
 
+        // Note, only the following four filters are supported by aca-py
+
         /**
          * Value may be of any type including null
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.3">rfc.section.6.1.3</a>
@@ -64,50 +66,71 @@ public class DIFField {
          * Same as const but as list where there has to be at least one match
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.2">rfc.section.6.1.2</a>
          */
-        @SerializedName("enum")
+        @SerializedName(value = "enum", alternate = {"enums"})
         private List<Object> _enum;
 
+        @SerializedName(value = "not", alternate = {"_not"})
+        private Boolean not;
+
+        @SerializedName(value = "type", alternate = {"_type"})
+        private Type type;
+
         /**
+         * Not supported by aca-py
          * less than (not equal to)
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3">rfc.section.6.2.3</a>
          */
-        @SerializedName(value = "exclusiveMaximum", alternate = {"exclusive_maximum"})
+        @SerializedName(value = "exclusiveMaximum", alternate = {"exclusive_maximum", "exclusive_max"})
         private String exclusiveMaximum;
 
         /**
+         * Not supported by aca-py
          * greater than (not equal to)
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5">rfc.section.6.2.5</a>
          */
-        @SerializedName(value = "exclusiveMinimum", alternate = {"exclusive_minimum"})
+        @SerializedName(value = "exclusiveMinimum", alternate = {"exclusive_minimum", "exclusive_min"})
         private String exclusiveMinimum;
 
-        /** less than or exactly equal to */
+        /**
+         * Not supported by aca-py
+         * less than or exactly equal to
+         */
         private String maximum;
-        /** greater than or exactly equal to */
+
+        /**
+         * Not supported by aca-py
+         * greater than or exactly equal to
+         */
         private String minimum;
 
-        /** String length, valid if length is less than, or equal to */
+        /**
+         * Not supported by aca-py
+         * String length, valid if length is less than, or equal to
+         */
         @SerializedName(value = "maxLength", alternate = {"max_length"})
         private Integer maxLength;
-        /** String length,  valid if length is greater than, or equal to */
+
+        /**
+         * Not supported by aca-py
+         * String length,  valid if length is greater than, or equal to
+         */
         @SerializedName(value = "minLength", alternate = {"min_length"})
         private Integer minLength;
 
         /**
+         * Not supported by aca-py
          * RFC, ISO... standard describing email, hostname, datetime etc.
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.7">rfc.section.7</a>
          */
+        @SerializedName(value = "format", alternate = {"fmt"})
         private String format;
 
-        private Boolean not;
-
         /**
+         * Not supported by aca-py
          * ECMA-262 regular expression
          * @see <a href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.3.3">rfc.section.6.3.3</a>
          */
         private String pattern;
-
-        private Type type;
 
         /**
          * JSON schema type
