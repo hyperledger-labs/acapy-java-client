@@ -27,6 +27,7 @@ import org.hyperledger.aries.api.jsonld.VerifiableCredential;
 import org.hyperledger.aries.api.multitenancy.WalletRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof.PresentationRequestCredentials;
+import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.config.GsonConfig;
 
 import javax.annotation.Nullable;
