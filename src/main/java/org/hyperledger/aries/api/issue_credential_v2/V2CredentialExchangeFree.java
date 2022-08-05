@@ -22,6 +22,7 @@ import java.util.UUID;
 @Data @AllArgsConstructor @NoArgsConstructor @Builder
 public class V2CredentialExchangeFree {
     private Boolean autoRemove;
+    private Boolean autoIssue;
     private String comment;
     private UUID connectionId;
     private V2CredentialPreview credentialPreview;
