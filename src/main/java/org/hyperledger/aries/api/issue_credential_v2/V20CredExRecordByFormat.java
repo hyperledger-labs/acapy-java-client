@@ -75,7 +75,7 @@ public class V20CredExRecordByFormat {
         String result = null;
         if (credProposal != null) {
             JsonElement indy = resolveIndyPayload(credProposal);
-            if (indy != null) {
+            if (indy != null && indy.getAsJsonObject().has("schema_id")) {
                 result = indy.getAsJsonObject().get("schema_id").getAsString();
             }
         }
