@@ -36,12 +36,12 @@ import java.util.Map;
  * The base64 encoded url can be found in the invitationRecord.invitationUrl
  */
 @Slf4j
-public class V1CredentialFreeOfferHelper {
+public class CredentialFreeOfferHelper {
 
     private final AriesClient acaPy;
 
     @Builder
-    public V1CredentialFreeOfferHelper(@NonNull AriesClient acaPy) {
+    public CredentialFreeOfferHelper(@NonNull AriesClient acaPy) {
         super();
         this.acaPy = acaPy;
     }
