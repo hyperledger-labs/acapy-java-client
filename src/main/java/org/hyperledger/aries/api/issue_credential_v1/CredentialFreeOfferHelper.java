@@ -19,8 +19,7 @@ import org.hyperledger.aries.api.issue_credential_v2.V20CredExRecord;
 import org.hyperledger.aries.api.issue_credential_v2.V2CredentialExchangeFree;
 import org.hyperledger.aries.api.issue_credential_v2.V2ToV1IndyCredentialConverter;
 import org.hyperledger.aries.api.out_of_band.AttachmentDef;
-import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
-import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
+import org.hyperledger.aries.api.out_of_band.BaseOOBInvitationHelper;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,14 +35,11 @@ import java.util.Map;
  * The base64 encoded url can be found in the invitationRecord.invitationUrl
  */
 @Slf4j
-public class CredentialFreeOfferHelper {
-
-    private final AriesClient acaPy;
+public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
 
     @Builder
     public CredentialFreeOfferHelper(@NonNull AriesClient acaPy) {
-        super();
-        this.acaPy = acaPy;
+        super(acaPy);
     }
 
     /**
@@ -70,10 +66,12 @@ public class CredentialFreeOfferHelper {
             r.credentialExchangeId(ex.getCredentialExchangeId());
             r.credentialProposalDict(ex.getCredentialProposalDict());
             // step 2 - create out-of-band invitation with attached credential offer
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(ex);
+            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
+                    ex.getCredentialExchangeId(),
+                    AttachmentDef.AttachmentType.CREDENTIAL_OFFER);
             r.invitationRecord(invitationRecord);
         } catch (IOException e) {
-            throw new AriesNetworkException("aca-py is not available");
+            throw new AriesNetworkException(NETWORK_ERROR);
         }
         return r.build();
     }
@@ -111,27 +109,14 @@ public class CredentialFreeOfferHelper {
             r.credentialProposalDict(V2ToV1IndyCredentialConverter.INSTANCE()
                     .toV1Proposal(ex).getCredentialProposalDict());
             // step 2 - create out-of-band invitation with attached credential offer
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(ex);
+            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
+                    ex.getCredentialExchangeId(),
+                    AttachmentDef.AttachmentType.CREDENTIAL_OFFER);
             r.invitationRecord(invitationRecord);
         } catch (IOException e) {
-            throw new AriesNetworkException("aca-py is not available");
+            throw new AriesNetworkException(NETWORK_ERROR);
         }
         return r.build();
-    }
-
-    private InvitationRecord createOOBInvitationWithAttachment(@NonNull BaseCredExRecord ex) throws IOException {
-        return acaPy.outOfBandCreateInvitation(
-                InvitationCreateRequest.builder()
-                        .usePublicDid(Boolean.TRUE)
-                        .attachment(AttachmentDef.builder()
-                                .id(ex.getCredentialExchangeId())
-                                .type(AttachmentDef.AttachmentType.CREDENTIAL_OFFER)
-                                .build())
-                        .build(),
-                CreateInvitationFilter.builder()
-                        .autoAccept(Boolean.TRUE)
-                        .build())
-                .orElseThrow();
     }
 
     @Data
