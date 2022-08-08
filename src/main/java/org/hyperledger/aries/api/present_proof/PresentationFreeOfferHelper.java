@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * see the NOTICE file and/or the repository at
+ * https://github.com/hyperledger-labs/acapy-java-client
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 package org.hyperledger.aries.api.present_proof;
 
 import lombok.*;
@@ -15,7 +22,7 @@ import java.io.IOException;
 public class PresentationFreeOfferHelper extends BaseOOBInvitationHelper {
 
     @Builder
-    public PresentationFreeOfferHelper(@NonNull AriesClient acaPy) {
+    public PresentationFreeOfferHelper(AriesClient acaPy) {
         super(acaPy);
     }
 

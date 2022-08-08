@@ -38,7 +38,7 @@ import java.util.Map;
 public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
 
     @Builder
-    public CredentialFreeOfferHelper(@NonNull AriesClient acaPy) {
+    public CredentialFreeOfferHelper(AriesClient acaPy) {
         super(acaPy);
     }
 
