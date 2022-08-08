@@ -13,9 +13,7 @@ import org.hyperledger.aries.AriesClient;
 import org.hyperledger.aries.api.exception.AriesNetworkException;
 import org.hyperledger.aries.api.out_of_band.AttachmentDef;
 import org.hyperledger.aries.api.out_of_band.BaseOOBInvitationHelper;
-import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
-import org.hyperledger.aries.api.present_proof_v2.V20PresExRecordToV1Converter;
-import org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest;
+import org.hyperledger.aries.api.present_proof_v2.*;
 
 import java.io.IOException;
 
@@ -67,12 +65,34 @@ public class PresentationFreeOfferHelper extends BaseOOBInvitationHelper {
         return r.build();
     }
 
+    public PresentationFreeOffer buildDif(@NonNull V2DIFProofRequest pr) {
+        PresentationFreeOffer.PresentationFreeOfferBuilder r = PresentationFreeOffer.builder();
+        try {
+            V20PresCreateRequestRequest req = V20PresCreateRequestRequest.builder()
+                    .autoVerify(Boolean.TRUE)
+                    .presentationRequest(V20PresSendRequestRequest.V20PresRequestByFormat.builder()
+                            .dif(pr)
+                            .build())
+                    .build();
+            V20PresExRecord ex = acaPy.presentProofV2CreateRequest(req)
+                    .orElseThrow();
+            r.presentationExchangeRecord(ex);
+            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
+                    ex.getPresentationExchangeId(),
+                    AttachmentDef.AttachmentType.PRESENT_PROOF);
+            r.invitationRecord(invitationRecord);
+        } catch (IOException e) {
+            throw new AriesNetworkException(NETWORK_ERROR);
+        }
+        return r.build();
+    }
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
     public static final class PresentationFreeOffer {
-        private PresentationExchangeRecord presentationExchangeRecord;
+        private BasePresExRecord presentationExchangeRecord;
         private InvitationRecord invitationRecord;
     }
 }
