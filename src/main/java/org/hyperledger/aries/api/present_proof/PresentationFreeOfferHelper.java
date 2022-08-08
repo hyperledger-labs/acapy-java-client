@@ -31,11 +31,7 @@ public class PresentationFreeOfferHelper extends BaseOOBInvitationHelper {
                             .proofRequest(pr)
                             .autoVerify(Boolean.TRUE)
                     .build()).orElseThrow();
-            r.presentationExchangeRecord(ex);
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
-                    ex.getPresentationExchangeId(),
-                    AttachmentDef.AttachmentType.PRESENT_PROOF);
-            r.invitationRecord(invitationRecord);
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
@@ -54,11 +50,7 @@ public class PresentationFreeOfferHelper extends BaseOOBInvitationHelper {
             PresentationExchangeRecord ex = acaPy.presentProofV2CreateRequest(req)
                     .map(V20PresExRecordToV1Converter::toV1)
                     .orElseThrow();
-            r.presentationExchangeRecord(ex);
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
-                    ex.getPresentationExchangeId(),
-                    AttachmentDef.AttachmentType.PRESENT_PROOF);
-            r.invitationRecord(invitationRecord);
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
@@ -74,17 +66,21 @@ public class PresentationFreeOfferHelper extends BaseOOBInvitationHelper {
                             .dif(pr)
                             .build())
                     .build();
-            V20PresExRecord ex = acaPy.presentProofV2CreateRequest(req)
-                    .orElseThrow();
-            r.presentationExchangeRecord(ex);
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
-                    ex.getPresentationExchangeId(),
-                    AttachmentDef.AttachmentType.PRESENT_PROOF);
-            r.invitationRecord(invitationRecord);
+            V20PresExRecord ex = acaPy.presentProofV2CreateRequest(req).orElseThrow();
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
         return r.build();
+    }
+
+    private void setAndBuildInvitation(PresentationFreeOffer.PresentationFreeOfferBuilder r, BasePresExRecord ex)
+            throws IOException {
+        r.presentationExchangeRecord(ex);
+        InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
+                ex.getPresentationExchangeId(),
+                AttachmentDef.AttachmentType.PRESENT_PROOF);
+        r.invitationRecord(invitationRecord);
     }
 
     @Data
