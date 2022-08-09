@@ -1196,11 +1196,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Create a credential offer, independent of any proposal or connection
-     * @param request {@link V20CredOfferConnFreeRequest}
+     * @param request {@link V2CredentialExchangeFree}
      * @return {@link V20CredExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20CredExRecord> issueCredentialV2CreateOffer(@NonNull V20CredOfferConnFreeRequest request)
+    public Optional<V20CredExRecord> issueCredentialV2CreateOffer(@NonNull V2CredentialExchangeFree request)
             throws IOException {
         Request req = buildPost(url + "/issue-credential-2.0/create-offer", request);
         return call(req, V20CredExRecord.class);

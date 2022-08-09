@@ -54,7 +54,7 @@ public class V2ToV1IndyCredentialConverter {
                 .build();
     }
 
-    public V1CredentialExchange toV1Offer(@NonNull V20CredExRecord v2Record) {
+    public static V1CredentialExchange toV1Offer(@NonNull V20CredExRecord v2Record) {
         IdWrapper ids = getIdsFromOffer(v2Record);
         return v2Record.toV1Builder()
                 .credentialDefinitionId(ids.getCredentialDefinitionId())
@@ -109,7 +109,7 @@ public class V2ToV1IndyCredentialConverter {
         else return Optional.empty();
     }
 
-    private IdWrapper getIdsFromOffer(@NonNull V20CredExRecord indy) {
+    private static IdWrapper getIdsFromOffer(@NonNull V20CredExRecord indy) {
         IdWrapper.IdWrapperBuilder b = IdWrapper.builder();
         if (indy.getByFormat() != null && indy.getByFormat().getCredOffer() != null) {
             JsonObject offer = indy.getByFormat().getCredOffer();
