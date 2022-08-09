@@ -62,14 +62,8 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                     .credentialPreview(new CredentialPreview(CredentialAttributes.fromMap(document)))
                     .build();
             V1CredentialExchange ex = acaPy.issueCredentialCreateOffer(create).orElseThrow();
-            r.threadId(ex.getThreadId());
-            r.credentialExchangeId(ex.getCredentialExchangeId());
-            r.credentialProposalDict(ex.getCredentialProposalDict());
             // step 2 - create out-of-band invitation with attached credential offer
-            InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
-                    ex.getCredentialExchangeId(),
-                    AttachmentDef.AttachmentType.CREDENTIAL_OFFER);
-            r.invitationRecord(invitationRecord);
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
@@ -99,7 +93,10 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                         .attributes(CredentialAttributes.fromMap(document))
                         .build())
                 .build();
-            setAndBuildInvitation(r, create);
+            V1CredentialExchange ex = acaPy.issueCredentialV2CreateOffer(create)
+                    .map(V2ToV1IndyCredentialConverter::toV1Offer)
+                    .orElseThrow();
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
@@ -121,20 +118,19 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                             .ldProof(vc)
                             .build())
                     .build();
-            setAndBuildInvitation(r, create);
+            V20CredExRecord ex = acaPy.issueCredentialV2CreateOffer(create).orElseThrow();
+            setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);
         }
         return r.build();
     }
 
-    private void setAndBuildInvitation(CredentialFreeOffer.CredentialFreeOfferBuilder r, V2CredentialExchangeFree create)
+    private void setAndBuildInvitation(
+            @NonNull CredentialFreeOffer.CredentialFreeOfferBuilder r,
+            @NonNull BaseCredExRecord ex)
             throws IOException {
-        V20CredExRecord ex = acaPy.issueCredentialV2CreateOffer(create).orElseThrow();
-        r.threadId(ex.getThreadId());
-        r.credentialExchangeId(ex.getCredentialExchangeId());
-        r.credentialProposalDict(V2ToV1IndyCredentialConverter.INSTANCE()
-                .toV1Proposal(ex).getCredentialProposalDict());
+        r.credentialExchangeRecord(ex);
         InvitationRecord invitationRecord = createOOBInvitationWithAttachment(
                 ex.getCredentialExchangeId(),
                 AttachmentDef.AttachmentType.CREDENTIAL_OFFER);
@@ -146,15 +142,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
     @AllArgsConstructor
     @Builder
     public static final class CredentialFreeOffer {
-
-        /** reference to the credential exchange record */
-        private String credentialExchangeId;
-
-        /** credential exchange thread id */
-        private String threadId;
-
-        private V1CredentialExchange.CredentialProposalDict credentialProposalDict;
-
+        private BaseCredExRecord credentialExchangeRecord;
         private InvitationRecord invitationRecord;
     }
 }
