@@ -116,6 +116,7 @@ public class ReactiveEventHandler implements IEventHandler {
                         break;
                     case OUT_OF_BAND:
                         parser.parseValueSave(payload, OOBRecord.class, oobRecordSink::tryEmitNext);
+                        break;
                     default:
                         break;
                 }

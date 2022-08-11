@@ -102,6 +102,7 @@ public abstract class EventHandler implements IEventHandler {
                         break;
                     case OUT_OF_BAND:
                         parser.parseValueSave(payload, OOBRecord.class, this::handleOutOfBand);
+                        break;
                     default:
                         break;
                 }

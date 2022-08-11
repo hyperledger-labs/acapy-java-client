@@ -107,6 +107,7 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                         break;
                     case OUT_OF_BAND:
                         handleOutOfBand(walletId, parser.parseValueSave(payload, OOBRecord.class).orElseThrow());
+                        break;
                     default:
                         break;
                 }
