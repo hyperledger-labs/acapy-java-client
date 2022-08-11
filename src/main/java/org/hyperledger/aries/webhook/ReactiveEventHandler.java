@@ -18,6 +18,7 @@ import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueLDCredentialEvent;
 import org.hyperledger.aries.api.message.BasicMessage;
 import org.hyperledger.aries.api.message.ProblemReport;
+import org.hyperledger.aries.api.out_of_band.OOBRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
@@ -57,6 +58,7 @@ public class ReactiveEventHandler implements IEventHandler {
     private final Sinks.Many<DiscoverFeatureEvent> discoverFeatureSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
     private final Sinks.Many<RevocationNotificationEvent> revocationNotificationSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
     private final Sinks.Many<RevocationNotificationEventV2> revocationNotificationSinkV2 = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
+    private final Sinks.Many<OOBRecord> oobRecordSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
 
     public void handleEvent(String topic, String payload) {
         handleEvent(null, topic, payload);
@@ -111,6 +113,9 @@ public class ReactiveEventHandler implements IEventHandler {
                         break;
                     case REVOCATION_NOTIFICATION_V2:
                         parser.parseValueSave(payload, RevocationNotificationEventV2.class, revocationNotificationSinkV2::tryEmitNext);
+                        break;
+                    case OUT_OF_BAND:
+                        parser.parseValueSave(payload, OOBRecord.class, oobRecordSink::tryEmitNext);
                         break;
                     default:
                         break;
@@ -181,5 +186,9 @@ public class ReactiveEventHandler implements IEventHandler {
 
     public Flux<RevocationNotificationEventV2> revocationNotificationV2() {
         return revocationNotificationSinkV2.asFlux();
+    }
+
+    public Flux<OOBRecord> outOfBand() {
+        return oobRecordSink.asFlux();
     }
 }

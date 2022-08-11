@@ -7,19 +7,28 @@
  */
 package org.hyperledger.aries.api.out_of_band;
 
+import com.google.gson.JsonElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor
-public class InvitationRecord {
+public class InvitationRecord implements InvitationMessageTranslator {
     private String createdAt;
+    private String updatedAt;
     private String inviMsgId;
-    /** see {@link InvitationMessage}*/
-    private Object invitation;
+
+    /**
+     * Invitation payload
+     * see {@link InvitationMessage}
+     * use {@link InvitationMessageTranslator#asRFC0067Type()} or
+     * {@link InvitationMessageTranslator#asStringType()}
+     * to resolve the respective payload
+     */
+    private JsonElement invitation;
+
     private String invitationId;
     private String invitationUrl;
     private String oobId;
-    private String state;
+    private OOBRecord.OOBState state;
     private Boolean trace;
-    private String updatedAt;
 }

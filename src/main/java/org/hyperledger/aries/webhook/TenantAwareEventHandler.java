@@ -19,6 +19,7 @@ import org.hyperledger.aries.api.issue_credential_v2.V2IssueIndyCredentialEvent;
 import org.hyperledger.aries.api.issue_credential_v2.V2IssueLDCredentialEvent;
 import org.hyperledger.aries.api.message.BasicMessage;
 import org.hyperledger.aries.api.message.ProblemReport;
+import org.hyperledger.aries.api.out_of_band.OOBRecord;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.revocation.RevocationEvent;
@@ -104,6 +105,9 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
                     case SETTINGS:
                         handleSettings(walletId, parser.parseValueSave(payload, Settings.class).orElseThrow());
                         break;
+                    case OUT_OF_BAND:
+                        handleOutOfBand(walletId, parser.parseValueSave(payload, OOBRecord.class).orElseThrow());
+                        break;
                     default:
                         break;
                 }
@@ -179,6 +183,10 @@ public abstract class TenantAwareEventHandler implements IEventHandler {
 
     public void handleSettings(String walletId, Settings settings) throws Exception {
         log.debug(LOG_MSG_MULTI, walletId, EventType.SETTINGS, settings);
+    }
+
+    public void handleOutOfBand(String walletId, OOBRecord oob) throws Exception {
+        log.debug(LOG_MSG_MULTI, walletId, EventType.OUT_OF_BAND, oob);
     }
     
     public void handleRaw(String walletId, String eventType, String json) {
