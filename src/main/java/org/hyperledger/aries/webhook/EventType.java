@@ -29,6 +29,7 @@ public enum EventType {
     ISSUE_CREDENTIAL_V2("issue_credential_v2_0"),
     ISSUE_CREDENTIAL_V2_INDY("issue_credential_v2_0_indy"),
     ISSUE_CREDENTIAL_V2_LD_PROOF("issue_credential_v2_0_ld_proof"),
+    OUT_OF_BAND("out_of_band"),
     PING("ping"),
     PRESENT_PROOF("present_proof"),
     PRESENT_PROOF_V2("present_proof_v2_0"),
