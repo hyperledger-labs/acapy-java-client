@@ -58,9 +58,9 @@ public class OOBRecord implements InvitationMessageTranslator {
         @SerializedName(value = "reuse-not-accepted", alternate = "reuse_not_accepted")
         NOT_ACCEPTED,
         @SerializedName(value = "reuse-accepted", alternate = "reuse_accepted")
-        STATE_ACCEPTED,
+        ACCEPTED,
         @SerializedName("done")
-        STATE_DONE
+        DONE
     }
 
     public enum OOBRole {

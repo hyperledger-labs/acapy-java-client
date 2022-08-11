@@ -11,8 +11,6 @@ import com.google.gson.JsonElement;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Data @NoArgsConstructor
 public class InvitationRecord implements InvitationMessageTranslator {
     private String createdAt;
