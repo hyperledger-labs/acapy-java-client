@@ -12,11 +12,8 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           check-latest: true
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          cache: 'maven'
+
       - name: Publish package
         run: mvn --batch-mode deploy
         env:

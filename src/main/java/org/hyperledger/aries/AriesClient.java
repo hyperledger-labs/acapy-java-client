@@ -86,6 +86,7 @@ import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
+import org.hyperledger.aries.api.server.ConcreteAdminConfig;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
@@ -2582,6 +2583,18 @@ public class AriesClient extends BaseClient {
     public Optional<AdminConfig> statusConfig() throws IOException {
         Request req = buildGet(url + "/status/config");
         return call(req, AdminConfig.class);
+    }
+
+    /**
+     * Fetch the server configuration. Same as {@link #statusConfig()}, but a concrete class is returned
+     * instead of a value extractor.
+     * @since aca-py 0.7.0
+     * @return {@link ConcreteAdminConfig}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<ConcreteAdminConfig> statusConfigTyped() throws IOException {
+        Request req = buildGet(url + "/status/config");
+        return getWrapped(raw(req), "config", ConcreteAdminConfig.class);
     }
 
     /**
