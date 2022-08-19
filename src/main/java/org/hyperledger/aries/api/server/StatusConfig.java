@@ -21,7 +21,7 @@ import java.util.Optional;
  */
 @Data
 @NoArgsConstructor
-public class ConcreteAdminConfig {
+public class StatusConfig {
 
     // Admin
     @SerializedName("admin.admin_insecure_mode")
@@ -47,6 +47,8 @@ public class ConcreteAdminConfig {
     private Boolean autoAcceptRequests;
     @SerializedName("debug.auto_respond_messages")
     private Boolean autoRespondMessages;
+    @SerializedName("debug.auto_respond_credential_proposal")
+    public Boolean autoRespondCredentialProposal;
     @SerializedName("debug.auto_respond_credential_offer")
     private Boolean autoRespondCredentialOffer;
     @SerializedName("debug.auto_respond_credential_request")
@@ -100,7 +102,7 @@ public class ConcreteAdminConfig {
 
     // Transport
     @SerializedName("transport.inbound_configs")
-    private List<String> transportInboundConfigs;
+    private List<List<String>> transportInboundConfigs;
     @SerializedName("transport.outbound_configs")
     private List<String> transportOutboundConfigs;
     @SerializedName("transport.enable_undelivered_queue")
@@ -146,6 +148,46 @@ public class ConcreteAdminConfig {
 
     public boolean isTailsServerConfigured() {
         return StringUtils.isNotBlank(tailsServerBaseUrl);
+    }
+
+    public boolean isAutoAcceptInvites() {
+        return Boolean.TRUE.equals(autoAcceptInvites);
+    }
+
+    public boolean isAutoAcceptRequests() {
+        return Boolean.TRUE.equals(autoAcceptRequests);
+    }
+
+    public boolean isAutoRespondMessages() {
+        return Boolean.TRUE.equals(autoRespondMessages);
+    }
+
+    public boolean isAutoRespondCredentialOffer() {
+        return Boolean.TRUE.equals(autoRespondCredentialOffer);
+    }
+
+    public boolean isAutoRespondCredentialProposal() {
+        return Boolean.TRUE.equals(autoRespondCredentialProposal);
+    }
+
+    public boolean isAutoRespondCredentialRequest() {
+        return Boolean.TRUE.equals(autoRespondCredentialRequest);
+    }
+
+    public boolean isAutoRespondPresentationProposal() {
+        return Boolean.TRUE.equals(autoRespondPresentationProposal);
+    }
+
+    public boolean isAutoRespondPresentationRequest() {
+        return Boolean.TRUE.equals(autoRespondPresentationRequest);
+    }
+
+    public boolean isAutoStoreCredential() {
+        return Boolean.TRUE.equals(autoStoreCredential);
+    }
+
+    public boolean isAutoVerifyPresentation() {
+        return Boolean.TRUE.equals(autoVerifyPresentation);
     }
 
     public Optional<LedgerConfigEntry> findWriteLedger() {

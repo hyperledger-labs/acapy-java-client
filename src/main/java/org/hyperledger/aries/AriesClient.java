@@ -86,7 +86,7 @@ import org.hyperledger.aries.api.schema.SchemasCreatedFilter;
 import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
-import org.hyperledger.aries.api.server.ConcreteAdminConfig;
+import org.hyperledger.aries.api.server.StatusConfig;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
@@ -2575,6 +2575,35 @@ public class AriesClient extends BaseClient {
     // ----------------------------------------------------
 
     /**
+     * Fetch list of loaded plugins
+     * @return list of loaded plugins
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<List<String>> plugins() throws IOException {
+        Request req = buildGet(url + "/plugins");
+        return getWrapped(raw(req), "result", STRING_LIST_TYPE);
+    }
+
+    /**
+     * Shut down server. Warning: calling this endpoint renders aca-py unresponsive
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void shutdown() throws IOException {
+        Request req = buildGet(url + "/shutdown");
+        call(req);
+    }
+
+    /**
+     * Fetch the server status
+     * @return {@link AdminStatus}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<AdminStatus> status() throws IOException {
+        Request req = buildGet(url + "/status");
+        return call(req, AdminStatus.class);
+    }
+
+    /**
      * Fetch the server configuration
      * @since aca-py 0.7.0
      * @return {@link AdminConfig}
@@ -2589,12 +2618,12 @@ public class AriesClient extends BaseClient {
      * Fetch the server configuration. Same as {@link #statusConfig()}, but a concrete class is returned
      * instead of a value extractor.
      * @since aca-py 0.7.0
-     * @return {@link ConcreteAdminConfig}
+     * @return {@link StatusConfig}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<ConcreteAdminConfig> statusConfigTyped() throws IOException {
+    public Optional<StatusConfig> statusConfigTyped() throws IOException {
         Request req = buildGet(url + "/status/config");
-        return getWrapped(raw(req), "config", ConcreteAdminConfig.class);
+        return getWrapped(raw(req), "config", StatusConfig.class);
     }
 
     /**
@@ -2617,6 +2646,15 @@ public class AriesClient extends BaseClient {
     public Optional<AdminStatusReadiness> statusReady() throws IOException {
         Request req = buildGet(url + "/status/ready");
         return call(req, AdminStatusReadiness.class);
+    }
+
+    /**
+     * Reset statistics
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void statusReset() throws IOException {
+        Request req = buildPost(url + "/status/reset", EMPTY_JSON);
+        call(req);
     }
 
     /**

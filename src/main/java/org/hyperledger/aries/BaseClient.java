@@ -33,10 +33,7 @@ import org.hyperledger.aries.config.GsonConfig;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -58,6 +55,7 @@ public abstract class BaseClient {
     static final Type WALLET_DID_TYPE = new TypeToken<Collection<DID>>(){}.getType();
     static final Type WALLET_RECORD_TYPE = new TypeToken<Collection<WalletRecord>>(){}.getType();
     static final Type MAP_TYPE = new TypeToken<Map<String, String>>(){}.getType();
+    static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
 
     static final String X_API_KEY = "X-API-Key";
     static final String AUTHORIZATION = "Authorization";

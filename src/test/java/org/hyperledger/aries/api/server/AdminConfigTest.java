@@ -11,6 +11,7 @@ import org.hyperledger.aries.IntegrationTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,5 +76,20 @@ public class AdminConfigTest extends IntegrationTestBase {
         List<String> plugins = config.getUnwrapped("external_plugins", AdminConfig.COLLECTION_TYPE);
         Assertions.assertNotNull(plugins);
         Assertions.assertEquals("aries_cloudagent.messaging.jsonld", plugins.get(0));
+    }
+
+    @Test
+    void testGetTypedServerStatusConfig() throws IOException {
+        StatusConfig config = ac.statusConfigTyped().orElseThrow();
+        Assertions.assertTrue(config.getAdminInsecureMode());
+        Assertions.assertEquals("8031", config.getAdminPort());
+        Assertions.assertEquals(2097152, config.getTransportMaxMessageSize());
+        Assertions.assertEquals("aries_cloudagent.messaging.jsonld", config.getExternalPlugins().get(0));
+    }
+
+    @Test
+    void testLoadPlugins() throws IOException {
+        List<String> plugins = ac.plugins().orElseThrow();
+        Assertions.assertTrue(plugins.size() > 0);
     }
 }
