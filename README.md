@@ -222,9 +222,13 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /schemas/{schema_id}                                         | :white_check_mark: |
 | POST   | /schemas/{schema_id}/write_record                            | :white_check_mark: |
 |        | **server**                                                   |                    |
+| GET    | /plugins                                                     | :white_check_mark: |
+| GET    | /shutdown                                                    | :white_check_mark: |
+| GET    | /status                                                      | :white_check_mark: |
 | GET    | /status/config                                               | :white_check_mark: |
 | GET    | /status/live                                                 | :white_check_mark: |
 | GET    | /status/ready                                                | :white_check_mark: |
+| POST   | /status/reset                                                | :white_check_mark: |
 |        | **trustping**                                                |                    |
 | POST   | /connections/{conn_id}/send-ping                             | :white_check_mark: |
 |        | **wallet**                                                   |                    |
