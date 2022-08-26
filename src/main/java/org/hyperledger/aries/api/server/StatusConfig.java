@@ -96,6 +96,8 @@ public class StatusConfig {
     @SerializedName("trace.label")
     private String traceLabel;
 
+    private Boolean preserveExchangeRecords;
+
     private Boolean emitNewDidcomPrefix;
     private Boolean emitNewDidcomMimeType;
     private Boolean exchUseUnencryptedTags;
@@ -188,6 +190,10 @@ public class StatusConfig {
 
     public boolean isAutoVerifyPresentation() {
         return Boolean.TRUE.equals(autoVerifyPresentation);
+    }
+
+    public boolean isPreserveExchangeRecords() {
+        return Boolean.TRUE.equals(preserveExchangeRecords);
     }
 
     public Optional<LedgerConfigEntry> findWriteLedger() {

@@ -1882,7 +1882,9 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Fetch all present-proof exchange records
+     * Fetch present-proof exchange records
+     * Warning: using this endpoint in production environments is a bad idea, as there is no paging you will
+     * potentially load hundreds MB worth of data into memory.
      * @return list of {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
@@ -1891,7 +1893,9 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Fetch all present-proof exchange records
+     * Fetch present-proof exchange records
+     * Warning: using this endpoint in production environments is a bad idea, as there is no paging you will
+     * potentially load hundreds MB worth of data into memory.
      * @param filter {@link PresentProofRecordsFilter}
      * @return list of {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
@@ -2068,7 +2072,9 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Fetch all present-proof exchange records
+     * Fetch v2 present-proof exchange records
+     * Warning: using this endpoint in production environments is a bad idea, as there is no paging you will
+     * potentially load hundreds MB worth of data into memory.
      * @param filter {@link V2PresentProofRecordsFilter}
      * @return list of {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
