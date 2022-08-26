@@ -92,6 +92,7 @@ import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.TimeUtil;
+import org.hyperledger.aries.config.UriUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -1736,10 +1737,6 @@ public class AriesClient extends BaseClient {
         if (StringUtils.isNotEmpty(bearerToken)) {
             throw new IllegalStateException("You can not create a sub wallet from a sub wallet.");
         }
-        URI uri = URI.create(url);
-        String scheme = uri.getScheme().equals("https") ? "wss" : "ws";
-        String host = uri.getHost();
-        int port = uri.getPort();
         WalletRecord wr = multitenancyWalletCreate(request).orElseThrow();
         return new ClientToTenant(
                 AriesClient.builder()
@@ -1751,7 +1748,7 @@ public class AriesClient extends BaseClient {
                     .apiKey(this.apiKey)
                     .bearerToken(wr.getToken())
                     .walletId(wr.getWalletId())
-                    .url(scheme + "://" + host + ":" + port + "/ws")
+                    .url(UriUtil.httpToWs(url))
                     .build(),
                 wr);
     }
