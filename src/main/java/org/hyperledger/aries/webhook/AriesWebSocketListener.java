@@ -55,7 +55,6 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
 
     @Override
     public void onMessage(@NonNull WebSocket webSocket, @NonNull String message) {
-        log.trace(appendLabel("Event: {}"), message);
         try {
             JsonObject json = gson.fromJson(message, JsonObject.class);
             String walletId = json.has("wallet_id") ? json.get("wallet_id").getAsString() : null;
@@ -65,6 +64,7 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
             // drop ws ping messages, not to be confused with aca-py ping message
             // https://datatracker.ietf.org/doc/html/rfc6455#section-5.5.2
             if (notWsPing(topic, payload) && isForWalletId(walletId)) {
+                log.trace(appendLabel("Event: {}"), message);
                 handler.forEach(h -> h.handleEvent(walletId, topic, payload));
             }
         } catch (JsonSyntaxException ex) {

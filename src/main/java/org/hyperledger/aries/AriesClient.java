@@ -71,8 +71,9 @@ import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
+import org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresSpecByFormatRequest;
-import org.hyperledger.aries.api.present_proof_v2.V2PresentProofRecordsFilter;
+import org.hyperledger.aries.api.present_proof_v2.*;
 import org.hyperledger.aries.api.resolver.DIDDocument;
 import org.hyperledger.aries.api.revocation.RevRegCreateRequest;
 import org.hyperledger.aries.api.revocation.RevRegUpdateTailsFileUri;
@@ -92,11 +93,11 @@ import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
 import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.TimeUtil;
+import org.hyperledger.aries.config.UriUtil;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -1736,10 +1737,6 @@ public class AriesClient extends BaseClient {
         if (StringUtils.isNotEmpty(bearerToken)) {
             throw new IllegalStateException("You can not create a sub wallet from a sub wallet.");
         }
-        URI uri = URI.create(url);
-        String scheme = uri.getScheme().equals("https") ? "wss" : "ws";
-        String host = uri.getHost();
-        int port = uri.getPort();
         WalletRecord wr = multitenancyWalletCreate(request).orElseThrow();
         return new ClientToTenant(
                 AriesClient.builder()
@@ -1751,7 +1748,7 @@ public class AriesClient extends BaseClient {
                     .apiKey(this.apiKey)
                     .bearerToken(wr.getToken())
                     .walletId(wr.getWalletId())
-                    .url(scheme + "://" + host + ":" + port + "/ws")
+                    .url(UriUtil.httpToWs(url))
                     .build(),
                 wr);
     }
@@ -2217,11 +2214,11 @@ public class AriesClient extends BaseClient {
 
     /**
      * Sends a free presentation request not bound to any proposal
-     * @param proofRequest {@link org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest}
+     * @param proofRequest {@link V20PresSendRequestRequest}
      * @return {@link V20PresExRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<V20PresExRecord> presentProofV2SendRequest(@NonNull org.hyperledger.aries.api.present_proof_v2.V20PresSendRequestRequest proofRequest)
+    public Optional<V20PresExRecord> presentProofV2SendRequest(@NonNull V20PresSendRequestRequest proofRequest)
             throws IOException {
         Request req = buildPost(url + "/present-proof-2.0/send-request", proofRequest);
         return call(req, V20PresExRecord.class);

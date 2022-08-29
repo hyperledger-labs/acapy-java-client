@@ -47,6 +47,7 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
      * @param client Optional: {@link OkHttpClient} if null or not set a default client is created
      * @param handler Optional: None, one or many custom event handler implementations, defaults to {@link EventHandler.DefaultEventHandler}
      * @param walletIdFilter Optional: Filter events by provided walletId
+     * @param reactiveBufferSize How many events the reactive event handler should buffer, defaults to {@link ReactiveEventHandler#DEFAULT_BUFFER_SIZE}
      */
     @Builder
     public AriesWebSocketClient(@Nullable String url,
@@ -54,7 +55,9 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
                                 @Nullable String bearerToken,
                                 @Nullable OkHttpClient client,
                                 @Singular("handler") List<IEventHandler> handler,
-                                @Nullable @Singular("walletId") List<String> walletIdFilter) {
+                                @Nullable @Singular("walletId") List<String> walletIdFilter,
+                                @Nullable Integer reactiveBufferSize) {
+        super(reactiveBufferSize != null ? reactiveBufferSize : ReactiveEventHandler.DEFAULT_BUFFER_SIZE);
         this.client = Objects.requireNonNullElseGet(client, OkHttpClient::new);
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
