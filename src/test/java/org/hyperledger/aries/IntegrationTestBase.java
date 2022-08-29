@@ -49,7 +49,15 @@ public abstract class IntegrationTestBase {
     @BeforeEach
     void setup() {
         ac = AriesClient.builder()
-                .url("http://localhost:" + ariesContainer.getMappedPort(ARIES_ADMIN_PORT))
+                .url(getHTTPAdminUrl())
                 .build();
+    }
+
+    public String getHTTPAdminUrl() {
+        return "http://localhost:" + ariesContainer.getMappedPort(ARIES_ADMIN_PORT);
+    }
+
+    public String getWSAdminUrl() {
+        return "ws://localhost:" + ariesContainer.getMappedPort(ARIES_ADMIN_PORT) + "/ws";
     }
 }

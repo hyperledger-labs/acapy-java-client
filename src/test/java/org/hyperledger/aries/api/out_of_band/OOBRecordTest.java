@@ -49,6 +49,7 @@ public class OOBRecordTest {
             "    \"state\": \"initial\",\n" +
             "    \"updated_at\": \"2022-08-11T12:51:45.665135Z\",\n" +
             "    \"oob_id\": \"bb1b9906-f1b4-4c92-96a6-bda81d6282a8\",\n" +
+            "    \"our_recipient_key\": \"8gdhRLtvJHzKoJGyuEqgdN1QZGYfai4wMHFGgtfDXg3D\",\n" +
             "    \"trace\": false\n" +
             "}";
 
