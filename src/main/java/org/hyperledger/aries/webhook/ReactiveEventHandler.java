@@ -7,7 +7,6 @@
  */
 package org.hyperledger.aries.webhook;
 
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 import org.hyperledger.aries.api.discover_features.DiscoverFeatureEvent;
@@ -32,10 +31,9 @@ import reactor.core.publisher.Sinks;
  * Reactive event handler
  */
 @Slf4j
-@NoArgsConstructor
 public class ReactiveEventHandler implements IEventHandler {
 
-    private static final int BUFFER_SIZE = 100;
+    protected static final int DEFAULT_BUFFER_SIZE = 100;
 
     private final EventParser parser = new EventParser();
 
@@ -43,22 +41,45 @@ public class ReactiveEventHandler implements IEventHandler {
     // replay().limit(100)
     // multicast().onBackpressureBuffer(100, false);
 
-    private final Sinks.Many<ConnectionRecord> connectionSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<PresentationExchangeRecord> presExSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<V20PresExRecord> presExV2Sink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<V1CredentialExchange> credExSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<V20CredExRecord> credExV2Sink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<V2IssueIndyCredentialEvent> credIssueIndySink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<V2IssueLDCredentialEvent> credIssueLDSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<BasicMessage> basicMassageSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<PingEvent> pingEventSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<RevocationEvent> issuerRevocationEventSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<EndorseTransactionRecord> endorseTrxSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<ProblemReport> problemReportSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<DiscoverFeatureEvent> discoverFeatureSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<RevocationNotificationEvent> revocationNotificationSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<RevocationNotificationEventV2> revocationNotificationSinkV2 = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
-    private final Sinks.Many<OOBRecord> oobRecordSink = Sinks.many().multicast().onBackpressureBuffer(BUFFER_SIZE, false);
+    private final Sinks.Many<ConnectionRecord> connectionSink;
+    private final Sinks.Many<PresentationExchangeRecord> presExSink;
+    private final Sinks.Many<V20PresExRecord> presExV2Sink;
+    private final Sinks.Many<V1CredentialExchange> credExSink;
+    private final Sinks.Many<V20CredExRecord> credExV2Sink;
+    private final Sinks.Many<V2IssueIndyCredentialEvent> credIssueIndySink;
+    private final Sinks.Many<V2IssueLDCredentialEvent> credIssueLDSink;
+    private final Sinks.Many<BasicMessage> basicMassageSink;
+    private final Sinks.Many<PingEvent> pingEventSink;
+    private final Sinks.Many<RevocationEvent> issuerRevocationEventSink;
+    private final Sinks.Many<EndorseTransactionRecord> endorseTrxSink;
+    private final Sinks.Many<ProblemReport> problemReportSink;
+    private final Sinks.Many<DiscoverFeatureEvent> discoverFeatureSink;
+    private final Sinks.Many<RevocationNotificationEvent> revocationNotificationSink;
+    private final Sinks.Many<RevocationNotificationEventV2> revocationNotificationSinkV2;
+    private final Sinks.Many<OOBRecord> oobRecordSink;
+
+    public ReactiveEventHandler() {
+        this(DEFAULT_BUFFER_SIZE);
+    }
+
+    public ReactiveEventHandler(int bufferSize) {
+        this.connectionSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.presExSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.presExV2Sink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.credExSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.credExV2Sink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.credIssueIndySink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.credIssueLDSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.basicMassageSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.pingEventSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.issuerRevocationEventSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.endorseTrxSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.problemReportSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.discoverFeatureSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.revocationNotificationSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.revocationNotificationSinkV2 = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+        this.oobRecordSink = Sinks.many().multicast().onBackpressureBuffer(bufferSize, false);
+    }
 
     public void handleEvent(String topic, String payload) {
         handleEvent(null, topic, payload);
