@@ -43,7 +43,7 @@ public class OOBRecord implements InvitationMessageTranslator {
     private UUID reuseMsgId;
     private UUID oobId;
     private UUID attachThreadId;
-    private UUID ourRecipientKey;
+    private String ourRecipientKey;
     private ProofRequestPresentation.ServiceDecorator ourService;
     private Boolean multiUse;
     private Boolean trace;
