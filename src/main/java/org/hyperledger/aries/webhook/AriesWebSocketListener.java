@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.BaseClient;
 import org.hyperledger.aries.config.GsonConfig;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @Slf4j
@@ -29,19 +30,22 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
     private final Gson gson = GsonConfig.defaultConfig();
 
     private final String label;
+    private final boolean withLabel;
     private final List<IEventHandler> handler;
     private final List<String> walletIdFilter;
-    private final boolean withLabel;
+    private final IFailureHandler failureHandler;
 
     @Builder
     public AriesWebSocketListener(
-            String label,
+            @Nullable String label,
             @NonNull @Singular("handler") List<IEventHandler> handler,
-            @Singular("walletId") List<String> walletIdFilter) {
+            @Singular("walletId") List<String> walletIdFilter,
+            @Nullable IFailureHandler failureHandler) {
         this.label = label;
-        this.handler = handler;
         this.withLabel = StringUtils.isNotEmpty(label);
+        this.handler = handler;
         this.walletIdFilter = walletIdFilter;
+        this.failureHandler = failureHandler;
     }
 
     private String appendLabel(String msg) {
@@ -75,8 +79,12 @@ public class AriesWebSocketListener extends okhttp3.WebSocketListener {
     @Override
     public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable th, Response response) {
         String message = response != null ? response.message() : th.getMessage();
-        if (!"Socket closed".equals(message))
-            log.error(String.format("%s Failure: %s", label, message), th);
+        if (!"Socket closed".equals(message)) {
+            log.error(appendLabel("Failure: {}, exception: {}"), message, th.getClass());
+        }
+        if (failureHandler != null) {
+            failureHandler.onFailure();
+        }
     }
 
     @Override

@@ -9,14 +9,12 @@ package org.hyperledger.aries;
 
 import lombok.Builder;
 import lombok.Singular;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.aries.webhook.AriesWebSocketListener;
-import org.hyperledger.aries.webhook.EventHandler;
-import org.hyperledger.aries.webhook.IEventHandler;
-import org.hyperledger.aries.webhook.ReactiveEventHandler;
+import org.hyperledger.aries.webhook.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -24,11 +22,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ACA-PY Websocket Client: Receives events from aca-py
  */
-public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCloseable {
+@Slf4j
+public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCloseable, IFailureHandler {
 
     private final OkHttpClient client;
     private final String url;
@@ -36,6 +38,7 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
     private final String bearerToken;
     private final List<IEventHandler> handler;
     private final List<String> walletIdFilter;
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
     private WebSocket webSocket;
 
@@ -68,19 +71,20 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
     }
 
     private void openWebSocket() {
-        Request.Builder b = new Request.Builder();
-        b.url(url);
+        Request.Builder request = new Request.Builder();
+        request.url(url);
         if (apiKey != null) {
-            b.header(BaseClient.X_API_KEY, apiKey);
+            request.header(BaseClient.X_API_KEY, apiKey);
         }
         if (bearerToken != null) {
-            b.header(BaseClient.AUTHORIZATION, BaseClient.BEARER + bearerToken);
+            request.header(BaseClient.AUTHORIZATION, BaseClient.BEARER + bearerToken);
         }
         webSocket = client.newWebSocket(
-                b.build(),
+                request.build(),
                 AriesWebSocketListener.builder()
-                        .handler(handler)
                         .walletIdFilter(walletIdFilter)
+                        .handler(handler)
+                        .failureHandler(self())
                         .build());
     }
 
@@ -89,6 +93,20 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         if (webSocket != null) {
             webSocket.close(1001, null);
         }
+        webSocket = null;
+    }
+
+    @Override
+    public void onFailure() {
+        close();
+        executor.schedule(() -> {
+            log.debug("Websocket disconnected - reconnecting");
+            try {
+                openWebSocket();
+            } catch (Exception e) {
+                onFailure();
+            }
+        }, 5, TimeUnit.SECONDS);
     }
 
     @NotNull
@@ -97,5 +115,9 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         tempHandler.add(this);
         tempHandler.addAll(handler.isEmpty() ? List.of(new EventHandler.DefaultEventHandler()) : handler);
         return Collections.unmodifiableList(tempHandler);
+    }
+
+    private AriesWebSocketClient self() {
+        return this;
     }
 }
