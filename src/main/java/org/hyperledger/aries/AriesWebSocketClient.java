@@ -109,6 +109,11 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         }, 5, TimeUnit.SECONDS);
     }
 
+    public void shutdown() {
+        executor.shutdownNow();
+        close();
+    }
+
     @NotNull
     private List<IEventHandler> mergeHandler(List<IEventHandler> handler) {
         List<IEventHandler> tempHandler = new ArrayList<>();
