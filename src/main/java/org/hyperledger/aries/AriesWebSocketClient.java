@@ -36,8 +36,10 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
     private final String url;
     private final String apiKey;
     private final String bearerToken;
-    private final AriesWebSocketListener ariesWebSocketListener;
+    private final List<IEventHandler> handler;
+    private final List<String> walletIdFilter;
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
     private WebSocket webSocket;
 
     /**
@@ -63,15 +65,12 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
-        this.ariesWebSocketListener = AriesWebSocketListener.builder()
-                .walletIdFilter(walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null)
-                .handler(mergeHandler(handler))
-                .failureHandler(this)
-                .build();
+        this.handler = mergeHandler(handler);
+        this.walletIdFilter = walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null;
         openWebSocket();
     }
 
-    public void openWebSocket() {
+    private void openWebSocket() {
         Request.Builder request = new Request.Builder();
         request.url(url);
         if (apiKey != null) {
@@ -82,7 +81,11 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         }
         webSocket = client.newWebSocket(
                 request.build(),
-                ariesWebSocketListener);
+                AriesWebSocketListener.builder()
+                        .handler(mergeHandler(handler))
+                        .walletIdFilter(walletIdFilter)
+                        .failureHandler(self())
+                        .build());
     }
 
     @Override
@@ -112,5 +115,9 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         tempHandler.add(this);
         tempHandler.addAll(handler.isEmpty() ? List.of(new EventHandler.DefaultEventHandler()) : handler);
         return Collections.unmodifiableList(tempHandler);
+    }
+
+    private AriesWebSocketClient self() {
+        return this;
     }
 }
