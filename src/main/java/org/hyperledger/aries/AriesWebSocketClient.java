@@ -65,8 +65,8 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         this.url = StringUtils.isEmpty(url) ? "ws://localhost:8031/ws" : StringUtils.trim(url);
         this.apiKey = StringUtils.trimToEmpty(apiKey);
         this.bearerToken = StringUtils.trimToEmpty(bearerToken);
-        this.handler = mergeHandler(handler);
         this.walletIdFilter = walletIdFilter != null ? Collections.unmodifiableList(walletIdFilter) : null;
+        this.handler = mergeHandler(handler);
         openWebSocket();
     }
 
@@ -82,8 +82,8 @@ public class AriesWebSocketClient extends ReactiveEventHandler implements AutoCl
         webSocket = client.newWebSocket(
                 request.build(),
                 AriesWebSocketListener.builder()
-                        .handler(mergeHandler(handler))
                         .walletIdFilter(walletIdFilter)
+                        .handler(handler)
                         .failureHandler(self())
                         .build());
     }
