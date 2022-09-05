@@ -13,6 +13,9 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Model for /present-proof/records/{pres_ex_id}/send-presentation
+ */
 @Data @Builder
 public class SendPresentationRequest {
 

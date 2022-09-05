@@ -36,7 +36,7 @@ public class SendPresentationRequestHelperTest {
         Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
                 presentationRequest.getRequestedAttributes().get("attribute_group_0").getCredId());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class SendPresentationRequestHelperTest {
         Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
                 presentationRequest.getRequestedAttributes().get("masterId").getCredId());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SendPresentationRequestHelperTest {
         Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
                 presentationRequest.getRequestedAttributes().get("masterId").getCredId());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class SendPresentationRequestHelperTest {
         Assertions.assertEquals("75df600d-b2da-408e-8b4c-25df81dee9f5",
                 presentationRequest.getRequestedPredicates().get("construct_partner").getCredId());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
     }
 
     private final String requestCredentialsSingle = "  {\n" +

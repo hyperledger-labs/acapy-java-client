@@ -116,7 +116,7 @@ public class SendPresentationRequestHelper {
                         match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedAttr
                                 .builder()
                                 .credId(match.getKey())
-                                .revealed(match.getValue())
+                                .revealed(match.getValue() != null ? match.getValue() : Boolean.TRUE)
                                 .build()));
             });
         }
