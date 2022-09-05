@@ -17,10 +17,10 @@ import java.util.*;
  * The helper takes the result of the following two api calls:
  * 1. /present-proof/records/{pres_ex_id}
  * 2. /present-proof/records/{pres_ex_id}/credentials
- * To generate the model for
- * /present-proof/records/{pres_ex_id}/send-presentation
+ * To generate the model for /present-proof/records/{pres_ex_id}/send-presentation
  *
- * https://github.com/hyperledger/aries-rfcs/blob/master/concepts/0441-present-proof-best-practices/README.md
+ * @see <a href="https://github.com/hyperledger/aries-rfcs/blob/master/concepts/0441-present-proof-best-practices/README.md">
+ *     0441-present-proof-best-practices</a>
  */
 public class PresentationRequestBuilder {
 
