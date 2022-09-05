@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data @Builder
-public class PresentationRequest {
+public class SendPresentationRequest {
 
     private Boolean trace;
 

@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hyperledger.aries.api.present_proof.PresentationRequest;
+import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 
 /**
  * V20PresSpecByFormatRequest
@@ -22,6 +22,6 @@ import org.hyperledger.aries.api.present_proof.PresentationRequest;
 @Builder
 public class V20PresSpecByFormatRequest {
     private DIFPresSpec dif;
-    private PresentationRequest indy;
+    private SendPresentationRequest indy;
     private Boolean trace;
 }

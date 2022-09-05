@@ -66,7 +66,7 @@ import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
-import org.hyperledger.aries.api.present_proof.PresentationRequest;
+import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
@@ -1976,14 +1976,14 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a proof presentation
      * @param presentationExchangeId the presentation exchange id
-     * @param presentationRequest {@link PresentationRequest}
+     * @param sendPresentationRequest {@link SendPresentationRequest}
      * @return {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<PresentationExchangeRecord> presentProofRecordsSendPresentation(@NonNull String presentationExchangeId,
-        @NonNull PresentationRequest presentationRequest) throws IOException {
+        @NonNull SendPresentationRequest sendPresentationRequest) throws IOException {
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/send-presentation",
-                presentationRequest);
+                sendPresentationRequest);
         return call(req, PresentationExchangeRecord.class);
     }
 

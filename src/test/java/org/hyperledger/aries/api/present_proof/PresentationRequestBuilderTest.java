@@ -27,7 +27,7 @@ public class PresentationRequestBuilderTest {
                 PresentationRequestCredentials.class);
         PresentationExchangeRecord ex = gson.fromJson(presExSingle, PresentationExchangeRecord.class);
 
-        Optional<PresentationRequest> presentationRequest = PresentationRequestBuilder.acceptAll(ex, List.of(cred));
+        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred));
 
         Assertions.assertTrue(presentationRequest.isPresent());
 
@@ -46,7 +46,7 @@ public class PresentationRequestBuilderTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
-        Optional<PresentationRequest> presentationRequest = PresentationRequestBuilder.acceptAll(ex, cred);
+        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
 
         Assertions.assertTrue(presentationRequest.isPresent());
         Assertions.assertEquals(2, presentationRequest.get().getRequestedAttributes().size());
@@ -65,7 +65,7 @@ public class PresentationRequestBuilderTest {
     @Test
     void testNoMatchingCredentialFound() {
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
-        Optional<PresentationRequest> presentationRequest = PresentationRequestBuilder.acceptAll(ex, List.of());
+        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of());
         Assertions.assertFalse(presentationRequest.isPresent());
     }
 
@@ -76,7 +76,7 @@ public class PresentationRequestBuilderTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExPredicates, PresentationExchangeRecord.class);
 
-        Optional<PresentationRequest> presentationRequest = PresentationRequestBuilder.acceptAll(ex, cred);
+        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
 
         Assertions.assertTrue(presentationRequest.isPresent());
 

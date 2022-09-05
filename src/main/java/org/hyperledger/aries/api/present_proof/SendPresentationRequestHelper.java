@@ -22,26 +22,26 @@ import java.util.*;
  * @see <a href="https://github.com/hyperledger/aries-rfcs/blob/master/concepts/0441-present-proof-best-practices/README.md">
  *     0441-present-proof-best-practices</a>
  */
-public class PresentationRequestBuilder {
+public class SendPresentationRequestHelper {
 
     /**
      * Auto accept all matching credentials
      * @param presentationExchange {@link PresentationExchangeRecord}
      * @param matchingCredentials {@link PresentationRequestCredentials}
-     * @return {@link PresentationRequest}
+     * @return {@link SendPresentationRequest}
      */
-    public static Optional<PresentationRequest> acceptAll(
+    public static Optional<SendPresentationRequest> acceptAll(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> matchingCredentials) {
 
-        Optional<PresentationRequest> result = Optional.empty();
-        Map<String, PresentationRequest.IndyRequestedCredsRequestedAttr> requestedAttributes =
+        Optional<SendPresentationRequest> result = Optional.empty();
+        Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> requestedAttributes =
                 buildRequestedAttributes(presentationExchange, matchingCredentials);
-        Map<String, PresentationRequest.IndyRequestedCredsRequestedPred> requestedPredicates =
+        Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> requestedPredicates =
                 buildRequestedPredicates(presentationExchange, matchingCredentials);
 
         if (!requestedAttributes.isEmpty() || !requestedPredicates.isEmpty()) {
-            result = Optional.of(PresentationRequest
+            result = Optional.of(SendPresentationRequest
                     .builder()
                     .requestedAttributes(requestedAttributes)
                     .requestedPredicates(requestedPredicates)
@@ -50,18 +50,18 @@ public class PresentationRequestBuilder {
         return result;
     }
 
-    private static Map<String, PresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(
+    private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> matchingCredentials) {
 
-        Map<String, PresentationRequest.IndyRequestedCredsRequestedAttr> result = new LinkedHashMap<>();
+        Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> result = new LinkedHashMap<>();
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
         if (presentationRequest != null && presentationRequest.getRequestedAttributes() != null) {
             Set<String> requestedReferents = presentationRequest.getRequestedAttributes().keySet();
             requestedReferents.forEach(ref -> {
                 // find requested referent in matching wallet credentials
                 matchReferent(matchingCredentials, ref).ifPresent(
-                        match -> result.put(ref, PresentationRequest.IndyRequestedCredsRequestedAttr
+                        match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedAttr
                                 .builder()
                                 .credId(match)
                                 .revealed(Boolean.TRUE)
@@ -71,16 +71,16 @@ public class PresentationRequestBuilder {
         return result;
     }
 
-    private static Map<String, PresentationRequest.IndyRequestedCredsRequestedPred> buildRequestedPredicates(
+    private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> buildRequestedPredicates(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> matchingCredentials) {
-        Map<String, PresentationRequest.IndyRequestedCredsRequestedPred> result = new LinkedHashMap<>();
+        Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> result = new LinkedHashMap<>();
 
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
         if (presentationRequest != null && presentationRequest.getRequestedPredicates() != null) {
             Set<String> requestedReferents = presentationRequest.getRequestedPredicates().keySet();
             requestedReferents.forEach(ref -> matchReferent(matchingCredentials, ref).ifPresent(
-                    match -> result.put(ref, PresentationRequest.IndyRequestedCredsRequestedPred
+                    match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedPred
                             .builder()
                             .credId(match)
                             // .timestamp let aca-py do this
