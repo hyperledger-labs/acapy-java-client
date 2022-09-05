@@ -10,7 +10,9 @@ package org.hyperledger.aries.api.present_proof;
 import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Used in scenarios where 'auto-respond-presentation-request' is set to false.
@@ -24,32 +26,51 @@ import java.util.*;
  */
 public class SendPresentationRequestHelper {
 
+    public static Optional<SendPresentationRequest> acceptAll(
+            @NonNull PresentationExchangeRecord presentationExchange,
+            @NonNull List<PresentationRequestCredentials> selectedCredential) {
+        return acceptAll(presentationExchange, selectedCredential, null);
+    }
+
     /**
-     * Auto accept all matching credentials
+     * Auto accept all selected credentials
      * @param presentationExchange {@link PresentationExchangeRecord}
-     * @param matchingCredentials {@link PresentationRequestCredentials}
+     * @param selectedCredentials {@link PresentationRequestCredentials}
      * @return {@link SendPresentationRequest}
      */
     public static Optional<SendPresentationRequest> acceptAll(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> matchingCredentials) {
+            @NonNull List<PresentationRequestCredentials> selectedCredentials,
+            @Nullable Map<String, String> selfAttestedAttributes) {
 
         Optional<SendPresentationRequest> result = Optional.empty();
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> requestedAttributes =
-                buildRequestedAttributes(presentationExchange, matchingCredentials);
+                buildRequestedAttributes(presentationExchange, selectedCredentials);
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> requestedPredicates =
-                buildRequestedPredicates(presentationExchange, matchingCredentials);
+                buildRequestedPredicates(presentationExchange, selectedCredentials);
 
         if (!requestedAttributes.isEmpty() || !requestedPredicates.isEmpty()) {
             result = Optional.of(SendPresentationRequest
                     .builder()
                     .requestedAttributes(requestedAttributes)
                     .requestedPredicates(requestedPredicates)
+                    .selfAttestedAttributes(selfAttestedAttributes)
                     .build());
         }
         return result;
     }
 
+    public static List<PresentationRequestCredentials> filterMatchingCredentialsByReferents(
+            List<PresentationRequestCredentials> matchingCredentials,
+            List<String> selectedReferents) {
+        if (selectedReferents == null || selectedReferents.isEmpty()) {
+            return matchingCredentials;
+        }
+        return matchingCredentials
+                .stream()
+                .filter(c -> selectedReferents.contains(c.getCredentialInfo().getReferent()))
+                .collect(Collectors.toList());
+    }
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> matchingCredentials) {
