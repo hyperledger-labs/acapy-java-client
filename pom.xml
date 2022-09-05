@@ -57,13 +57,13 @@
         <maven-release-plugin.version>3.0.0-M6</maven-release-plugin.version>
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.13.3</jackson.version>
+        <jackson.version>2.13.4</jackson.version>
         <junit.jupiter.api.version>5.9.0</junit.jupiter.api.version>
-        <kotlin.version>1.6.21</kotlin.version>
+        <kotlin.version>1.7.10</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.10.0</okhttp.version>
-        <pmd.version>6.48.0</pmd.version>
+        <pmd.version>6.49.0</pmd.version>
         <testcontainers.version>1.17.3</testcontainers.version>
     </properties>
 
