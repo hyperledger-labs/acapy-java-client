@@ -26,10 +26,17 @@ import java.util.stream.Collectors;
  */
 public class SendPresentationRequestHelper {
 
-    public static Optional<SendPresentationRequest> acceptAll(
+    public static Optional<SendPresentationRequest> acceptSelected(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> selectedCredential) {
-        return acceptAll(presentationExchange, selectedCredential, null);
+            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials) {
+        return buildRequest(presentationExchange, selectedCredentials, null);
+    }
+
+    public static Optional<SendPresentationRequest> acceptSelected(
+            @NonNull PresentationExchangeRecord presentationExchange,
+            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
+            @Nullable Map<String, String> selfAttestedAttributes) {
+        return buildRequest(presentationExchange, selectedCredentials, selfAttestedAttributes);
     }
 
     /**
@@ -40,7 +47,30 @@ public class SendPresentationRequestHelper {
      */
     public static Optional<SendPresentationRequest> acceptAll(
             @NonNull PresentationExchangeRecord presentationExchange,
+            @NonNull List<PresentationRequestCredentials> selectedCredentials) {
+        return acceptAll(presentationExchange, selectedCredentials, null);
+    }
+
+    /**
+     * Auto accept all selected credentials
+     * @param presentationExchange {@link PresentationExchangeRecord}
+     * @param selectedCredentials {@link PresentationRequestCredentials}
+     * @param selfAttestedAttributes  map of self attested attributes, k = group name, v = value
+     * @return {@link SendPresentationRequest}
+     */
+    public static Optional<SendPresentationRequest> acceptAll(
+            @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> selectedCredentials,
+            @Nullable Map<String, String> selfAttestedAttributes) {
+        Map<PresentationRequestCredentials, Boolean> acceptAll = selectedCredentials.stream()
+                .map(sel -> Map.entry(sel, Boolean.TRUE))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return buildRequest(presentationExchange, acceptAll, selfAttestedAttributes);
+    }
+
+    private static Optional<SendPresentationRequest> buildRequest(
+            @NonNull PresentationExchangeRecord presentationExchange,
+            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
             @Nullable Map<String, String> selfAttestedAttributes) {
 
         Optional<SendPresentationRequest> result = Optional.empty();
@@ -71,9 +101,10 @@ public class SendPresentationRequestHelper {
                 .filter(c -> selectedReferents.contains(c.getCredentialInfo().getReferent()))
                 .collect(Collectors.toList());
     }
+
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> matchingCredentials) {
+            @NonNull Map<PresentationRequestCredentials, Boolean> matchingCredentials) {
 
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> result = new LinkedHashMap<>();
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
@@ -84,8 +115,8 @@ public class SendPresentationRequestHelper {
                 matchReferent(matchingCredentials, ref).ifPresent(
                         match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedAttr
                                 .builder()
-                                .credId(match)
-                                .revealed(Boolean.TRUE)
+                                .credId(match.getKey())
+                                .revealed(match.getValue())
                                 .build()));
             });
         }
@@ -94,7 +125,7 @@ public class SendPresentationRequestHelper {
 
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> buildRequestedPredicates(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> matchingCredentials) {
+            @NonNull Map<PresentationRequestCredentials, Boolean> matchingCredentials) {
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> result = new LinkedHashMap<>();
 
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
@@ -103,20 +134,21 @@ public class SendPresentationRequestHelper {
             requestedReferents.forEach(ref -> matchReferent(matchingCredentials, ref).ifPresent(
                     match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedPred
                             .builder()
-                            .credId(match)
+                            .credId(match.getKey())
                             // .timestamp let aca-py do this
                             .build())));
         }
         return result;
     }
 
-    private static Optional<String> matchReferent(
-            @NotNull List<PresentationRequestCredentials> matchingCredentials, String ref) {
+    private static Optional<Map.Entry<String, Boolean>> matchReferent(
+            @NotNull Map<PresentationRequestCredentials, Boolean> matchingCredentials, String ref) {
         return matchingCredentials
+                .entrySet()
                 .stream()
-                .filter(cred -> cred.getPresentationReferents().contains(ref))
-                .map(PresentationRequestCredentials::getCredentialInfo)
-                .map(PresentationRequestCredentials.CredentialInfo::getReferent)
+                .filter(e -> e.getKey().getPresentationReferents().contains(ref))
+                .map(e -> Map.entry(e.getKey().getCredentialInfo(), e.getValue()))
+                .map(e -> Map.entry(e.getKey().getReferent(), e.getValue()))
                 .findFirst();
     }
 }

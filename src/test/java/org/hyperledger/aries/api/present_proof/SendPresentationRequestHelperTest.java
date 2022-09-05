@@ -15,9 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public class PresentationRequestBuilderTest {
+public class SendPresentationRequestHelperTest {
 
     private final Gson gson = GsonConfig.defaultConfig();
 
@@ -27,14 +28,13 @@ public class PresentationRequestBuilderTest {
                 PresentationRequestCredentials.class);
         PresentationExchangeRecord ex = gson.fromJson(presExSingle, PresentationExchangeRecord.class);
 
-        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred));
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred))
+                .orElseThrow();
 
-        Assertions.assertTrue(presentationRequest.isPresent());
-
-        Assertions.assertEquals(1, presentationRequest.get().getRequestedAttributes().size());
-        Assertions.assertNotNull(presentationRequest.get().getRequestedAttributes().get("attribute_group_0"));
+        Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("attribute_group_0"));
         Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.get().getRequestedAttributes().get("attribute_group_0").getCredId());
+                presentationRequest.getRequestedAttributes().get("attribute_group_0").getCredId());
 
         // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
     }
@@ -46,18 +46,47 @@ public class PresentationRequestBuilderTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
-        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred)
+                .orElseThrow();
 
-        Assertions.assertTrue(presentationRequest.isPresent());
-        Assertions.assertEquals(2, presentationRequest.get().getRequestedAttributes().size());
+        Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
 
-        Assertions.assertNotNull(presentationRequest.get().getRequestedAttributes().get("bank_account"));
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
         Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.get().getRequestedAttributes().get("bank_account").getCredId());
+                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
 
-        Assertions.assertNotNull(presentationRequest.get().getRequestedAttributes().get("masterId"));
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("masterId"));
         Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
-                presentationRequest.get().getRequestedAttributes().get("masterId").getCredId());
+                presentationRequest.getRequestedAttributes().get("masterId").getCredId());
+
+        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
+    }
+
+    @Test
+    void testMultipleCredentialsWithSelection() {
+        List<PresentationRequestCredentials> cred = gson.fromJson(requestCredentialsMulti,
+                new TypeToken<Collection<PresentationRequestCredentials>>() {
+                }.getType());
+        PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
+
+        Map<PresentationRequestCredentials, Boolean> revealed = Map.of(
+                cred.get(0), Boolean.FALSE,
+                cred.get(1), Boolean.TRUE);
+
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptSelected(ex, revealed)
+                .orElseThrow();
+
+        Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
+
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
+        Assertions.assertTrue(presentationRequest.getRequestedAttributes().get("bank_account").getRevealed());
+        Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
+                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
+
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("masterId"));
+        Assertions.assertFalse(presentationRequest.getRequestedAttributes().get("masterId").getRevealed());
+        Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
+                presentationRequest.getRequestedAttributes().get("masterId").getCredId());
 
         // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
     }
@@ -76,18 +105,17 @@ public class PresentationRequestBuilderTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExPredicates, PresentationExchangeRecord.class);
 
-        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred)
+                .orElseThrow();
 
-        Assertions.assertTrue(presentationRequest.isPresent());
-
-        Assertions.assertEquals(1, presentationRequest.get().getRequestedAttributes().size());
-        Assertions.assertNotNull(presentationRequest.get().getRequestedAttributes().get("bank_account"));
+        Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
+        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
         Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.get().getRequestedAttributes().get("bank_account").getCredId());
+                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
 
-        Assertions.assertEquals(1, presentationRequest.get().getRequestedPredicates().size());
+        Assertions.assertEquals(1, presentationRequest.getRequestedPredicates().size());
         Assertions.assertEquals("75df600d-b2da-408e-8b4c-25df81dee9f5",
-                presentationRequest.get().getRequestedPredicates().get("construct_partner").getCredId());
+                presentationRequest.getRequestedPredicates().get("construct_partner").getCredId());
 
         // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest.get()));
     }
