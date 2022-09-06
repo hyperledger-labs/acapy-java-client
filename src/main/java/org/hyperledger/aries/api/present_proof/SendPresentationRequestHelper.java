@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
  */
 public class SendPresentationRequestHelper {
 
-    public static Optional<SendPresentationRequest> acceptSelected(
+    public static SendPresentationRequest acceptSelected(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials) {
         return buildRequest(presentationExchange, selectedCredentials, null);
     }
 
-    public static Optional<SendPresentationRequest> acceptSelected(
+    public static SendPresentationRequest acceptSelected(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
             @Nullable Map<String, String> selfAttestedAttributes) {
@@ -45,7 +45,7 @@ public class SendPresentationRequestHelper {
      * @param selectedCredentials {@link PresentationRequestCredentials}
      * @return {@link SendPresentationRequest}
      */
-    public static Optional<SendPresentationRequest> acceptAll(
+    public static SendPresentationRequest acceptAll(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> selectedCredentials) {
         return acceptAll(presentationExchange, selectedCredentials, null);
@@ -58,7 +58,7 @@ public class SendPresentationRequestHelper {
      * @param selfAttestedAttributes  map of self attested attributes, k = group name, v = value
      * @return {@link SendPresentationRequest}
      */
-    public static Optional<SendPresentationRequest> acceptAll(
+    public static SendPresentationRequest acceptAll(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull List<PresentationRequestCredentials> selectedCredentials,
             @Nullable Map<String, String> selfAttestedAttributes) {
@@ -68,31 +68,27 @@ public class SendPresentationRequestHelper {
         return buildRequest(presentationExchange, acceptAll, selfAttestedAttributes);
     }
 
-    private static Optional<SendPresentationRequest> buildRequest(
+    private static SendPresentationRequest buildRequest(
             @NonNull PresentationExchangeRecord presentationExchange,
             @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
             @Nullable Map<String, String> selfAttestedAttributes) {
 
-        Optional<SendPresentationRequest> result = Optional.empty();
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> requestedAttributes =
                 buildRequestedAttributes(presentationExchange, selectedCredentials);
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> requestedPredicates =
                 buildRequestedPredicates(presentationExchange, selectedCredentials);
 
-        if (!requestedAttributes.isEmpty() || !requestedPredicates.isEmpty()) {
-            result = Optional.of(SendPresentationRequest
-                    .builder()
-                    .requestedAttributes(requestedAttributes)
-                    .requestedPredicates(requestedPredicates)
-                    .selfAttestedAttributes(selfAttestedAttributes)
-                    .build());
-        }
-        return result;
+        return SendPresentationRequest
+                .builder()
+                .requestedAttributes(requestedAttributes)
+                .requestedPredicates(requestedPredicates)
+                .selfAttestedAttributes(selfAttestedAttributes)
+                .build();
     }
 
     public static List<PresentationRequestCredentials> filterMatchingCredentialsByReferents(
-            List<PresentationRequestCredentials> matchingCredentials,
-            List<String> selectedReferents) {
+            @NonNull List<PresentationRequestCredentials> matchingCredentials,
+            @Nullable List<String> selectedReferents) {
         if (selectedReferents == null || selectedReferents.isEmpty()) {
             return matchingCredentials;
         }
@@ -100,6 +96,24 @@ public class SendPresentationRequestHelper {
                 .stream()
                 .filter(c -> selectedReferents.contains(c.getCredentialInfo().getReferent()))
                 .collect(Collectors.toList());
+    }
+
+    public static Map<PresentationRequestCredentials, Boolean> filterMatchingCredentialsByReferents(
+            @NonNull List<PresentationRequestCredentials> matchingCredentials,
+            @Nullable Map<String, Boolean> selectedReferents) {
+        if (selectedReferents == null || selectedReferents.isEmpty()) {
+            return matchingCredentials.stream()
+                    .map(match -> Map.entry(match, Boolean.TRUE))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+        return matchingCredentials
+                .stream()
+                .filter(match -> selectedReferents.containsKey(match.getCredentialInfo().getReferent()))
+                .map(match -> {
+                    String referent = match.getCredentialInfo().getReferent();
+                    return Map.entry(match, selectedReferents.get(referent));
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(

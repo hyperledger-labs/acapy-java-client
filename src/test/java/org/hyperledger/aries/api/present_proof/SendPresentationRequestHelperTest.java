@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class SendPresentationRequestHelperTest {
 
@@ -28,8 +27,7 @@ public class SendPresentationRequestHelperTest {
                 PresentationRequestCredentials.class);
         PresentationExchangeRecord ex = gson.fromJson(presExSingle, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred))
-                .orElseThrow();
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred));
 
         Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
         Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("attribute_group_0"));
@@ -46,8 +44,7 @@ public class SendPresentationRequestHelperTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred)
-                .orElseThrow();
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
 
         Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
 
@@ -73,8 +70,7 @@ public class SendPresentationRequestHelperTest {
                 cred.get(0), Boolean.FALSE,
                 cred.get(1), Boolean.TRUE);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptSelected(ex, revealed)
-                .orElseThrow();
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptSelected(ex, revealed);
 
         Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
 
@@ -94,8 +90,8 @@ public class SendPresentationRequestHelperTest {
     @Test
     void testNoMatchingCredentialFound() {
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
-        Optional<SendPresentationRequest> presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of());
-        Assertions.assertFalse(presentationRequest.isPresent());
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of());
+        Assertions.assertNotNull(presentationRequest);
     }
 
     @Test
@@ -105,8 +101,7 @@ public class SendPresentationRequestHelperTest {
                 }.getType());
         PresentationExchangeRecord ex = gson.fromJson(presExPredicates, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred)
-                .orElseThrow();
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
 
         Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
         Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
