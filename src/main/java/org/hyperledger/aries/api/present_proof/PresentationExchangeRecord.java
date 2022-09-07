@@ -14,7 +14,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.acy_py.generated.model.AttachDecorator;
+import org.hyperledger.acy_py.generated.model.IndyPresAttrSpec;
+import org.hyperledger.acy_py.generated.model.IndyPresPreview;
 import org.hyperledger.aries.api.ExchangeVersion;
+import org.hyperledger.aries.api.issue_credential_v1.ThreadId;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -23,6 +27,8 @@ import org.hyperledger.aries.webhook.EventParser;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -31,15 +37,11 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
 public class PresentationExchangeRecord extends BasePresExRecord {
 
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject presentationProposalDict;
+    private PresentationProposalDict presentationProposalDict;
 
     private PresentProofRequest.ProofRequest presentationRequest;
 
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject presentationRequestDict;
+    private PresentationRequestDict presentationRequestDict;
 
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
@@ -159,6 +161,12 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         return EventParser.getValuesByRevealedAttributesFull(presentation.toString());
     }
 
+    @Override
+    @JsonIgnore
+    public ExchangeVersion getVersion() {
+        return version == null ? ExchangeVersion.V1 : version;
+    }
+
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
     public static class Identifier {
         private String schemaId;
@@ -182,9 +190,40 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private String encoded;
     }
 
-    @Override
-    @JsonIgnore
-    public ExchangeVersion getVersion() {
-        return version == null ? ExchangeVersion.V1 : version;
+    @Data @NonNull
+    public static class PresentationProposalDict {
+        @SerializedName("@id")
+        private String id;
+
+        @SerializedName("@type")
+        private String type;
+
+        private String comment;
+
+        private IndyPresPreview presentationProposal;
+
+        public Set<UUID> collectProposalReferents() {
+            return presentationProposal.getAttributes().stream()
+                    .map(IndyPresAttrSpec::getReferent)
+                    .map(UUID::fromString)
+                    .collect(Collectors.toSet());
+        }
+    }
+
+    @Data @NonNull
+    public static class PresentationRequestDict {
+        @SerializedName("@id")
+        private String id;
+
+        @SerializedName("@type")
+        private String type;
+
+        private String comment;
+
+        @SerializedName("~thread")
+        private ThreadId threadId;
+
+        @SerializedName("request_presentations~attach")
+        private AttachDecorator requestPresentationAttach;
     }
 }

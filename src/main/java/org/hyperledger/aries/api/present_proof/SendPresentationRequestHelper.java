@@ -156,11 +156,11 @@ public class SendPresentationRequestHelper {
     }
 
     private static Optional<Map.Entry<String, Boolean>> matchReferent(
-            @NotNull Map<PresentationRequestCredentials, Boolean> matchingCredentials, String ref) {
+            @NotNull Map<PresentationRequestCredentials, Boolean> matchingCredentials, String presentationReferent) {
         return matchingCredentials
                 .entrySet()
                 .stream()
-                .filter(e -> e.getKey().getPresentationReferents().contains(ref))
+                .filter(e -> e.getKey().getPresentationReferents().contains(presentationReferent))
                 .map(e -> Map.entry(e.getKey().getCredentialInfo(), e.getValue()))
                 .map(e -> Map.entry(e.getKey().getReferent(), e.getValue()))
                 .findFirst();
