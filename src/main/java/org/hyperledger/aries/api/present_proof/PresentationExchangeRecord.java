@@ -202,10 +202,9 @@ public class PresentationExchangeRecord extends BasePresExRecord {
 
         private IndyPresPreview presentationProposal;
 
-        public Set<UUID> collectProposalReferents() {
+        public Set<String> collectProposalReferents() {
             return presentationProposal.getAttributes().stream()
                     .map(IndyPresAttrSpec::getReferent)
-                    .map(UUID::fromString)
                     .collect(Collectors.toSet());
         }
     }
@@ -224,6 +223,6 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private ThreadId threadId;
 
         @SerializedName("request_presentations~attach")
-        private AttachDecorator requestPresentationAttach;
+        private List<AttachDecorator> requestPresentationAttach;
     }
 }
