@@ -8,6 +8,8 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
@@ -15,8 +17,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.acy_py.generated.model.AttachDecorator;
-import org.hyperledger.acy_py.generated.model.IndyPresAttrSpec;
-import org.hyperledger.acy_py.generated.model.IndyPresPreview;
+import org.hyperledger.acy_py.generated.model.IndyProofReqPredSpec;
 import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.issue_credential_v1.ThreadId;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
@@ -24,10 +25,10 @@ import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
 import org.hyperledger.aries.webhook.EventParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -190,11 +191,15 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private String encoded;
     }
 
-    @Data @NonNull
+    @Data @NoArgsConstructor
+    @JsonPropertyOrder({"id", "type", "comment", "presentationProposal"})
     public static class PresentationProposalDict {
+
+        @JsonProperty("@id")
         @SerializedName("@id")
         private String id;
 
+        @JsonProperty("@type")
         @SerializedName("@type")
         private String type;
 
@@ -204,24 +209,75 @@ public class PresentationExchangeRecord extends BasePresExRecord {
 
         public Set<String> collectProposalReferents() {
             return presentationProposal.getAttributes().stream()
-                    .map(IndyPresAttrSpec::getReferent)
+                    .map(IndyPresPreview.IndyPresAttrSpec::getReferent)
                     .collect(Collectors.toSet());
+        }
+
+        @Data @NoArgsConstructor
+        @JsonPropertyOrder({"type", "attributes", "predicates"})
+        public static class IndyPresPreview {
+
+            @JsonProperty("@type")
+            @SerializedName("@type")
+            private String type;
+
+            private List<IndyPresAttrSpec> attributes = new ArrayList<>();
+
+            private List<IndyPresPredSpec> predicates = new ArrayList<>();
+
+            @Data @NoArgsConstructor
+            @JsonPropertyOrder({"credDefId", "mimeType", "name", "referent", "value"})
+            public static class IndyPresAttrSpec {
+
+                @JsonProperty("cred_def_id")
+                @SerializedName("cred_def_id")
+                private String credDefId;
+
+                @JsonProperty("mime-type")
+                @SerializedName("mime-type")
+                private String mimeType;
+
+                private String name;
+
+                private String referent;
+
+                private String value;
+            }
+
+            @Data @NoArgsConstructor
+            @JsonPropertyOrder({"credDefId", "name", "predicate", "threshold"})
+            public static class IndyPresPredSpec {
+
+                @JsonProperty("cred_def_id")
+                @SerializedName("cred_def_id")
+                private String credDefId;
+
+                private String name;
+
+                private IndyProofReqPredSpec.PTypeEnum predicate;
+
+                private Integer threshold;
+            }
         }
     }
 
-    @Data @NonNull
+    @Data @NoArgsConstructor
     public static class PresentationRequestDict {
+        @JsonProperty("@id")
         @SerializedName("@id")
         private String id;
 
+        @JsonProperty("@type")
         @SerializedName("@type")
         private String type;
 
         private String comment;
 
+        @JsonProperty("~thread")
         @SerializedName("~thread")
         private ThreadId threadId;
 
+        @JsonProperty("request_presentations~attach")
         @SerializedName("request_presentations~attach")
         private List<AttachDecorator> requestPresentationAttach;
     }
