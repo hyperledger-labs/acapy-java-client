@@ -22,13 +22,13 @@ public class SendPresentationRequest {
     private Boolean trace;
 
     @Builder.Default
+    private Map<String, IndyRequestedCredsRequestedAttr> requestedAttributes = new HashMap<>();
+
+    @Builder.Default
     private Map<String, IndyRequestedCredsRequestedPred> requestedPredicates = new HashMap<>();
 
     @Builder.Default
     private Map<String, String> selfAttestedAttributes = new HashMap<>();
-
-    @Builder.Default
-    private Map<String, IndyRequestedCredsRequestedAttr> requestedAttributes = new HashMap<>();
 
     @Data @Builder
     public static final class IndyRequestedCredsRequestedPred {
