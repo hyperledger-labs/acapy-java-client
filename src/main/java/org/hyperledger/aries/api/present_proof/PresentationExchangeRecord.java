@@ -208,9 +208,9 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private IndyPresPreview presentationProposal;
 
         public Set<String> collectProposalReferents() {
-            return presentationProposal.getAttributes().stream()
+            return presentationProposal != null ? presentationProposal.getAttributes().stream()
                     .map(IndyPresPreview.IndyPresAttrSpec::getReferent)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toSet()) : Set.of();
         }
 
         @Data @NoArgsConstructor
