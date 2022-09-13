@@ -25,7 +25,7 @@ public class V2ToV1IndyCredentialConverterTest extends MockedTestBase {
         Assertions.assertTrue(credential.isPresent());
         Assertions.assertNotNull(credential.get().getAttrs());
         Assertions.assertEquals(2, credential.get().getAttrs().size());
-        Assertions.assertEquals("222", credential.get().getAttrs().get("iban"));
-        Assertions.assertEquals("1111", credential.get().getAttrs().get("bic"));
+        Assertions.assertEquals("222", credential.get().getAttrs().stream().filter(attr -> attr.getName().equals("iban")).findFirst().get().getValue());
+        Assertions.assertEquals("1111", credential.get().getAttrs().stream().filter(attr -> attr.getName().equals("bic")).findFirst().get().getValue());
     }
 }

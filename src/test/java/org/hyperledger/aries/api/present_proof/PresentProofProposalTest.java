@@ -10,12 +10,13 @@ package org.hyperledger.aries.api.present_proof;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperledger.aries.IntegrationTestBase;
 import org.hyperledger.aries.api.credentials.Credential;
+import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.exception.AriesException;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +28,7 @@ public class PresentProofProposalTest extends IntegrationTestBase {
     @Test
     void testBuildPresentationProposal() {
         Credential cred = new Credential();
-        cred.setAttrs(Map.of("street", "teststreet"));
+        cred.setAttrs(List.of(new CredentialAttributes("street", "teststreet", null)));
         cred.setCredentialDefinitionId("WgWxqztrNooG92RXvxSTWv:3:CL:20:tag");
         cred.setReferent("referent");
 

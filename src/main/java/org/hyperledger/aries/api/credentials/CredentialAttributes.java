@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Data @NoArgsConstructor @Builder
 public class CredentialAttributes {
 
     @SerializedName(value = "mime-type")
@@ -32,10 +32,11 @@ public class CredentialAttributes {
     private String name;
     private String value;
 
-    public CredentialAttributes(String name, String value) {
+    public CredentialAttributes(String name, String value, String mimeType) {
         super();
         this.name = name;
         this.value = value;
+        this.mimeType = mimeType;
     }
 
     public static <T> List<CredentialAttributes> from(@NonNull T instance) {
@@ -60,7 +61,9 @@ public class CredentialAttributes {
                         } catch (IllegalAccessException | IllegalArgumentException e) {
                             log.error("Could not get value of field: {}", fieldName, e);
                         }
-                        result.add(new CredentialAttributes(fieldName, fieldValue));
+
+                        // TODO: Set mime-type instead of passing null
+                        result.add(new CredentialAttributes(fieldName, fieldValue, null));
                     }
                 }
             }
@@ -72,13 +75,13 @@ public class CredentialAttributes {
     public static List<CredentialAttributes> from(@NonNull Map<String, Object> values) {
         List<CredentialAttributes> result = new ArrayList<>();
         // TODO check if complex object
-        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v.toString())));
+        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v.toString(), null)));
         return result;
     }
 
     public static List<CredentialAttributes> fromMap(@NonNull Map<String, String> values) {
         List<CredentialAttributes> result = new ArrayList<>();
-        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v)));
+        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v, null)));
         return result;
     }
 

@@ -10,10 +10,12 @@ package org.hyperledger.aries.api.present_proof;
 import com.google.gson.JsonObject;
 import lombok.NonNull;
 import org.hyperledger.aries.api.credentials.Credential;
+import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalByFormat;
 import org.hyperledger.aries.api.present_proof_v2.V20PresProposalRequest;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Helper class to build a {@link PresentProofProposal}
@@ -29,12 +31,13 @@ public class PresentProofProposalBuilder {
      * @return simple {@link PresentProofProposal} without any predicates set
      */
     public static PresentProofProposal fromCredential(@NonNull String connectionId, @NonNull Credential cred) {
-        final Map<String, String> attrs = cred.getAttrs();
+        final List<CredentialAttributes> attrs = cred.getAttrs();
         List<PresentProofProposal.PresentationPreview.PresAttrSpec> presAttr = new ArrayList<>();
-        attrs.forEach( (k, v) -> presAttr.add(PresentProofProposal.PresentationPreview.PresAttrSpec
+        attrs.forEach( attr -> presAttr.add(PresentProofProposal.PresentationPreview.PresAttrSpec
                 .builder()
-                .name(k)
-                .value(v)
+                .name(attr.getName())
+                .value(attr.getValue())
+                .mimeType(attr.getMimeType())
                 .credentialDefinitionId(cred.getCredentialDefinitionId())
                 .referent(cred.getReferent())
                 .build()));
@@ -56,19 +59,19 @@ public class PresentProofProposalBuilder {
     public static V20PresProposalRequest v2IndyFromCredential(
             @NonNull String connectionId, @NonNull Credential cred, String requestName) {
 
-        final Map<String, String> attrs = cred.getAttrs();
+        final List<CredentialAttributes> attrs = cred.getAttrs();
         final List<JsonObject> res = new ArrayList<>();
 
-        attrs.forEach((name, value) -> res.add(PresentProofRequest.ProofRequest.ProofRestrictions
+        attrs.forEach(attr -> res.add(PresentProofRequest.ProofRequest.ProofRestrictions
                 .builder()
-                        .addAttributeValueRestriction(name, value)
+                        .addAttributeValueRestriction(attr.getName(), attr.getValue())
                         .schemaId(cred.getSchemaId())
                         .credentialDefinitionId(cred.getCredentialDefinitionId())
                 .build().toJsonObject()));
 
         PresentProofRequest.ProofRequest.ProofRequestedAttributes requestedAttributes = PresentProofRequest.ProofRequest.ProofRequestedAttributes
                 .builder()
-                .names(new ArrayList<>(attrs.keySet()))
+                .names(attrs.stream().map(CredentialAttributes::getName).collect(Collectors.toList()))
                 .restrictions(res)
                 .build();
 

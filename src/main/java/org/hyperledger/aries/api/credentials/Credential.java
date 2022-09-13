@@ -16,14 +16,14 @@ import org.hyperledger.aries.pojo.PojoProcessor;
 import java.lang.reflect.Field;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Credential {
 
-    private Map<String, String> attrs;
+    private List<CredentialAttributes> attrs;
 
     @SerializedName(value = CredDefId.CREDENTIAL_DEFINITION_ID,
             alternate = {CredDefId.CRED_DEF_ID, CredDefId.CREDENTIALDEFINITIONID})
@@ -50,7 +50,12 @@ public class Credential {
         AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
             for(Field field: fields) {
                 String fieldName = PojoProcessor.fieldName(field);
-                String fieldValue = attrs.get(fieldName);
+                String fieldValue = attrs.stream().filter(attribute -> attribute
+                        .getName()
+                        .equals(fieldName))
+                        .findFirst()
+                        .get()
+                        .getValue();
                 try {
                     field.setAccessible(true);
                     field.set(result, fieldValue);
