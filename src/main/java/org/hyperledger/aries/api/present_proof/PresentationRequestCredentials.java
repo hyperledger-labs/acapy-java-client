@@ -11,9 +11,10 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hyperledger.aries.api.credentials.CredentialAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Model for:
@@ -35,7 +36,7 @@ public class PresentationRequestCredentials {
 
         private String referent;
 
-        private Map<String, String> attrs;
+        private List<CredentialAttributes> attrs;
 
         private String schemaId;
 

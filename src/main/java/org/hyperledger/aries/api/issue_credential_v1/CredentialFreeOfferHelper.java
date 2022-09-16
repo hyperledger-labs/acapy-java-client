@@ -22,6 +22,8 @@ import org.hyperledger.aries.api.out_of_band.AttachmentDef;
 import org.hyperledger.aries.api.out_of_band.BaseOOBInvitationHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +52,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
      */
     public CredentialFreeOffer buildV1Indy(
             @NonNull String credentialDefinitionId,
-            @NonNull Map<String, String> document) {
+            @NonNull List<CredentialAttributes> document) {
         CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
         try{
             // issue-credential/create in conjunction with oob invitation attachment
@@ -59,7 +61,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                     .autoIssue(Boolean.TRUE)
                     .autoRemove(Boolean.TRUE)
                     .credDefId(credentialDefinitionId)
-                    .credentialPreview(new CredentialPreview(CredentialAttributes.fromMap(document)))
+                    .credentialPreview(new CredentialPreview(document))
                     .build();
             V1CredentialExchange ex = acaPy.issueCredentialCreateOffer(create).orElseThrow();
             // step 2 - create out-of-band invitation with attached credential offer
@@ -78,7 +80,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
      */
     public CredentialFreeOffer buildV2Indy(
             @NonNull String credentialDefinitionId,
-            @NonNull Map<String, String> document) {
+            @NonNull List<CredentialAttributes> document) {
         CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
         try {
             V2CredentialExchangeFree create = V2CredentialExchangeFree.builder()
@@ -90,7 +92,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                                 .build())
                         .build())
                 .credentialPreview(V2CredentialExchangeFree.V2CredentialPreview.builder()
-                        .attributes(CredentialAttributes.fromMap(document))
+                        .attributes(document)
                         .build())
                 .build();
             V1CredentialExchange ex = acaPy.issueCredentialV2CreateOffer(create)

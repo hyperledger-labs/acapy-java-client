@@ -69,7 +69,7 @@ public class MockedPresentProofTest extends MockedTestBase {
 
         Assertions.assertTrue(credentials.isPresent());
         Assertions.assertEquals(2, credentials.get().size());
-        Assertions.assertEquals("bpa", credentials.get().get(0).getCredentialInfo().getAttrs().get("name"));
+        Assertions.assertEquals("bpa", credentials.get().get(0).getCredentialInfo().getAttrs().stream().filter(attr -> attr.getName().equals("name")).findFirst().get().getValue());
     }
 
     @Test
