@@ -7,71 +7,22 @@
  */
 package org.hyperledger.aries.api.present_proof;
 
-import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
+import lombok.*;
+import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.aries.api.exception.AriesException;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Used in scenarios where 'auto-respond-presentation-request' is set to false.
- * The helper takes the result of the following two api calls:
- * 1. /present-proof/records/{pres_ex_id}
- * 2. /present-proof/records/{pres_ex_id}/credentials
- * To generate the model for /present-proof/records/{pres_ex_id}/send-presentation
- *
- * @see <a href="https://github.com/hyperledger/aries-rfcs/blob/master/concepts/0441-present-proof-best-practices/README.md">
- *     0441-present-proof-best-practices</a>
+ * Helper class that maps a flat list of attribute or predicate group names back into their respective groups:
+ * selectedAttributes, selectedPredicates and selfAttestedAttributes in reference to the matching poof request.
  */
 public class SendPresentationRequestHelper {
 
-    public static SendPresentationRequest acceptSelected(
+    public static SendPresentationRequest buildRequest(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials) {
-        return buildRequest(presentationExchange, selectedCredentials, null);
-    }
-
-    public static SendPresentationRequest acceptSelected(
-            @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
-            @Nullable Map<String, String> selfAttestedAttributes) {
-        return buildRequest(presentationExchange, selectedCredentials, selfAttestedAttributes);
-    }
-
-    /**
-     * Auto accept all selected credentials
-     * @param presentationExchange {@link PresentationExchangeRecord}
-     * @param selectedCredentials {@link PresentationRequestCredentials}
-     * @return {@link SendPresentationRequest}
-     */
-    public static SendPresentationRequest acceptAll(
-            @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> selectedCredentials) {
-        return acceptAll(presentationExchange, selectedCredentials, null);
-    }
-
-    /**
-     * Auto accept all selected credentials
-     * @param presentationExchange {@link PresentationExchangeRecord}
-     * @param selectedCredentials {@link PresentationRequestCredentials}
-     * @param selfAttestedAttributes  map of self attested attributes, k = group name, v = value
-     * @return {@link SendPresentationRequest}
-     */
-    public static SendPresentationRequest acceptAll(
-            @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull List<PresentationRequestCredentials> selectedCredentials,
-            @Nullable Map<String, String> selfAttestedAttributes) {
-        Map<PresentationRequestCredentials, Boolean> acceptAll = selectedCredentials.stream()
-                .map(sel -> Map.entry(sel, Boolean.TRUE))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return buildRequest(presentationExchange, acceptAll, selfAttestedAttributes);
-    }
-
-    private static SendPresentationRequest buildRequest(
-            @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull Map<PresentationRequestCredentials, Boolean> selectedCredentials,
-            @Nullable Map<String, String> selfAttestedAttributes) {
+            @NonNull Map<String, SelectedMatch.ReferentInfo> selectedCredentials) {
 
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> requestedAttributes =
                 buildRequestedAttributes(presentationExchange, selectedCredentials);
@@ -82,87 +33,78 @@ public class SendPresentationRequestHelper {
                 .builder()
                 .requestedAttributes(requestedAttributes)
                 .requestedPredicates(requestedPredicates)
-                .selfAttestedAttributes(selfAttestedAttributes)
+                .selfAttestedAttributes(findSelfAttested(selectedCredentials))
                 .build();
-    }
-
-    public static List<PresentationRequestCredentials> filterMatchingCredentialsByReferents(
-            @NonNull List<PresentationRequestCredentials> matchingCredentials,
-            @Nullable List<String> selectedReferents) {
-        if (selectedReferents == null || selectedReferents.isEmpty()) {
-            return matchingCredentials;
-        }
-        return matchingCredentials
-                .stream()
-                .filter(c -> selectedReferents.contains(c.getCredentialInfo().getReferent()))
-                .collect(Collectors.toList());
-    }
-
-    public static Map<PresentationRequestCredentials, Boolean> filterMatchingCredentialsByReferents(
-            @NonNull List<PresentationRequestCredentials> matchingCredentials,
-            @Nullable Map<String, Boolean> selectedReferents) {
-        if (selectedReferents == null || selectedReferents.isEmpty()) {
-            return matchingCredentials.stream()
-                    .map(match -> Map.entry(match, Boolean.TRUE))
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
-        return matchingCredentials
-                .stream()
-                .filter(match -> selectedReferents.containsKey(match.getCredentialInfo().getReferent()))
-                .map(match -> {
-                    String referent = match.getCredentialInfo().getReferent();
-                    return Map.entry(match, selectedReferents.get(referent));
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> buildRequestedAttributes(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull Map<PresentationRequestCredentials, Boolean> matchingCredentials) {
-
+            @NonNull Map<String, SelectedMatch.ReferentInfo> matchingCredentials) {
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedAttr> result = new LinkedHashMap<>();
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
         if (presentationRequest != null && presentationRequest.getRequestedAttributes() != null) {
-            Set<String> requestedReferents = presentationRequest.getRequestedAttributes().keySet();
-            requestedReferents.forEach(ref -> {
-                // find requested referent in matching wallet credentials
-                matchReferent(matchingCredentials, ref).ifPresent(
-                        match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedAttr
-                                .builder()
-                                .credId(match.getKey())
-                                .revealed(match.getValue() != null ? match.getValue() : Boolean.TRUE)
-                                .build()));
-            });
+            Set<String> attributeGroupNames = presentationRequest.getRequestedAttributes().keySet();
+            result = matchingCredentials.entrySet().stream()
+                    .filter(e -> attributeGroupNames.contains(e.getKey()))
+                    .filter(e -> e.getValue().getReferent() != null)
+                    .map(e -> Map.entry(e.getKey(), SendPresentationRequest.IndyRequestedCredsRequestedAttr
+                            .builder()
+                            .credId(e.getValue().getReferent().toString())
+                            .revealed(e.getValue().getRevealed() != null ? e.getValue().getRevealed() : Boolean.TRUE)
+                            // .timestamp let aca-py do this
+                            .build()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
         return result;
     }
 
     private static Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> buildRequestedPredicates(
             @NonNull PresentationExchangeRecord presentationExchange,
-            @NonNull Map<PresentationRequestCredentials, Boolean> matchingCredentials) {
+            @NonNull Map<String, SelectedMatch.ReferentInfo> matchingCredentials) {
         Map<String, SendPresentationRequest.IndyRequestedCredsRequestedPred> result = new LinkedHashMap<>();
 
         PresentProofRequest.ProofRequest presentationRequest = presentationExchange.getPresentationRequest();
         if (presentationRequest != null && presentationRequest.getRequestedPredicates() != null) {
-            Set<String> requestedReferents = presentationRequest.getRequestedPredicates().keySet();
-            requestedReferents.forEach(ref -> matchReferent(matchingCredentials, ref).ifPresent(
-                    match -> result.put(ref, SendPresentationRequest.IndyRequestedCredsRequestedPred
+            Set<String> predicateGroupNames = presentationRequest.getRequestedPredicates().keySet();
+            result = matchingCredentials.entrySet().stream()
+                    .filter(e -> predicateGroupNames.contains(e.getKey()))
+                    .map(e -> Map.entry(e.getKey(), SendPresentationRequest.IndyRequestedCredsRequestedPred
                             .builder()
-                            .credId(match.getKey())
+                            .credId(e.getValue().getReferent().toString())
                             // .timestamp let aca-py do this
-                            .build())));
+                            .build()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            if (predicateGroupNames.size() > result.size()) {
+                throw new AriesException(0, "Provided predicate group size does not match the requested size");
+            }
         }
         return result;
     }
 
-    private static Optional<Map.Entry<String, Boolean>> matchReferent(
-            @NotNull Map<PresentationRequestCredentials, Boolean> matchingCredentials, String presentationReferent) {
-        return matchingCredentials
-                .entrySet()
-                .stream()
-                .filter(e -> e.getKey().getPresentationReferents().contains(presentationReferent))
-                .map(e -> Map.entry(e.getKey().getCredentialInfo(), e.getValue()))
-                .map(e -> Map.entry(e.getKey().getReferent(), e.getValue()))
-                .findFirst();
+    private static Map<String, String> findSelfAttested(
+            @NonNull Map<String, SelectedMatch.ReferentInfo> selectedCredentials) {
+        return selectedCredentials.entrySet().stream()
+                .filter(e -> e.getValue().getReferent() == null)
+                .filter(e -> StringUtils.isNotEmpty(e.getValue().getSelfAttestedValue()))
+                .map(e -> Map.entry(e.getKey(), e.getValue().getSelfAttestedValue()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class SelectedMatch {
+
+        // group name to referent information
+        private Map<String, ReferentInfo> selectedReferents;
+
+        @Data
+        @Builder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class ReferentInfo {
+            private UUID referent;
+            private Boolean revealed;
+            private String selfAttestedValue;
+        }
     }
 }

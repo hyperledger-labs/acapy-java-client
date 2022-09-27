@@ -8,137 +8,143 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.hyperledger.aries.config.GsonConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class SendPresentationRequestHelperTest {
 
     private final Gson gson = GsonConfig.defaultConfig();
 
     @Test
-    void testSingleCredential() {
-        PresentationRequestCredentials cred = gson.fromJson(requestCredentialsSingle,
-                PresentationRequestCredentials.class);
+    void testSingleMatch() {
+        UUID referent = UUID.randomUUID();
         PresentationExchangeRecord ex = gson.fromJson(presExSingle, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of(cred));
+        SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
+                .buildRequest(ex, Map.of("gr_0", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                        .referent(referent)
+                        .build()));
 
-        Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("attribute_group_0"));
-        Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.getRequestedAttributes().get("attribute_group_0").getCredId());
+        Assertions.assertNotNull(sendPresentationReq.getRequestedAttributes());
+        SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttr = sendPresentationReq.getRequestedAttributes()
+                .get("gr_0");
+        Assertions.assertNotNull(reqAttr);
+        Assertions.assertEquals(referent.toString(), reqAttr.getCredId());
+        Assertions.assertTrue(reqAttr.getRevealed());
+        Assertions.assertNotNull(sendPresentationReq.getRequestedPredicates());
+        Assertions.assertNotNull(sendPresentationReq.getSelfAttestedAttributes());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(sendPresentationReq));
     }
 
     @Test
-    void testMultipleCredentials() {
-        List<PresentationRequestCredentials> cred = gson.fromJson(requestCredentialsMulti,
-                new TypeToken<Collection<PresentationRequestCredentials>>() {
-                }.getType());
+    void testMultipleMatches() {
+        UUID referentGr0 = UUID.randomUUID();
+        UUID referentGr1 = UUID.randomUUID();
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
+        SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
+                .buildRequest(ex, Map.of(
+                        "gr_0", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .referent(referentGr0).build(),
+                        "gr_1", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .referent(referentGr1).revealed(Boolean.FALSE).build()));
 
-        Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
+        Assertions.assertEquals(2, sendPresentationReq.getRequestedAttributes().size());
 
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
-        Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
+        SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
+                .get("gr_0");
+        Assertions.assertNotNull(reqAttrGr0);
+        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertTrue(reqAttrGr0.getRevealed());
 
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("masterId"));
-        Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
-                presentationRequest.getRequestedAttributes().get("masterId").getCredId());
+        SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr1 = sendPresentationReq.getRequestedAttributes()
+                .get("gr_1");
+        Assertions.assertNotNull(reqAttrGr1);
+        Assertions.assertEquals(referentGr1.toString(), reqAttrGr1.getCredId());
+        Assertions.assertFalse(reqAttrGr1.getRevealed());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
+        Assertions.assertNotNull(sendPresentationReq.getRequestedPredicates());
+        Assertions.assertNotNull(sendPresentationReq.getSelfAttestedAttributes());
+
+        // System.out.println(GsonConfig.prettyPrinter().toJson(sendPresentationReq));
     }
 
     @Test
-    void testMultipleCredentialsWithSelection() {
-        List<PresentationRequestCredentials> cred = gson.fromJson(requestCredentialsMulti,
-                new TypeToken<Collection<PresentationRequestCredentials>>() {
-                }.getType());
+    void testMultipleWithSelfAttested() {
+        UUID referentGr0 = UUID.randomUUID();
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
-        Map<PresentationRequestCredentials, Boolean> revealed = Map.of(
-                cred.get(0), Boolean.FALSE,
-                cred.get(1), Boolean.TRUE);
+        SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
+                .buildRequest(ex, Map.of(
+                        "gr_0", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .referent(referentGr0).build(),
+                        "gr_1", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .selfAttestedValue("self").build()));
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptSelected(ex, revealed);
+        Assertions.assertEquals(1, sendPresentationReq.getRequestedAttributes().size());
+        SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
+                .get("gr_0");
+        Assertions.assertNotNull(reqAttrGr0);
+        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertTrue(reqAttrGr0.getRevealed());
 
-        Assertions.assertEquals(2, presentationRequest.getRequestedAttributes().size());
+        Assertions.assertEquals(1, sendPresentationReq.getSelfAttestedAttributes().size());
+        String selfAttested = sendPresentationReq.getSelfAttestedAttributes().get("gr_1");
+        Assertions.assertNotNull(selfAttested);
+        Assertions.assertEquals("self", selfAttested);
 
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
-        Assertions.assertTrue(presentationRequest.getRequestedAttributes().get("bank_account").getRevealed());
-        Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
+        Assertions.assertNotNull(sendPresentationReq.getRequestedPredicates());
 
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("masterId"));
-        Assertions.assertFalse(presentationRequest.getRequestedAttributes().get("masterId").getRevealed());
-        Assertions.assertEquals("6348003e-e7c4-4ace-a9ce-f65fabf4d810",
-                presentationRequest.getRequestedAttributes().get("masterId").getCredId());
-
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(sendPresentationReq));
     }
 
     @Test
     void testNoMatchingCredentialFound() {
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, List.of());
+        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.buildRequest(ex, Map.of());
         Assertions.assertNotNull(presentationRequest);
     }
 
     @Test
     void testWithPredicates() {
-        List<PresentationRequestCredentials> cred = gson.fromJson(requestCredentialsPredicates,
-                new TypeToken<Collection<PresentationRequestCredentials>>() {
-                }.getType());
+        UUID referentGr0 = UUID.randomUUID();
+        UUID referentGr1 = UUID.randomUUID();
         PresentationExchangeRecord ex = gson.fromJson(presExPredicates, PresentationExchangeRecord.class);
 
-        SendPresentationRequest presentationRequest = SendPresentationRequestHelper.acceptAll(ex, cred);
+        SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
+                .buildRequest(ex, Map.of(
+                        "gr_0", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .referent(referentGr0).build(),
+                        "pr_0", SendPresentationRequestHelper.SelectedMatch.ReferentInfo.builder()
+                                .referent(referentGr1).build()));
 
-        Assertions.assertEquals(1, presentationRequest.getRequestedAttributes().size());
-        Assertions.assertNotNull(presentationRequest.getRequestedAttributes().get("bank_account"));
-        Assertions.assertEquals("ef25ac99-372e-4076-af47-19ce6cee4579",
-                presentationRequest.getRequestedAttributes().get("bank_account").getCredId());
+        Assertions.assertEquals(1, sendPresentationReq.getRequestedAttributes().size());
+        SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
+                .get("gr_0");
+        Assertions.assertNotNull(reqAttrGr0);
+        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertTrue(reqAttrGr0.getRevealed());
 
-        Assertions.assertEquals(1, presentationRequest.getRequestedPredicates().size());
-        Assertions.assertEquals("75df600d-b2da-408e-8b4c-25df81dee9f5",
-                presentationRequest.getRequestedPredicates().get("construct_partner").getCredId());
+        Assertions.assertEquals(1, sendPresentationReq.getRequestedPredicates().size());
+        SendPresentationRequest.IndyRequestedCredsRequestedPred reqPredGr0 = sendPresentationReq.getRequestedPredicates()
+                .get("pr_0");
+        Assertions.assertNotNull(reqPredGr0);
+        Assertions.assertEquals(referentGr1.toString(), reqPredGr0.getCredId());
 
-        // System.out.println(GsonConfig.prettyPrinter().toJson(presentationRequest));
+        // System.out.println(GsonConfig.prettyPrinter().toJson(sendPresentationReq));
     }
-
-    private final String requestCredentialsSingle = "  {\n" +
-            "    \"cred_info\": {\n" +
-            "      \"referent\": \"ef25ac99-372e-4076-af47-19ce6cee4579\",\n" +
-            "      \"attrs\": {\n" +
-            "        \"iban\": \"1234\",\n" +
-            "        \"bic\": \"4321\"\n" +
-            "      },\n" +
-            "      \"schema_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0\",\n" +
-            "      \"cred_def_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:3:CL:571:Bank Account V2\",\n" +
-            "      \"rev_reg_id\": null,\n" +
-            "      \"cred_rev_id\": null\n" +
-            "    },\n" +
-            "    \"interval\": null,\n" +
-            "    \"presentation_referents\": [\n" +
-            "      \"attribute_group_0\"\n" +
-            "    ]\n" +
-            "  }";
 
     private final String presExSingle = "    {\n" +
             "      \"presentation_request\": {\n" +
             "        \"name\": \"Proof request\",\n" +
             "        \"version\": \"1.0\",\n" +
             "        \"requested_attributes\": {\n" +
-            "          \"attribute_group_0\": {\n" +
+            "          \"gr_0\": {\n" +
             "            \"names\": [\n" +
             "              \"bic\",\n" +
             "              \"iban\"\n" +
@@ -160,54 +166,6 @@ public class SendPresentationRequestHelperTest {
             "      \"thread_id\": \"689e2ab1-4168-446a-902f-81ceaec16412\"\n" +
             "    }";
 
-    private final String requestCredentialsMulti = "[\n" +
-            "  {\n" +
-            "    \"cred_info\": {\n" +
-            "      \"referent\": \"6348003e-e7c4-4ace-a9ce-f65fabf4d810\",\n" +
-            "      \"attrs\": {\n" +
-            "        \"dateOfBirth\": \"mmm\",\n" +
-            "        \"dateOfExpiry\": \"lmlmmlM\",\n" +
-            "        \"nationality\": \"mmm\",\n" +
-            "        \"academicTitle\": \"mmm\",\n" +
-            "        \"addressZipCode\": \"kklln\",\n" +
-            "        \"documentType\": \"mmmm\",\n" +
-            "        \"familyName\": \"mmm\",\n" +
-            "        \"addressCity\": \"mm\",\n" +
-            "        \"birthName\": \"mmm\",\n" +
-            "        \"addressStreet\": \"mmm\",\n" +
-            "        \"placeOfBirth\": \"mmm\",\n" +
-            "        \"firstName\": \"mmm\",\n" +
-            "        \"addressCountry\": \"mmllm\"\n" +
-            "      },\n" +
-            "      \"schema_id\": \"847fVkFJiNZ4FUew9g6Zn4:2:Basis-ID:1.0\",\n" +
-            "      \"cred_def_id\": \"VoSfM3eGaPxduty34ySygw:3:CL:2899:Basis-ID-Alice\",\n" +
-            "      \"rev_reg_id\": null,\n" +
-            "      \"cred_rev_id\": null\n" +
-            "    },\n" +
-            "    \"interval\": null,\n" +
-            "    \"presentation_referents\": [\n" +
-            "      \"masterId\"\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  {\n" +
-            "    \"cred_info\": {\n" +
-            "      \"referent\": \"ef25ac99-372e-4076-af47-19ce6cee4579\",\n" +
-            "      \"attrs\": {\n" +
-            "        \"bic\": \"4321\",\n" +
-            "        \"iban\": \"1234\"\n" +
-            "      },\n" +
-            "      \"schema_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0\",\n" +
-            "      \"cred_def_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:3:CL:571:Bank Account V2\",\n" +
-            "      \"rev_reg_id\": null,\n" +
-            "      \"cred_rev_id\": null\n" +
-            "    },\n" +
-            "    \"interval\": null,\n" +
-            "    \"presentation_referents\": [\n" +
-            "      \"bank_account\"\n" +
-            "    ]\n" +
-            "  }\n" +
-            "]";
-
     private final String presExMulti = "{\n" +
             "    \"connection_id\": \"8bc1ccef-7ae3-40e9-90bf-12d3228856d3\",\n" +
             "    \"thread_id\": \"c1695bbc-7fed-4e49-b848-67f56f31b6c5\",\n" +
@@ -218,7 +176,7 @@ public class SendPresentationRequestHelperTest {
             "        \"name\": \"Proof request\",\n" +
             "        \"version\": \"1.0\",\n" +
             "        \"requested_attributes\": {\n" +
-            "            \"bank_account\": {\n" +
+            "            \"gr_0\": {\n" +
             "                \"names\": [\n" +
             "                    \"iban\"\n" +
             "                ],\n" +
@@ -228,7 +186,7 @@ public class SendPresentationRequestHelperTest {
             "                    }\n" +
             "                ]\n" +
             "            },\n" +
-            "            \"masterId\": {\n" +
+            "            \"gr_1\": {\n" +
             "                \"names\": [\n" +
             "                    \"firstName\"\n" +
             "                ],\n" +
@@ -244,49 +202,6 @@ public class SendPresentationRequestHelperTest {
             "    }\n" +
             "}";
 
-    private final String requestCredentialsPredicates = "[\n" +
-            "  {\n" +
-            "    \"cred_info\": {\n" +
-            "      \"referent\": \"ef25ac99-372e-4076-af47-19ce6cee4579\",\n" +
-            "      \"attrs\": {\n" +
-            "        \"bic\": \"4321\",\n" +
-            "        \"iban\": \"1234\"\n" +
-            "      },\n" +
-            "      \"schema_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0\",\n" +
-            "      \"cred_def_id\": \"M6Mbe3qx7vB4wpZF4sBRjt:3:CL:571:Bank Account V2\",\n" +
-            "      \"rev_reg_id\": null,\n" +
-            "      \"cred_rev_id\": null\n" +
-            "    },\n" +
-            "    \"interval\": null,\n" +
-            "    \"presentation_referents\": [\n" +
-            "      \"bank_account\"\n" +
-            "    ]\n" +
-            "  },\n" +
-            "  {\n" +
-            "    \"cred_info\": {\n" +
-            "      \"referent\": \"75df600d-b2da-408e-8b4c-25df81dee9f5\",\n" +
-            "      \"attrs\": {\n" +
-            "        \"validtill\": \"01.01.2022\",\n" +
-            "        \"name\": \"Phil\",\n" +
-            "        \"sub\": \"Sub\",\n" +
-            "        \"registration_nr\": \"Reg\",\n" +
-            "        \"address\": \"Street\",\n" +
-            "        \"company\": \"Corp\",\n" +
-            "        \"phone\": \"20\",\n" +
-            "        \"email\": \"foo@bar.com\"\n" +
-            "      },\n" +
-            "      \"schema_id\": \"HET4uocEgd9e1jbu7vhmqE:2:ConstructPartner:1.3\",\n" +
-            "      \"cred_def_id\": \"Ni2hE7fEHJ25xUBc7ZESf6:3:CL:1726:Partners\",\n" +
-            "      \"rev_reg_id\": \"Ni2hE7fEHJ25xUBc7ZESf6:4:Ni2hE7fEHJ25xUBc7ZESf6:3:CL:1726:Partners:CL_ACCUM:e3bd48ad-a546-436b-ba28-cd4ac2c9afce\",\n" +
-            "      \"cred_rev_id\": \"2\"\n" +
-            "    },\n" +
-            "    \"interval\": null,\n" +
-            "    \"presentation_referents\": [\n" +
-            "      \"construct_partner\"\n" +
-            "    ]\n" +
-            "  }\n" +
-            "]";
-
     private final String presExPredicates = "{\n" +
             "    \"thread_id\": \"673e93b5-eb38-42cf-a1e7-7861563ef7c6\",\n" +
             "    \"created_at\": \"2021-06-02 12:41:32.643524Z\",\n" +
@@ -299,7 +214,7 @@ public class SendPresentationRequestHelperTest {
             "        \"name\": \"Proof request\",\n" +
             "        \"version\": \"1.0\",\n" +
             "        \"requested_attributes\": {\n" +
-            "            \"bank_account\": {\n" +
+            "            \"gr_0\": {\n" +
             "                \"name\": \"iban\",\n" +
             "                \"restrictions\": [\n" +
             "                    {\n" +
@@ -309,7 +224,7 @@ public class SendPresentationRequestHelperTest {
             "            }\n" +
             "        },\n" +
             "        \"requested_predicates\": {\n" +
-            "            \"construct_partner\": {\n" +
+            "            \"pr_0\": {\n" +
             "                \"name\": \"phone\",\n" +
             "                \"p_type\": \">=\",\n" +
             "                \"p_value\": 20\n" +

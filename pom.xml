@@ -58,7 +58,7 @@
         <maven.surefire.version>3.0.0-M7</maven.surefire.version>
         <!-- Dependency Versions -->
         <jackson.version>2.13.4</jackson.version>
-        <junit.jupiter.api.version>5.9.0</junit.jupiter.api.version>
+        <junit.jupiter.api.version>5.9.1</junit.jupiter.api.version>
         <kotlin.version>1.7.10</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.4.22</version>
+            <version>3.4.23</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.11</version>
+            <version>1.4.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -366,7 +366,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.1.1</version>
+                <version>4.7.2.0</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -397,7 +397,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.18.0</version>
+                <version>3.19.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
@@ -430,7 +430,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.1.2</version>
+                <version>7.2.1</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>
