@@ -159,5 +159,13 @@ public class PresentProofRequest {
                 }
             }
         }
+
+        public boolean hasRequestedAttributes() {
+            return requestedAttributes != null && !requestedAttributes.isEmpty();
+        }
+
+        public boolean hasRequestedPredicates() {
+            return requestedPredicates != null && !requestedPredicates.isEmpty();
+        }
     }
 }
