@@ -49,7 +49,7 @@ public class SendPresentationRequestHelper {
                     .filter(e -> e.getValue().getReferent() != null)
                     .map(e -> Map.entry(e.getKey(), SendPresentationRequest.IndyRequestedCredsRequestedAttr
                             .builder()
-                            .credId(e.getValue().getReferent().toString())
+                            .credId(e.getValue().getReferent())
                             .revealed(e.getValue().getRevealed() != null ? e.getValue().getRevealed() : Boolean.TRUE)
                             // .timestamp let aca-py do this
                             .build()))
@@ -70,7 +70,7 @@ public class SendPresentationRequestHelper {
                     .filter(e -> predicateGroupNames.contains(e.getKey()))
                     .map(e -> Map.entry(e.getKey(), SendPresentationRequest.IndyRequestedCredsRequestedPred
                             .builder()
-                            .credId(e.getValue().getReferent().toString())
+                            .credId(e.getValue().getReferent())
                             // .timestamp let aca-py do this
                             .build()))
                     .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -102,7 +102,7 @@ public class SendPresentationRequestHelper {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class ReferentInfo {
-            private UUID referent;
+            private String referent;
             private Boolean revealed;
             private String selfAttestedValue;
         }

@@ -21,7 +21,7 @@ public class SendPresentationRequestHelperTest {
 
     @Test
     void testSingleMatch() {
-        UUID referent = UUID.randomUUID();
+        String referent = UUID.randomUUID().toString();
         PresentationExchangeRecord ex = gson.fromJson(presExSingle, PresentationExchangeRecord.class);
 
         SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
@@ -33,7 +33,7 @@ public class SendPresentationRequestHelperTest {
         SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttr = sendPresentationReq.getRequestedAttributes()
                 .get("gr_0");
         Assertions.assertNotNull(reqAttr);
-        Assertions.assertEquals(referent.toString(), reqAttr.getCredId());
+        Assertions.assertEquals(referent, reqAttr.getCredId());
         Assertions.assertTrue(reqAttr.getRevealed());
         Assertions.assertNotNull(sendPresentationReq.getRequestedPredicates());
         Assertions.assertNotNull(sendPresentationReq.getSelfAttestedAttributes());
@@ -43,8 +43,8 @@ public class SendPresentationRequestHelperTest {
 
     @Test
     void testMultipleMatches() {
-        UUID referentGr0 = UUID.randomUUID();
-        UUID referentGr1 = UUID.randomUUID();
+        String referentGr0 = UUID.randomUUID().toString();
+        String referentGr1 = UUID.randomUUID().toString();
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
         SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
@@ -59,13 +59,13 @@ public class SendPresentationRequestHelperTest {
         SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
                 .get("gr_0");
         Assertions.assertNotNull(reqAttrGr0);
-        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertEquals(referentGr0, reqAttrGr0.getCredId());
         Assertions.assertTrue(reqAttrGr0.getRevealed());
 
         SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr1 = sendPresentationReq.getRequestedAttributes()
                 .get("gr_1");
         Assertions.assertNotNull(reqAttrGr1);
-        Assertions.assertEquals(referentGr1.toString(), reqAttrGr1.getCredId());
+        Assertions.assertEquals(referentGr1, reqAttrGr1.getCredId());
         Assertions.assertFalse(reqAttrGr1.getRevealed());
 
         Assertions.assertNotNull(sendPresentationReq.getRequestedPredicates());
@@ -76,7 +76,7 @@ public class SendPresentationRequestHelperTest {
 
     @Test
     void testMultipleWithSelfAttested() {
-        UUID referentGr0 = UUID.randomUUID();
+        String referentGr0 = UUID.randomUUID().toString();
         PresentationExchangeRecord ex = gson.fromJson(presExMulti, PresentationExchangeRecord.class);
 
         SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
@@ -90,7 +90,7 @@ public class SendPresentationRequestHelperTest {
         SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
                 .get("gr_0");
         Assertions.assertNotNull(reqAttrGr0);
-        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertEquals(referentGr0, reqAttrGr0.getCredId());
         Assertions.assertTrue(reqAttrGr0.getRevealed());
 
         Assertions.assertEquals(1, sendPresentationReq.getSelfAttestedAttributes().size());
@@ -112,8 +112,8 @@ public class SendPresentationRequestHelperTest {
 
     @Test
     void testWithPredicates() {
-        UUID referentGr0 = UUID.randomUUID();
-        UUID referentGr1 = UUID.randomUUID();
+        String referentGr0 = UUID.randomUUID().toString();
+        String referentGr1 = UUID.randomUUID().toString();
         PresentationExchangeRecord ex = gson.fromJson(presExPredicates, PresentationExchangeRecord.class);
 
         SendPresentationRequest sendPresentationReq = SendPresentationRequestHelper
@@ -127,14 +127,14 @@ public class SendPresentationRequestHelperTest {
         SendPresentationRequest.IndyRequestedCredsRequestedAttr reqAttrGr0 = sendPresentationReq.getRequestedAttributes()
                 .get("gr_0");
         Assertions.assertNotNull(reqAttrGr0);
-        Assertions.assertEquals(referentGr0.toString(), reqAttrGr0.getCredId());
+        Assertions.assertEquals(referentGr0, reqAttrGr0.getCredId());
         Assertions.assertTrue(reqAttrGr0.getRevealed());
 
         Assertions.assertEquals(1, sendPresentationReq.getRequestedPredicates().size());
         SendPresentationRequest.IndyRequestedCredsRequestedPred reqPredGr0 = sendPresentationReq.getRequestedPredicates()
                 .get("pr_0");
         Assertions.assertNotNull(reqPredGr0);
-        Assertions.assertEquals(referentGr1.toString(), reqPredGr0.getCredId());
+        Assertions.assertEquals(referentGr1, reqPredGr0.getCredId());
 
         // System.out.println(GsonConfig.prettyPrinter().toJson(sendPresentationReq));
     }
