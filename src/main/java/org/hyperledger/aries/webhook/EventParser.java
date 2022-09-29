@@ -149,6 +149,7 @@ public class EventParser {
         return result;
     }
 
+    @Deprecated
     public static Set<Entry<String, JsonElement>> getRevealedAttributes(@NonNull String json) {
         JsonElement revealedAttrs = JsonParser
                 .parseString(json)
@@ -163,6 +164,7 @@ public class EventParser {
                 ;
     }
 
+    @Deprecated
     private static JsonElement getRevealedAttrGroups(@NonNull String json) {
         return JsonParser
                 .parseString(json)
@@ -171,6 +173,7 @@ public class EventParser {
         ;
     }
 
+    @Deprecated
     private static Identifier getIdentifierAtIndex(@NonNull String json, int index) {
         JsonObject identifier = JsonParser
                 .parseString(json)
@@ -205,30 +208,6 @@ public class EventParser {
                 result.add(a);
             }
         });
-    }
-
-    public static Map<String, PresentationExchangeRecord.RevealedAttributeGroup> getValuesByAttributeGroup(@NonNull String json) {
-        Map<String, PresentationExchangeRecord.RevealedAttributeGroup> result = new HashMap<>();
-        final JsonElement groupsJson = getRevealedAttrGroups(json);
-        if (groupsJson == null) { // not an groupsJson group
-            return result;
-        }
-        JsonObject attrGroups = groupsJson.getAsJsonObject();
-        final Set<String> attrGroupNames = attrGroups.keySet();
-        attrGroupNames.forEach(name -> {
-            PresentationExchangeRecord.RevealedAttributeGroup
-                    .RevealedAttributeGroupBuilder groupBuilder = PresentationExchangeRecord.RevealedAttributeGroup.builder();
-
-            final Set<Entry<String, JsonElement>> attrs = attrGroups
-                    .get(name).getAsJsonObject().get("values").getAsJsonObject().entrySet();
-            attrs.forEach(e -> groupBuilder.revealedAttribute(e.getKey(), e.getValue().getAsJsonObject().get("raw").getAsString()));
-
-            int subProofIndex = attrGroups.get(name).getAsJsonObject().get("sub_proof_index").getAsInt();
-            groupBuilder.identifier(getIdentifierAtIndex(json, subProofIndex));
-
-            result.put(name, groupBuilder.build());
-        });
-        return result;
     }
 
     public static Map<String, Object> getValuesByRevealedAttributes(@NonNull String json) {

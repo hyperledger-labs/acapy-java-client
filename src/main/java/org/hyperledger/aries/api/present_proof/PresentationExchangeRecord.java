@@ -121,7 +121,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return revealed attributes mapped to their group
      */
     public Map<String, RevealedAttributeGroup> findRevealedAttributeGroups() {
-        return EventParser.getValuesByAttributeGroup(presentation.toString());
+        return RequestedProofParser.collectRevealedGroups(presentation);
     }
 
     /**
@@ -158,7 +158,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * </pre>
      * @return revealed attribute to value mapping
      */
-    public Map<String, RevealedAttribute> findRevealedAttributedFull() {
+    public Map<String, RevealedAttribute> findRevealedAttributesFull() {
         return EventParser.getValuesByRevealedAttributesFull(presentation.toString());
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -85,7 +85,7 @@ public class EventParserTest {
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         Map<String, Object> attrs = p.findRevealedAttributes();
         Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
-        PresentationExchangeRecord.RevealedAttribute city = p.findRevealedAttributedFull().get("4_city_uuid");
+        PresentationExchangeRecord.RevealedAttribute city = p.findRevealedAttributesFull().get("4_city_uuid");
         Assertions.assertEquals("Zürich", city.getRaw());
     }
 
