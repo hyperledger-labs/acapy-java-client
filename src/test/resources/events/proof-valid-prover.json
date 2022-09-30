@@ -349,7 +349,7 @@
                     }
                 },
                 "1_bic_uuid": {
-                    "sub_proof_index": 1,
+                    "sub_proof_index": 0,
                     "values": {
                         "bic2": {
                             "raw": "PBNK",

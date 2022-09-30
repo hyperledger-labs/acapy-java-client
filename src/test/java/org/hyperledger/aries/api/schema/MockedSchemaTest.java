@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.schema.SchemaSendResponse.Schema;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ class MockedSchemaTest extends MockedTestBase {
 
     @Test
     void testSendSchema() throws Exception {
-        String json = loader.load("files/schemas/schemaSendResults.json");
+        String json = FileLoader.load("files/schemas/schemaSendResults.json");
 
         server.enqueue(new MockResponse().setBody(json));
 
@@ -44,7 +45,7 @@ class MockedSchemaTest extends MockedTestBase {
 
     @Test
     void testGetSchemaById() throws Exception {
-        String json = loader.load("files/schemas/schemaGetResults.json");
+        String json = FileLoader.load("files/schemas/schemaGetResults.json");
 
         server.enqueue(new MockResponse().setBody(json));
 

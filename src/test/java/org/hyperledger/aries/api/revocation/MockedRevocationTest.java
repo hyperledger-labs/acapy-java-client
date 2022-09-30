@@ -11,15 +11,14 @@ import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.acy_py.generated.model.IssuerRevRegRecord;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
 class MockedRevocationTest extends MockedTestBase {
 
-    private final String response = loader.load("files/revocation/revRegCreateResponse.json");
-    private final String parsed = loader.load("files/revocation/revRegCreateResponseJava.json");
+    private final String response = FileLoader.load("files/revocation/revRegCreateResponse.json");
+    private final String parsed = FileLoader.load("files/revocation/revRegCreateResponseJava.json");
 
     @Test
     void testCreateRevReg() throws Exception {
@@ -36,7 +35,7 @@ class MockedRevocationTest extends MockedTestBase {
 
     @Test
     void testGetregistriesCreated() throws Exception {
-        String reqCreated = loader.load("files/revocation/revRegsCreated.json");
+        String reqCreated = FileLoader.load("files/revocation/revRegsCreated.json");
 
         server.enqueue(new MockResponse().setBody(reqCreated));
 
@@ -67,8 +66,8 @@ class MockedRevocationTest extends MockedTestBase {
 
     @Test
     void testGetActiveRegistry() throws Exception {
-        String respActive = loader.load("files/revocation/revRegCreateResponseStateActive.json");
-        String parsedActive = loader.load("files/revocation/revRegCreateResponseStateActiveJava.json");
+        String respActive = FileLoader.load("files/revocation/revRegCreateResponseStateActive.json");
+        String parsedActive = FileLoader.load("files/revocation/revRegCreateResponseStateActiveJava.json");
 
         server.enqueue(new MockResponse().setBody(respActive));
 
