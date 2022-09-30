@@ -182,6 +182,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         @Singular
         private Map<String, String> revealedAttributes;
         private Identifier identifier;
+        private RequestedProofType type;
     }
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
@@ -189,6 +190,18 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private Integer subProofIndex;
         private String raw;
         private String encoded;
+    }
+
+    @AllArgsConstructor @Getter
+    public enum RequestedProofType {
+        REVEALED_ATTRS("revealed_attrs"),
+        REVEALED_ATTR_GROUPS("revealed_attr_groups"),
+        SELF_ATTESTED_ATTRS("self_attested_attrs"),
+        UNREVEALED_ATTRS("unrevealed_attrs"),
+        PREDICATES("predicates")
+        ;
+
+        private final String name;
     }
 
     @Data @NoArgsConstructor
