@@ -20,9 +20,6 @@ import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord.Reveal
 import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.pojo.PojoProcessor;
 
-import java.lang.reflect.Field;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -185,7 +182,6 @@ public class RequestedProofParser {
     public static <T> T from(
             @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest, @NonNull Class<T> type) {
 
-        T result = PojoProcessor.getInstance(type);
         Map<String, RevealedAttributeGroup> revealedAttrGroups = collectRevealedGroups(presentation);
         Map<String, String> nameToValue;
 
@@ -196,21 +192,7 @@ public class RequestedProofParser {
             nameToValue = aggregateAll(presentation, presentationRequest);
         }
 
-        Set<Field> fields = PojoProcessor.fields(type);
-        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-            for (Field field : fields) {
-                String fieldName = PojoProcessor.fieldName(field);
-                String fieldValue = nameToValue.get(fieldName);
-                try {
-                    field.setAccessible(true);
-                    field.set(result, fieldValue);
-                } catch (IllegalAccessException | IllegalArgumentException e) {
-                    log.error("Could not set value of field: {} to: {}", fieldName, fieldValue, e);
-                }
-            }
-            return null; // nothing to return
-        });
-        return result;
+        return PojoProcessor.setValues(type, nameToValue);
     }
 
     public static Map<String, Object> from(

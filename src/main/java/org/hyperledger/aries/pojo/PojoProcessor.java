@@ -16,7 +16,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -75,5 +77,25 @@ public class PojoProcessor {
             }
             return result;
         });
+    }
+
+    public static <T> T setValues(@NonNull Class<T> type, @NonNull Map<String, String> values) {
+        T result = PojoProcessor.getInstance(type);
+
+        Set<Field> fields = PojoProcessor.fields(type);
+        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+            for(Field field: fields) {
+                String fieldName = PojoProcessor.fieldName(field);
+                String fieldValue = values.get(fieldName);
+                try {
+                    field.setAccessible(true);
+                    field.set(result, fieldValue);
+                } catch (IllegalAccessException | IllegalArgumentException e) {
+                    log.error("Could not set value of field: {} to: {}", fieldName, fieldValue, e);
+                }
+            }
+            return null; // nothing to return
+        });
+        return result;
     }
 }
