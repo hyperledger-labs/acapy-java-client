@@ -127,8 +127,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      *     },
      *     "bank-account-03": {
      *         "revealed_attributes": {
-     *             "bic": "1234",
-     *             "iban": "4321"
+     *             "bic": "1234"
      *         },
      *         "type": "SELF_ATTESTED_ATTRS",
      *         "identifier": {}
