@@ -182,13 +182,14 @@ public class RequestedProofParser {
     public static <T> T from(
             @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest, @NonNull Class<T> type) {
 
-        Map<String, RevealedAttributeGroup> revealedAttrGroups = collectRevealedGroups(presentation);
         Map<String, String> nameToValue;
 
         if (PojoProcessor.hasAttributeGroupName(type)) {
-            RevealedAttributeGroup group = revealedAttrGroups.get(PojoProcessor.getAttributeGroupName(type));
+            Map<String, RevealedAttributeGroup> allGroups = collectAll(presentation, presentationRequest);
+            RevealedAttributeGroup group = allGroups.get(PojoProcessor.getAttributeGroupName(type));
             nameToValue = group != null ? group.getRevealedAttributes() : Map.of();
         } else {
+            // brute force
             nameToValue = aggregateAll(presentation, presentationRequest);
         }
 

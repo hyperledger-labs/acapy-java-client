@@ -8,13 +8,18 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.google.gson.Gson;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord.RevealedAttributeGroup;
 import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.pojo.AttributeGroupName;
+import org.hyperledger.aries.pojo.AttributeName;
 import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
+import java.util.Set;
 
 public class RequestedProofParserTest {
 
@@ -97,6 +102,45 @@ public class RequestedProofParserTest {
         Assertions.assertEquals("1234", group.getRevealedAttributes().get("iban"));
         Assertions.assertEquals(PresentationExchangeRecord.RequestedProofType.SELF_ATTESTED_ATTRS, group.getType());
         Assertions.assertNull(group.getIdentifier());
+    }
+
+    @Test
+    void testCollectValuesFromSet() {
+        String revealedAttr = FileLoader.load("events/proof-valid-verifier.json");
+        PresentationExchangeRecord ex = gson.fromJson(revealedAttr, PresentationExchangeRecord.class);
+        Map<String, Object> from = ex.from(Set.of("city", "street"));
+        Assertions.assertEquals("Test Corp Campus", from.get("street"));
+        Assertions.assertEquals("Zürich", from.get("city"));
+    }
+
+    @Test
+    void testCollectValueFromAnnotatedClass() {
+        String revealedAttr = FileLoader.load("events/proof-valid-verifier.json");
+        PresentationExchangeRecord ex = gson.fromJson(revealedAttr, PresentationExchangeRecord.class);
+        CountryNamed valueWrapped = ex.from(CountryNamed.class);
+        Assertions.assertEquals("Switzerland", valueWrapped.getValue());
+    }
+
+    @Test
+    void testCollectValueFromPojo() {
+        String revealedAttr = FileLoader.load("events/proof-valid-verifier.json");
+        PresentationExchangeRecord ex = gson.fromJson(revealedAttr, PresentationExchangeRecord.class);
+        CountrySimple valueWrapped = ex.from(CountrySimple.class);
+        Assertions.assertEquals("Switzerland", valueWrapped.getCountry());
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AttributeGroupName("7_country_uuid")
+    public static final class CountryNamed {
+        @AttributeName("country")
+        private String value;
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static final class CountrySimple {
+        private String country;
     }
 
     private final String revealedGroups = "{\n" +

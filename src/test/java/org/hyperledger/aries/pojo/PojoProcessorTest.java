@@ -37,6 +37,8 @@ class PojoProcessorTest {
 
     @Test
     void testGetAttributeGroupName() {
+        assertTrue(PojoProcessor.hasAttributeGroupName(ConcreteExample.class));
+
         String group = PojoProcessor.getAttributeGroupName(ConcreteExample.class);
         assertNotNull(group);
         assertEquals("group_01", group);
