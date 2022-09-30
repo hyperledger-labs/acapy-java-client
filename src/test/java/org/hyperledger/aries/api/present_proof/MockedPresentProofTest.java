@@ -16,6 +16,7 @@ import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -30,14 +31,14 @@ public class MockedPresentProofTest extends MockedTestBase {
 
     @Test
     void testParsePresentationResponse() {
-        String json = loader.load("files/present-proof-request-response.json");
+        String json = FileLoader.load("files/present-proof-request-response.json");
         PresentationExchangeRecord response = gson.fromJson(json, PresentationExchangeRecord.class);
         assertEquals("23243302324860431744596330413752559589", response.getPresentationRequest().getNonce());
     }
 
     @Test
     void testGetPresentationExchangeRecords() throws Exception {
-        String json = loader.load("files/present-proof-records.json");
+        String json = FileLoader.load("files/present-proof-records.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<PresentationExchangeRecord>> res = ac.presentProofRecords();
@@ -49,7 +50,7 @@ public class MockedPresentProofTest extends MockedTestBase {
 
     @Test
     void testGetPresentationExchangeRecord() throws Exception {
-        String json = loader.load("files/present-proof-record.json");
+        String json = FileLoader.load("files/present-proof-record.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<PresentationExchangeRecord> res = ac.presentProofRecordsGetById("mock");
@@ -61,7 +62,7 @@ public class MockedPresentProofTest extends MockedTestBase {
 
     @Test
     void testGetPresentProofRecordsCredentials() throws Exception {
-        String json = loader.load("files/present-proof-records-credentials.json");
+        String json = FileLoader.load("files/present-proof-records-credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
         Optional<List<PresentationRequestCredentials>> credentials = ac
@@ -90,7 +91,7 @@ public class MockedPresentProofTest extends MockedTestBase {
         module.addSerializer(JsonObject.class, new JsonObjectSerializer());
         mapper.registerModule(module);
 
-        String json = loader.load("files/present-proof-records.json");
+        String json = FileLoader.load("files/present-proof-records.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<PresentationExchangeRecord>> res = ac.presentProofRecords();

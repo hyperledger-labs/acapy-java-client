@@ -7,19 +7,15 @@
  */
 package org.hyperledger.aries;
 
+import com.google.gson.Gson;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockWebServer;
 import org.hyperledger.aries.config.GsonConfig;
-import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.google.gson.Gson;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockWebServer;
-
 public abstract class MockedTestBase {
 
-    protected FileLoader loader = FileLoader.newLoader();
     protected Gson gson = GsonConfig.defaultConfig();
     protected Gson pretty = GsonConfig.prettyPrinter();
 

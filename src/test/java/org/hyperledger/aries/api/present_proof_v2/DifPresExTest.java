@@ -17,12 +17,11 @@ import org.junit.jupiter.api.Test;
 
 public class DifPresExTest {
 
-    private final FileLoader loader = FileLoader.newLoader();
     private final Gson gson = GsonConfig.defaultConfig();
 
     @Test
     void testParsePresentationRequest() {
-        String json = loader.load("files/present-proof-v2/verifier-done-dif.json");
+        String json = FileLoader.load("files/present-proof-v2/verifier-done-dif.json");
         V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
 
         Assertions.assertTrue(v2.isDif());
@@ -40,7 +39,7 @@ public class DifPresExTest {
 
     @Test
     void testParsePresentation() {
-        String json = loader.load("files/present-proof-v2/verifier-proposal-received.json");
+        String json = FileLoader.load("files/present-proof-v2/verifier-proposal-received.json");
         V20PresExRecord v2 = gson.fromJson(json, V20PresExRecord.class);
 
         V20PresProposalByFormat.DIFProofProposal presDef = v2.resolveDifPresentationProposal();

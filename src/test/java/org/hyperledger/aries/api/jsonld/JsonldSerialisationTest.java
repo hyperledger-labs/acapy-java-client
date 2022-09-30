@@ -16,14 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class JsonldSerialisationTest {
 
-    private final FileLoader loader = FileLoader.newLoader();
-
     @Test
     void testGsonSerialisation() {
-        final String json = loader.load("json-ld/verifiableCredentialUnsigned.json");
+        final String json = FileLoader.load("json-ld/verifiableCredentialUnsigned.json");
         final VerifiableIndyCredential vc = GsonConfig.defaultConfig().fromJson(json, VerifiableIndyCredential.class);
         String vcString = GsonConfig.prettyPrinter().toJson(vc);
         assertEquals(json, vcString);
     }
-
 }

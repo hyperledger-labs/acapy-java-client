@@ -9,6 +9,7 @@ package org.hyperledger.aries.api.connection;
 
 import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testGetConnections() throws Exception {
-        String json = loader.load("files/connections.json");
+        String json = FileLoader.load("files/connections.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<ConnectionRecord>> c = ac.connections();
@@ -29,7 +30,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testGetConnectionsFiltered() throws Exception {
-        String json = loader.load("files/connectionsActive.json");
+        String json = FileLoader.load("files/connectionsActive.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<ConnectionRecord>> c = ac
@@ -40,7 +41,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testGetConnectionIds() throws Exception {
-        String json = loader.load("files/connections.json");
+        String json = FileLoader.load("files/connections.json");
         server.enqueue(new MockResponse().setBody(json));
 
         List<String> c = ac.connectionIds();
@@ -49,7 +50,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testGetActiveConnectionIds() throws Exception {
-        String json = loader.load("files/connectionsActive.json");
+        String json = FileLoader.load("files/connectionsActive.json");
         server.enqueue(new MockResponse().setBody(json));
 
         List<String> c = ac.connectionIds(ConnectionFilter.builder().state(ConnectionState.ACTIVE).build());
@@ -58,7 +59,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testCreateInvitation() throws Exception {
-        String json = loader.load("files/invitation.json");
+        String json = FileLoader.load("files/invitation.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<CreateInvitationResponse> inv = ac
@@ -69,7 +70,7 @@ class MockedConnectionTest extends MockedTestBase {
 
     @Test
     void testReceiveInvitation() throws Exception {
-        String json = loader.load("files/connection.json");
+        String json = FileLoader.load("files/connection.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<ConnectionRecord> con = ac.connectionsReceiveInvitation(new ReceiveInvitationRequest(), null);

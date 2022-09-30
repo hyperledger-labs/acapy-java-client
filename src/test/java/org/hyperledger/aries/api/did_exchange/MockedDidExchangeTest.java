@@ -10,6 +10,7 @@ package org.hyperledger.aries.api.did_exchange;
 import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class MockedDidExchangeTest extends MockedTestBase {
 
     @Test
     void testCreateRequest() throws Exception {
-        String json = loader.load("files/didexchange/didexchange-create-request.json");
+        String json = FileLoader.load("files/didexchange/didexchange-create-request.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<ConnectionRecord> c = ac.didExchangeCreateRequest(DidExchangeCreateRequestFilter

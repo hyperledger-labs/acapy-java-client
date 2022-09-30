@@ -9,6 +9,7 @@ package org.hyperledger.aries.api.issue_credential_v2;
 
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.credentials.Credential;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ public class V2ToV1IndyCredentialConverterTest extends MockedTestBase {
 
     @Test
     void testSimpleV2ToV1() {
-        String json = loader.load("files/issue-credential-v2/holder-icv2-done.json");
+        String json = FileLoader.load("files/issue-credential-v2/holder-icv2-done.json");
         V20CredExRecord v20CredExRecord = gson.fromJson(json, V20CredExRecord.class);
         V2ToV1IndyCredentialConverter c = V2ToV1IndyCredentialConverter.INSTANCE();
         Optional<Credential> credential = c.toV1Credential(v20CredExRecord);

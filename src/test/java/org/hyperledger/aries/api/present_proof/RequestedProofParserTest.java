@@ -35,7 +35,7 @@ public class RequestedProofParserTest {
 
     @Test
     void testCollectRevealedAttributes() {
-        String revealedAttr = FileLoader.newLoader().load("events/proof-valid-verifier");
+        String revealedAttr = FileLoader.load("events/proof-valid-verifier");
         PresentationExchangeRecord ex = gson.fromJson(revealedAttr, PresentationExchangeRecord.class);
         Map<String, RevealedAttributeGroup> revealed = RequestedProofParser
                 .collectAll(ex.getPresentation(), ex.getPresentationRequest());
@@ -50,7 +50,7 @@ public class RequestedProofParserTest {
 
     @Test
     void testCollectRevealedAttributesValues() {
-        String revealedAttr = FileLoader.newLoader().load("events/proof-valid-verifier");
+        String revealedAttr = FileLoader.load("events/proof-valid-verifier");
         PresentationExchangeRecord ex = gson.fromJson(revealedAttr, PresentationExchangeRecord.class);
         Map<String, String> revealed = RequestedProofParser.collectRevealedAttributesValues(ex.getPresentation(),
                 ex.getPresentationRequest());
