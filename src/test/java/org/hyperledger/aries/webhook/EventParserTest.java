@@ -83,10 +83,8 @@ public class EventParserTest {
     void testProofPresentationGetRevealedAttributes() {
         String json = loader.load("events/proof-valid-verifier.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
-        Map<String, Object> attrs = p.findRevealedAttributes();
-        Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
-        PresentationExchangeRecord.RevealedAttribute city = p.findRevealedAttributesFull().get("4_city_uuid");
-        Assertions.assertEquals("Zürich", city.getRaw());
+        Map<String, String> attrs = p.findRevealedAttributes();
+        Assertions.assertEquals("Zürich", attrs.get("city"));
     }
 
     @Test

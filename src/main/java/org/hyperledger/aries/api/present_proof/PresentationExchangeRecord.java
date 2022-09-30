@@ -48,7 +48,10 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject presentation;
 
-    // part of the websocket message
+    /**
+     * Copy of the identifiers that are part of the presentation,
+     * only set in the websocket message
+     */
     private List<Identifier> identifiers;
 
     private transient ExchangeVersion version;
@@ -100,6 +103,48 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     }
 
     /**
+     * Collects all revealed attributes, revealed attribute groups, predicates, unrevealed attributes
+     * and self attested attributes into one common representation
+     * <pre>{@code
+     * {
+     *     "bank-account-01": {
+     *         "revealed_attributes": {
+     *             "bic": "1234",
+     *             "iban": "4321"
+     *        },
+     *         "type": "REVEALED_ATTR_GROUPS",
+     *         "identifier": {
+     *             "schema_id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0",
+     *             "cred_def_id": "F6dB7dMVHUQSC64qemnBi7:3:CL:571:mybank",
+     *             "timestamp": "1628609220"
+     *         }
+     *     },
+     *     "bank-account-02": {
+     *         "revealed_attributes": {},
+     *         "type": "PREDICATES",
+     *         "identifier": {
+     *             "schema_id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0"
+     *         }
+     *     },
+     *     "bank-account-03": {
+     *         "revealed_attributes": {
+     *             "bic": "1234",
+     *             "iban": "4321"
+     *         },
+     *         "type": "SELF_ATTESTED_ATTRS",
+     *         "identifier": {}
+     *     }
+     * }
+     * }
+     * </pre>
+     * @return returns all revealed attributes, revealed attribute groups, predicates,
+     * unrevealed attributes and self attested attributes.
+     */
+    public Map<String, RevealedAttributeGroup> collectAll() {
+        return RequestedProofParser.collectAll(presentation, presentationRequest);
+    }
+
+    /**
      * Low level extractor that maps revealed attributes and values to their group
      * <pre>{@code
      * {
@@ -125,7 +170,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     }
 
     /**
-     * Low level extractor that returns a map of all revealed attributes and their values.
+     * Low level extractor that returns a flat map of all revealed attributes and their values.
      * <pre>{@code
      * {
      *     "iban": "4321",
@@ -135,31 +180,8 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * </pre>
      * @return revealed attribute to value mapping
      */
-    public Map<String, Object> findRevealedAttributes() {
-        return EventParser.getValuesByRevealedAttributes(presentation.toString());
-    }
-
-    /**
-     * Low level extractor that returns a map of all revealed attributes with the all their information.
-     * This is useful for all cases where access to the sub proof index is needed to extract the matching identifier
-     * from the identifiers list.
-     * <pre>{@code
-     * "iban": {
-     *     "sub_proof_index": 0,
-     *     "raw": "4321",
-     *     "encoded": "26574491753489267293487534742481789407179815570291479106142274998003667228256"
-     * },
-     * "bic": {
-     *     "sub_proof_index": 0,
-     *     "raw": "1234",
-     *     "encoded": "95644933709556837616493211320418578774074706673436554047751118609009445904569"
-     * }
-     * }
-     * </pre>
-     * @return revealed attribute to value mapping
-     */
-    public Map<String, RevealedAttribute> findRevealedAttributesFull() {
-        return EventParser.getValuesByRevealedAttributesFull(presentation.toString());
+    public Map<String, String> findRevealedAttributes() {
+        return RequestedProofParser.collectRevealedAttributesValues(presentation, presentationRequest);
     }
 
     @Override

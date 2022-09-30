@@ -68,12 +68,7 @@ public class RequestedProofParser {
 
     public static Map<String, RevealedAttributeGroup> collectRevealedAttributes(
             @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
-        return getRevealedAttributes(presentation)
-                .stream()
-                .collect(Collectors
-                        .toMap(
-                                Map.Entry::getKey,
-                                v -> gson.fromJson(v.getValue(), RevealedAttribute.class)))
+        return collectRevealedAttributes(presentation)
                 .entrySet()
                 .stream()
                 .map(e ->
@@ -85,6 +80,27 @@ public class RequestedProofParser {
                             .build()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
                 ;
+    }
+
+    public static Map<String, RevealedAttribute> collectRevealedAttributes(@NonNull JsonObject presentation) {
+        return getRevealedAttributes(presentation)
+                .stream()
+                .collect(Collectors
+                        .toMap(
+                                Map.Entry::getKey,
+                                v -> gson.fromJson(v.getValue(), RevealedAttribute.class)))
+                ;
+    }
+
+    public static Map<String, String> collectRevealedAttributesValues(
+            @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
+        return collectRevealedAttributes(presentation)
+                .entrySet()
+                .stream()
+                .map(e -> Map.entry(
+                        findAttributeNameForRevealedAttribute(e.getKey(), presentationRequest),
+                        e.getValue().getRaw()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     public static Map<String, RevealedAttributeGroup> collectPredicates(@NonNull JsonObject presentation) {
