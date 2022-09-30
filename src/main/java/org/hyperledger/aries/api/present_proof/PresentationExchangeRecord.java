@@ -23,7 +23,6 @@ import org.hyperledger.aries.api.issue_credential_v1.ThreadId;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
-import org.hyperledger.aries.webhook.EventParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return Instance of the POJO with set properties
      */
     public <T> T from(@NonNull Class<T> type) {
-        return EventParser.from(presentation.toString(), type);
+        return RequestedProofParser.from(presentation, presentationRequest, type);
     }
 
     /**
@@ -99,7 +98,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return Map containing the attribute names and their corresponding values
      */
     public Map<String, Object> from(@NonNull Set<String> names) {
-        return EventParser.from(presentation.toString(), names);
+        return RequestedProofParser.from(presentation, presentationRequest, names);
     }
 
     /**

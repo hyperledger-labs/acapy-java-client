@@ -11,18 +11,22 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hyperledger.aries.api.present_proof.PresentProofRequest.ProofRequest;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord.RequestedProofType;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord.RevealedAttribute;
 import org.hyperledger.aries.api.present_proof.PresentationExchangeRecord.RevealedAttributeGroup;
 import org.hyperledger.aries.config.GsonConfig;
+import org.hyperledger.aries.pojo.PojoProcessor;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class RequestedProofParser {
 
     private static final Gson gson = GsonConfig.defaultConfig();
@@ -104,7 +108,6 @@ public class RequestedProofParser {
     }
 
     public static Map<String, RevealedAttributeGroup> collectPredicates(@NonNull JsonObject presentation) {
-        // TODO collect and map p_value and name from presentation request?
         return collectIdentifiers(presentation, RequestedProofType.PREDICATES);
     }
 
@@ -142,6 +145,19 @@ public class RequestedProofParser {
         ;
     }
 
+    private static PresentationExchangeRecord.Identifier getIdentifierAtIndex(@NonNull JsonObject presentation, int index) {
+        JsonElement identifier = presentation
+                .getAsJsonArray("identifiers")
+                .get(index);
+        return gson.fromJson(identifier, PresentationExchangeRecord.Identifier.class);
+    }
+
+    private static JsonObject getRequestedProof(@NonNull JsonObject presentation) {
+        return presentation
+                .getAsJsonObject("requested_proof")
+                ;
+    }
+
     private static Set<Map.Entry<String, JsonElement>> getRevealedAttributes(@NonNull JsonObject presentation) {
         JsonObject revealedAttrs = getByType(presentation, RequestedProofType.REVEALED_ATTRS);
         return revealedAttrs == null ? Set.of() : revealedAttrs.entrySet();
@@ -154,21 +170,71 @@ public class RequestedProofParser {
                 : null;
     }
 
-    private static JsonObject getRequestedProof(@NonNull JsonObject presentation) {
-        return presentation
-                .getAsJsonObject("requested_proof")
-                ;
-    }
-
-    private static PresentationExchangeRecord.Identifier getIdentifierAtIndex(@NonNull JsonObject presentation, int index) {
-        JsonElement identifier = presentation
-                .getAsJsonArray("identifiers")
-                .get(index);
-        return gson.fromJson(identifier, PresentationExchangeRecord.Identifier.class);
-    }
-
     private static String findAttributeNameForRevealedAttribute(
             @NonNull String key, @NonNull ProofRequest presentationRequest) {
         return presentationRequest.getRequestedAttributes().get(key).getName();
+    }
+
+    /**
+     * Converts the present_proof.presentation into an instance of the provided class type:
+     * @param <T> The class type
+     * @param presentation present_proof.presentation
+     * @param type POJO instance
+     * @return Instantiated type with all matching properties set
+     */
+    public static <T> T from(
+            @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest, @NonNull Class<T> type) {
+
+        T result = PojoProcessor.getInstance(type);
+        Map<String, RevealedAttributeGroup> revealedAttrGroups = collectRevealedGroups(presentation);
+        Map<String, String> nameToValue;
+
+        if (PojoProcessor.hasAttributeGroupName(type)) {
+            RevealedAttributeGroup group = revealedAttrGroups.get(PojoProcessor.getAttributeGroupName(type));
+            nameToValue = group != null ? group.getRevealedAttributes() : Map.of();
+        } else {
+            nameToValue = aggregateAll(presentation, presentationRequest);
+        }
+
+        Set<Field> fields = PojoProcessor.fields(type);
+        AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
+            for (Field field : fields) {
+                String fieldName = PojoProcessor.fieldName(field);
+                String fieldValue = nameToValue.get(fieldName);
+                try {
+                    field.setAccessible(true);
+                    field.set(result, fieldValue);
+                } catch (IllegalAccessException | IllegalArgumentException e) {
+                    log.error("Could not set value of field: {} to: {}", fieldName, fieldValue, e);
+                }
+            }
+            return null; // nothing to return
+        });
+        return result;
+    }
+
+    public static Map<String, Object> from(
+            @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest, @NonNull Set<String> names) {
+
+        Map<String, Object> result = new HashMap<>();
+        Map<String, String> all = aggregateAll(presentation, presentationRequest);
+
+        names.forEach(name -> {
+            String value = all.get(name);
+            if (StringUtils.isNotEmpty(value)) {
+                result.put(name, value);
+            }
+        });
+        return result;
+    }
+
+    private static Map<String, String> aggregateAll(
+            @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
+        Map<String, RevealedAttributeGroup> all = collectAll(presentation, presentationRequest);
+        return all.values().stream()
+                .filter(revealedAttributeGroup -> revealedAttributeGroup.getRevealedAttributes() != null)
+                .map(revealedAttributeGroup -> revealedAttributeGroup.getRevealedAttributes().entrySet())
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

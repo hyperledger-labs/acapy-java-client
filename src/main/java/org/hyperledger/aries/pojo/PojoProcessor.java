@@ -59,6 +59,10 @@ public class PojoProcessor {
         return group;
     }
 
+    public static boolean hasAttributeGroupName(@NonNull Class<?> type) {
+        return type.isAnnotationPresent(AttributeGroupName.class);
+    }
+
     public static @Nonnull <T> T getInstance(@NonNull Class<T> type) {
         return AccessController.doPrivileged((PrivilegedAction<T>) () -> {
             T result;
