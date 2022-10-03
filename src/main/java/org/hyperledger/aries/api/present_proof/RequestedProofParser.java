@@ -33,7 +33,7 @@ public class RequestedProofParser {
         Map<String, PresentationExchangeRecord.RevealedAttributeGroup> res = new LinkedHashMap<>();
         res.putAll(collectRevealedGroups(presentation));
         res.putAll(collectRevealedAttributes(presentation, presentationRequest));
-        res.putAll(collectPredicates(presentation));
+        res.putAll(collectPredicates(presentation, presentationRequest));
         res.putAll(collectUnrevealedAttributes(presentation));
         res.putAll(collectSelfAttestedAttributes(presentation, presentationRequest));
         return res;
@@ -104,8 +104,14 @@ public class RequestedProofParser {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    public static Map<String, RevealedAttributeGroup> collectPredicates(@NonNull JsonObject presentation) {
-        return collectIdentifiers(presentation, RequestedProofType.PREDICATES);
+    public static Map<String, RevealedAttributeGroup> collectPredicates(
+            @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
+        Map<String, RevealedAttributeGroup> predicates = collectIdentifiers(presentation, RequestedProofType.PREDICATES);
+        predicates.entrySet().forEach(e -> {
+            ProofRequest.ProofRequestedPredicates pred = presentationRequest.getRequestedPredicates().get(e.getKey());
+            e.getValue().setRequestedPredicates(pred);
+        });
+        return predicates;
     }
 
     public static Map<String, RevealedAttributeGroup> collectUnrevealedAttributes(@NonNull JsonObject presentation) {
