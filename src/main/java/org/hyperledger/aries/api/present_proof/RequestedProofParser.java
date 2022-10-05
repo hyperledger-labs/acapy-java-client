@@ -107,9 +107,11 @@ public class RequestedProofParser {
     public static Map<String, RevealedAttributeGroup> collectPredicates(
             @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
         Map<String, RevealedAttributeGroup> predicates = collectIdentifiers(presentation, RequestedProofType.PREDICATES);
-        predicates.entrySet().forEach(e -> {
-            ProofRequest.ProofRequestedPredicates pred = presentationRequest.getRequestedPredicates().get(e.getKey());
-            e.getValue().setRequestedPredicates(pred);
+        predicates.forEach((key, value) -> {
+            if (presentationRequest.getRequestedPredicates() != null) {
+                ProofRequest.ProofRequestedPredicates pred = presentationRequest.getRequestedPredicates().get(key);
+                value.setRequestedPredicates(pred);
+            }
         });
         return predicates;
     }
