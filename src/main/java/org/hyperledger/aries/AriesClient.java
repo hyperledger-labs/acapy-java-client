@@ -515,17 +515,15 @@ public class AriesClient extends BaseClient {
     // Credentials- Holder Credential Management
     // ----------------------------------------------------
 
-    // TODO no model, create a couple of credentials with mime types and see what happens
     /**
      * Get attribute MIME types from wallet
-     * @param credentialId credential id
-     * @return ???
+     * @param credentialId credential id (referent)
+     * @return map of attribute names and their associated mime-types
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<Object> credentialMimeTypes(@NonNull String credentialId)
-            throws IOException {
+    public Optional<Map<String, String>> credentialMimeTypes(@NonNull String credentialId) throws IOException {
         Request req = buildGet(url + "/credential/mime-types/" + credentialId);
-        return call(req, Object.class);
+        return getWrapped(raw(req), "results", MAP_TYPE);
     }
 
     /**
