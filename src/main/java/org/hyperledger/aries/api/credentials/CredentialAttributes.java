@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Data @Builder
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class CredentialAttributes {
 
     @SerializedName(value = "mime-type")
