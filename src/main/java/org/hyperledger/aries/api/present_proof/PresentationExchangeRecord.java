@@ -20,6 +20,7 @@ import org.hyperledger.acy_py.generated.model.AttachDecorator;
 import org.hyperledger.acy_py.generated.model.IndyProofReqPredSpec;
 import org.hyperledger.aries.api.ExchangeVersion;
 import org.hyperledger.aries.api.issue_credential_v1.ThreadId;
+import org.hyperledger.aries.api.present_proof.PresentProofRequest.ProofRequest.ProofRequestedPredicates;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
@@ -201,6 +202,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     public static class RevealedAttributeGroup {
         @Singular
         private Map<String, String> revealedAttributes;
+        private ProofRequestedPredicates requestedPredicates;
         private Identifier identifier;
         private RequestedProofType type;
     }
