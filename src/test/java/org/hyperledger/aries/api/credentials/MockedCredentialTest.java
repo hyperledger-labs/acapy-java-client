@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 class MockedCredentialTest extends MockedTestBase {
@@ -117,6 +118,17 @@ class MockedCredentialTest extends MockedTestBase {
         Assertions.assertTrue(exchanges.isPresent());
         Assertions.assertEquals(2, exchanges.get().size());
         Assertions.assertEquals(CredentialExchangeState.PROPOSAL_RECEIVED, exchanges.get().get(0).getState());
+    }
+
+    @Test
+    void testGetCredentialMimeTypes() throws Exception {
+        server.enqueue(new MockResponse().setBody("{\n" +
+                "  \"results\": {\n" +
+                "    \"bic\": \"application/json\"\n" +
+                "  }\n" +
+                "}"));
+        Map<String, String> c = ac.credentialMimeTypes("referent").orElseThrow();
+        Assertions.assertEquals("application/json", c.get("bic"));
     }
 
 }
