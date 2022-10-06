@@ -103,7 +103,15 @@ public class V1CredentialExchange extends BaseCredExRecord {
         private List<AttachDecorator> offersAttach = new ArrayList<>();
     }
 
-    public Optional<List<CredentialAttributes>> findAttributesInCredentialOfferDict() {
+    public Optional<Map<String, String>> findAttributesInCredentialOfferDict() {
+        Map<String, String> attributesMap = findAttributesInCredentialOfferDictList().orElse(List.of())
+                .stream()
+                .collect(Collectors.toMap(CredentialAttributes::getName, CredentialAttributes::getValue));
+
+        return Optional.of(attributesMap);
+    }
+
+    public Optional<List<CredentialAttributes>> findAttributesInCredentialOfferDictList() {
         Optional<List<CredentialAttributes>> result = Optional.empty();
         if (credentialOfferDict != null && credentialOfferDict.credentialPreview != null) {
             List<CredentialAttributes> attributes = credentialOfferDict.getCredentialPreview().getAttributes();

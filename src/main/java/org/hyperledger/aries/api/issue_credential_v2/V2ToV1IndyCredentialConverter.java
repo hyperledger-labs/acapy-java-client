@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.hyperledger.aries.api.credentials.Credential;
-import org.hyperledger.aries.api.credentials.CredentialAttributes;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
 import org.hyperledger.aries.config.GsonConfig;
 
@@ -95,8 +94,7 @@ public class V2ToV1IndyCredentialConverter {
                                     Map.Entry::getKey,
                                     v -> getRawValue(v.getValue())));
                     Credential v1Credential = gson.fromJson(typeIndy, Credential.class);
-                    // TODO: Pass mime-type
-                    v1Credential.setAttrs(CredentialAttributes.fromMap(raw));
+                    v1Credential.setAttrs(raw);
                     return Optional.of(v1Credential);
                 }
             }
