@@ -66,7 +66,7 @@ import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
 import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
-import org.hyperledger.aries.api.present_proof.PresentationRequest;
+import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
 import org.hyperledger.aries.api.present_proof_v2.V20PresExRecord;
@@ -515,17 +515,15 @@ public class AriesClient extends BaseClient {
     // Credentials- Holder Credential Management
     // ----------------------------------------------------
 
-    // TODO no model, create a couple of credentials with mime types and see what happens
     /**
      * Get attribute MIME types from wallet
-     * @param credentialId credential id
-     * @return ???
+     * @param credentialId credential id (referent)
+     * @return map of attribute names and their associated mime-types
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<Object> credentialMimeTypes(@NonNull String credentialId)
-            throws IOException {
+    public Optional<Map<String, String>> credentialMimeTypes(@NonNull String credentialId) throws IOException {
         Request req = buildGet(url + "/credential/mime-types/" + credentialId);
-        return call(req, Object.class);
+        return getWrapped(raw(req), "results", MAP_TYPE);
     }
 
     /**
@@ -1976,14 +1974,14 @@ public class AriesClient extends BaseClient {
     /**
      * Sends a proof presentation
      * @param presentationExchangeId the presentation exchange id
-     * @param presentationRequest {@link PresentationRequest}
+     * @param sendPresentationRequest {@link SendPresentationRequest}
      * @return {@link PresentationExchangeRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<PresentationExchangeRecord> presentProofRecordsSendPresentation(@NonNull String presentationExchangeId,
-        @NonNull PresentationRequest presentationRequest) throws IOException {
+        @NonNull SendPresentationRequest sendPresentationRequest) throws IOException {
         Request req = buildPost(url + "/present-proof/records/" + presentationExchangeId + "/send-presentation",
-                presentationRequest);
+                sendPresentationRequest);
         return call(req, PresentationExchangeRecord.class);
     }
 

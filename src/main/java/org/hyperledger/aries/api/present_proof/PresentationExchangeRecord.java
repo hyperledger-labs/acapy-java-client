@@ -8,21 +8,28 @@
 package org.hyperledger.aries.api.present_proof;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hyperledger.acy_py.generated.model.AttachDecorator;
+import org.hyperledger.acy_py.generated.model.IndyProofReqPredSpec;
 import org.hyperledger.aries.api.ExchangeVersion;
+import org.hyperledger.aries.api.issue_credential_v1.ThreadId;
+import org.hyperledger.aries.api.present_proof.PresentProofRequest.ProofRequest.ProofRequestedPredicates;
 import org.hyperledger.aries.api.serializer.JsonObjectDeserializer;
 import org.hyperledger.aries.api.serializer.JsonObjectSerializer;
 import org.hyperledger.aries.pojo.AttributeName;
-import org.hyperledger.aries.webhook.EventParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -31,21 +38,20 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
 public class PresentationExchangeRecord extends BasePresExRecord {
 
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject presentationProposalDict;
+    private PresentationProposalDict presentationProposalDict;
 
     private PresentProofRequest.ProofRequest presentationRequest;
 
-    @JsonSerialize(using = JsonObjectSerializer.class)
-    @JsonDeserialize(using = JsonObjectDeserializer.class)
-    private JsonObject presentationRequestDict;
+    private PresentationRequestDict presentationRequestDict;
 
     @JsonSerialize(using = JsonObjectSerializer.class)
     @JsonDeserialize(using = JsonObjectDeserializer.class)
     private JsonObject presentation;
 
-    // part of the websocket message
+    /**
+     * Copy of the identifiers that are part of the presentation,
+     * only set in the websocket message
+     */
     private List<Identifier> identifiers;
 
     private transient ExchangeVersion version;
@@ -82,7 +88,7 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return Instance of the POJO with set properties
      */
     public <T> T from(@NonNull Class<T> type) {
-        return EventParser.from(presentation.toString(), type);
+        return RequestedProofParser.from(presentation, presentationRequest, type);
     }
 
     /**
@@ -93,7 +99,48 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return Map containing the attribute names and their corresponding values
      */
     public Map<String, Object> from(@NonNull Set<String> names) {
-        return EventParser.from(presentation.toString(), names);
+        return RequestedProofParser.from(presentation, presentationRequest, names);
+    }
+
+    /**
+     * Collects all revealed attributes, revealed attribute groups, predicates, unrevealed attributes
+     * and self attested attributes into one common representation
+     * <pre>{@code
+     * {
+     *     "bank-account-01": {
+     *         "revealed_attributes": {
+     *             "bic": "1234",
+     *             "iban": "4321"
+     *        },
+     *         "type": "REVEALED_ATTR_GROUPS",
+     *         "identifier": {
+     *             "schema_id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0",
+     *             "cred_def_id": "F6dB7dMVHUQSC64qemnBi7:3:CL:571:mybank",
+     *             "timestamp": "1628609220"
+     *         }
+     *     },
+     *     "bank-account-02": {
+     *         "revealed_attributes": {},
+     *         "type": "PREDICATES",
+     *         "identifier": {
+     *             "schema_id": "M6Mbe3qx7vB4wpZF4sBRjt:2:bank_account:1.0"
+     *         }
+     *     },
+     *     "bank-account-03": {
+     *         "revealed_attributes": {
+     *             "bic": "1234"
+     *         },
+     *         "type": "SELF_ATTESTED_ATTRS",
+     *         "identifier": {}
+     *     }
+     * }
+     * }
+     * </pre>
+     * @return returns all revealed attributes, revealed attribute groups, predicates,
+     * unrevealed attributes and self attested attributes.
+     */
+    public Map<String, RevealedAttributeGroup> collectAll() {
+        return RequestedProofParser.collectAll(presentation, presentationRequest);
     }
 
     /**
@@ -118,11 +165,11 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * @return revealed attributes mapped to their group
      */
     public Map<String, RevealedAttributeGroup> findRevealedAttributeGroups() {
-        return EventParser.getValuesByAttributeGroup(presentation.toString());
+        return RequestedProofParser.collectRevealedGroups(presentation);
     }
 
     /**
-     * Low level extractor that returns a map of all revealed attributes and their values.
+     * Low level extractor that returns a flat map of all revealed attributes and their values.
      * <pre>{@code
      * {
      *     "iban": "4321",
@@ -132,31 +179,14 @@ public class PresentationExchangeRecord extends BasePresExRecord {
      * </pre>
      * @return revealed attribute to value mapping
      */
-    public Map<String, Object> findRevealedAttributes() {
-        return EventParser.getValuesByRevealedAttributes(presentation.toString());
+    public Map<String, String> findRevealedAttributes() {
+        return RequestedProofParser.collectRevealedAttributesValues(presentation, presentationRequest);
     }
 
-    /**
-     * Low level extractor that returns a map of all revealed attributes with the all their information.
-     * This is useful for all cases where access to the sub proof index is needed to extract the matching identifier
-     * from the identifiers list.
-     * <pre>{@code
-     * "iban": {
-     *     "sub_proof_index": 0,
-     *     "raw": "4321",
-     *     "encoded": "26574491753489267293487534742481789407179815570291479106142274998003667228256"
-     * },
-     * "bic": {
-     *     "sub_proof_index": 0,
-     *     "raw": "1234",
-     *     "encoded": "95644933709556837616493211320418578774074706673436554047751118609009445904569"
-     * }
-     * }
-     * </pre>
-     * @return revealed attribute to value mapping
-     */
-    public Map<String, RevealedAttribute> findRevealedAttributedFull() {
-        return EventParser.getValuesByRevealedAttributesFull(presentation.toString());
+    @Override
+    @JsonIgnore
+    public ExchangeVersion getVersion() {
+        return version == null ? ExchangeVersion.V1 : version;
     }
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
@@ -172,7 +202,9 @@ public class PresentationExchangeRecord extends BasePresExRecord {
     public static class RevealedAttributeGroup {
         @Singular
         private Map<String, String> revealedAttributes;
+        private ProofRequestedPredicates requestedPredicates;
         private Identifier identifier;
+        private RequestedProofType type;
     }
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
@@ -182,9 +214,106 @@ public class PresentationExchangeRecord extends BasePresExRecord {
         private String encoded;
     }
 
-    @Override
-    @JsonIgnore
-    public ExchangeVersion getVersion() {
-        return version == null ? ExchangeVersion.V1 : version;
+    @AllArgsConstructor @Getter
+    public enum RequestedProofType {
+        REVEALED_ATTRS("revealed_attrs"),
+        REVEALED_ATTR_GROUPS("revealed_attr_groups"),
+        SELF_ATTESTED_ATTRS("self_attested_attrs"),
+        UNREVEALED_ATTRS("unrevealed_attrs"),
+        PREDICATES("predicates")
+        ;
+
+        private final String name;
+    }
+
+    @Data @NoArgsConstructor
+    @JsonPropertyOrder({"id", "type", "comment", "presentationProposal"})
+    public static class PresentationProposalDict {
+
+        @JsonProperty("@id")
+        @SerializedName("@id")
+        private String id;
+
+        @JsonProperty("@type")
+        @SerializedName("@type")
+        private String type;
+
+        private String comment;
+
+        private IndyPresPreview presentationProposal;
+
+        public Set<String> collectProposalReferents() {
+            return presentationProposal != null ? presentationProposal.getAttributes().stream()
+                    .map(IndyPresPreview.IndyPresAttrSpec::getReferent)
+                    .collect(Collectors.toSet()) : Set.of();
+        }
+
+        @Data @NoArgsConstructor
+        @JsonPropertyOrder({"type", "attributes", "predicates"})
+        public static class IndyPresPreview {
+
+            @JsonProperty("@type")
+            @SerializedName("@type")
+            private String type;
+
+            private List<IndyPresAttrSpec> attributes = new ArrayList<>();
+
+            private List<IndyPresPredSpec> predicates = new ArrayList<>();
+
+            @Data @NoArgsConstructor
+            @JsonPropertyOrder({"credDefId", "mimeType", "name", "referent", "value"})
+            public static class IndyPresAttrSpec {
+
+                @JsonProperty("cred_def_id")
+                @SerializedName("cred_def_id")
+                private String credDefId;
+
+                @JsonProperty("mime-type")
+                @SerializedName("mime-type")
+                private String mimeType;
+
+                private String name;
+
+                private String referent;
+
+                private String value;
+            }
+
+            @Data @NoArgsConstructor
+            @JsonPropertyOrder({"credDefId", "name", "predicate", "threshold"})
+            public static class IndyPresPredSpec {
+
+                @JsonProperty("cred_def_id")
+                @SerializedName("cred_def_id")
+                private String credDefId;
+
+                private String name;
+
+                private IndyProofReqPredSpec.PTypeEnum predicate;
+
+                private Integer threshold;
+            }
+        }
+    }
+
+    @Data @NoArgsConstructor
+    public static class PresentationRequestDict {
+        @JsonProperty("@id")
+        @SerializedName("@id")
+        private String id;
+
+        @JsonProperty("@type")
+        @SerializedName("@type")
+        private String type;
+
+        private String comment;
+
+        @JsonProperty("~thread")
+        @SerializedName("~thread")
+        private ThreadId threadId;
+
+        @JsonProperty("request_presentations~attach")
+        @SerializedName("request_presentations~attach")
+        private List<AttachDecorator> requestPresentationAttach;
     }
 }

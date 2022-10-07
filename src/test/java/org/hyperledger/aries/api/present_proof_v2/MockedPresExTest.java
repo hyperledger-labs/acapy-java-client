@@ -10,6 +10,7 @@ package org.hyperledger.aries.api.present_proof_v2;
 import okhttp3.mockwebserver.MockResponse;
 import org.hyperledger.aries.MockedTestBase;
 import org.hyperledger.aries.api.jsonld.VerifiableCredential;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,7 @@ public class MockedPresExTest extends MockedTestBase {
 
     @Test
     void testGetMatchingDifCredentials() throws Exception {
-        String json = loader.load("files/present-proof-v2/matching-dif-credential.json");
+        String json = FileLoader.load("files/present-proof-v2/matching-dif-credential.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final List<VerifiableCredential.VerifiableCredentialMatch> res = ac.presentProofV2RecordsCredentialsDif("1", null)

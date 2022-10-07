@@ -15,10 +15,12 @@ import org.hyperledger.aries.api.credential_definition.CredentialDefinition.Cred
 import org.hyperledger.aries.api.issue_credential_v1.CredentialExchangeState;
 import org.hyperledger.aries.api.issue_credential_v1.IssueCredentialRecordsFilter;
 import org.hyperledger.aries.api.issue_credential_v1.V1CredentialExchange;
+import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 class MockedCredentialTest extends MockedTestBase {
@@ -41,7 +43,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetCredentialDefinition() throws Exception {
-        String json = loader.load("files/credentialDefinition.json");
+        String json = FileLoader.load("files/credentialDefinition.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<CredentialDefinitionGetResult> cd = ac.credentialDefinitionsGetById("mocked");
@@ -51,7 +53,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetCredential() throws Exception {
-        String json = loader.load("files/credential.json");
+        String json = FileLoader.load("files/credential.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<Credential> credential = ac.credential("mock");
@@ -61,7 +63,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetAllCredentials() throws Exception {
-        String json = loader.load("files/credentials.json");
+        String json = FileLoader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<Credential>> credentials = ac.credentials();
@@ -71,7 +73,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetCredentialsBySchemaId() throws Exception {
-        String json = loader.load("files/credentials.json");
+        String json = FileLoader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
         Optional<List<Credential>> credentials = ac.credentials(CredentialFilter.schemaId(schemaId));
@@ -86,7 +88,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetCredentialsByCredentialDefinitionId() throws Exception {
-        String json = loader.load("files/credentials.json");
+        String json = FileLoader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final Optional<List<Credential>> credentials = ac
@@ -97,7 +99,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetCredentialsByCredentialDefinitionIdAndSchemaId() throws Exception {
-        String json = loader.load("files/credentials.json");
+        String json = FileLoader.load("files/credentials.json");
         server.enqueue(new MockResponse().setBody(json));
 
         final List<String> credentials = ac.credentialIds(CredentialFilter
@@ -108,7 +110,7 @@ class MockedCredentialTest extends MockedTestBase {
 
     @Test
     void testGetIssueCredentialRecords() throws Exception {
-        String json = loader.load("files/issueCredentialRecords");
+        String json = FileLoader.load("files/issueCredentialRecords");
         server.enqueue(new MockResponse().setBody(json));
 
         Optional<List<V1CredentialExchange>> exchanges = ac.issueCredentialRecords(
@@ -116,6 +118,17 @@ class MockedCredentialTest extends MockedTestBase {
         Assertions.assertTrue(exchanges.isPresent());
         Assertions.assertEquals(2, exchanges.get().size());
         Assertions.assertEquals(CredentialExchangeState.PROPOSAL_RECEIVED, exchanges.get().get(0).getState());
+    }
+
+    @Test
+    void testGetCredentialMimeTypes() throws Exception {
+        server.enqueue(new MockResponse().setBody("{\n" +
+                "  \"results\": {\n" +
+                "    \"bic\": \"application/json\"\n" +
+                "  }\n" +
+                "}"));
+        Map<String, String> c = ac.credentialMimeTypes("referent").orElseThrow();
+        Assertions.assertEquals("application/json", c.get("bic"));
     }
 
 }

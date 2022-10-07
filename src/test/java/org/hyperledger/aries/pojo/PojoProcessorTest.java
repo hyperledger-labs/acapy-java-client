@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -37,6 +37,8 @@ class PojoProcessorTest {
 
     @Test
     void testGetAttributeGroupName() {
+        assertTrue(PojoProcessor.hasAttributeGroupName(ConcreteExample.class));
+
         String group = PojoProcessor.getAttributeGroupName(ConcreteExample.class);
         assertNotNull(group);
         assertEquals("group_01", group);

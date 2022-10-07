@@ -27,7 +27,6 @@ class JsonldTest extends IntegrationTestBase {
 
     private final Gson gson = GsonConfig.defaultConfig();
     private final Gson pretty = GsonConfig.prettyPrinter();
-    private final FileLoader loader = FileLoader.newLoader();
 
     @Test
     void testSignAndVerifyVC() throws Exception {
@@ -69,7 +68,7 @@ class JsonldTest extends IntegrationTestBase {
         // first create a local did
         DID localDid = createLocalDid();
 
-        String json = loader.load("json-ld/verifiablePresentationUnsigned.json");
+        String json = FileLoader.load("json-ld/verifiablePresentationUnsigned.json");
         VerifiablePresentation<VerifiableIndyCredential> vp = gson.fromJson(
                 json, VerifiablePresentation.INDY_CREDENTIAL_TYPE);
 

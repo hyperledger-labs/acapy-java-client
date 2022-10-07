@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -28,19 +28,18 @@ import java.util.Set;
 
 public class EventParserTest {
 
-    private final FileLoader loader = FileLoader.newLoader();
     private final EventParser parser = new EventParser();
 
     @Test
     void testParseConnectionEvent() {
-        String json = loader.load("events/connection-active.json");
+        String json = FileLoader.load("events/connection-active.json");
         ConnectionRecord conn = parser.parseValueSave(json, ConnectionRecord.class).orElseThrow();
         Assertions.assertEquals(ConnectionState.ACTIVE, conn.getState());
     }
 
     @Test
     void testParseIssuedCredential() {
-        String json = loader.load("events/issue-credential.json");
+        String json = FileLoader.load("events/issue-credential.json");
         V1CredentialExchange ex = parser.parseValueSave(json, V1CredentialExchange.class).orElseThrow();
         Assertions.assertEquals(CredentialExchangeRole.HOLDER, ex.getRole());
         Assertions.assertNotNull(ex.getCredentialDefinitionId());
@@ -49,7 +48,7 @@ public class EventParserTest {
 
     @Test
     void testParseProofPresentationVerifier() {
-        String json = loader.load("events/proof-valid-verifier.json");
+        String json = FileLoader.load("events/proof-valid-verifier.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         Assertions.assertEquals(PresentationExchangeRole.VERIFIER, p.getRole());
         Masterdata md = p.from(Masterdata.class);
@@ -63,7 +62,7 @@ public class EventParserTest {
 
     @Test
     void testParseProofPresentationVerifierMap() {
-        String json = loader.load("events/proof-valid-verifier.json");
+        String json = FileLoader.load("events/proof-valid-verifier.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         Map<String, Object> md = p.from(Set.of("country", "city"));
         Assertions.assertEquals("Switzerland", md.get("country"));
@@ -72,7 +71,7 @@ public class EventParserTest {
 
     @Test
     void testProofPresentationGetRevealedAttributeGroups() {
-        String json = loader.load("events/proof-valid-verifier-attr-group.json");
+        String json = FileLoader.load("events/proof-valid-verifier-attr-group.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         Map<String, PresentationExchangeRecord.RevealedAttributeGroup> revealedAttributesByGroup = p.findRevealedAttributeGroups();
         System.out.println(GsonConfig.prettyPrinter().toJson(revealedAttributesByGroup));
@@ -81,17 +80,15 @@ public class EventParserTest {
 
     @Test
     void testProofPresentationGetRevealedAttributes() {
-        String json = loader.load("events/proof-valid-verifier.json");
+        String json = FileLoader.load("events/proof-valid-verifier.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
-        Map<String, Object> attrs = p.findRevealedAttributes();
-        Assertions.assertEquals("Zürich", attrs.get("4_city_uuid"));
-        PresentationExchangeRecord.RevealedAttribute city = p.findRevealedAttributedFull().get("4_city_uuid");
-        Assertions.assertEquals("Zürich", city.getRaw());
+        Map<String, String> attrs = p.findRevealedAttributes();
+        Assertions.assertEquals("Zürich", attrs.get("city"));
     }
 
     @Test
     void testParseProofPresentationProver() {
-        String json = loader.load("events/proof-valid-prover.json");
+        String json = FileLoader.load("events/proof-valid-prover.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         Assertions.assertEquals(PresentationExchangeRole.PROVER, p.getRole());
         final BankAccount ba = p.from(BankAccount.class);
@@ -102,7 +99,7 @@ public class EventParserTest {
 
     @Test
     void testParseProofPresentationProverMap() {
-        String json = loader.load("events/proof-valid-prover.json");
+        String json = FileLoader.load("events/proof-valid-prover.json");
         PresentationExchangeRecord p = parser.parsePresentProof(json).orElseThrow();
         final Map<String, Object> ba = p.from(Set.of("iban", "bic"));
         Assertions.assertNotNull(ba);
@@ -112,7 +109,7 @@ public class EventParserTest {
 
     @Test
     void testParseDiscoverFeature() {
-        String jsonIn = loader.load("events/discover-feature-event.json");
+        String jsonIn = FileLoader.load("events/discover-feature-event.json");
         DiscoverFeatureEvent discoverFeatureEvent = parser.parseValueSave(jsonIn, DiscoverFeatureEvent.class).orElseThrow();
         String jsonOut = GsonConfig.prettyPrinter().toJson(discoverFeatureEvent);
         Assertions.assertEquals(jsonIn, jsonOut);
@@ -120,7 +117,7 @@ public class EventParserTest {
 
     @Test
     void testParseProblemReportDescriptionObject() {
-        String jsonIn = loader.load("events/problem-report-object.json");
+        String jsonIn = FileLoader.load("events/problem-report-object.json");
         ProblemReport problemReport = parser.parseValueSave(jsonIn, ProblemReport.class).orElseThrow();
         Assertions.assertEquals("dummy", problemReport.resolveProblemDescription());
         Assertions.assertEquals("message-parse-failure", problemReport.resolveProblemCode());
@@ -128,7 +125,7 @@ public class EventParserTest {
 
     @Test
     void testParseProblemReportDescriptionString() {
-        String jsonIn = loader.load("events/problem-report-string.json");
+        String jsonIn = FileLoader.load("events/problem-report-string.json");
         ProblemReport problemReport = parser.parseValueSave(jsonIn, ProblemReport.class).orElseThrow();
         Assertions.assertEquals("dummy", problemReport.resolveProblemDescription());
         Assertions.assertNull(problemReport.resolveProblemCode());
