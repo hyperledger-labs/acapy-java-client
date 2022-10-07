@@ -22,6 +22,7 @@ import org.hyperledger.aries.api.out_of_band.AttachmentDef;
 import org.hyperledger.aries.api.out_of_band.BaseOOBInvitationHelper;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,23 +52,19 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
     public CredentialFreeOffer buildV1Indy(
             @NonNull String credentialDefinitionId,
             @NonNull Map<String, String> document) {
-        CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
-        try{
-            // issue-credential/create in conjunction with oob invitation attachment
-            // step 1 - create credential offer
-            V1CredentialFreeOfferRequest create = V1CredentialFreeOfferRequest.builder()
-                    .autoIssue(Boolean.TRUE)
-                    .autoRemove(Boolean.TRUE)
-                    .credDefId(credentialDefinitionId)
-                    .credentialPreview(new CredentialPreview(CredentialAttributes.fromMap(document)))
-                    .build();
-            V1CredentialExchange ex = acaPy.issueCredentialCreateOffer(create).orElseThrow();
-            // step 2 - create out-of-band invitation with attached credential offer
-            setAndBuildInvitation(r, ex);
-        } catch (IOException e) {
-            throw new AriesNetworkException(NETWORK_ERROR);
-        }
-        return r.build();
+        return getCredentialFreeOffer(credentialDefinitionId, CredentialAttributes.fromMap(document));
+    }
+
+    /**
+     * Build for v1/indy
+     * @param credentialDefinitionId credential definition id
+     * @param document list of credential attributes
+     * @return {@link CredentialFreeOffer}
+     */
+    public CredentialFreeOffer buildV1Indy(
+            @NonNull String credentialDefinitionId,
+            @NonNull List<CredentialAttributes> document) {
+        return getCredentialFreeOffer(credentialDefinitionId, document);
     }
 
     /**
@@ -79,28 +76,19 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
     public CredentialFreeOffer buildV2Indy(
             @NonNull String credentialDefinitionId,
             @NonNull Map<String, String> document) {
-        CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
-        try {
-            V2CredentialExchangeFree create = V2CredentialExchangeFree.builder()
-                .autoIssue(Boolean.TRUE)
-                .autoRemove(Boolean.TRUE)
-                .filter(V2CredentialExchangeFree.V20CredFilter.builder()
-                        .indy(V20CredFilterIndy.builder()
-                                .credDefId(credentialDefinitionId)
-                                .build())
-                        .build())
-                .credentialPreview(V2CredentialExchangeFree.V2CredentialPreview.builder()
-                        .attributes(CredentialAttributes.fromMap(document))
-                        .build())
-                .build();
-            V1CredentialExchange ex = acaPy.issueCredentialV2CreateOffer(create)
-                    .map(V2ToV1IndyCredentialConverter::toV1Offer)
-                    .orElseThrow();
-            setAndBuildInvitation(r, ex);
-        } catch (IOException e) {
-            throw new AriesNetworkException(NETWORK_ERROR);
-        }
-        return r.build();
+        return getCredentialFreeOfferV2(credentialDefinitionId, CredentialAttributes.fromMap(document));
+    }
+
+    /**
+     * Build for v2/indy
+     * @param credentialDefinitionId credential definition id
+     * @param document list of credential attributes
+     * @return {@link CredentialFreeOffer}
+     */
+    public CredentialFreeOffer buildV2Indy(
+            @NonNull String credentialDefinitionId,
+            @NonNull List<CredentialAttributes> document) {
+        return getCredentialFreeOfferV2(credentialDefinitionId, document);
     }
 
     /**
@@ -110,6 +98,7 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
      */
     public CredentialFreeOffer buildDif(@NonNull V2CredentialExchangeFree.LDProofVCDetail vc) {
         CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
+
         try {
             V2CredentialExchangeFree create = V2CredentialExchangeFree.builder()
                     .autoIssue(Boolean.TRUE)
@@ -119,6 +108,52 @@ public class CredentialFreeOfferHelper extends BaseOOBInvitationHelper {
                             .build())
                     .build();
             V20CredExRecord ex = acaPy.issueCredentialV2CreateOffer(create).orElseThrow();
+            setAndBuildInvitation(r, ex);
+        } catch (IOException e) {
+            throw new AriesNetworkException(NETWORK_ERROR);
+        }
+        return r.build();
+    }
+
+    private CredentialFreeOffer getCredentialFreeOffer(@NonNull String credentialDefinitionId, @NonNull List<CredentialAttributes> document) {
+        CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
+
+        try{
+            // issue-credential/create in conjunction with oob invitation attachment
+            // step 1 - create credential offer
+            V1CredentialFreeOfferRequest create = V1CredentialFreeOfferRequest.builder()
+                    .autoIssue(Boolean.TRUE)
+                    .autoRemove(Boolean.TRUE)
+                    .credDefId(credentialDefinitionId)
+                    .credentialPreview(new CredentialPreview(document))
+                    .build();
+            V1CredentialExchange ex = acaPy.issueCredentialCreateOffer(create).orElseThrow();
+            // step 2 - create out-of-band invitation with attached credential offer
+            setAndBuildInvitation(r, ex);
+        } catch (IOException e) {
+            throw new AriesNetworkException(NETWORK_ERROR);
+        }
+        return r.build();
+    }
+
+    private CredentialFreeOffer getCredentialFreeOfferV2(@NonNull String credentialDefinitionId, @NonNull List<CredentialAttributes> document) {
+        CredentialFreeOffer.CredentialFreeOfferBuilder r = CredentialFreeOffer.builder();
+        try {
+            V2CredentialExchangeFree create = V2CredentialExchangeFree.builder()
+                    .autoIssue(Boolean.TRUE)
+                    .autoRemove(Boolean.TRUE)
+                    .filter(V2CredentialExchangeFree.V20CredFilter.builder()
+                            .indy(V20CredFilterIndy.builder()
+                                    .credDefId(credentialDefinitionId)
+                                    .build())
+                            .build())
+                    .credentialPreview(V2CredentialExchangeFree.V2CredentialPreview.builder()
+                            .attributes(document)
+                            .build())
+                    .build();
+            V1CredentialExchange ex = acaPy.issueCredentialV2CreateOffer(create)
+                    .map(V2ToV1IndyCredentialConverter::toV1Offer)
+                    .orElseThrow();
             setAndBuildInvitation(r, ex);
         } catch (IOException e) {
             throw new AriesNetworkException(NETWORK_ERROR);

@@ -32,12 +32,6 @@ public class CredentialAttributes {
     private String name;
     private String value;
 
-    public CredentialAttributes(String name, String value) {
-        super();
-        this.name = name;
-        this.value = value;
-    }
-
     public static <T> List<CredentialAttributes> from(@NonNull T instance) {
         List<CredentialAttributes> result = new ArrayList<>();
         Field[] fields = instance.getClass().getDeclaredFields();
@@ -60,7 +54,8 @@ public class CredentialAttributes {
                         } catch (IllegalAccessException | IllegalArgumentException e) {
                             log.error("Could not get value of field: {}", fieldName, e);
                         }
-                        result.add(new CredentialAttributes(fieldName, fieldValue));
+
+                        result.add(CredentialAttributes.builder().name(fieldName).value(fieldValue).build());
                     }
                 }
             }
@@ -72,13 +67,13 @@ public class CredentialAttributes {
     public static List<CredentialAttributes> from(@NonNull Map<String, Object> values) {
         List<CredentialAttributes> result = new ArrayList<>();
         // TODO check if complex object
-        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v.toString())));
+        values.forEach( (k,v) -> result.add(CredentialAttributes.builder().name(k).value(v.toString()).build()));
         return result;
     }
 
     public static List<CredentialAttributes> fromMap(@NonNull Map<String, String> values) {
         List<CredentialAttributes> result = new ArrayList<>();
-        values.forEach( (k,v) -> result.add(new CredentialAttributes(k, v)));
+        values.forEach( (k,v) -> result.add(CredentialAttributes.builder().name(k).value(v).build()));
         return result;
     }
 
