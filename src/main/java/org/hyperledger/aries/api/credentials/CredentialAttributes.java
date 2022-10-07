@@ -55,7 +55,7 @@ public class CredentialAttributes {
                             log.error("Could not get value of field: {}", fieldName, e);
                         }
 
-                        CredentialAttributes.builder().name(fieldName).value(fieldValue).build();
+                        result.add(CredentialAttributes.builder().name(fieldName).value(fieldValue).build());
                     }
                 }
             }
