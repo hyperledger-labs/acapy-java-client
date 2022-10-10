@@ -63,8 +63,8 @@
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.10.0</okhttp.version>
-        <pmd.version>6.49.0</pmd.version>
-        <testcontainers.version>1.17.3</testcontainers.version>
+        <pmd.version>6.50.0</pmd.version>
+        <testcontainers.version>1.17.5</testcontainers.version>
     </properties>
 
     <dependencyManagement>

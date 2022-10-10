@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2022 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -104,17 +104,15 @@ public class PresentProofRequestHelper {
     public static PresentProofRequest buildForEachAttribute(
             String connectionId,
             @NonNull Set<String> attributes,
-            List<ProofRestrictions> restrictions) {
+            @NonNull List<ProofRestrictions> restrictions) {
 
         Map<String, ProofRequestedAttributes> attr = new LinkedHashMap<>();
         attributes.forEach(name -> attr.put(name,
                 ProofRequestedAttributes.builder()
                 .name(name)
-                .restrictions(restrictions != null ?
-                        restrictions.stream()
-                                .map(ProofRestrictions::toJsonObject)
-                                .collect(Collectors.toList())
-                        : null)
+                .restrictions(restrictions.stream()
+                        .map(ProofRestrictions::toJsonObject)
+                        .collect(Collectors.toList()))
                 .build()));
         return PresentProofRequest
                 .builder()
