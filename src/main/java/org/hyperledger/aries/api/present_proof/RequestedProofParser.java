@@ -34,7 +34,7 @@ public class RequestedProofParser {
         res.putAll(collectRevealedGroups(presentation));
         res.putAll(collectRevealedAttributes(presentation, presentationRequest));
         res.putAll(collectPredicates(presentation, presentationRequest));
-        res.putAll(collectUnrevealedAttributes(presentation));
+        res.putAll(collectUnrevealedAttributes(presentation, presentationRequest));
         res.putAll(collectSelfAttestedAttributes(presentation, presentationRequest));
         return res;
     }
@@ -108,7 +108,7 @@ public class RequestedProofParser {
             @NonNull JsonObject presentation, @NonNull ProofRequest presentationRequest) {
         Map<String, RevealedAttributeGroup> predicates = collectIdentifiers(presentation, RequestedProofType.PREDICATES);
         predicates.forEach((key, value) -> {
-            if (presentationRequest.getRequestedPredicates() != null) {
+            if (presentationRequest.hasRequestedPredicates()) {
                 ProofRequest.ProofRequestedPredicates pred = presentationRequest.getRequestedPredicates().get(key);
                 value.setRequestedPredicates(pred);
             }
@@ -116,8 +116,24 @@ public class RequestedProofParser {
         return predicates;
     }
 
-    public static Map<String, RevealedAttributeGroup> collectUnrevealedAttributes(@NonNull JsonObject presentation) {
-        return collectIdentifiers(presentation, RequestedProofType.UNREVEALED_ATTRS);
+    public static Map<String, RevealedAttributeGroup> collectUnrevealedAttributes(
+            @NonNull JsonObject presentation,  @NonNull ProofRequest presentationRequest) {
+        Map<String, RevealedAttributeGroup> notRevealed = collectIdentifiers(presentation,
+                RequestedProofType.UNREVEALED_ATTRS);
+        notRevealed.forEach((key, value) -> {
+            if (presentationRequest.hasRequestedAttributes()) {
+                ProofRequest.ProofRequestedAttributes attr = presentationRequest.getRequestedAttributes().get(key);
+                Set<String> names = new HashSet<>();
+                if (StringUtils.isNotEmpty(attr.getName()))
+                    names.add(attr.getName());
+                if (attr.getNames() != null && attr.getNames().size() > 0)
+                    names.addAll(attr.getNames());
+                if (names.size() > 0)
+                    value.setRevealedAttributes(names.stream().map(n -> Map.entry(n, ""))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+            }
+        });
+        return notRevealed;
     }
 
     public static Map<String, RevealedAttributeGroup> collectSelfAttestedAttributes(

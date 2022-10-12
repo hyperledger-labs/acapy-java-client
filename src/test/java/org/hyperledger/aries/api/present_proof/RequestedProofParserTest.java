@@ -85,7 +85,7 @@ public class RequestedProofParserTest {
 
         Assertions.assertEquals(1, unrev.size());
         RevealedAttributeGroup group = unrev.get("account");
-        Assertions.assertEquals(0, group.getRevealedAttributes().size());
+        Assertions.assertEquals(2, group.getRevealedAttributes().size());
         Assertions.assertEquals(PresentationExchangeRecord.RequestedProofType.UNREVEALED_ATTRS, group.getType());
         Assertions.assertTrue(group.getIdentifier().getSchemaId().startsWith("F6d"));
     }
