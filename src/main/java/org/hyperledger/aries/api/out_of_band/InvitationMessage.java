@@ -48,6 +48,10 @@ public class InvitationMessage<T> {
 
     private String goal;
 
+    /**
+     * List of mime type in order of preference
+     * example: List [ "didcomm/aip1", "didcomm/aip2;env=rfc19" ]
+     */
     private List<String> accept;
 
     @Builder.Default

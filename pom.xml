@@ -60,11 +60,11 @@
         <jackson.version>2.13.4</jackson.version>
         <jackson.databind.version>2.13.4.2</jackson.databind.version>
         <junit.jupiter.api.version>5.9.1</junit.jupiter.api.version>
-        <kotlin.version>1.7.10</kotlin.version>
+        <kotlin.version>1.7.20</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.10.0</okhttp.version>
-        <pmd.version>6.50.0</pmd.version>
+        <pmd.version>6.51.0</pmd.version>
         <testcontainers.version>1.17.5</testcontainers.version>
     </properties>
 
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.9.1</version>
+            <version>2.10</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>1.6.7</version>
+            <version>1.6.8</version>
         </dependency>
         <!-- Scope Test -->
         <dependency>
@@ -201,7 +201,7 @@
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
                     <skip>true</skip>
-                    <inputSpec>${project.basedir}/swagger/0_7_4.json</inputSpec>
+                    <inputSpec>${project.basedir}/swagger/0_7_5.json</inputSpec>
                     <generatorName>java</generatorName>
                     <output>${project.basedir}</output>
                     <generateApis>false</generateApis>
@@ -367,7 +367,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.2.0</version>
+                <version>4.7.2.1</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -392,7 +392,7 @@
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs</artifactId>
-                        <version>4.7.2</version>
+                        <version>4.7.3</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -431,7 +431,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.2.1</version>
+                <version>7.3.0</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>

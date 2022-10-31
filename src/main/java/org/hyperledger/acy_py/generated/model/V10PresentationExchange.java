@@ -19,6 +19,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * V10PresentationExchange
@@ -224,4 +225,7 @@ public class V10PresentationExchange {
     public static final String SERIALIZED_NAME_VERIFIED = "verified";
     @SerializedName(SERIALIZED_NAME_VERIFIED)
     private VerifiedEnum verified;
+    public static final String SERIALIZED_NAME_VERIFIED_MSGS = "verified_msgs";
+    @SerializedName(SERIALIZED_NAME_VERIFIED_MSGS)
+    private List<String> verifiedMsgs = null;
 }
