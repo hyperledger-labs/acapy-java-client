@@ -25,6 +25,9 @@ import java.util.List;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class InvitationCreateRequest {
+    public static final String SERIALIZED_NAME_ACCEPT = "accept";
+    @SerializedName(SERIALIZED_NAME_ACCEPT)
+    private List<String> accept = null;
     public static final String SERIALIZED_NAME_ALIAS = "alias";
     @SerializedName(SERIALIZED_NAME_ALIAS)
     private String alias;
@@ -43,6 +46,9 @@ public class InvitationCreateRequest {
     public static final String SERIALIZED_NAME_MY_LABEL = "my_label";
     @SerializedName(SERIALIZED_NAME_MY_LABEL)
     private String myLabel;
+    public static final String SERIALIZED_NAME_PROTOCOL_VERSION = "protocol_version";
+    @SerializedName(SERIALIZED_NAME_PROTOCOL_VERSION)
+    private String protocolVersion;
     public static final String SERIALIZED_NAME_USE_PUBLIC_DID = "use_public_did";
     @SerializedName(SERIALIZED_NAME_USE_PUBLIC_DID)
     private Boolean usePublicDid;

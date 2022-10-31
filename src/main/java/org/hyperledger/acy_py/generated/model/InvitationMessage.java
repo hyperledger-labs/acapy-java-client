@@ -31,6 +31,9 @@ public class InvitationMessage {
     public static final String SERIALIZED_NAME_AT_TYPE = "@type";
     @SerializedName(SERIALIZED_NAME_AT_TYPE)
     private String atType;
+    public static final String SERIALIZED_NAME_ACCEPT = "accept";
+    @SerializedName(SERIALIZED_NAME_ACCEPT)
+    private List<String> accept = null;
     public static final String SERIALIZED_NAME_HANDSHAKE_PROTOCOLS = "handshake_protocols";
     @SerializedName(SERIALIZED_NAME_HANDSHAKE_PROTOCOLS)
     private List<String> handshakeProtocols = null;

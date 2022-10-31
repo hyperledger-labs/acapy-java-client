@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hyperledger.aries.api.ExchangeVersion;
 
+import java.util.List;
+
 /**
  * Keeps track of fields that are common to both V1 abd V2 presentation exchanges.
  */
@@ -31,7 +33,11 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private Boolean autoVerify;
     private Boolean trace;
     private Boolean verified;
-
+    /**
+     * Proof verification warning or error information.
+     */
+    // TODO: why not use errorMsg?
+    private List<String> verifiedMsgs;
     private String errorMsg;
 
     private String connectionId;
