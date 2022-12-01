@@ -28,6 +28,7 @@ class MockedDidExchangeTest extends MockedTestBase {
                 .theirPublicDid("F6dB7dMVHUQSC64qemnBi7")
                 .build());
         Assertions.assertTrue(c.isPresent());
+        Assertions.assertEquals("request-sent", c.get().getRfc23State());
         Assertions.assertEquals(ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1, c.get().getConnectionProtocol());
     }
 }
