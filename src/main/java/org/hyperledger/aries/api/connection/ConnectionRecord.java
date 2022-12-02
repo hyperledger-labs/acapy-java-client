@@ -31,7 +31,7 @@ public class ConnectionRecord {
     private String invitationMsgId;
     private String myDid;
     private String requestId;
-    private String rfc23Sate;
+    private String rfc23State;
     private RoutingState routingState;
     private ConnectionState state;
     private String theirDid;

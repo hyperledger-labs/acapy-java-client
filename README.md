@@ -290,7 +290,7 @@ public class WebhookController {
 
    private EventHandler handler = new EventHandler.DefaultEventHandler();
 
-   @Post("/webhook/{topic}")
+   @Post("/webhook/topic/{topic}")
    public void handleWebhookEvent(
            @PathVariable String topic,
            @Body String payload) {
@@ -320,7 +320,7 @@ public class WebhookController {
 
    private EventHandler handler = new TenantAwareEventHandler.DefaultTenantAwareEventHandler();
 
-   @Post("/webhook/{topic}")
+   @Post("/webhook/topic/{topic}")
    public void handleWebhookEvent(
            @PathVariable String topic,
            @Body String payload,
