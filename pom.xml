@@ -60,11 +60,11 @@
         <jackson.version>2.14.1</jackson.version>
         <jackson.databind.version>2.14.1</jackson.databind.version>
         <junit.jupiter.api.version>5.9.1</junit.jupiter.api.version>
-        <kotlin.version>1.7.21</kotlin.version>
+        <kotlin.version>1.7.22</kotlin.version>
         <lombok.version>1.18.24</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.10.0</okhttp.version>
-        <pmd.version>6.52.0</pmd.version>
+        <pmd.version>6.53.0</pmd.version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
 
@@ -93,12 +93,12 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.5.0</version>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.5</version>
+            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
@@ -432,7 +432,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.3.2</version>
+                <version>7.4.3</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>

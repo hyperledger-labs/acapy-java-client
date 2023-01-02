@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -7,10 +7,11 @@
  */
 package org.hyperledger.aries.api.did_exchange;
 
+import lombok.Builder;
 import lombok.Data;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
 
-@Data
+@Data @Builder
 public class DidExchangeAcceptInvitationFilter implements AcaPyRequestFilter {
     private String myEndpoint;
     private String myLabel;
