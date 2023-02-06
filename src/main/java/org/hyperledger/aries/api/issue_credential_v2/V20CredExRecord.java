@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -76,12 +76,23 @@ public class V20CredExRecord extends BaseCredExRecord {
     }
 
     public V20CredExRecordByFormat.LdProof resolveLDCredential() {
-        if (byFormat != null && byFormat.hasLdProof() && byFormat.getCredIssue() != null) {
+        if (hasLDProofWithCredential()) {
             return V20CredExRecordByFormat.LdProof
                     .builder()
                     .credential(byFormat.convertToLdProof(byFormat.getCredIssue(), VerifiableCredential.class))
                     .build();
         }
         return null;
+    }
+
+    public <T extends VerifiableCredential> T resolveLDCredentialFromCustomType(Class<T> type) {
+        if (hasLDProofWithCredential()) {
+            return byFormat.convertToLdProof(byFormat.getCredIssue(), type);
+        }
+        return null;
+    }
+
+    private boolean hasLDProofWithCredential() {
+        return byFormat != null && byFormat.hasLdProof() && byFormat.getCredIssue() != null;
     }
 }
