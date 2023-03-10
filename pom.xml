@@ -55,16 +55,16 @@
         <!-- Plugin Versions -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <maven-release-plugin.version>3.0.0-M7</maven-release-plugin.version>
-        <maven.surefire.version>3.0.0-M7</maven.surefire.version>
+        <maven.surefire.version>3.0.0-M9</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.14.1</jackson.version>
-        <jackson.databind.version>2.14.1</jackson.databind.version>
-        <junit.jupiter.api.version>5.9.1</junit.jupiter.api.version>
-        <kotlin.version>1.7.22</kotlin.version>
-        <lombok.version>1.18.24</lombok.version>
+        <jackson.version>2.14.2</jackson.version>
+        <jackson.databind.version>2.14.2</jackson.databind.version>
+        <junit.jupiter.api.version>5.9.2</junit.jupiter.api.version>
+        <kotlin.version>1.8.10</kotlin.version>
+        <lombok.version>1.18.26</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.10.0</okhttp.version>
-        <pmd.version>6.53.0</pmd.version>
+        <pmd.version>6.54.0</pmd.version>
         <testcontainers.version>1.17.6</testcontainers.version>
     </properties>
 
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.5.1</version>
+            <version>3.5.3</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.10</version>
+            <version>2.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -237,7 +237,7 @@
             <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.21.0</version>
+                <version>2.22.0</version>
                 <configuration>
                     <includes>
                         <include>org/hyperledger/acy_py/generated/</include>
@@ -298,7 +298,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.5.0</version>
                 <configuration>
                     <excludePackageNames>*.generated</excludePackageNames>
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
@@ -399,7 +399,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.19.0</version>
+                <version>3.20.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
@@ -432,7 +432,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>7.4.3</version>
+                <version>8.1.0</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>
@@ -539,7 +539,7 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>3.1.0</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
@@ -577,7 +577,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.2</version>
                 <reportSets>
                     <reportSet>
                         <reports>
