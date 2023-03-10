@@ -27,3 +27,10 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: mvn clean verify
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            **/surefire-reports/*.xml
+          large_files: true
