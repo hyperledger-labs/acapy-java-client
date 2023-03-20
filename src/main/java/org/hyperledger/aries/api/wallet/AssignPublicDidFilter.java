@@ -13,13 +13,12 @@ import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import okhttp3.HttpUrl;
 import org.apache.commons.lang3.StringUtils;
-import org.hyperledger.aries.api.AcaPyRequestFilter;
 import org.hyperledger.aries.api.endorser.EndorserInfoFilter;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class AssignPublicDidFilter extends EndorserInfoFilter implements AcaPyRequestFilter {
+public class AssignPublicDidFilter extends EndorserInfoFilter {
     private String mediationId;
 
     @Override

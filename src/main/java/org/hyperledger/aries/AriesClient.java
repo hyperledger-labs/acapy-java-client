@@ -2829,7 +2829,7 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Update end point in wallet and, if public, on ledger
+     * Update endpoint in wallet and on ledger if posted to it
      * @param endpointRequest {@link DIDEndpointWithType}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
@@ -2839,7 +2839,7 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Update end point in wallet and, if public, on ledger endorsed
+     * Update endpoint in wallet and on ledger if posted to it (endorsed)
      * @param endpointRequest {@link DIDEndpointWithType}
      * @param endorserInfoFilter {@link EndorserInfoFilter}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
