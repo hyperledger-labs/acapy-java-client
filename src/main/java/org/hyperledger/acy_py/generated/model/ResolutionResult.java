@@ -23,9 +23,9 @@ import com.google.gson.annotations.SerializedName;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class ResolutionResult {
-    public static final String SERIALIZED_NAME_DID_DOC = "did_doc";
-    @SerializedName(SERIALIZED_NAME_DID_DOC)
-    private Object didDoc;
+    public static final String SERIALIZED_NAME_DID_DOCUMENT = "did_document";
+    @SerializedName(SERIALIZED_NAME_DID_DOCUMENT)
+    private Object didDocument;
     public static final String SERIALIZED_NAME_METADATA = "metadata";
     @SerializedName(SERIALIZED_NAME_METADATA)
     private Object metadata;

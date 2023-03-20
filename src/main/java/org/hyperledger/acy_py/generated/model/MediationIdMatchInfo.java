@@ -14,22 +14,18 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.UUID;
+
 /**
- * DIDCreate
+ * MediationIdMatchInfo
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class DIDCreate {
-    public static final String SERIALIZED_NAME_METHOD = "method";
-    @SerializedName(SERIALIZED_NAME_METHOD)
-    private String method;
-    public static final String SERIALIZED_NAME_OPTIONS = "options";
-    @SerializedName(SERIALIZED_NAME_OPTIONS)
-    private DIDCreateOptions options;
-    public static final String SERIALIZED_NAME_SEED = "seed";
-    @SerializedName(SERIALIZED_NAME_SEED)
-    private String seed;
+public class MediationIdMatchInfo {
+    public static final String SERIALIZED_NAME_MEDIATION_ID = "mediation_id";
+    @SerializedName(SERIALIZED_NAME_MEDIATION_ID)
+    private UUID mediationId;
 }

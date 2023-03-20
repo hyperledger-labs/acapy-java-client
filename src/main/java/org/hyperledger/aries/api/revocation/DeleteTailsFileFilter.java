@@ -5,14 +5,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.endorser;
+package org.hyperledger.aries.api.revocation;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
 
-@Data @SuperBuilder
-public class EndorserInfoFilter implements AcaPyRequestFilter {
-    private String connId;
-    private Boolean createTransactionForEndorser;
+@Data @Builder
+public class DeleteTailsFileFilter implements AcaPyRequestFilter {
+    private String credDefId;
+    private String refRegId;
 }

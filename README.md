@@ -158,6 +158,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | DELETE | /mediation/requests/{mediation_id}                           | :white_check_mark: |
 | POST   | /mediation/requests/{mediation_id}/deny                      | :white_check_mark: |
 | POST   | /mediation/requests/{mediation_id}/grant                     | :white_check_mark: |
+| POST   | /mediation/update-keylist/{conn_id}                          | :white_check_mark: |
 | PUT    | /mediation/{mediation_id}/default-mediator                   | :white_check_mark: |
 |        | **multitenancy**                                             |                    |
 | POST   | /multitenancy/wallet                                         | :white_check_mark: |
@@ -202,6 +203,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /revocation/credential-record                                | :white_check_mark: |
 | POST   | /revocation/publish-revocations                              | :white_check_mark: |
 | GET    | /revocation/registries/created                               | :white_check_mark: |
+| DELETE | /revocation/registry/delete-tails-file                       | :white_check_mark: |
 | GET    | /revocation/registry/{rev_reg_id}                            | :white_check_mark: |
 | PATCH  | /revocation/registry/{rev_reg_id}                            | :white_check_mark: |
 | POST   | /revocation/registry/{rev_reg_id}/definition                 | :white_check_mark: |

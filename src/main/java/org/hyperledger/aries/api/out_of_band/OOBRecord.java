@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -56,11 +56,13 @@ public class OOBRecord implements InvitationMessageTranslator {
         @SerializedName(value = "await-response", alternate = "await_response")
         AWAIT_RESPONSE,
         @SerializedName(value = "reuse-not-accepted", alternate = "reuse_not_accepted")
-        NOT_ACCEPTED,
+        REUSE_NOT_ACCEPTED,
         @SerializedName(value = "reuse-accepted", alternate = "reuse_accepted")
-        ACCEPTED,
+        REUSE_ACCEPTED,
         @SerializedName("done")
-        DONE
+        DONE,
+        @SerializedName("deleted")
+        DELETED
     }
 
     public enum OOBRole {

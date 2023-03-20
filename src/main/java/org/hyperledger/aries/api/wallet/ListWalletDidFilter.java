@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -22,7 +22,7 @@ public class ListWalletDidFilter implements AcaPyRequestFilter {
     private DID.KeyTypeEnum keyType;
 
     /** did method to query for */
-    private DID.MethodEnum method;
+    private String method;
 
     /** Whether did is current public, or wallet only */
     private DID.PostureEnum posture;

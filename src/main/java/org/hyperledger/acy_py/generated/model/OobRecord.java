@@ -12,7 +12,13 @@
 
 package org.hyperledger.acy_py.generated.model;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 
 /**
  * OobRecord
@@ -44,12 +50,118 @@ public class OobRecord {
     public static final String SERIALIZED_NAME_OUR_RECIPIENT_KEY = "our_recipient_key";
     @SerializedName(SERIALIZED_NAME_OUR_RECIPIENT_KEY)
     private String ourRecipientKey;
+
+    /**
+     * OOB Role
+     */
+    @JsonAdapter(RoleEnum.Adapter.class)
+    public enum RoleEnum {
+        SENDER("sender"),
+
+        RECEIVER("receiver");
+
+        private String value;
+
+        RoleEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static RoleEnum fromValue(String value) {
+            for (RoleEnum b : RoleEnum.values()) {
+                if (b.value.equals(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
+
+        public static class Adapter extends TypeAdapter<RoleEnum> {
+            @Override
+            public void write(final JsonWriter jsonWriter, final RoleEnum enumeration) throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public RoleEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return RoleEnum.fromValue(value);
+            }
+        }
+    }
+
     public static final String SERIALIZED_NAME_ROLE = "role";
     @SerializedName(SERIALIZED_NAME_ROLE)
-    private String role;
+    private RoleEnum role;
+
+    /**
+     * Out of band message exchange state
+     */
+    @JsonAdapter(StateEnum.Adapter.class)
+    public enum StateEnum {
+        INITIAL("initial"),
+
+        PREPARE_RESPONSE("prepare-response"),
+
+        AWAIT_RESPONSE("await-response"),
+
+        REUSE_NOT_ACCEPTED("reuse-not-accepted"),
+
+        REUSE_ACCEPTED("reuse-accepted"),
+
+        DONE("done"),
+
+        DELETED("deleted");
+
+        private String value;
+
+        StateEnum(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        public static StateEnum fromValue(String value) {
+            for (StateEnum b : StateEnum.values()) {
+                if (b.value.equals(value)) {
+                    return b;
+                }
+            }
+            throw new IllegalArgumentException("Unexpected value '" + value + "'");
+        }
+
+        public static class Adapter extends TypeAdapter<StateEnum> {
+            @Override
+            public void write(final JsonWriter jsonWriter, final StateEnum enumeration) throws IOException {
+                jsonWriter.value(enumeration.getValue());
+            }
+
+            @Override
+            public StateEnum read(final JsonReader jsonReader) throws IOException {
+                String value = jsonReader.nextString();
+                return StateEnum.fromValue(value);
+            }
+        }
+    }
+
     public static final String SERIALIZED_NAME_STATE = "state";
     @SerializedName(SERIALIZED_NAME_STATE)
-    private String state;
+    private StateEnum state;
     public static final String SERIALIZED_NAME_THEIR_SERVICE = "their_service";
     @SerializedName(SERIALIZED_NAME_THEIR_SERVICE)
     private ServiceDecorator theirService;

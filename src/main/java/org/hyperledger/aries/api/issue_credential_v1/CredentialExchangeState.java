@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -110,6 +110,14 @@ public enum CredentialExchangeState {
     @JsonProperty("abandoned")
     @SerializedName(value = "abandoned")
     ABANDONED,
+
+    /**
+     * V2 state only
+     * Credential exchange deleted
+     */
+    @JsonProperty("deleted")
+    @SerializedName(value = "deleted")
+    DELETED,
 
     /**
      * Not an aries state, but useful in business logic reacting on these states

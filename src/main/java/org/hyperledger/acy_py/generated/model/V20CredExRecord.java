@@ -199,7 +199,9 @@ public class V20CredExRecord {
 
         CREDENTIAL_REVOKED("credential-revoked"),
 
-        ABANDONED("abandoned");
+        ABANDONED("abandoned"),
+
+        DELETED("deleted");
 
         private String value;
 

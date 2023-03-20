@@ -29,8 +29,12 @@ import java.io.IOException;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class DIDCreateOptions {
+    public static final String SERIALIZED_NAME_DID = "did";
+    @SerializedName(SERIALIZED_NAME_DID)
+    private String did;
+
     /**
-     * Gets or Sets keyType
+     * Key type to use for the DID keypair. Validated with the chosen DID method&#39;s supported key types.
      */
     @JsonAdapter(KeyTypeEnum.Adapter.class)
     public enum KeyTypeEnum {

@@ -182,7 +182,9 @@ public class V20PresExRecord {
 
         DONE("done"),
 
-        ABANDONED("abandoned");
+        ABANDONED("abandoned"),
+
+        DELETED("deleted");
 
         private String value;
 

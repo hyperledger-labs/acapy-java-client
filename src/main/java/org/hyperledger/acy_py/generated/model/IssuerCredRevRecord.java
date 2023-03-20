@@ -32,6 +32,9 @@ public class IssuerCredRevRecord {
     public static final String SERIALIZED_NAME_CRED_EX_ID = "cred_ex_id";
     @SerializedName(SERIALIZED_NAME_CRED_EX_ID)
     private String credExId;
+    public static final String SERIALIZED_NAME_CRED_EX_VERSION = "cred_ex_version";
+    @SerializedName(SERIALIZED_NAME_CRED_EX_VERSION)
+    private String credExVersion;
     public static final String SERIALIZED_NAME_CRED_REV_ID = "cred_rev_id";
     @SerializedName(SERIALIZED_NAME_CRED_REV_ID)
     private String credRevId;
