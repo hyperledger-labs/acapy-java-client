@@ -4,7 +4,7 @@
 
     <groupId>network.idu.acapy</groupId>
     <artifactId>aries-client-python</artifactId>
-    <version>0.7.34-SNAPSHOT</version>
+    <version>0.8.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -53,19 +53,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <gpg.passphrase>empty</gpg.passphrase>
         <!-- Plugin Versions -->
-        <license-maven-plugin.version>4.1</license-maven-plugin.version>
-        <maven-release-plugin.version>3.0.0</maven-release-plugin.version>
-        <maven.surefire.version>3.0.0</maven.surefire.version>
+        <license-maven-plugin.version>4.2</license-maven-plugin.version>
+        <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
+        <maven.surefire.version>3.1.2</maven.surefire.version>
         <!-- Dependency Versions -->
-        <jackson.version>2.14.2</jackson.version>
-        <jackson.databind.version>2.14.2</jackson.databind.version>
-        <junit.jupiter.api.version>5.9.2</junit.jupiter.api.version>
-        <kotlin.version>1.8.10</kotlin.version>
-        <lombok.version>1.18.26</lombok.version>
+        <jackson.version>2.15.2</jackson.version>
+        <jackson.databind.version>2.15.2</jackson.databind.version>
+        <junit.jupiter.api.version>5.10.0</junit.jupiter.api.version>
+        <kotlin.version>1.9.0</kotlin.version>
+        <lombok.version>1.18.28</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
-        <okhttp.version>4.10.0</okhttp.version>
+        <okhttp.version>4.11.0</okhttp.version>
         <pmd.version>6.55.0</pmd.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
+        <testcontainers.version>1.18.3</testcontainers.version>
     </properties>
 
     <dependencyManagement>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
-            <version>3.5.4</version>
+            <version>3.5.8</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -138,7 +138,7 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>1.6.9</version>
+            <version>1.6.11</version>
         </dependency>
         <!-- Scope Test -->
         <dependency>
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.3.6</version>
+            <version>1.3.7</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -237,7 +237,7 @@
             <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.22.0</version>
+                <version>2.23.0</version>
                 <configuration>
                     <includes>
                         <include>org/hyperledger/acy_py/generated/</include>
@@ -315,7 +315,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -341,7 +341,7 @@
                     <dependency>
                         <groupId>org.apache.maven.scm</groupId>
                         <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>2.0.0</version>
+                        <version>2.0.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -368,7 +368,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.3.2</version>
+                <version>4.7.3.5</version>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Low</threshold>
@@ -399,7 +399,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.20.0</version>
+                <version>3.21.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>net.sourceforge.pmd</groupId>
@@ -432,7 +432,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.1.2</version>
+                <version>8.3.1</version>
                 <configuration>
                     <failBuildOnAnyVulnerability>true</failBuildOnAnyVulnerability>
                     <skip>true</skip>
@@ -448,7 +448,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.10</version>
                 <configuration>
                     <excludes>
                         <exclude>**/generated/model/**</exclude>
@@ -539,11 +539,11 @@
                 </plugin>
                 <plugin>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.1.1</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -556,7 +556,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <version>3.1.0</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -577,7 +577,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.4.2</version>
+                <version>3.4.5</version>
                 <reportSets>
                     <reportSet>
                         <reports>
