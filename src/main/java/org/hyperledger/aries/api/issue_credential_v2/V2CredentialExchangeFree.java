@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -28,6 +28,7 @@ public class V2CredentialExchangeFree {
     private V2CredentialPreview credentialPreview;
     private V20CredFilter filter;
     private Boolean trace;
+    private String verificationMethod;
 
     @Data @AllArgsConstructor @NoArgsConstructor @Builder
     public static class V2CredentialPreview {

@@ -5,12 +5,16 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.ledger;
+package org.hyperledger.aries.api.wallet;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor
-public class EndpointResponse {
-    private String endpoint;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor @Getter
+public enum DefaultDidMethod {
+    KEY("key"),
+    SOV("sov");
+
+    private String method;
 }

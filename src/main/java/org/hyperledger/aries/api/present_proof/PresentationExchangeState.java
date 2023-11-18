@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -57,6 +57,11 @@ public enum PresentationExchangeState {
     @JsonProperty("abandoned")
     @SerializedName("abandoned")
     ABANDONED,
+
+    /** V2 state only */
+    @JsonProperty("deleted")
+    @SerializedName("deleted")
+    DELETED,
 
     /** Not an aries state, can be used in a manual proof exchange to mark the state
      * as declined if the request was not accepted */

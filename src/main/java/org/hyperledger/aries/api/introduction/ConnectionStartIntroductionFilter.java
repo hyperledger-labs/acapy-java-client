@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -13,7 +13,7 @@ import lombok.NonNull;
 import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
-public class ConnectionStartIntroductionFilter implements AcaPyRequestFilter {
+public final class ConnectionStartIntroductionFilter implements AcaPyRequestFilter {
     @NonNull private String targetConnectionId;
     private String message;
 }

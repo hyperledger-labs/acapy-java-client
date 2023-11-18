@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -48,7 +48,7 @@ public class StatusConfig {
     @SerializedName("debug.auto_respond_messages")
     private Boolean autoRespondMessages;
     @SerializedName("debug.auto_respond_credential_proposal")
-    public Boolean autoRespondCredentialProposal;
+    private Boolean autoRespondCredentialProposal;
     @SerializedName("debug.auto_respond_credential_offer")
     private Boolean autoRespondCredentialOffer;
     @SerializedName("debug.auto_respond_credential_request")

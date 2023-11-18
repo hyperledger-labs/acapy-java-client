@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -49,7 +49,7 @@ public interface AcaPyRequestFilter {
                         value = ((Boolean) o).toString().toLowerCase(Locale.US);
                     }
                     if (value != null) {
-                        b.addQueryParameter(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f), value);
+                        b.addQueryParameter(translateFieldName(f), value);
                     }
                 }
             } catch (IllegalAccessException e) {
@@ -57,5 +57,13 @@ public interface AcaPyRequestFilter {
             }
         });
         return b;
+    }
+
+    private static String translateFieldName(Field field) {
+        SerializedName sn = field.getAnnotation(SerializedName.class);
+        if (sn != null) {
+            return sn.value();
+        }
+        return FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(field);
     }
 }

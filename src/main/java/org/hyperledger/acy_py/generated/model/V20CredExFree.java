@@ -43,4 +43,7 @@ public class V20CredExFree {
     public static final String SERIALIZED_NAME_TRACE = "trace";
     @SerializedName(SERIALIZED_NAME_TRACE)
     private Boolean trace;
+    public static final String SERIALIZED_NAME_VERIFICATION_METHOD = "verification_method";
+    @SerializedName(SERIALIZED_NAME_VERIFICATION_METHOD)
+    private String verificationMethod;
 }

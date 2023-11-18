@@ -5,20 +5,14 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.hyperledger.aries.api.schema;
+package org.hyperledger.aries.api.revocation;
 
 import lombok.Builder;
 import lombok.Data;
-
-import javax.annotation.Nonnull;
-import java.util.List;
+import org.hyperledger.aries.api.AcaPyRequestFilter;
 
 @Data @Builder
-public final class SchemaSendRequest {
-    @Nonnull
-    private List<String> attributes;
-    @Nonnull
-    private String schemaName;
-    @Nonnull
-    private String schemaVersion;
+public class DeleteTailsFileFilter implements AcaPyRequestFilter {
+    private String credDefId;
+    private String refRegId;
 }

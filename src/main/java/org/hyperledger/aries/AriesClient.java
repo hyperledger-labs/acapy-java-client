@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -16,6 +16,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.lang3.StringUtils;
+import org.hyperledger.acy_py.generated.model.InvitationRecord;
 import org.hyperledger.acy_py.generated.model.V20CredOfferRequest;
 import org.hyperledger.acy_py.generated.model.*;
 import org.hyperledger.aries.api.action_menu.PerformRequest;
@@ -62,10 +63,9 @@ import org.hyperledger.aries.api.multitenancy.CreateWalletTokenResponse;
 import org.hyperledger.aries.api.multitenancy.RemoveWalletRequest;
 import org.hyperledger.aries.api.multitenancy.UpdateWalletRequest;
 import org.hyperledger.aries.api.multitenancy.WalletRecord;
-import org.hyperledger.aries.api.out_of_band.CreateInvitationFilter;
+import org.hyperledger.aries.api.out_of_band.*;
 import org.hyperledger.aries.api.out_of_band.InvitationCreateRequest;
 import org.hyperledger.aries.api.out_of_band.InvitationMessage;
-import org.hyperledger.aries.api.out_of_band.ReceiveInvitationFilter;
 import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 import org.hyperledger.aries.api.present_proof.*;
 import org.hyperledger.aries.api.present_proof_v2.V20PresCreateRequestRequest;
@@ -90,8 +90,8 @@ import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.api.server.StatusConfig;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
+import org.hyperledger.aries.api.wallet.AssignPublicDidFilter;
 import org.hyperledger.aries.api.wallet.ListWalletDidFilter;
-import org.hyperledger.aries.api.wallet.WalletDIDCreate;
 import org.hyperledger.aries.config.TimeUtil;
 import org.hyperledger.aries.config.UriUtil;
 
@@ -1700,6 +1700,19 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Update KeyList for a connection
+     * @param connectionId the connection id
+     * @param info {@link MediationIdMatchInfo}
+     * @return {@link KeylistUpdate}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<KeylistUpdate> mediationUpdateKeyList(@NonNull String connectionId,
+        @NonNull MediationIdMatchInfo info) throws IOException {
+        Request req = buildPost(url + "/mediation/update-keylist/" + connectionId, info);
+        return call(req, KeylistUpdate.class);
+    }
+
+    /**
      * Set default mediator
      * @param mediationId mediation record identifier
      * @return {@link MediationRecord}
@@ -1850,14 +1863,14 @@ public class AriesClient extends BaseClient {
      * @return {@link ConnectionRecord}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public <T> Optional<ConnectionRecord> outOfBandReceiveInvitation(
+    public <T> Optional<OOBRecord> outOfBandReceiveInvitation(
             @NonNull InvitationMessage<T> request, ReceiveInvitationFilter filter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/out-of-band/receive-invitation")).newBuilder();
         if (filter != null) {
             filter.buildParams(b);
         }
         Request req = buildPost(b.build().toString(), request);
-        return call(req, ConnectionRecord.class);
+        return call(req, OOBRecord.class);
     }
 
     // ----------------------------------------------------
@@ -2335,6 +2348,19 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Delete the tails file
+     * @param filter {@link DeleteTailsFileFilter}
+     * @return {@link TailsDeleteResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<TailsDeleteResponse> revocationRegistryDeleteTailsFile(@NonNull DeleteTailsFileFilter filter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/revocation/registry/delete-tails-file")).newBuilder();
+        filter.buildParams(b);
+        Request req = buildDelete(b.toString());
+        return call(req, TailsDeleteResponse.class);
+    }
+
+    /**
      * Gets revocation registry by revocation registry id
      * @param revRegId the revocation registry id
      * @return {@link IssuerRevRegRecord}
@@ -2737,7 +2763,7 @@ public class AriesClient extends BaseClient {
      * @return {@link DID}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<DID> walletDidCreate(@NonNull WalletDIDCreate didCreate) throws IOException {
+    public Optional<DID> walletDidCreate(@NonNull DIDCreate didCreate) throws IOException {
         Request req = buildPost(url + "/wallet/did/create", didCreate);
         return getWrapped(raw(req), "result", DID.class);
     }
@@ -2777,15 +2803,15 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Assign the current public did as an endorser
+     * Assign the current public did (endorsed)
      * @param did fully qualified did:indy
-     * @param endorserInfoFilter {@link EndorserInfoFilter}
+     * @param assignPublicDidFilter {@link AssignPublicDidFilter}
      * @return {@link DID}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
-    public Optional<DID> walletDidPublic(@NonNull String did, @NonNull EndorserInfoFilter endorserInfoFilter) throws IOException {
+    public Optional<DID> walletDidPublic(@NonNull String did, @NonNull AssignPublicDidFilter assignPublicDidFilter) throws IOException {
         HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/did/public")).newBuilder();
-        endorserInfoFilter.buildParams(b);
+        assignPublicDidFilter.buildParams(b);
         b.addQueryParameter("did", did);
         Request req = buildPost(b.toString(), EMPTY_JSON);
         return getWrapped(raw(req), "result", DID.class);
@@ -2803,12 +2829,25 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Update end point in wallet and, if public, on ledger
+     * Update endpoint in wallet and on ledger if posted to it
      * @param endpointRequest {@link DIDEndpointWithType}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public void walletSetDidEndpoint(@NonNull DIDEndpointWithType endpointRequest) throws IOException {
         Request req = buildPost(url + "/wallet/set-did-endpoint", endpointRequest);
+        call(req);
+    }
+
+    /**
+     * Update endpoint in wallet and on ledger if posted to it (endorsed)
+     * @param endpointRequest {@link DIDEndpointWithType}
+     * @param endorserInfoFilter {@link EndorserInfoFilter}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public void walletSetDidEndpoint(@NonNull DIDEndpointWithType endpointRequest, EndorserInfoFilter endorserInfoFilter) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/wallet/set-did-endpoint")).newBuilder();
+        endorserInfoFilter.buildParams(b);
+        Request req = buildPost(b.toString(), endpointRequest);
         call(req);
     }
 

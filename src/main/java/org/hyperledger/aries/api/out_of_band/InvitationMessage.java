@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -42,6 +42,8 @@ public class InvitationMessage<T> {
     private String atType;
 
     private String label;
+
+    private String imageUrl;
 
     @SerializedName("goal_code")
     private String goalCode;

@@ -37,6 +37,9 @@ public class InvitationMessage {
     public static final String SERIALIZED_NAME_HANDSHAKE_PROTOCOLS = "handshake_protocols";
     @SerializedName(SERIALIZED_NAME_HANDSHAKE_PROTOCOLS)
     private List<String> handshakeProtocols = null;
+    public static final String SERIALIZED_NAME_IMAGE_URL = "imageUrl";
+    @SerializedName(SERIALIZED_NAME_IMAGE_URL)
+    private String imageUrl;
     public static final String SERIALIZED_NAME_LABEL = "label";
     @SerializedName(SERIALIZED_NAME_LABEL)
     private String label;
