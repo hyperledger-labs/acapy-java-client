@@ -4,7 +4,7 @@
 
     <groupId>network.idu.acapy</groupId>
     <artifactId>aries-client-python</artifactId>
-    <version>0.8.0-SNAPSHOT</version>
+    <version>0.8.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
