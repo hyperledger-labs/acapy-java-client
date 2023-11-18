@@ -41,6 +41,21 @@
     </Match>
 
     <Match>
+        <Class name="org.hyperledger.aries.api.server.AdminConfig" />
+        <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+    </Match>
+
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+        <And>
+            <Or>
+                <Class name="org.hyperledger.aries.api.jsonld.VerifiableCredential" />
+                <Class name="org.hyperledger.aries.api.out_of_band.BaseOOBInvitationHelper" />
+            </Or>
+        </And>
+    </Match>
+
+    <Match>
         <Bug pattern="CRLF_INJECTION_LOGS" />
     </Match>
 

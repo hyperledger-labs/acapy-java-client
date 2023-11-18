@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  */
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @JsonPropertyOrder({ "@context", "type" })
-public class VerifiablePresentation<T extends VerifiableCredential> {
+public final class VerifiablePresentation<T extends VerifiableCredential> {
 
     public static final Type VERIFIABLE_CREDENTIAL_TYPE =
             new TypeToken<VerifiablePresentation<VerifiableCredential>>(){}.getType();

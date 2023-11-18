@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Data @Builder
-public class SchemaSendRequest {
+public final class SchemaSendRequest {
     @Nonnull
     private List<String> attributes;
     @Nonnull

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Slf4j
-public class AriesWebSocketListener extends okhttp3.WebSocketListener {
+public final class AriesWebSocketListener extends okhttp3.WebSocketListener {
 
     private final Gson gson = GsonConfig.defaultConfig();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2021 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
  * or issued to a connection (issuer to holder)
  */
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class V1CredentialProposalRequest {
+public final class V1CredentialProposalRequest {
 
     /**
      * Holder choice to auto accept offer in this credential exchange

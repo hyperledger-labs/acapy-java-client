@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -86,7 +86,7 @@ public class VerifiableCredential {
     @SuperBuilder @NoArgsConstructor @AllArgsConstructor
     @Data @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
     @JsonInclude(Include.NON_NULL)
-    public static class VerifiableIndyCredential extends LabeledVerifiableCredential {
+    public static final class VerifiableIndyCredential extends LabeledVerifiableCredential {
         @Nullable
         @SerializedName("indyIssuer")
         private String indyIssuer;
@@ -103,7 +103,7 @@ public class VerifiableCredential {
     @SuperBuilder @NoArgsConstructor @AllArgsConstructor
     @Data @EqualsAndHashCode(callSuper = true) @ToString(callSuper = true)
     @JsonInclude(Include.NON_NULL)
-    public static class VerifiableCredentialMatch extends VerifiableCredential {
+    public static final class VerifiableCredentialMatch extends VerifiableCredential {
         private String recordId;
     }
 }
