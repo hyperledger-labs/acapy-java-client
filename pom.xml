@@ -61,7 +61,7 @@
         <jackson.databind.version>2.15.2</jackson.databind.version>
         <junit.jupiter.api.version>5.10.0</junit.jupiter.api.version>
         <kotlin.version>1.9.0</kotlin.version>
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <lombok.maven.plugin.version>1.18.20.0</lombok.maven.plugin.version>
         <okhttp.version>4.11.0</okhttp.version>
         <pmd.version>6.55.0</pmd.version>

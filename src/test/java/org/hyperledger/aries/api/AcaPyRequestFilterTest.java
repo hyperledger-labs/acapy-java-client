@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -56,6 +56,13 @@ public class AcaPyRequestFilterTest {
     }
 
     @Test
+    void testAnnotatedBoolean() {
+        HttpUrl.Builder b = Objects.requireNonNull(base).newBuilder();
+        AnnotatedBoolean ab = AnnotatedBoolean.builder().isPublic(Boolean.TRUE).build();
+        Assertions.assertEquals(url + "?public=true", ab.buildParams(b).toString());
+    }
+
+    @Test
     void testEmptyString() {
         HttpUrl.Builder b = Objects.requireNonNull(base).newBuilder();
         Dummy d = Dummy.builder().testMyData("").build();
@@ -78,5 +85,11 @@ public class AcaPyRequestFilterTest {
     private enum AnnotatedDummyEnum {
         @SerializedName("value_2")
         VALUE2
+    }
+
+    @Builder
+    private static final class AnnotatedBoolean implements AcaPyRequestFilter {
+        @SerializedName("public")
+        private Boolean isPublic;
     }
 }
