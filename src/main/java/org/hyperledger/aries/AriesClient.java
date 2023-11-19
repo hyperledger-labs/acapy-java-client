@@ -88,6 +88,8 @@ import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.api.server.StatusConfig;
+import org.hyperledger.aries.api.settings.ProfileSettings;
+import org.hyperledger.aries.api.settings.UpdateProfileSettings;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
 import org.hyperledger.aries.api.wallet.AssignPublicDidFilter;
@@ -2307,6 +2309,19 @@ public class AriesClient extends BaseClient {
     }
 
     /**
+     * Rotate revocation registry
+     * @since aca-py 0.10.4
+     * @param credentialDefinitionId the credential definition id
+     * @return {@link RevRegsCreated}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<RevRegsCreated> revocationActiveRegistryRotate(@NonNull String credentialDefinitionId)
+            throws IOException {
+        Request req = buildPost(url + "/revocation/active-registry/" + credentialDefinitionId + "/rotate", EMPTY_JSON);
+        return call(req, RevRegsCreated.class);
+    }
+
+    /**
      * Clear pending revocations
      * @param request {@link ClearPendingRevocationsRequest} Credential revocation ids by revocation registry id:
      * omit for all, specify null or empty list for all pending per revocation registry
@@ -2634,6 +2649,33 @@ public class AriesClient extends BaseClient {
     public Optional<Schema> schemasWriteRecord(@NonNull String schemaId) throws IOException {
         Request req = buildPost(url + "/schemas/" + schemaId + "/write_record", EMPTY_JSON);
         return getWrapped(raw(req), "schema", Schema.class);
+    }
+
+    // ----------------------------------------------------
+    // Settings
+    // ----------------------------------------------------
+
+    /**
+     * Update configurable settings associated with the profile
+     * @since aca-py 0.10.4
+     * @param settings {@link UpdateProfileSettings}
+     * @return map with the settings
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<Map<String, Object>> settingsUpdate(@NonNull UpdateProfileSettings settings) throws IOException {
+        Request req = buildPut(url + "/settings", settings);
+        return call(req, MAP_TYPE_OBJECT);
+    }
+
+    /**
+     * Get configurable settings associated with the profile
+     * @since aca-py 0.10.4
+     * @return map with the settings
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<Map<String, Object>> settingsGet() throws IOException {
+        Request req = buildGet(url + "/settings");
+        return call(req, MAP_TYPE_OBJECT);
     }
 
     // ----------------------------------------------------

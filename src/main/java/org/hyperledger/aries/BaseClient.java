@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -55,6 +55,7 @@ public abstract class BaseClient {
     static final Type WALLET_DID_TYPE = new TypeToken<Collection<DID>>(){}.getType();
     static final Type WALLET_RECORD_TYPE = new TypeToken<Collection<WalletRecord>>(){}.getType();
     static final Type MAP_TYPE = new TypeToken<Map<String, String>>(){}.getType();
+    static final Type MAP_TYPE_OBJECT = new TypeToken<Map<String, String>>(){}.getType();
     static final Type STRING_LIST_TYPE = new TypeToken<List<String>>(){}.getType();
 
     static final String X_API_KEY = "X-API-Key";

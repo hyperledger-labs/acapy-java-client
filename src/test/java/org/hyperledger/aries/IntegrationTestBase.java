@@ -21,7 +21,7 @@ public abstract class IntegrationTestBase {
 
     private final Logger log = LoggerFactory.getLogger(IntegrationTestBase.class);
 
-    public static final String ARIES_VERSION = "ghcr.io/hyperledger/aries-cloudagent-python:py3.9-0.8.0";
+    public static final String ARIES_VERSION = "ghcr.io/hyperledger/aries-cloudagent-python:py3.9-0.10.4";
     public static final Integer ARIES_INBOUND_PORT = 8030;
     public static final Integer ARIES_ADMIN_PORT = 8031;
 
