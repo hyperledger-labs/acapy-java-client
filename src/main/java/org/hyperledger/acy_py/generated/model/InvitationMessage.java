@@ -34,6 +34,12 @@ public class InvitationMessage {
     public static final String SERIALIZED_NAME_ACCEPT = "accept";
     @SerializedName(SERIALIZED_NAME_ACCEPT)
     private List<String> accept = null;
+    public static final String SERIALIZED_NAME_GOAL = "goal";
+    @SerializedName(SERIALIZED_NAME_GOAL)
+    private String goal;
+    public static final String SERIALIZED_NAME_GOAL_CODE = "goal_code";
+    @SerializedName(SERIALIZED_NAME_GOAL_CODE)
+    private String goalCode;
     public static final String SERIALIZED_NAME_HANDSHAKE_PROTOCOLS = "handshake_protocols";
     @SerializedName(SERIALIZED_NAME_HANDSHAKE_PROTOCOLS)
     private List<String> handshakeProtocols = null;

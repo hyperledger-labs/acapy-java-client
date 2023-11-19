@@ -30,6 +30,7 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private String updatedAt;
 
     private Boolean autoPresent;
+    private Boolean autoRemove;
     private Boolean autoVerify;
     private Boolean trace;
     private Boolean verified;

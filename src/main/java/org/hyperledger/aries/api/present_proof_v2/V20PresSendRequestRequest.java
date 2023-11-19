@@ -22,6 +22,7 @@ import org.hyperledger.aries.api.present_proof.PresentProofRequest;
 @Builder
 public class V20PresSendRequestRequest {
 
+    private Boolean autoRemove;
     private Boolean autoVerify;
     private String comment;
     private String connectionId;

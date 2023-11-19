@@ -27,6 +27,7 @@ public class V2CredentialExchangeFree {
     private UUID connectionId;
     private V2CredentialPreview credentialPreview;
     private V20CredFilter filter;
+    private String replacementId;
     private Boolean trace;
     private String verificationMethod;
 

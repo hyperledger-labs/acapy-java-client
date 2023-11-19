@@ -21,6 +21,7 @@ import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 @NoArgsConstructor
 @Builder
 public class V20PresSpecByFormatRequest {
+    private Boolean autoRemove;
     private DIFPresSpec dif;
     private SendPresentationRequest indy;
     private Boolean trace;

@@ -25,6 +25,9 @@ import java.util.UUID;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class V10PresentationSendRequestRequest {
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
     public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
     @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
     private Boolean autoVerify;

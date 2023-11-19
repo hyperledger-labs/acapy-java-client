@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class V20PresProposalRequest {
     private Boolean autoPresent;
+    private Boolean autoRemove;
     private String comment;
     private String connectionId;
     private V20PresProposalByFormat presentationProposal;

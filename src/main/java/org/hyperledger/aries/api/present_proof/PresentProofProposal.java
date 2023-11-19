@@ -25,6 +25,8 @@ import java.util.List;
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class PresentProofProposal {
 
+    private Boolean autoRemove;
+
     private Boolean autoPresent;
 
     private String comment;

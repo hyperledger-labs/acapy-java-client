@@ -33,6 +33,9 @@ public class V10PresentationExchange {
     public static final String SERIALIZED_NAME_AUTO_PRESENT = "auto_present";
     @SerializedName(SERIALIZED_NAME_AUTO_PRESENT)
     private Boolean autoPresent;
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
     public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
     @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
     private Boolean autoVerify;

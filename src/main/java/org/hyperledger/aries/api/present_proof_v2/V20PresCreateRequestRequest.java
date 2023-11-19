@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class V20PresCreateRequestRequest {
+    private Boolean autoRemove;
     private Boolean autoVerify;
     private String comment;
     private V20PresSendRequestRequest.V20PresRequestByFormat presentationRequest;
