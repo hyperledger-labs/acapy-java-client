@@ -35,6 +35,8 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 
 | Client Version | ACA-PY Version |
 |----------------|----------------|
+| 0.10.4         | 0.10.x         |
+| 0.8.0          | 0.8.0          |
 | 0.7.0          | 0.7.0          |
 | 0.7.6          | 0.7.1, 0.7.2   |
 | \>= 0.7.18     | 0.7.3          |
@@ -85,6 +87,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | POST   | /didexchange/receive-request                                 | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-invitation                     | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-request                        | :white_check_mark: |
+| POST   | /didexchange/{conn_id}/reject                                | :white_check_mark: |
 |        | **discover-features**                                        |                    |
 | GET    | /discover-features/query                                     | :white_check_mark: |
 | GET    | /discover-features/records                                   | :white_check_mark: |
@@ -137,15 +140,17 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | POST   | /jsonld/sign                                                 | :white_check_mark: |
 | POST   | /jsonld/verify                                               | :white_check_mark: |
 |        | **ledger**                                                   |                    |
+| GET    | /ledger/config                                               | :white_check_mark: |
 | GET    | /ledger/did-endpoint                                         | :white_check_mark: |
 | GET    | /ledger/did-verkey                                           | :white_check_mark: |
 | GET    | /ledger/get-nym-role                                         | :white_check_mark: |
-| GET    | /ledger/multiple/config                                      | :white_check_mark: |
-| GET    | /ledger/multiple/get-write-ledger                            | :white_check_mark: |
+| GET    | /ledger/get-write-ledger                                     | :white_check_mark: |
+| GET    | /ledger/get-write-ledgers                                    | :white_check_mark: |
 | POST   | /ledger/register-nym                                         | :white_check_mark: |
 | PATCH  | /ledger/rotate-public-did-keypair                            | :white_check_mark: |
 | GET    | /ledger/taa                                                  | :white_check_mark: |
 | POST   | /ledger/taa/accept                                           | :white_check_mark: |
+| POST   | /ledger/{ledger_id}/set-write-ledger                         | :white_check_mark: |
 |        | **mediation**                                                |                    |
 | GET    | /mediation/default-mediator                                  | :white_check_mark: |
 | DELETE | /mediation/default-mediator                                  | :white_check_mark: |

@@ -751,6 +751,22 @@ public class AriesClient extends BaseClient {
         return call(req, ConnectionRecord.class);
     }
 
+    /**
+     * Abandon or reject a DID Exchange
+     * @since aca-py 0.10.4
+     * @param connectionId the connection id
+     * @param rejectRequest {@link DIDXRejectRequest}
+     * @return {@link ConnectionRecord}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<ConnectionRecord> didExchangeReject(@NonNull String connectionId,
+        @NonNull DIDXRejectRequest rejectRequest) throws IOException {
+        HttpUrl.Builder b = Objects.requireNonNull(
+                HttpUrl.parse(url + "/didexchange/" + connectionId + "/reject")).newBuilder();
+        Request req = buildPost(b.toString(), rejectRequest);
+        return call(req, ConnectionRecord.class);
+    }
+
     // ----------------------------------------------------
     // Discover Features V1 - Feature discovery v1
     // ----------------------------------------------------
@@ -1443,6 +1459,18 @@ public class AriesClient extends BaseClient {
     // ----------------------------------------------------
 
     /**
+     * Fetch the multiple ledger configurations currently in use
+     * @since aca-py 0.10.4
+     * @return {@link LedgerConfigList}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<LedgerConfigList> ledgerConfig() throws IOException{
+        HttpUrl.Builder b = Objects.requireNonNull(HttpUrl.parse(url + "/ledger/config")).newBuilder();
+        Request req = buildGet(b.build().toString());
+        return call(req, LedgerConfigList.class);
+    }
+
+    /**
      * Get the endpoint for a DID from the ledger.
      * @param did the DID of interest
      * @param type optional, endpoint type of interest (defaults to 'endpoint')
@@ -1487,25 +1515,25 @@ public class AriesClient extends BaseClient {
     }
 
     /**
-     * Fetch the multiple ledger configuration currently in use
-     * @return {@link LedgerConfig}
+     * Fetch the current write ledger
+     * @return {@link WriteLedger}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
-     * @since 0.7.3
+     * @since 0.10.4
      */
-    public Optional<LedgerConfig> ledgerMultipleConfig() throws IOException {
-        Request req = buildGet(url + "/ledger/multiple/config");
-        return call(req, LedgerConfig.class);
+    public Optional<WriteLedger> ledgerGetWriteLedger() throws IOException {
+        Request req = buildGet(url + "/ledger/get-write-ledger");
+        return call(req, WriteLedger.class);
     }
 
     /**
-     * Fetch the current write ledger
-     * @return {@link WriteLedgerRequest}
+     * Fetch list of available write ledgers
+     * @return {@link ConfigurableWriteLedgers}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
-     * @since 0.7.3
+     * @since 0.10.4
      */
-    public Optional<WriteLedgerRequest> ledgerMultipleGetWriteLedger() throws IOException {
-        Request req = buildGet(url + "/ledger/multiple/get-write-ledger");
-        return call(req, WriteLedgerRequest.class);
+    public Optional<ConfigurableWriteLedgers> ledgerGetWriteLedgers() throws IOException {
+        Request req = buildGet(url + "/ledger/get-write-ledgers");
+        return call(req, ConfigurableWriteLedgers.class);
     }
 
     /**
@@ -1552,6 +1580,17 @@ public class AriesClient extends BaseClient {
     public void ledgerTaaAccept(@NonNull TAAAccept taaAccept) throws IOException {
         Request req = buildPost(url + "/ledger/taa/accept", taaAccept);
         call(req);
+    }
+
+    /**
+     * Set write ledger
+     * @param ledgerId the ledger id
+     * @return {@link WriteLedger}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<WriteLedger> ledgerSetWriteLedger(@NonNull String ledgerId) throws IOException {
+        Request req = buildPut(url + "/ledger/" + ledgerId + "/set-write-ledger", EMPTY_JSON);
+        return call(req, WriteLedger.class);
     }
 
     // ----------------------------------------------------

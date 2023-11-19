@@ -30,6 +30,10 @@ public class DIDXRequest {
     @SerializedName("did_doc~attach")
     private DIDXRequestDidDocAttach didDocAttach;
 
+    private String goal;
+
+    private String goalCode;
+
     private String label;
 
     @Data @Builder @NoArgsConstructor @AllArgsConstructor
