@@ -88,7 +88,6 @@ import org.hyperledger.aries.api.server.AdminConfig;
 import org.hyperledger.aries.api.server.AdminStatusLiveliness;
 import org.hyperledger.aries.api.server.AdminStatusReadiness;
 import org.hyperledger.aries.api.server.StatusConfig;
-import org.hyperledger.aries.api.settings.ProfileSettings;
 import org.hyperledger.aries.api.settings.UpdateProfileSettings;
 import org.hyperledger.aries.api.trustping.PingRequest;
 import org.hyperledger.aries.api.trustping.PingResponse;
@@ -2907,6 +2906,28 @@ public class AriesClient extends BaseClient {
     public Optional<DIDEndpoint> walletGetDidEndpoint(@NonNull String did) throws IOException {
         Request req = buildGet(url + "/wallet/get-did-endpoint" + "?did=" + did);
         return call(req, DIDEndpoint.class);
+    }
+
+    /**
+     * Create a EdDSA jws using did keys with a given payload
+     * @param jwsCreate {@link JWSCreate}
+     * @return tbd
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<Object> walletJWTSign(@NonNull JWSCreate jwsCreate) throws IOException {
+        Request req = buildPost(url + "/wallet/jws/sign", jwsCreate);
+        return call(req, Object.class);
+    }
+
+    /**
+     * Verify a EdDSA jws using did keys with a given JWS
+     * @param jwsCreate {@link JWSVerify}
+     * @return {@link JWSVerifyResponse}
+     * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
+     */
+    public Optional<JWSVerifyResponse> walletJWTVerify(@NonNull JWSVerify jwsCreate) throws IOException {
+        Request req = buildPost(url + "/wallet/jws/verify", jwsCreate);
+        return call(req, JWSVerifyResponse.class);
     }
 
     /**

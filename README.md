@@ -230,14 +230,6 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 |        | **settings**                                                 |                    |
 | PUT    | /settings                                                    | :white_check_mark: |
 | GET    | /settings                                                    | :white_check_mark: |
-|        | **server**                                                   |                    |
-| GET    | /plugins                                                     | :white_check_mark: |
-| GET    | /shutdown                                                    | :white_check_mark: |
-| GET    | /status                                                      | :white_check_mark: |
-| GET    | /status/config                                               | :white_check_mark: |
-| GET    | /status/live                                                 | :white_check_mark: |
-| GET    | /status/ready                                                | :white_check_mark: |
-| POST   | /status/reset                                                | :white_check_mark: |
 |        | **trustping**                                                |                    |
 | POST   | /connections/{conn_id}/send-ping                             | :white_check_mark: |
 |        | **wallet**                                                   |                    |
@@ -247,7 +239,17 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /wallet/did/public                                           | :white_check_mark: |
 | POST   | /wallet/did/public                                           | :white_check_mark: |
 | GET    | /wallet/get-did-endpoint                                     | :white_check_mark: |
+| POST   | /wallet/jwt/sign                                             | :white_check_mark: |
+| POST   | /wallet/jwt/verify                                           | :white_check_mark: |
 | POST   | /wallet/set-did-endpoint                                     | :white_check_mark: |
+|        | **server**                                                   |                    |
+| GET    | /plugins                                                     | :white_check_mark: |
+| GET    | /shutdown                                                    | :white_check_mark: |
+| GET    | /status                                                      | :white_check_mark: |
+| GET    | /status/config                                               | :white_check_mark: |
+| GET    | /status/live                                                 | :white_check_mark: |
+| GET    | /status/ready                                                | :white_check_mark: |
+| POST   | /status/reset                                                | :white_check_mark: |
 
 ## Client Examples
 
