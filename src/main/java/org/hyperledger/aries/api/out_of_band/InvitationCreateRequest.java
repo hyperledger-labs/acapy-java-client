@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -7,6 +7,7 @@
  */
 package org.hyperledger.aries.api.out_of_band;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import org.hyperledger.aries.api.connection.ConnectionRecord;
 
@@ -22,6 +23,9 @@ public class InvitationCreateRequest {
     private String alias;
     @Singular
     private List<AttachmentDef> attachments;
+    private String goal;
+    @SerializedName("goal_code")
+    private String goalCode;
     @Builder.Default
     private List<String> handshakeProtocols = List.of(
             ConnectionRecord.ConnectionProtocol.DID_EXCHANGE_V1.getValue(),

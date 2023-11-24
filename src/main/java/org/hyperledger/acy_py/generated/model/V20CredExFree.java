@@ -40,6 +40,9 @@ public class V20CredExFree {
     public static final String SERIALIZED_NAME_FILTER = "filter";
     @SerializedName(SERIALIZED_NAME_FILTER)
     private V20CredFilter filter;
+    public static final String SERIALIZED_NAME_REPLACEMENT_ID = "replacement_id";
+    @SerializedName(SERIALIZED_NAME_REPLACEMENT_ID)
+    private String replacementId;
     public static final String SERIALIZED_NAME_TRACE = "trace";
     @SerializedName(SERIALIZED_NAME_TRACE)
     private Boolean trace;

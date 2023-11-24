@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -30,6 +30,7 @@ public abstract class BasePresExRecord implements PresExStateTranslator {
     private String updatedAt;
 
     private Boolean autoPresent;
+    private Boolean autoRemove;
     private Boolean autoVerify;
     private Boolean trace;
     private Boolean verified;

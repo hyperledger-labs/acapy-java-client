@@ -32,6 +32,8 @@ import java.util.Map;
 @Builder
 public final class PresentProofRequest {
 
+    private Boolean autoRemove;
+
     private Boolean autoVerify;
 
     private String comment;

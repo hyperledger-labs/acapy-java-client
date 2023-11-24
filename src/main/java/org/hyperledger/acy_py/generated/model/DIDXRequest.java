@@ -35,6 +35,12 @@ public class DIDXRequest {
     public static final String SERIALIZED_NAME_DID_DOC_TILDE_ATTACH = "did_doc~attach";
     @SerializedName(SERIALIZED_NAME_DID_DOC_TILDE_ATTACH)
     private AttachDecorator didDocTildeAttach;
+    public static final String SERIALIZED_NAME_GOAL = "goal";
+    @SerializedName(SERIALIZED_NAME_GOAL)
+    private String goal;
+    public static final String SERIALIZED_NAME_GOAL_CODE = "goal_code";
+    @SerializedName(SERIALIZED_NAME_GOAL_CODE)
+    private String goalCode;
     public static final String SERIALIZED_NAME_LABEL = "label";
     @SerializedName(SERIALIZED_NAME_LABEL)
     private String label;

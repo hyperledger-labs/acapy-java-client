@@ -23,6 +23,9 @@ import com.google.gson.annotations.SerializedName;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class V20CredRequestRequest {
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
     public static final String SERIALIZED_NAME_HOLDER_DID = "holder_did";
     @SerializedName(SERIALIZED_NAME_HOLDER_DID)
     private String holderDid;

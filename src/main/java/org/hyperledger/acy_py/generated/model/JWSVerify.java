@@ -15,15 +15,15 @@ package org.hyperledger.acy_py.generated.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * WriteLedgerRequest
+ * JWSVerify
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class WriteLedgerRequest {
-    public static final String SERIALIZED_NAME_LEDGER_ID = "ledger_id";
-    @SerializedName(SERIALIZED_NAME_LEDGER_ID)
-    private String ledgerId;
+public class JWSVerify {
+    public static final String SERIALIZED_NAME_JWT = "jwt";
+    @SerializedName(SERIALIZED_NAME_JWT)
+    private String jwt;
 }

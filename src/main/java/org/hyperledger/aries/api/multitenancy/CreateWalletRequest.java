@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -7,18 +7,22 @@
  */
 package org.hyperledger.aries.api.multitenancy;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateWalletRequest {
+
+    /**
+     * Agent config key-value pairs
+     */
+    @Singular
+    private Map<String, Object> extraSettings;
 
     /**
      * Image url for this wallet. This image url is publicized (self-attested) to other agents as part of forming a

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -21,6 +21,7 @@ import org.hyperledger.aries.api.present_proof.SendPresentationRequest;
 @NoArgsConstructor
 @Builder
 public class V20PresSpecByFormatRequest {
+    private Boolean autoRemove;
     private DIFPresSpec dif;
     private SendPresentationRequest indy;
     private Boolean trace;

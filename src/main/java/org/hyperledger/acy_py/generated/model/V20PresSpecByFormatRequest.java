@@ -23,6 +23,9 @@ import com.google.gson.annotations.SerializedName;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class V20PresSpecByFormatRequest {
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
     public static final String SERIALIZED_NAME_DIF = "dif";
     @SerializedName(SERIALIZED_NAME_DIF)
     private DIFPresSpec dif;

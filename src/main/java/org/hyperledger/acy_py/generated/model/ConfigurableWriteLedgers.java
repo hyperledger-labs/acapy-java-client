@@ -14,22 +14,18 @@ package org.hyperledger.acy_py.generated.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
- * V10PresentationSendRequestToProposal
+ * ConfigurableWriteLedgers
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class V10PresentationSendRequestToProposal {
-    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
-    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
-    private Boolean autoRemove;
-    public static final String SERIALIZED_NAME_AUTO_VERIFY = "auto_verify";
-    @SerializedName(SERIALIZED_NAME_AUTO_VERIFY)
-    private Boolean autoVerify;
-    public static final String SERIALIZED_NAME_TRACE = "trace";
-    @SerializedName(SERIALIZED_NAME_TRACE)
-    private Boolean trace;
+public class ConfigurableWriteLedgers {
+    public static final String SERIALIZED_NAME_WRITE_LEDGERS = "write_ledgers";
+    @SerializedName(SERIALIZED_NAME_WRITE_LEDGERS)
+    private List<String> writeLedgers = null;
 }

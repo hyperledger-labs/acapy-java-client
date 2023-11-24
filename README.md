@@ -12,7 +12,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 <dependency>
    <groupId>network.idu.acapy</groupId>
    <artifactId>aries-client-python</artifactId>
-   <version>0.8.0</version>
+   <version>0.10.0</version>
 </dependency>
 ```
 
@@ -35,6 +35,8 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 
 | Client Version | ACA-PY Version |
 |----------------|----------------|
+| 0.10.0         | 0.10.x         |
+| 0.8.0          | 0.8.0          |
 | 0.7.0          | 0.7.0          |
 | 0.7.6          | 0.7.1, 0.7.2   |
 | \>= 0.7.18     | 0.7.3          |
@@ -85,6 +87,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | POST   | /didexchange/receive-request                                 | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-invitation                     | :white_check_mark: |
 | POST   | /didexchange/{conn_id}/accept-request                        | :white_check_mark: |
+| POST   | /didexchange/{conn_id}/reject                                | :white_check_mark: |
 |        | **discover-features**                                        |                    |
 | GET    | /discover-features/query                                     | :white_check_mark: |
 | GET    | /discover-features/records                                   | :white_check_mark: |
@@ -137,15 +140,17 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | POST   | /jsonld/sign                                                 | :white_check_mark: |
 | POST   | /jsonld/verify                                               | :white_check_mark: |
 |        | **ledger**                                                   |                    |
+| GET    | /ledger/config                                               | :white_check_mark: |
 | GET    | /ledger/did-endpoint                                         | :white_check_mark: |
 | GET    | /ledger/did-verkey                                           | :white_check_mark: |
 | GET    | /ledger/get-nym-role                                         | :white_check_mark: |
-| GET    | /ledger/multiple/config                                      | :white_check_mark: |
-| GET    | /ledger/multiple/get-write-ledger                            | :white_check_mark: |
+| GET    | /ledger/get-write-ledger                                     | :white_check_mark: |
+| GET    | /ledger/get-write-ledgers                                    | :white_check_mark: |
 | POST   | /ledger/register-nym                                         | :white_check_mark: |
 | PATCH  | /ledger/rotate-public-did-keypair                            | :white_check_mark: |
 | GET    | /ledger/taa                                                  | :white_check_mark: |
 | POST   | /ledger/taa/accept                                           | :white_check_mark: |
+| POST   | /ledger/{ledger_id}/set-write-ledger                         | :white_check_mark: |
 |        | **mediation**                                                |                    |
 | GET    | /mediation/default-mediator                                  | :white_check_mark: |
 | DELETE | /mediation/default-mediator                                  | :white_check_mark: |
@@ -198,6 +203,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /resolver/resolve/{did}                                      | :white_check_mark: |
 |        | **revocation**                                               |                    |
 | GET    | /revocation/active-registry/{cred_def_id}                    | :white_check_mark: |
+| POST   | /revocation/active-registry/{cred_def_id}/rotate             | :white_check_mark: |
 | POST   | /revocation/clear-pending-revocations                        | :white_check_mark: |
 | POST   | /revocation/create-registry                                  | :white_check_mark: |
 | GET    | /revocation/credential-record                                | :white_check_mark: |
@@ -221,14 +227,9 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /schemas/created                                             | :white_check_mark: |
 | GET    | /schemas/{schema_id}                                         | :white_check_mark: |
 | POST   | /schemas/{schema_id}/write_record                            | :white_check_mark: |
-|        | **server**                                                   |                    |
-| GET    | /plugins                                                     | :white_check_mark: |
-| GET    | /shutdown                                                    | :white_check_mark: |
-| GET    | /status                                                      | :white_check_mark: |
-| GET    | /status/config                                               | :white_check_mark: |
-| GET    | /status/live                                                 | :white_check_mark: |
-| GET    | /status/ready                                                | :white_check_mark: |
-| POST   | /status/reset                                                | :white_check_mark: |
+|        | **settings**                                                 |                    |
+| PUT    | /settings                                                    | :white_check_mark: |
+| GET    | /settings                                                    | :white_check_mark: |
 |        | **trustping**                                                |                    |
 | POST   | /connections/{conn_id}/send-ping                             | :white_check_mark: |
 |        | **wallet**                                                   |                    |
@@ -238,7 +239,17 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 | GET    | /wallet/did/public                                           | :white_check_mark: |
 | POST   | /wallet/did/public                                           | :white_check_mark: |
 | GET    | /wallet/get-did-endpoint                                     | :white_check_mark: |
+| POST   | /wallet/jwt/sign                                             | :white_check_mark: |
+| POST   | /wallet/jwt/verify                                           | :white_check_mark: |
 | POST   | /wallet/set-did-endpoint                                     | :white_check_mark: |
+|        | **server**                                                   |                    |
+| GET    | /plugins                                                     | :white_check_mark: |
+| GET    | /shutdown                                                    | :white_check_mark: |
+| GET    | /status                                                      | :white_check_mark: |
+| GET    | /status/config                                               | :white_check_mark: |
+| GET    | /status/live                                                 | :white_check_mark: |
+| GET    | /status/ready                                                | :white_check_mark: |
+| POST   | /status/reset                                                | :white_check_mark: |
 
 ## Client Examples
 

@@ -30,6 +30,9 @@ import java.util.List;
 @lombok.NoArgsConstructor
 @lombok.Builder
 public class CreateWalletRequest {
+    public static final String SERIALIZED_NAME_EXTRA_SETTINGS = "extra_settings";
+    @SerializedName(SERIALIZED_NAME_EXTRA_SETTINGS)
+    private Object extraSettings;
     public static final String SERIALIZED_NAME_IMAGE_URL = "image_url";
     @SerializedName(SERIALIZED_NAME_IMAGE_URL)
     private String imageUrl;

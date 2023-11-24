@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2022 - for information on the respective copyright owner
+ * Copyright (c) 2020-2023 - for information on the respective copyright owner
  * see the NOTICE file and/or the repository at
  * https://github.com/hyperledger-labs/acapy-java-client
  *
@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class V20PresCreateRequestRequest {
+    private Boolean autoRemove;
     private Boolean autoVerify;
     private String comment;
     private V20PresSendRequestRequest.V20PresRequestByFormat presentationRequest;
