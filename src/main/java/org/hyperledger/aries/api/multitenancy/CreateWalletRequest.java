@@ -7,18 +7,22 @@
  */
 package org.hyperledger.aries.api.multitenancy;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateWalletRequest {
+
+    /**
+     * Agent config key-value pairs
+     */
+    @Singular
+    private Map<String, Object> extraSettings;
 
     /**
      * Image url for this wallet. This image url is publicized (self-attested) to other agents as part of forming a

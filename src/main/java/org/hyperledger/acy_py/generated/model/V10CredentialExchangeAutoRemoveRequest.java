@@ -15,15 +15,15 @@ package org.hyperledger.acy_py.generated.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * V10DiscoveryExchangeResult
+ * V10CredentialExchangeAutoRemoveRequest
  */
 
 @lombok.Data
 @lombok.AllArgsConstructor
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class V10DiscoveryExchangeResult {
-    public static final String SERIALIZED_NAME_RESULTS = "results";
-    @SerializedName(SERIALIZED_NAME_RESULTS)
-    private V10DiscoveryRecord results;
+public class V10CredentialExchangeAutoRemoveRequest {
+    public static final String SERIALIZED_NAME_AUTO_REMOVE = "auto_remove";
+    @SerializedName(SERIALIZED_NAME_AUTO_REMOVE)
+    private Boolean autoRemove;
 }

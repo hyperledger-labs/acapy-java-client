@@ -19,6 +19,8 @@ import java.util.Map;
 @Data @Builder
 public class SendPresentationRequest {
 
+    private Boolean autoRemove;
+
     private Boolean trace;
 
     @Builder.Default
@@ -40,6 +42,5 @@ public class SendPresentationRequest {
     public static final class IndyRequestedCredsRequestedAttr {
         private Boolean revealed;
         private String credId;
-        private Integer timestamp;
     }
 }

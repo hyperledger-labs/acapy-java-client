@@ -1135,13 +1135,15 @@ public class AriesClient extends BaseClient {
     /**
      * Send issuer a credential request
      * @param credentialExchangeId credential exchange identifier
+     * @param request {@link V10CredentialExchangeAutoRemoveRequest}
      * @return {@link V1CredentialExchange}
      * @throws IOException if the request could not be executed due to cancellation, a connectivity problem or timeout.
      */
     public Optional<V1CredentialExchange> issueCredentialRecordsSendRequest(
-            @NonNull String credentialExchangeId) throws IOException {
+            @NonNull String credentialExchangeId, @Nullable V10CredentialExchangeAutoRemoveRequest request)
+            throws IOException {
         Request req = buildPost(url + "/issue-credential/records/" + credentialExchangeId + "/send-request",
-                EMPTY_JSON);
+                request != null ? request : EMPTY_JSON);
         return call(req, V1CredentialExchange.class);
     }
 

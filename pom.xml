@@ -201,7 +201,7 @@
                 <!-- aca-py still uses v2 definition file -->
                 <configuration>
                     <skip>true</skip>
-                    <inputSpec>${project.basedir}/swagger/0_10_4.json</inputSpec>
+                    <inputSpec>${project.basedir}/swagger/0_10_5.json</inputSpec>
                     <generatorName>java</generatorName>
                     <output>${project.basedir}</output>
                     <generateApis>false</generateApis>
