@@ -51,15 +51,16 @@ public final class SignRequest {
         @Data @Builder
         public static final class Options {
             @Nullable
-            private String creator;
+            private String challenge;
             @Nullable
-            @SerializedName("verificationMethod")
-            private String verificationMethod;
-            @Nullable
+            private String domain;
+            @NonNull
             @SerializedName("proofPurpose")
             private String proofPurpose;
-
             private String type;
+            @NonNull
+            @SerializedName("verificationMethod")
+            private String verificationMethod;
 
             public static class OptionsBuilder {} // java doc plugin cannot handle lombok
 

@@ -18,6 +18,7 @@ import org.hyperledger.aries.api.wallet.DefaultDidMethod;
 import org.hyperledger.aries.config.GsonConfig;
 import org.hyperledger.aries.util.FileLoader;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -29,6 +30,7 @@ class JsonldTest extends IntegrationTestBase {
     private final Gson pretty = GsonConfig.prettyPrinter();
 
     @Test
+    @Disabled // TODO broken in aca-py
     void testSignAndVerifyVC() throws Exception {
 
         // first create a local did
@@ -63,6 +65,7 @@ class JsonldTest extends IntegrationTestBase {
     }
 
     @Test
+    @Disabled // TODO broken in aca-py
     void testSignAndVerifyVP() throws Exception {
 
         // first create a local did

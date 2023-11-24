@@ -35,7 +35,7 @@ Convenience library based on okhttp and gson to interact with [aries cloud agent
 
 | Client Version | ACA-PY Version |
 |----------------|----------------|
-| 0.10.4         | 0.10.x         |
+| 0.10.0         | 0.10.x         |
 | 0.8.0          | 0.8.0          |
 | 0.7.0          | 0.7.0          |
 | 0.7.6          | 0.7.1, 0.7.2   |
